@@ -1,0 +1,16 @@
+{
+  "name": "aua",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "docker:build": "docker build -t aua-portal -f ./devops/Dockerfile --build-arg NODE_ENV=prod --build-arg REACT_APP_AUA_GIT_HASH=$(git rev-parse --short HEAD) .",
+    "docker:run": "docker run -p 80:80 --env-file ./devops/.env.prod aua-portal",
+    "docker:push": "aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin 680876118134.dkr.ecr.ap-southeast-2.amazonaws.com; docker tag aua-portal:latest 680876118134.dkr.ecr.ap-southeast-2.amazonaws.com/aua-portal:latest; docker push 680876118134.dkr.ecr.ap-southeast-2.amazonaws.com/aua-portal:latest"
+  },
+  "author": "mr.shaojun@gmail.com",
+  "license": "MIT"
+}

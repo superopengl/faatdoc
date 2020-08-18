@@ -1,0 +1,16 @@
+RED='\033[0;31m'
+ORANGE='\033[0;33m'
+GREEN='\033[0;32m'
+NC='\033[0m'
+
+echo -e "${ORANGE}AUA${NC}"
+
+alias uhome='cd /Users/jshao/github/aua'
+alias uweb='cd /Users/jshao/github/aua/aua-web'
+alias uapp='cd /Users/jshao/github/aua/aua-app'
+
+export AWS_PROFILE=aua
+
+ssh-add -K ~/.ssh/ubc_id_rsa
+
+uhome

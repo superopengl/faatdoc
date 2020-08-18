@@ -1,0 +1,7 @@
+**/node_modules
+*/npm-debug.log
+**/build
+**/.env*
+*/docs
+aua-app/src/**/*.js
+aua-app/index.js
