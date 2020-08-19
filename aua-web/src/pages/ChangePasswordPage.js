@@ -58,7 +58,7 @@ class ChangePasswordPage extends React.Component {
   validateConfirmPasswordRule = ({ getFieldValue }) => {
     return {
       async validator(value) {
-        if (getFieldValue('newPassword') !== value) {
+        if (getFieldValue('newPassword') !== getFieldValue('confirmPassword')) {
           throw new Error('The confirm password does not match');
         }
       }

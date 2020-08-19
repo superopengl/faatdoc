@@ -20,6 +20,7 @@ import PrivacyPolicyPage from 'pages/PrivacyPolicyPage';
 import GalleryPage from 'pages/GalleryPage';
 import OtherPage from 'pages/OtherPage';
 import ClientsPage from 'pages/ClientsPage';
+import AsksPage from 'pages/AsksPage';
 
 
 class App extends React.Component {
@@ -72,6 +73,7 @@ class App extends React.Component {
             {isAdmin && <Route path="/admin" exact component={AdminPage} />}
             {isAdmin && <Route path="/clients" exact component={ClientsPage} />}
             {isAdmin && <Route path="/tasks" exact component={ClientsPage} />}
+            {isClient && <Route path="/asks" exact component={AsksPage} />}
             {isClient && <Route path="/membership" exact component={MembershipPage} />}
             {!isGuest && <Route path="/change_password" exact component={ChangePasswordPage} />}
             <Route path="/terms_and_conditions" exact component={TermAndConditionPage} />

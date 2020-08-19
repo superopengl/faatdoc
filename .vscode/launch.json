@@ -13,7 +13,7 @@
         "<node_internals>/**"
       ],
       "args": [
-        "${workspaceFolder}/ubc-app/src/index.ts"
+        "${workspaceFolder}/aua-app/src/index.ts"
       ],
       "env": {
         "TS_NODE_IGNORE": "false",
@@ -25,10 +25,10 @@
         "-r",
         "ts-node/register"
       ],
-      "cwd": "${workspaceRoot}/ubc-app",
+      "cwd": "${workspaceRoot}/aua-app",
       "protocol": "inspector",
       "outFiles": [
-        "${workspaceFolder}/ubc-app/**/*.js"
+        "${workspaceFolder}/aua-app/**/*.js"
       ]
     }
   ]

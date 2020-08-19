@@ -22,14 +22,13 @@ export const authMiddleware = async (req, res, next) => {
       const isExpired = !user.lastNudgedAt || moment(user.lastNudgedAt).add(24, 'hours').isBefore();
       if (isExpired) {
         user.sessionId = null;
-        await repo.save(user);
+        await repo.update(user.id, { sessionId: null });
 
         // Session expired
         return sendSessionExpired(res);
       }
 
-      user.lastNudgedAt = getUtcNow();
-      repo.save(user).catch(() => {});
+      repo.update(user.id, { lastNudgedAt: getUtcNow() }).catch(() => { });
 
       req.user = Object.freeze(user);
     }

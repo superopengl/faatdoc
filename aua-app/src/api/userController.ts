@@ -12,6 +12,7 @@ import { ProfileImage } from '../entity/ProfileImage';
 import { createProfileImageEntities } from '../utils/createProfileImageEntities';
 import { createProfileEntity } from '../utils/createProfileEntity';
 import { File } from '../entity/File';
+import { v4 as uuidv4 } from 'uuid';
 
 
 export const getProfile = handlerWrapper(async (req, res) => {
@@ -52,7 +53,9 @@ export const changePassword = handlerWrapper(async (req, res) => {
   assert(password && newPassword && user.secret === computeUserSecret(password, user.salt), 400, 'Invalid password');
 
   const repo = getRepository(User);
-  await repo.update(user.id, { secret: computeUserSecret(newPassword, user.salt) });
+  const newSalt = uuidv4();
+  const newSecret = computeUserSecret(newPassword, newSalt);
+  await repo.update(user.id, { secret: newSecret, salt: newSalt });
 
   res.json();
 });
@@ -61,32 +64,32 @@ export const listClients = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin');
 
   const clients = await getConnection()
-  .createQueryBuilder()
-  .from(User, 'u')
-  .innerJoin(q => q.from(Profile, 'p').select('*'), 'p', 'u.id = p.id')
-  .select([
-    `u.id as id`,
-    `"email"`,
-    `"givenName"`,
-    `"surname"`,
-    `"company"`,
-    `"createdAt" AT TIME ZONE 'UTC' AT TIME ZONE 'Australia/Sydney'`,
-    `"lastLoggedInAt" AT TIME ZONE 'UTC' AT TIME ZONE 'Australia/Sydney'`,
-    `"lastUpdatedAt" AT TIME ZONE 'UTC' AT TIME ZONE 'Australia/Sydney'`,
-    `"status"`,
-    `"phone"`,
-    `"tfn"`,
-    `"abn"`,
-    `"acn"`,
-    `"address"`,
-    `"dob"`,
-    `"gender"`,
-    `"remark"`,
-    `"wechat"`,
-    `"occupation"`,
-    `"industry"`,
-  ])
-  .execute();
+    .createQueryBuilder()
+    .from(User, 'u')
+    .innerJoin(q => q.from(Profile, 'p').select('*'), 'p', 'u.id = p.id')
+    .select([
+      `u.id as id`,
+      `"email"`,
+      `"givenName"`,
+      `"surname"`,
+      `"company"`,
+      `"createdAt" AT TIME ZONE 'UTC' AT TIME ZONE 'Australia/Sydney'`,
+      `"lastLoggedInAt" AT TIME ZONE 'UTC' AT TIME ZONE 'Australia/Sydney'`,
+      `"lastUpdatedAt" AT TIME ZONE 'UTC' AT TIME ZONE 'Australia/Sydney'`,
+      `"status"`,
+      `"phone"`,
+      `"tfn"`,
+      `"abn"`,
+      `"acn"`,
+      `"address"`,
+      `"dob"`,
+      `"gender"`,
+      `"remark"`,
+      `"wechat"`,
+      `"occupation"`,
+      `"industry"`,
+    ])
+    .execute();
 
   res.json(clients);
 });
