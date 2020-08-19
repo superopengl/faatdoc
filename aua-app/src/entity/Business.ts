@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-import { Image } from './Image';
+import { File } from './File';
 @Entity()
 export class Business {
     @PrimaryGeneratedColumn('uuid')
@@ -33,7 +33,7 @@ export class Business {
     ordinal?: number;
 
     @Column({ type: 'uuid' })
-    imageId: Image;
+    imageId: File;
 }
 
 

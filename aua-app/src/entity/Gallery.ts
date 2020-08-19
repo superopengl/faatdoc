@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
-import { Image } from './Image';
+import { File } from './File';
 @Entity()
 export class Gallery {
   @PrimaryGeneratedColumn('uuid')

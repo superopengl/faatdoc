@@ -13,7 +13,7 @@ width: 100%;
 text-align: center;
 font-size: 0.8rem;
 color: #f0f0f0;
-background-color: #001233;
+background-color: #000000;
 padding-left: 1rem;
 padding-right: 1rem;
 
@@ -34,7 +34,7 @@ const HomeFooter = () => (
     <section id="about">
       <Row>
         <Col span={24}>
-          <p>©{new Date().getFullYear()} AUA ALLIED PTY LTD. All right reserved.</p>
+          <p>©{new Date().getFullYear()} AUAO Accounting Office PTY LTD. All right reserved.</p>
           <p style={{display: 'none'}}>Version ${gitVersion}</p>
           <p><a href="/terms_and_conditions" target="_blank">Terms & Conditions</a> | <a href="/privacy_policy" target="_blank">Privacy Policy</a> </p>
           <a href="https://www.techseeding.com.au" target="_blank" rel="noopener noreferrer">

@@ -13,7 +13,7 @@ import { ProfileImage } from '../entity/ProfileImage';
 import { createProfileImageEntities } from '../utils/createProfileImageEntities';
 import { createBusinessProfileEntity } from '../utils/createBusinessProfileEntity';
 import { createIndividualProfileEntity } from '../utils/createIndividualProfileEntity';
-import { Image } from '../entity/Image';
+import { File } from '../entity/File';
 
 async function updateBusinessProfile(userId, payload) {
   const profile = createBusinessProfileEntity(userId, payload);
@@ -35,7 +35,7 @@ async function updateIndividualProfile(userId, payload) {
   });
 }
 
-async function getProfilePictures(userId: string): Promise<Image[]> {
+async function getProfilePictures(userId: string): Promise<File[]> {
   const profileImageRepo = getRepository(ProfileImage);
   const entities: ProfileImage[] = await profileImageRepo
     .createQueryBuilder('x')
@@ -48,8 +48,8 @@ async function getProfilePictures(userId: string): Promise<Image[]> {
 
   const imageIdsMap = new Map(entities.map(x => [x.imageId, x.ordinal]));
 
-  const imageRepo = getRepository(Image);
-  const images: Image[] = await imageRepo
+  const imageRepo = getRepository(File);
+  const images: File[] = await imageRepo
     .createQueryBuilder('x')
     .where('x.id IN (:...imageIds)', { imageIds: Array.from(imageIdsMap.keys()) })
     .getMany();

@@ -5,12 +5,10 @@ NC='\033[0m'
 
 echo -e "${ORANGE}AUA${NC}"
 
-alias uhome='cd /Users/jshao/github/aua'
-alias uweb='cd /Users/jshao/github/aua/aua-web'
-alias uapp='cd /Users/jshao/github/aua/aua-app'
+alias ahome='cd /Users/jshao/github/aua'
 
-export AWS_PROFILE=aua
+export AWS_PROFILE=txd
 
-ssh-add -K ~/.ssh/ubc_id_rsa
+ssh-add -K ~/.ssh/superopengl_id_rsa
 
-uhome
+ahome

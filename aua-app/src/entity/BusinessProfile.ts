@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryColumn, Index, JoinTable, ManyToMany } from 'typeorm';
-import { Image } from './Image';
+import { File } from './File';
 
 @Entity()
 export class BusinessProfile {

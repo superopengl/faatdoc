@@ -57,5 +57,9 @@ export class User {
   @Index('user_resetPasswordToken_unique', { unique: true })
   @Column({ type: 'uuid', nullable: true })
   resetPasswordToken?: string;
+
+
+  @Column({ default: false })
+  ssoGoogle: boolean;
 }
 

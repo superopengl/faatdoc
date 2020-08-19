@@ -1,5 +1,5 @@
 import { Entity, Column, OneToOne, PrimaryGeneratedColumn, JoinColumn } from 'typeorm';
-import { Image } from './Image';
+import { File } from './File';
 @Entity()
 export class Event {
     @PrimaryGeneratedColumn('uuid')
@@ -24,5 +24,5 @@ export class Event {
     ordinal?: number;
 
     @Column({ type: 'uuid' })
-    imageId: Image;
+    imageId: File;
 }

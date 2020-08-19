@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 @Entity()
-export class Image {
+export class File {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

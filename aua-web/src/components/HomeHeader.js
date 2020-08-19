@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Layout, Menu, Drawer, Button, Modal } from 'antd';
+import { Layout, Menu, Drawer, Button, Modal, Typography } from 'antd';
 import MediaQuery from 'react-responsive'
 import {
   MenuOutlined, HomeOutlined, PhoneOutlined, SmileOutlined, PictureOutlined,
@@ -14,6 +14,7 @@ import { Logo } from './Logo';
 import { GlobalContext } from '../contexts/GlobalContext'
 import { logout } from 'services/authService';
 
+const {Title} = Typography;
 const { Header } = Layout;
 const HeaderStyled = styled(Header)`
 position: fixed;
@@ -97,23 +98,15 @@ class HomeHeaderRaw extends React.Component {
             return (
               <HeaderStyled>
                 <HeaderLogo to="/#home">
-                  <Logo />
+                  {/* <Logo/> <Title style={{display: 'inline', color: '#666666', position: 'relative', top: 16}}>AU Accouting Office</Title> */}
+                  <img alt="AUA logo" src="/images/header-logo.png" width="auto" height="60" style={{padding: '2px 0 2px 0'}}></img>
                 </HeaderLogo>
                 <MediaQuery minDeviceWidth={801}>
                   <MenuContianer>
                     <Menu mode="horizontal" style={{ border: 0 }}>
                       <Menu.Item key="home"><HashLink to="/#home">Home</HashLink></Menu.Item>
-                      {isGuest && <Menu.Item key="events"><HashLink to="/#events">Events</HashLink></Menu.Item>}
-                      <Menu.SubMenu key="gallery" title="Gallery">
-                        <Menu.Item key="badminton"><HashLink to="/gallery/badminton">Badminton Social Club</HashLink></Menu.Item>
-                        <Menu.Item key="tennis"><HashLink to="/gallery/tennis">Tennis Playing Club</HashLink></Menu.Item>
-                        <Menu.Item key="gourmet"><HashLink to="/gallery/gourmet">Food Tasting Club</HashLink></Menu.Item>
-                        <Menu.Item key="hiking"><HashLink to="/gallery/hiking">Hiking and Cycling Activities</HashLink></Menu.Item>
-                        <Menu.Item key="gathering"><HashLink to="/gallery/gathering">Business Partners Gathering</HashLink></Menu.Item>
-                        <Menu.Item key="tour"><HashLink to="/gallery/tour">Touring and Sightseeing</HashLink></Menu.Item>
-                      </Menu.SubMenu>
-                      {isGuest && <Menu.Item key="about_us"><HashLink to="/#about">About Us</HashLink></Menu.Item>}
-                      {isGuest && <Menu.Item key="contact"><HashLink to="/#contact">Contact</HashLink></Menu.Item>}
+                      <Menu.Item key="services"><HashLink to="/#services">Services</HashLink></Menu.Item>
+                      <Menu.Item key="team"><HashLink to="/#team">Team</HashLink></Menu.Item>
                       {isGuest && <Menu.Item key="login"><Link to="/login">Log In / Sign Up</Link></Menu.Item>}
                       {isMember && <Menu.Item key="membership"><Link to="/membership">Membership</Link></Menu.Item>}
                       {isMember && <Menu.Item key="profile"><Link to="/profile">Profile</Link></Menu.Item>}
@@ -143,17 +136,8 @@ class HomeHeaderRaw extends React.Component {
                       {isMember && <Menu.Item key="profile"><UserOutlined /> <Link to="/profile">Profile</Link></Menu.Item>}
                       {!isGuest && <Menu.Item key="changePassword"><SecurityScanOutlined /> <Link to="/change_password">Change Password</Link></Menu.Item>}
                       <Menu.Item key="home"><HomeOutlined /> <HashLink to="/#home" onClick={this.onClose}>Home</HashLink></Menu.Item>
-                      {isGuest && <Menu.Item key="events"><BellOutlined /> <HashLink to="/#events" onClick={this.onClose}>Events</HashLink></Menu.Item>}
-                      <Menu.SubMenu key="gallery" icon={<PictureOutlined />} title="Gallery">
-                        <Menu.Item key="badminton" onClick={this.onClose}><HashLink to="/gallery/badminton"> Badminton Social Club</HashLink></Menu.Item>
-                        <Menu.Item key="tennis" onClick={this.onClose}><HashLink to="/gallery/tennis"> Tennis Playing Club</HashLink></Menu.Item>
-                        <Menu.Item key="gourmet" onClick={this.onClose}><HashLink to="/gallery/gourmet"> Food Tasting Club</HashLink></Menu.Item>
-                        <Menu.Item key="hiking" onClick={this.onClose}><HashLink to="/gallery/hiking"> Hiking and Cycling Activities</HashLink></Menu.Item>
-                        <Menu.Item key="gathering" onClick={this.onClose}><HashLink to="/gallery/gathering"> Business Partners Gathering</HashLink></Menu.Item>
-                        <Menu.Item key="tour" onClick={this.onClose}><HashLink to="/gallery/tour"> Touring and Sightseeing</HashLink></Menu.Item>
-                      </Menu.SubMenu>
-                      {isGuest && <Menu.Item key="about_us"><SmileOutlined /> <HashLink to="/#about" onClick={this.onClose}>About Us</HashLink></Menu.Item>}
-                      {isGuest && <Menu.Item key="contact"><PhoneOutlined /> <HashLink to="/#contact" onClick={this.onClose}>Contact</HashLink></Menu.Item>}
+                      <Menu.Item key="services"><BellOutlined /> <HashLink to="/#services" onClick={this.onClose}>Services</HashLink></Menu.Item>
+                      <Menu.Item key="team"><BellOutlined /> <HashLink to="/#team" onClick={this.onClose}>Team</HashLink></Menu.Item>
                       {!isGuest && <Menu.Item key="logout" onClick={handleLogout}><LogoutOutlined /> Log Out</Menu.Item>}
                     </Menu>
                   </Drawer>

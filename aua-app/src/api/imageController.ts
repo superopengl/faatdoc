@@ -1,14 +1,14 @@
 
 import * as aws from 'aws-sdk';
 import { getRepository } from 'typeorm';
-import { Image } from '../entity/Image';
+import { File } from '../entity/File';
 import { assert } from '../utils';
 import { handlerWrapper } from '../utils/asyncHandler';
 import { awsConfig } from '../utils/awsConfig';
 
 export const getImage = handlerWrapper(async (req, res) => {
   const { id } = req.params;
-  const repo = getRepository(Image);
+  const repo = getRepository(File);
   const image = repo.findOne(id);
   assert(image, 404);
   res.json(image);
@@ -50,7 +50,7 @@ export const uploadImage = handlerWrapper(async (req, res) => {
 
   const location = await uploadToS3(id, data);
 
-  const image: Image = {
+  const image: File = {
     id,
     fileName: name,
     mime: mimetype,
@@ -58,7 +58,7 @@ export const uploadImage = handlerWrapper(async (req, res) => {
     md5
   };
 
-  const repo = getRepository(Image);
+  const repo = getRepository(File);
   await repo.insert(image);
 
   res.json(image);

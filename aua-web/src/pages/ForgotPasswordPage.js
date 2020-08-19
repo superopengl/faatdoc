@@ -9,7 +9,7 @@ const ContainerStyled = styled.div`
   margin: 2rem auto;
   padding: 2rem 0.5rem;
   text-align: center;
-  max-width: 500px;
+  max-width: 400px;
 `;
 
 const LogoContainer = styled.div`
@@ -66,11 +66,13 @@ class ResetPasswordPage extends React.Component {
           </Form.Item>
           <Form.Item style={{marginTop: '2rem'}}>
             <Button block type="primary" htmlType="submit" disabled={sending}>Send reset link to email</Button>
-            <Button block size="large" type="link" onClick={() => this.goBack()}>Cancel</Button>
+            <Button block type="link" onClick={() => this.goBack()}>Cancel</Button>
+          </Form.Item>
+          <Form.Item>
+        <Link to="/"><Button block type="link">Go to home page</Button></Link>
+
           </Form.Item>
         </Form>
-        <Divider />
-        <Link to="/"><Button block size="large" type="link">Go to home page</Button></Link>
       </ContainerStyled>
 
     );

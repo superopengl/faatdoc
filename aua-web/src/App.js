@@ -71,12 +71,6 @@ class App extends React.Component {
             {isAdmin && <Route path="/admin" exact component={AdminPage} />}
             {isMember && <Route path="/membership" exact component={MembershipPage} />}
             {!isGuest && <Route path="/change_password" exact component={ChangePasswordPage} />}
-            <Route path="/gallery/badminton" exact component={() => <GalleryPage group="badminton"/>} />
-            <Route path="/gallery/tennis" exact component={() => <GalleryPage group="tennis"/>} />
-            <Route path="/gallery/gourmet" exact component={() => <GalleryPage group="gourmet"/>} />
-            <Route path="/gallery/hiking" exact component={() => <GalleryPage group="hiking"/>} />
-            <Route path="/gallery/gathering" exact component={() => <GalleryPage group="gathering"/>} />
-            <Route path="/gallery/tour" exact component={() => <GalleryPage group="tour"/>} />
             <Route path="/terms_and_conditions" exact component={TermAndConditionPage} />
             <Route path="/privacy_policy" exact component={PrivacyPolicyPage} />
             <Route component={OtherPage} />
