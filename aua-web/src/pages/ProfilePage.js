@@ -69,9 +69,6 @@ class ProfilePage extends React.Component {
               try {
                 this.setState({ sending: true });
           
-                // Sanitize pictures to imageIds
-                values.pictures = values.pictures.map(p => _.get(p, 'id', p));
-          
                 await saveProfile(values);
           
                 notify.success( 'Successfully saved profile changes!');
@@ -92,8 +89,7 @@ class ProfilePage extends React.Component {
               <HomeHeader></HomeHeader>
               <PageContainer>
                 <ContainerStyled>
-                  <Title level={2}>{_.capitalize(role)} Member Profile</Title>
-                  <Title level={4}><Text code>{user.memberId}</Text></Title>
+                  <Title level={2}>User Profile</Title>
                   <ProfileForm okButtonText="Save Change" mode="profile" initialValues={initialValues} role={role} onOk={handleSave} loading={sending} />
                 </ContainerStyled>
               </PageContainer>

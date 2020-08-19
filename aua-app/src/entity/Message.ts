@@ -5,31 +5,24 @@ export class Message {
   @PrimaryGeneratedColumn('uuid')
   id?: string;
 
-
   @Column({ default: () => `timezone('UTC', now())` })
   createdAt?: Date;
-
 
   @Column('uuid')
   thread: string;
 
+  @Column({default: true})
+  received: boolean;
 
   @Column('uuid')
-  from: string;
-
-
-  @Column('uuid')
-  to: string;
-
+  userId: string;
 
   @Column({ type: 'uuid', nullable: true })
   taskId?: string;
 
-
   @Column()
   content: string;
 
-
-  @Column({ type: 'uuid', array: true, nullable: true })
-  files: string[];
+  @Column({default: false})
+  hasRead: boolean;
 }

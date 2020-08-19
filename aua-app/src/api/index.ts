@@ -5,4 +5,3 @@ export * from './businessController';
 export * from './eventController';
 export * from './authController';
 export * from './userController';
-export * from './memberController';

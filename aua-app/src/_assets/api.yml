@@ -231,6 +231,12 @@ paths:
       responses:
         200:
           description: OK
+  /user:
+    get:
+      operationId: listClients
+      responses:
+        200:
+          description: OK          
   /user/profile:
     post:
       operationId: updateProfile

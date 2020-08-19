@@ -2,9 +2,8 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class TaskTracking {
-  @PrimaryGeneratedColumn('uuid')
-  id?: string;
-
+  @PrimaryGeneratedColumn()
+  id?: Number;
 
   @Column('uuid')
   taskId: string;
@@ -17,11 +16,14 @@ export class TaskTracking {
   @Column({ default: () => `timezone('UTC', now())` })
   createdAt?: Date;
 
-
   @Column()
-  statusBefore: string;
+  event: string;
 
 
-  @Column()
-  statusAfter: string;
+  @Column({nullable: true})
+  preValue: string;
+
+
+  @Column({nullable: true})
+  newValue: string;
 }

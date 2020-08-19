@@ -1,8 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-
 @Entity()
-export class Task {
+export class TaskFile {
   @PrimaryGeneratedColumn('uuid')
   id?: string;
 
@@ -10,10 +9,17 @@ export class Task {
   createdAt?: Date;
 
   @Column('uuid')
-  userId: string;
+  taskId: string;
+
+  @Column('uuid')
+  fileId: string;
+
+  @Column({ nullable: true })
+  comment: string;
 
   @Column({ default: 'new' })
   status: string;
+
+  @Column({ nullable: true })
+  signedAt: Date;
 }
-
-

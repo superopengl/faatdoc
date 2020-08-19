@@ -7,23 +7,17 @@ import * as _ from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import { UserStatus } from '../enums/UserStatus';
 import { computeUserSecret } from '../utils/computeUserSecret';
-import { BusinessProfile } from '../entity/BusinessProfile';
-import { IndividualProfile } from '../entity/IndividualProfile';
+import { Profile } from '../entity/Profile';
 import { handlerWrapper } from '../utils/asyncHandler';
 import { createProfileImageEntities } from '../utils/createProfileImageEntities';
-import { createBusinessProfileEntity } from '../utils/createBusinessProfileEntity';
-import { createIndividualProfileEntity } from '../utils/createIndividualProfileEntity';
+import { createProfileEntity } from '../utils/createProfileEntity';
 import { sendEmail } from '../services/emailService';
 import { getForgotPasswordHtmlEmail, getForgotPasswordTextEmail, getSignUpHtmlEmail, getSignUpTextEmail } from '../utils/emailTemplates';
 import * as moment from 'moment';
 import { logError } from '../utils/logger';
 import { getUtcNow } from '../utils/getUtcNow';
+import { Role } from '../enums/Role';
 
-function getMembershipExpirationDate() {
-  const theYear = moment().year();
-  const expiryYear =  theYear <= 2021 ? moment('2021-12-31') : moment();
-  return expiryYear.endOf('year').toDate();
-}
 
 export const login = handlerWrapper(async (req, res) => {
   const { name, password } = req.body;
@@ -33,7 +27,7 @@ export const login = handlerWrapper(async (req, res) => {
   const user: User = await repo
     .createQueryBuilder()
     .where(
-      '(LOWER("memberId") = LOWER(:name) OR LOWER(email) = LOWER(:name)) AND status != :status',
+      'LOWER(email) = LOWER(:name) AND status != :status',
       {
         name,
         status: UserStatus.Disabled
@@ -60,7 +54,7 @@ export const login = handlerWrapper(async (req, res) => {
 });
 
 export const logout = handlerWrapper(async (req, res) => {
-  assertRole(req, 'admin', 'business', 'individual');
+  assertRole(req, 'admin', 'client');
   const { user: { id } } = req as any;
   const repo = getRepository(User);
   await repo.update({ id: id }, { sessionId: null });
@@ -68,25 +62,8 @@ export const logout = handlerWrapper(async (req, res) => {
   res.json();
 });
 
-async function nextSequence(sequenceName): Promise<string> {
-  const number = await getManager()
-    .query(`SELECT nextval('${sequenceName}')`);
 
-  return `${number[0].nextval}`.padStart(4, '0');
-}
-
-async function nextIndividualMemberId() {
-  const number = await nextSequence('individual_member_id');
-  return `ME${number}`;
-}
-
-
-async function nextBusinessMemberId() {
-  const number = await nextSequence('business_member_id');
-  return `BU${number}`;
-}
-
-function createUserEntity(payload, role, memberId): User {
+function createUserEntity(payload): User {
   const { email, password } = payload;
   validatePasswordStrength(password);
 
@@ -96,33 +73,18 @@ function createUserEntity(payload, role, memberId): User {
   const user = new User();
   user.id = id;
   user.email = email.toLowerCase();
-  user.memberId = memberId.toUpperCase();
   user.secret = computeUserSecret(password, salt);
   user.salt = salt;
-  user.role = role;
+  user.role = Role.Client;
   user.status = UserStatus.Enabled;
-  user.expiryDate = getMembershipExpirationDate();
 
   return user;
 }
 
-async function createBusinessUser(payload, specifiedMemberId = null): Promise<{ user: User, profile: BusinessProfile }> {
-  const memberId = specifiedMemberId || await nextBusinessMemberId();
-  const user = createUserEntity(payload, 'business', memberId);
-  const profile = createBusinessProfileEntity(user.id, payload);
-  const profileImages = createProfileImageEntities(user.id, payload.pictures);
 
-  await getManager().transaction(async manager => {
-    await manager.save([user, profile, ...profileImages]);
-  });
-
-  return { user, profile };
-}
-
-async function createIndividualUser(payload, specifiedMemberId = null): Promise<{ user: User, profile: IndividualProfile }> {
-  const memberId = specifiedMemberId || await nextIndividualMemberId();
-  const user = createUserEntity(payload, 'individual', memberId);
-  const profile = createIndividualProfileEntity(user.id, payload);
+async function createUser(payload): Promise<{ user: User, profile: Profile }> {
+  const user = createUserEntity(payload);
+  const profile = createProfileEntity(user.id, payload);
   const profileImages = createProfileImageEntities(user.id, payload.pictures);
 
   await getManager().transaction(async manager => {
@@ -135,45 +97,28 @@ async function createIndividualUser(payload, specifiedMemberId = null): Promise<
 
 export const signup = handlerWrapper(async (req, res) => {
   const payload = req.body;
-  const { type } = req.query;
-  assert(type, 400, `'type' query parameter is missing`);
-  const isBusiness = type === 'business';
-  const isIndividual = type === 'individual';
-  assert(isBusiness || isIndividual, 400, `Unsupported type ${type}`);
 
-  const isAdmin = _.get(req, 'user.role') === 'admin';
-  const isGuest = _.get(req, 'user') === undefined;
-  assert(isAdmin && /(ME|BU)[0-9]{4}/i.test(payload.memberId), 400, 'Invalid member ID');
-
-  const canSignUp = isGuest || isAdmin;
+  // const isAdmin = _.get(req, 'user.role') === 'admin';
 
   // payload.email = payload.email.toLowerCase();
-  const specifiedMemberId = isAdmin ? payload.memberId : null;
-  let result;
-  if (type === 'business') {
-    result = await createBusinessUser(payload, specifiedMemberId);
-  } else if (type === 'individual') {
-    result = await createIndividualUser(payload, specifiedMemberId);
-  } else {
-    assert(false, 500, 'Invalid code path');
-  }
+  const result = await createUser(payload);
 
-  const { user: { id, email, memberId, expiryDate }, profile: { name } } = result;
+  const { user: { id, email }, profile: { givenName, surname } } = result;
 
+  const name = `${givenName} ${surname}`;
   const url = process.env.AUA_DOMAIN_NAME;
   // Non-blocking sending email
   sendEmail({
     subject: 'Welcome to AUA Allied',
     to: email,
-    htmlBody: getSignUpHtmlEmail(name, memberId, url, expiryDate),
-    textBody: getSignUpTextEmail(name, memberId, url, expiryDate),
+    htmlBody: getSignUpHtmlEmail(name, url),
+    textBody: getSignUpTextEmail(name, url),
     shouldBcc: true
   }).catch(err => logError(err, req, res, 'error at sending out email'));
 
   const info = {
     id,
-    email,
-    memberId
+    email
   };
 
   res.json(info);
@@ -188,30 +133,21 @@ export const forgotPassword = handlerWrapper(async (req, res) => {
     return;
   }
 
-  const { id, role, memberId } = user;
+  const { id, role } = user;
 
   const resetPasswordToken = uuidv4();
   user.resetPasswordToken = resetPasswordToken;
   user.status = UserStatus.ResetPassword;
 
-  let name = '';
-  switch (role) {
-    case 'business':
-      name = (await getRepository(BusinessProfile).findOne(id)).name;
-      break;
-    case 'individual':
-      name = (await getRepository(IndividualProfile).findOne(id)).name;
-      break;
-    default:
-      break;
-  }
+  const { givenName, surname } = await getRepository(Profile).findOne(id);
+  const name = `${givenName} ${surname}`;
 
   const url = `${process.env.AUA_DOMAIN_NAME}/reset_password/${resetPasswordToken}/`;
   await sendEmail({
     subject: 'Forgot Password',
     to: email,
-    htmlBody: getForgotPasswordHtmlEmail(name, memberId, url),
-    textBody: getForgotPasswordTextEmail(name, memberId, url),
+    htmlBody: getForgotPasswordHtmlEmail(name, url),
+    textBody: getForgotPasswordTextEmail(name, url),
     shouldBcc: false
   });
 

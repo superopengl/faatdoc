@@ -19,6 +19,7 @@ import Error404 from 'pages/Error404';
 import PrivacyPolicyPage from 'pages/PrivacyPolicyPage';
 import GalleryPage from 'pages/GalleryPage';
 import OtherPage from 'pages/OtherPage';
+import ClientsPage from 'pages/ClientsPage';
 
 
 class App extends React.Component {
@@ -57,7 +58,7 @@ class App extends React.Component {
     const { role } = this.state;
     const isAdmin = role === 'admin';
     const isGuest = role === 'guest';
-    const isMember = role === 'business' || role === 'individual';
+    const isClient = role === 'client';
     return (
       <GlobalContext.Provider value={this.state}>
         <BrowserRouter basename="/">
@@ -65,11 +66,13 @@ class App extends React.Component {
             <Route path="/" exact component={HomePage} />
             {isGuest && <Route path="/login" exact component={LogInPage} />}
             {(isAdmin || isGuest) && <Route path="/signup" component={SignUpPage} />}
-            {isMember && <Route path="/profile" component={ProfilePage} />}
+            {isClient && <Route path="/profile" component={ProfilePage} />}
             <Route path="/forgot_password" exact component={ForgotPasswordPage} />
             <Route path="/reset_password" exact component={ResetPasswordPage} />
             {isAdmin && <Route path="/admin" exact component={AdminPage} />}
-            {isMember && <Route path="/membership" exact component={MembershipPage} />}
+            {isAdmin && <Route path="/clients" exact component={ClientsPage} />}
+            {isAdmin && <Route path="/tasks" exact component={ClientsPage} />}
+            {isClient && <Route path="/membership" exact component={MembershipPage} />}
             {!isGuest && <Route path="/change_password" exact component={ChangePasswordPage} />}
             <Route path="/terms_and_conditions" exact component={TermAndConditionPage} />
             <Route path="/privacy_policy" exact component={PrivacyPolicyPage} />

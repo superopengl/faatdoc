@@ -55,18 +55,17 @@ class SignUpPage extends React.Component {
     try {
       const { history, location } = this.props;
       this.setState({ sending: true });
-      const { type } = queryString.parse(location.search);
 
       // Sanitize pictures to imageIds
       values.pictures = (values.pictures || []).map(p => _.get(p, 'id', p));
-      const user = await signUp(values, type);
+      const user = await signUp(values);
 
       if (isAdmin) {
         // Admin
         Modal.confirm({
           title: '🎉 Successfully signed up!',
           icon: null,
-          content: <Title level={4} style={{ textAlign: 'center' }}><Text code>{user?.memberId}</Text></Title>,
+          // content: <Title level={4} style={{ textAlign: 'center' }}><Text code>{user?.memberId}</Text></Title>,
           onOk() {
             history.go(0);
           },
@@ -83,15 +82,10 @@ class SignUpPage extends React.Component {
           icon: null,
           content: <>
             <p>
-              Congratulations and thank you very much for signing up AUA Allied.
-          Your registration email is <strong>{user?.email}</strong>. Below is your member ID
-          </p>
-            <Title level={4} style={{ textAlign: 'center' }}><Text code>{user?.memberId}</Text></Title>
-            <p>
-              You can login with either the registration email or the member ID.
+              Congratulations and thank you very much for signing up AUA Allied. Your registration email is <strong>{user?.email}</strong>.
           </p>
             <p>
-              We will issue and post the physical card shortly. You can always log into the system and use the e-card.
+              You can login with either the registration email anytime.
           </p>
           </>,
           onOk() {
@@ -119,7 +113,6 @@ class SignUpPage extends React.Component {
 
   render() {
     const { sending } = this.state;
-    const { type } = queryString.parse(this.props.location.search);
 
     return (
       <GlobalContext.Consumer>{
@@ -130,9 +123,9 @@ class SignUpPage extends React.Component {
           return (<PageContainer>
             <ContainerStyled>
               <LogoContainer><Logo /></LogoContainer>
-              <Title level={2}>{_.capitalize(type)} Member Sign Up</Title>
-              {!isAdmin && <Link to="/login"><Button size="small" block type="link">Already a member? Click to log in</Button></Link>}
-              <ProfileForm okButtonText="Sign Up" type={type} onOk={values => this.handleSignUp(values, isAdmin)} loading={sending} mode="signup"></ProfileForm>
+              <Title level={2}>User Sign Up</Title>
+              {!isAdmin && <Link to="/login"><Button size="small" block type="link">Already a user? Click to log in</Button></Link>}
+              <ProfileForm okButtonText="Sign Up" onOk={values => this.handleSignUp(values, isAdmin)} loading={sending} mode="signup"></ProfileForm>
               <Divider />
               <Link to="/"><Button block size="large" type="link">Go to home page</Button></Link>
             </ContainerStyled>

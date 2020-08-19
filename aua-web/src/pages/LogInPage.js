@@ -103,7 +103,7 @@ class LogInPage extends React.Component {
                     <Button ghost block type="primary" icon={<GoogleOutlined />}>Log In with Google</Button>
                   </Form.Item>
                   <Form.Item>
-                    <Link to="/signup?type=business"><Button ghost block type="primary">Sign Up</Button></Link>
+                    <Link to="/signup"><Button ghost block type="primary">Sign Up</Button></Link>
                   </Form.Item>
                   <Form.Item>
                     <Link to="/forgot_password">

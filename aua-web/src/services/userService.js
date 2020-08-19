@@ -12,4 +12,8 @@ export async function changePassword(password, newPassword) {
   return httpPost(`user/change_password`, { password, newPassword });
 }
 
+export async function listClients() {
+  return httpGet(`user`);
+}
+
 

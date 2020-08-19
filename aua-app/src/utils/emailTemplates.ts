@@ -26,7 +26,7 @@ Admin (on behalf of AUA Allied)
 </p>
 `;
 
-export const getForgotPasswordHtmlEmail = (name, memberId, url) => `
+export const getForgotPasswordHtmlEmail = (name, url) => `
 <p>Dear ${name}</p>
 
 <p>Please click below link to reset your password.</p>
@@ -35,7 +35,7 @@ export const getForgotPasswordHtmlEmail = (name, memberId, url) => `
 ${SIGNATURE_HTML}
 `;
 
-export const getForgotPasswordTextEmail = (name, memberId, url) => `
+export const getForgotPasswordTextEmail = (name, url) => `
 Dear ${name}
 
 Please click below link to reset your password.
@@ -44,27 +44,23 @@ ${url}
 ${SIGNATURE_TEXT}
 `;
 
-export const getSignUpHtmlEmail = (name, memberId, url, expiryDate) => `
+export const getSignUpHtmlEmail = (name, url) => `
 <p>Dear ${name}</p>
 <p>
 Welcome to join us.
 <br/>
 Your Membership eCard information is as below.</p>
-<p>Member ID: <strong>${memberId}</strong>
-<br/>Valid to: <strong>${formatDate(expiryDate)}</strong></p>
 <p>You can log in anytime to our website on <a href="${url}" target="_blank" referrerpolicy="no-referrer">${url}</a></p>
 
 ${SIGNATURE_HTML}
 `;
 
-export const getSignUpTextEmail = (name, memberId, url, expiryDate) => `
+export const getSignUpTextEmail = (name, url) => `
 Dear ${name}
 
 Welcome to join us.
 
 Your Membership eCard information is as below.
-Member ID: ${memberId}
-Valid to: ${formatDate(expiryDate)}
 
 You can log in anytime to our website on ${url}
 

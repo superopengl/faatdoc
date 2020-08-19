@@ -43,6 +43,7 @@ export async function sendEmail(req: EmailRequest) {
     ReplyToAddresses: ['AUA Allied <office.aua.allied@gmail.com>'],
   };
 
-  const sesRequest = ses.sendEmail(params).promise();
-  await sesRequest;
+  // TODO: Turn on email sending
+  // const sesRequest = ses.sendEmail(params).promise();
+  // await sesRequest;
 }

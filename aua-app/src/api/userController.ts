@@ -1,111 +1,50 @@
 
-import { getRepository, getManager } from 'typeorm';
+import { getRepository, getManager, getConnection } from 'typeorm';
 import { User } from '../entity/User';
 import { assert, assertRole } from '../utils/assert';
 import { validatePasswordStrength } from '../utils/validatePasswordStrength';
 import * as _ from 'lodash';
 import { computeUserSecret } from '../utils/computeUserSecret';
-import { BusinessProfile } from '../entity/BusinessProfile';
-import { IndividualProfile } from '../entity/IndividualProfile';
+import { Profile } from '../entity/Profile';
 import { handlerWrapper } from '../utils/asyncHandler';
 import { Role } from '../enums/Role';
 import { ProfileImage } from '../entity/ProfileImage';
 import { createProfileImageEntities } from '../utils/createProfileImageEntities';
-import { createBusinessProfileEntity } from '../utils/createBusinessProfileEntity';
-import { createIndividualProfileEntity } from '../utils/createIndividualProfileEntity';
+import { createProfileEntity } from '../utils/createProfileEntity';
 import { File } from '../entity/File';
 
-async function updateBusinessProfile(userId, payload) {
-  const profile = createBusinessProfileEntity(userId, payload);
-  const profileImages = createProfileImageEntities(userId, payload.pictures);
-
-  await getManager().transaction(async manager => {
-    await manager.getRepository(ProfileImage).delete({userId});
-    await manager.save([profile, ...profileImages]);
-  });
-}
-
-async function updateIndividualProfile(userId, payload) {
-  const profile = createIndividualProfileEntity(userId, payload);
-  const profileImages = createProfileImageEntities(userId, payload.pictures);
-
-  await getManager().transaction(async manager => {
-    await manager.getRepository(ProfileImage).delete({userId});
-    await manager.save([profile, ...profileImages]);
-  });
-}
-
-async function getProfilePictures(userId: string): Promise<File[]> {
-  const profileImageRepo = getRepository(ProfileImage);
-  const entities: ProfileImage[] = await profileImageRepo
-    .createQueryBuilder('x')
-    // .select(['x.imageId'])
-    .where({ userId })
-    .orderBy('x.ordinal', 'ASC')
-    .getMany();
-
-  if (!entities.length) return [];
-
-  const imageIdsMap = new Map(entities.map(x => [x.imageId, x.ordinal]));
-
-  const imageRepo = getRepository(File);
-  const images: File[] = await imageRepo
-    .createQueryBuilder('x')
-    .where('x.id IN (:...imageIds)', { imageIds: Array.from(imageIdsMap.keys()) })
-    .getMany();
-
-  return _.sortBy(images, [img => imageIdsMap.get(img.id)]);
-}
 
 export const getProfile = handlerWrapper(async (req, res) => {
-  assertRole(req, 'admin', 'business', 'individual');
+  assertRole(req, 'admin', 'client');
   const { id, role } = (req as any).user as User;
-  let profile = null;
 
-  switch (role) {
-    case Role.Business:
-      const businessProfileRepo = getRepository(BusinessProfile);
-      profile = await businessProfileRepo.findOne(id);
-      break;
-    case Role.Individual:
-      const individualProfileRepo = getRepository(IndividualProfile);
-      profile = await individualProfileRepo.findOne(id);
-      break;
-    case Role.Admin:
-      profile = {};
-      break;
-    default:
-      assert(false, 400, `Invalid role ${role}`);
-      break;
-  }
-
-  profile.pictures = await getProfilePictures(id);
+  const profileRepo = getRepository(Profile);
+  const profile = await profileRepo.findOne(id);
 
   res.json(profile);
 });
 
 
 export const updateProfile = handlerWrapper(async (req, res) => {
-  assertRole(req, 'business', 'individual');
+  assertRole(req, 'client');
   const { id, role } = (req as any).user as User;
   const payload = req.body;
-  switch (role) {
-    case Role.Business:
-      await updateBusinessProfile(id, payload);
-      break;
-    case Role.Individual:
-      await updateIndividualProfile(id, payload);
-      break;
-    default:
-      assert(false, 400, `Invalid role ${role}`);
-      break;
-  }
+
+  const userId = id;
+
+  const profile = createProfileEntity(userId, payload);
+  const profileImages = createProfileImageEntities(userId, payload.pictures);
+
+  await getManager().transaction(async manager => {
+    await manager.getRepository(ProfileImage).delete({ userId });
+    await manager.save([profile, ...profileImages]);
+  });
 
   res.json();
 });
 
 export const changePassword = handlerWrapper(async (req, res) => {
-  assertRole(req, 'admin', 'business', 'individual');
+  assertRole(req, 'admin', 'client');
   const { password, newPassword } = req.body;
   validatePasswordStrength(newPassword);
 
@@ -116,4 +55,38 @@ export const changePassword = handlerWrapper(async (req, res) => {
   await repo.update(user.id, { secret: computeUserSecret(newPassword, user.salt) });
 
   res.json();
+});
+
+export const listClients = handlerWrapper(async (req, res) => {
+  assertRole(req, 'admin');
+
+  const clients = await getConnection()
+  .createQueryBuilder()
+  .from(User, 'u')
+  .innerJoin(q => q.from(Profile, 'p').select('*'), 'p', 'u.id = p.id')
+  .select([
+    `u.id as id`,
+    `"email"`,
+    `"givenName"`,
+    `"surname"`,
+    `"company"`,
+    `"createdAt" AT TIME ZONE 'UTC' AT TIME ZONE 'Australia/Sydney'`,
+    `"lastLoggedInAt" AT TIME ZONE 'UTC' AT TIME ZONE 'Australia/Sydney'`,
+    `"lastUpdatedAt" AT TIME ZONE 'UTC' AT TIME ZONE 'Australia/Sydney'`,
+    `"status"`,
+    `"phone"`,
+    `"tfn"`,
+    `"abn"`,
+    `"acn"`,
+    `"address"`,
+    `"dob"`,
+    `"gender"`,
+    `"remark"`,
+    `"wechat"`,
+    `"occupation"`,
+    `"industry"`,
+  ])
+  .execute();
+
+  res.json(clients);
 });

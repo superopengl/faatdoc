@@ -79,7 +79,7 @@ class HomeHeaderRaw extends React.Component {
           context => {
             const { role } = context;
             const isAdmin = role === 'admin';
-            const isMember = role === 'business' || role === 'individual';
+            const isClient = role === 'client';
             const isGuest = role === 'guest';
 
             const handleLogout = () => {
@@ -105,11 +105,12 @@ class HomeHeaderRaw extends React.Component {
                   <MenuContianer>
                     <Menu mode="horizontal" style={{ border: 0 }}>
                       <Menu.Item key="home"><HashLink to="/#home">Home</HashLink></Menu.Item>
-                      <Menu.Item key="services"><HashLink to="/#services">Services</HashLink></Menu.Item>
-                      <Menu.Item key="team"><HashLink to="/#team">Team</HashLink></Menu.Item>
+                      {isGuest && <Menu.Item key="services"><HashLink to="/#services">Services</HashLink></Menu.Item>}
+                      {isGuest && <Menu.Item key="team"><HashLink to="/#team">Team</HashLink></Menu.Item>}
                       {isGuest && <Menu.Item key="login"><Link to="/login">Log In / Sign Up</Link></Menu.Item>}
-                      {isMember && <Menu.Item key="membership"><Link to="/membership">Membership</Link></Menu.Item>}
-                      {isMember && <Menu.Item key="profile"><Link to="/profile">Profile</Link></Menu.Item>}
+                      {isClient && <Menu.Item key="membership"><Link to="/membership">Membership</Link></Menu.Item>}
+                      {isClient && <Menu.Item key="profile"><Link to="/profile">Profile</Link></Menu.Item>}
+                      {isAdmin && <Menu.Item key="clients"><Link to="/clients">Clients</Link></Menu.Item>}
                       {isAdmin && <Menu.Item key="admin"><Link to="/admin">Admin</Link></Menu.Item>}
                       {!isGuest && <Menu.Item key="changePassword"><Link to="/change_password">Change Password</Link></Menu.Item>}
                       {!isGuest && <Menu.Item key="logout" onClick={handleLogout}>Log Out</Menu.Item>}
@@ -132,12 +133,13 @@ class HomeHeaderRaw extends React.Component {
                     <Menu mode="inline" style={{ border: 0 }} openKeys={['gallery']}>
                       {isGuest && <Menu.Item key="login"><LoginOutlined /> <Link to="/login">Log In / Sign Up</Link></Menu.Item>}
                       {isAdmin && <Menu.Item key="admin"><SettingOutlined /> <Link to="/admin">Admin</Link></Menu.Item>}
-                      {isMember && <Menu.Item key="membership"><IdcardOutlined /> <Link to="/membership">Membership</Link></Menu.Item>}
-                      {isMember && <Menu.Item key="profile"><UserOutlined /> <Link to="/profile">Profile</Link></Menu.Item>}
+                      {isAdmin && <Menu.Item key="clients"><SettingOutlined /> <Link to="/clients">Clients</Link></Menu.Item>}
+                      {isClient && <Menu.Item key="membership"><IdcardOutlined /> <Link to="/membership">Membership</Link></Menu.Item>}
+                      {isClient && <Menu.Item key="profile"><UserOutlined /> <Link to="/profile">Profile</Link></Menu.Item>}
                       {!isGuest && <Menu.Item key="changePassword"><SecurityScanOutlined /> <Link to="/change_password">Change Password</Link></Menu.Item>}
                       <Menu.Item key="home"><HomeOutlined /> <HashLink to="/#home" onClick={this.onClose}>Home</HashLink></Menu.Item>
-                      <Menu.Item key="services"><BellOutlined /> <HashLink to="/#services" onClick={this.onClose}>Services</HashLink></Menu.Item>
-                      <Menu.Item key="team"><BellOutlined /> <HashLink to="/#team" onClick={this.onClose}>Team</HashLink></Menu.Item>
+                      {isGuest && <Menu.Item key="services"><BellOutlined /> <HashLink to="/#services" onClick={this.onClose}>Services</HashLink></Menu.Item>}
+                      {isGuest && <Menu.Item key="team"><BellOutlined /> <HashLink to="/#team" onClick={this.onClose}>Team</HashLink></Menu.Item>}
                       {!isGuest && <Menu.Item key="logout" onClick={handleLogout}><LogoutOutlined /> Log Out</Menu.Item>}
                     </Menu>
                   </Drawer>
