@@ -1,4 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { MessageType } from '../enums/MessageType';
 
 @Entity()
 export class Message {
@@ -8,21 +9,18 @@ export class Message {
   @Column({ default: () => `timezone('UTC', now())` })
   createdAt?: Date;
 
-  @Column('uuid')
-  thread: string;
-
-  @Column({default: true})
-  received: boolean;
+  @Column()
+  type: MessageType;
 
   @Column('uuid')
-  userId: string;
+  clientUserId: string;
 
-  @Column({ type: 'uuid', nullable: true })
-  taskId?: string;
+  @Column('uuid')
+  agentUserId: string;
 
   @Column()
   content: string;
 
-  @Column({default: false})
-  hasRead: boolean;
+  @Column({nullable: true})
+  readAt?: Date;
 }

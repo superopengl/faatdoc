@@ -12,20 +12,22 @@ const FooterStyled = styled(Footer)`
 width: 100%;
 text-align: center;
 font-size: 0.8rem;
-color: #f0f0f0;
-background-color: #000000;
+color: #999999;
+background-color: #000011;
 padding-left: 1rem;
 padding-right: 1rem;
 
 a {
-  color: #f0f0f0;
+  color: #999999;
 
   &:hover {
     text-decoration: underline;
   }
 }
 
-// line-height: rem;
+p {
+  margin-bottom: 0;
+}
 `;
 
 

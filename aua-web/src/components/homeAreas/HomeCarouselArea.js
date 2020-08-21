@@ -82,8 +82,8 @@ class HomeCarouselAreaRaw extends React.Component {
     const { windowWidth } = this.props;
 
     const posterHeight = windowWidth < 576 ? 200 :
-      windowWidth < 992 ? 400 :
-        600;
+      windowWidth < 992 ? 300 :
+        500;
 
     const catchPhraseSize = windowWidth < 576 ? 28 :
       windowWidth < 992 ? 36 :

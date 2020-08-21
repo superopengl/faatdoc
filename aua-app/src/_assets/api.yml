@@ -34,153 +34,6 @@ paths:
       responses:
         200:
           description: OK
-  /gallery:
-    get:
-      operationId: listGallery
-      responses:
-        200:
-          description: OK
-    post:
-      operationId: saveGallery
-      responses:
-        200:
-          description: OK
-  /gallery/{id}:
-    get:
-      operationId: getGallery
-      parameters:
-        - name: id
-          in: path
-          type: string
-          format: uuid
-          required: true
-      responses:
-        200:
-          description: OK
-    delete:
-      operationId: deleteGallery
-      parameters:
-        - name: id
-          in: path
-          type: string
-          format: uuid
-          required: true
-      responses:
-        200:
-          description: OK
-  /poster:
-    get:
-      operationId: listPoster
-      responses:
-        200:
-          description: OK
-    post:
-      operationId: savePoster
-      responses:
-        200:
-          description: OK
-  /poster/{id}:
-    get:
-      operationId: getPoster
-      parameters:
-        - name: id
-          in: path
-          type: string
-          format: uuid
-          required: true
-      responses:
-        200:
-          description: OK
-    delete:
-      operationId: deletePoster
-      parameters:
-        - name: id
-          in: path
-          type: string
-          format: uuid
-          required: true
-      responses:
-        200:
-          description: OK
-  /business:
-    get:
-      operationId: listBusiness
-      parameters:
-        - name: group
-          in: query
-          type: string
-          required: false
-          enum:
-            - top
-            - new
-            - life
-            - auto
-            - restaurant
-      responses:
-        200:
-          description: OK
-    post:
-      operationId: saveBusiness
-      responses:
-        200:
-          description: OK
-  /business/{id}:
-    get:
-      operationId: getBusiness
-      parameters:
-        - name: id
-          in: path
-          type: string
-          format: uuid
-          required: true
-      responses:
-        200:
-          description: OK
-    delete:
-      operationId: deleteBusiness
-      parameters:
-        - name: id
-          in: path
-          type: string
-          format: uuid
-          required: true
-      responses:
-        200:
-          description: OK
-  /event:
-    get:
-      operationId: listEvent
-      responses:
-        200:
-          description: OK
-    post:
-      operationId: saveEvent
-      responses:
-        200:
-          description: OK
-  /event/{id}:
-    get:
-      operationId: getEvent
-      parameters:
-        - name: id
-          in: path
-          type: string
-          format: uuid
-          required: true
-      responses:
-        200:
-          description: OK
-    delete:
-      operationId: deleteEvent
-      parameters:
-        - name: id
-          in: path
-          type: string
-          format: uuid
-          required: true
-      responses:
-        200:
-          description: OK
   /auth/login:
     post:
       operationId: login
@@ -253,10 +106,38 @@ paths:
       operationId: changePassword
       responses:
         200:
-          description: OK
-  /member/csv:
-    get:
-      operationId: downloadMemberCsv
+          description: OK     
+  /job_template:
+    post:
+      operationId: saveJobTemplate
       responses:
         200:
-          description: OK          
+          description: OK
+    get:
+      operationId: listJobTemplates
+      responses:
+        200:
+          description: OK     
+  /job_template/{id}:
+    get:
+      operationId: getJobTemplate
+      parameters:
+        - name: id
+          in: path
+          type: string
+          format: uuid
+          required: true
+      responses:
+        200:
+          description: OK        
+    delete:
+      operationId: deleteJobTemplate
+      parameters:
+        - name: id
+          in: path
+          type: string
+          format: uuid
+          required: true
+      responses:
+        200:
+          description: OK                      

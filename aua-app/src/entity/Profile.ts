@@ -1,10 +1,24 @@
 import { Entity, Column, PrimaryColumn, Index, ManyToMany, JoinTable } from 'typeorm';
-import { File } from './File';
 
 @Entity()
 export class Profile {
   @PrimaryColumn('uuid')
   id: string;
+
+  @Column('uuid')
+  userId: string;
+
+  @Column({ default: () => `timezone('UTC', now())` })
+  createdAt?: Date;
+
+  @Column()
+  lastUpdatedAt: Date;
+
+  @Column()
+  type: string;
+
+  @Column()
+  name: string;
 
   @Column({ nullable: true })
   givenName: string;
@@ -35,9 +49,6 @@ export class Profile {
 
   @Column({nullable: true})
   acn: string;
-
-  @Column()
-  lastUpdatedAt?: Date;
 
   @Column({nullable: true})
   remark?: string;

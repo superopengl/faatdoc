@@ -108,10 +108,11 @@ class HomeHeaderRaw extends React.Component {
                       {isGuest && <Menu.Item key="services"><HashLink to="/#services">Services</HashLink></Menu.Item>}
                       {isGuest && <Menu.Item key="team"><HashLink to="/#team">Team</HashLink></Menu.Item>}
                       {isGuest && <Menu.Item key="login"><Link to="/login">Log In / Sign Up</Link></Menu.Item>}
-                      {isClient && <Menu.Item key="membership"><Link to="/membership">Membership</Link></Menu.Item>}
+                      {isClient && <Menu.Item key="asks"><Link to="/asks">Requests</Link></Menu.Item>}
                       {isClient && <Menu.Item key="profile"><Link to="/profile">Profile</Link></Menu.Item>}
                       {isAdmin && <Menu.Item key="clients"><Link to="/clients">Clients</Link></Menu.Item>}
                       {isAdmin && <Menu.Item key="admin"><Link to="/admin">Admin</Link></Menu.Item>}
+                      {isAdmin && <Menu.Item key="job_template"><Link to="/job_template">Job Template</Link></Menu.Item>}
                       {!isGuest && <Menu.Item key="changePassword"><Link to="/change_password">Change Password</Link></Menu.Item>}
                       {!isGuest && <Menu.Item key="logout" onClick={handleLogout}>Log Out</Menu.Item>}
                     </Menu>
@@ -133,8 +134,9 @@ class HomeHeaderRaw extends React.Component {
                     <Menu mode="inline" style={{ border: 0 }} openKeys={['gallery']}>
                       {isGuest && <Menu.Item key="login"><LoginOutlined /> <Link to="/login">Log In / Sign Up</Link></Menu.Item>}
                       {isAdmin && <Menu.Item key="admin"><SettingOutlined /> <Link to="/admin">Admin</Link></Menu.Item>}
+                      {isAdmin && <Menu.Item key="job_template"><SettingOutlined /> <Link to="/job_template">Job Template</Link></Menu.Item>}
                       {isAdmin && <Menu.Item key="clients"><SettingOutlined /> <Link to="/clients">Clients</Link></Menu.Item>}
-                      {isClient && <Menu.Item key="membership"><IdcardOutlined /> <Link to="/membership">Membership</Link></Menu.Item>}
+                      {isClient && <Menu.Item key="asks"><IdcardOutlined /> <Link to="/asks">Requests</Link></Menu.Item>}
                       {isClient && <Menu.Item key="profile"><UserOutlined /> <Link to="/profile">Profile</Link></Menu.Item>}
                       {!isGuest && <Menu.Item key="changePassword"><SecurityScanOutlined /> <Link to="/change_password">Change Password</Link></Menu.Item>}
                       <Menu.Item key="home"><HomeOutlined /> <HashLink to="/#home" onClick={this.onClose}>Home</HashLink></Menu.Item>

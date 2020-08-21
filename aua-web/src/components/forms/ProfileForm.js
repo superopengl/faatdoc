@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 import { Input, Button, Form, Radio, DatePicker, Checkbox } from 'antd';
-import { ProfilePictureUploader } from '../ProfilePictureUploader';
+import { FileUploader } from '../FileUploader';
 import * as moment from 'moment';
 import { GlobalContext } from 'contexts/GlobalContext';
 

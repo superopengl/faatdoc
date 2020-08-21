@@ -1,11 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Tabs, Typography, Layout, Button, Row } from 'antd';
+import { Tabs, Typography, Layout, Button, Row, Col, Card, Modal } from 'antd';
 import PosterAdminGrid from 'components/grids/PosterAdminGrid';
 import GalleryAdminGrid from 'components/grids/GalleryAdminGrid';
 import BusinessAdminGrid from 'components/grids/BusinessAdminGrid';
 import EventAdminGrid from 'components/grids/EventAdminGrid';
 import HomeHeader from 'components/HomeHeader';
+import TaskRequestForm from 'components/forms/TaskRequestForm';
 import { handleDownloadCsv } from 'services/memberService';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment';
@@ -17,6 +18,7 @@ import {
 import { Link } from 'react-router-dom';
 import { Table, Tag, Space } from 'antd';
 import { listClients } from 'services/userService';
+import { PlusOutlined, StopOutlined, QuestionOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
 const { TabPane } = Tabs;
@@ -55,7 +57,7 @@ const columnDef = [
     dataIndex: 'bio',
     key: 'bio',
     render: (text, record) => {
-      const {dob, gender} = record;
+      const { dob, gender } = record;
       const theDate = moment(dob);
       return <>
         <div>Gendar: {gender}</div>
@@ -114,13 +116,23 @@ const columnDef = [
   },
 ];
 
+const spanProps = {
+  xs: 24,
+  sm: 24,
+  md: 12,
+  lg: 8,
+  xl: 6,
+  xxl: 6,
+}
+
 class AsksPage extends React.Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-      data: []
+      data: [],
+      modalVisible: false
     }
   }
 
@@ -140,22 +152,50 @@ class AsksPage extends React.Component {
     saveAs(blob, `ubcallied members ${moment().format('YYYY-MM-DD_HH-mm-ss')}.csv`);
   }
 
+  add = () => {
+    this.setState({ modalVisible: true });
+  }
+
+  handleModalCancel = () => {
+    this.setState({ modalVisible: false });
+  }
+
+  handleEditModalOk = () => {
+
+  }
+
   render() {
     const { windowWidth } = this.props;
 
-    const { data } = this.state;
+    const { data, modalVisible } = this.state;
 
     const showNarrowScreenWarning = windowWidth <= 450;
 
     return (
       <LayoutStyled>
+        <Modal
+          title="New Request"
+          visible={modalVisible}
+          onOk={this.handleEditModalOk}
+          onCancel={this.handleModalCancel}
+          footer={null}
+        >
+          <TaskRequestForm></TaskRequestForm>
+        </Modal>
         <HomeHeader></HomeHeader>
         <ContainerStyled>
           <StyledTitleRow>
             <Title level={2} style={{ margin: 'auto' }}>My Requests</Title>
           </StyledTitleRow>
           {showNarrowScreenWarning && <Text type="warning"><ExclamationCircleOutlined /> This admin page will be more convenient on wide screens.</Text>}
-          <Table columns={columnDef} dataSource={data} />
+          <Row>
+            <Col {...spanProps}>
+              <Card hoverable onClick={() => this.add()}>
+                <PlusOutlined style={{ fontSize: '5rem', margin: 'auto', width: '100%' }} />
+                {/* <Text type="secondary">Click to add new card</Text> */}
+              </Card>
+            </Col>
+          </Row>
         </ContainerStyled>
       </LayoutStyled >
     );

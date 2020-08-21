@@ -16,9 +16,6 @@ export class File {
   @Column()
   mime: string;
 
-  @Column({ default: () => `timezone('UTC', now())` })
-  lastAccess?: Date;
-
   @Column()
   location: string;
 

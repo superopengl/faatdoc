@@ -33,7 +33,7 @@ function getBase64(file) {
   });
 }
 
-class ProfilePictureUploaderRaw extends React.Component {
+class FileUploaderRaw extends React.Component {
   constructor(props) {
     super(props);
 
@@ -169,10 +169,10 @@ class ProfilePictureUploaderRaw extends React.Component {
   }
 }
 
-ProfilePictureUploaderRaw.propTypes = {};
+FileUploaderRaw.propTypes = {};
 
-ProfilePictureUploaderRaw.defaultProps = {
+FileUploaderRaw.defaultProps = {
   disabled: false
 };
 
-export const ProfilePictureUploader = ProfilePictureUploaderRaw;
+export const FileUploader = FileUploaderRaw;

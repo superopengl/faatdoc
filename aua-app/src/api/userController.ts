@@ -8,8 +8,6 @@ import { computeUserSecret } from '../utils/computeUserSecret';
 import { Profile } from '../entity/Profile';
 import { handlerWrapper } from '../utils/asyncHandler';
 import { Role } from '../enums/Role';
-import { ProfileImage } from '../entity/ProfileImage';
-import { createProfileImageEntities } from '../utils/createProfileImageEntities';
 import { createProfileEntity } from '../utils/createProfileEntity';
 import { File } from '../entity/File';
 import { v4 as uuidv4 } from 'uuid';
@@ -34,11 +32,10 @@ export const updateProfile = handlerWrapper(async (req, res) => {
   const userId = id;
 
   const profile = createProfileEntity(userId, payload);
-  const profileImages = createProfileImageEntities(userId, payload.pictures);
 
   await getManager().transaction(async manager => {
-    await manager.getRepository(ProfileImage).delete({ userId });
-    await manager.save([profile, ...profileImages]);
+    // await manager.getRepository(ProfileImage).delete({ userId });
+    await manager.save([profile]);
   });
 
   res.json();

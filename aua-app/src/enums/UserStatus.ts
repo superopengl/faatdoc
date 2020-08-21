@@ -1,5 +1,5 @@
 export enum UserStatus {
   Enabled = 'enabled',
-  ResetPassword = 'resetPassword',
+  ResetPassword = 'reset_password',
   Disabled = 'disabled'
 }

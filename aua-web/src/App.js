@@ -21,6 +21,7 @@ import GalleryPage from 'pages/GalleryPage';
 import OtherPage from 'pages/OtherPage';
 import ClientsPage from 'pages/ClientsPage';
 import AsksPage from 'pages/AsksPage';
+import JobAdminPage from 'pages/JobAdminPage';
 
 
 class App extends React.Component {
@@ -60,6 +61,8 @@ class App extends React.Component {
     const isAdmin = role === 'admin';
     const isGuest = role === 'guest';
     const isClient = role === 'client';
+    const isAgent = role === 'agent';
+
     return (
       <GlobalContext.Provider value={this.state}>
         <BrowserRouter basename="/">
@@ -71,10 +74,10 @@ class App extends React.Component {
             <Route path="/forgot_password" exact component={ForgotPasswordPage} />
             <Route path="/reset_password" exact component={ResetPasswordPage} />
             {isAdmin && <Route path="/admin" exact component={AdminPage} />}
+            {isAdmin && <Route path="/job_template" exact component={JobAdminPage} />}
             {isAdmin && <Route path="/clients" exact component={ClientsPage} />}
             {isAdmin && <Route path="/tasks" exact component={ClientsPage} />}
             {isClient && <Route path="/asks" exact component={AsksPage} />}
-            {isClient && <Route path="/membership" exact component={MembershipPage} />}
             {!isGuest && <Route path="/change_password" exact component={ChangePasswordPage} />}
             <Route path="/terms_and_conditions" exact component={TermAndConditionPage} />
             <Route path="/privacy_policy" exact component={PrivacyPolicyPage} />

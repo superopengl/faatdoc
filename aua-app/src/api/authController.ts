@@ -9,7 +9,6 @@ import { UserStatus } from '../enums/UserStatus';
 import { computeUserSecret } from '../utils/computeUserSecret';
 import { Profile } from '../entity/Profile';
 import { handlerWrapper } from '../utils/asyncHandler';
-import { createProfileImageEntities } from '../utils/createProfileImageEntities';
 import { createProfileEntity } from '../utils/createProfileEntity';
 import { sendEmail } from '../services/emailService';
 import { getForgotPasswordHtmlEmail, getForgotPasswordTextEmail, getSignUpHtmlEmail, getSignUpTextEmail } from '../utils/emailTemplates';
@@ -85,10 +84,9 @@ function createUserEntity(payload): User {
 async function createUser(payload): Promise<{ user: User, profile: Profile }> {
   const user = createUserEntity(payload);
   const profile = createProfileEntity(user.id, payload);
-  const profileImages = createProfileImageEntities(user.id, payload.pictures);
 
   await getManager().transaction(async manager => {
-    await manager.save([user, profile, ...profileImages]);
+    await manager.save([user, profile]);
   });
 
   return { user, profile };

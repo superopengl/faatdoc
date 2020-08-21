@@ -31,8 +31,8 @@ a {
 const MapContainer = styled.div`
 margin: auto;
 width: 100%;
-max-width: 800px;
-height: 400px;
+max-width: 600px;
+height: 300px;
 `;
 
 class HomeContactArea extends React.Component {
@@ -87,17 +87,15 @@ class HomeContactArea extends React.Component {
                 Unit 101, 11 Spring St., Chatswood, NSW 2067
                 </a>
             </p>
-            <MapContainer>
+            {/* <MapContainer>
               <GoogleMapReact
                 bootstrapURLKeys={{ key: 'AIzaSyAqcl9O4Ay_2qL7aZX_LMwIARUAXlPM9yQ' }}
                 defaultCenter={position}
                 defaultZoom={15}
                 yesIWantToUseGoogleMapApiInternals
                 onGoogleApiLoaded={({ map, maps }) => renderMarkers(map, maps)}
-              >
-                {/* <AnyReactComponent text="AU Accounting Office" lat={-33.796497} lng={151.185049} /> */}
-              </GoogleMapReact>
-            </MapContainer>
+              />
+            </MapContainer> */}
           </section>
         </InfoCard>
       </HomeRowArea>

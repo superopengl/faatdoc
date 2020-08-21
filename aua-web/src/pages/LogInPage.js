@@ -78,7 +78,7 @@ class LogInPage extends React.Component {
                 const profile = await getProfile();
                 setProfile(profile);
 
-                this.props.history.push(user.role === 'admin' ? '/admin' : '/membership');
+                this.props.history.push(user.role === 'admin' ? '/tasks' : '/requests');
               } catch {
                 this.setState({ sending: false });
               }
