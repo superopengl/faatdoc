@@ -2,15 +2,16 @@ import React from 'react';
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 import { Input, Button, Form, Modal, DatePicker, Table, Card, Space, Typography } from 'antd';
-import { FileUploader } from '../FileUploader';
+import { FileUploader } from 'components/FileUploader';
 import * as moment from 'moment';
 import { GlobalContext } from 'contexts/GlobalContext';
 import { Menu, Dropdown, message, Tooltip } from 'antd';
 import { UpOutlined, DownOutlined, DeleteOutlined, QuestionOutlined } from '@ant-design/icons';
 import { Divider } from 'antd';
-import { listJobTemplates, deleteJobTemplate } from 'services/jobTemplateService';
+import { listPortofolios, deletePortofolio } from 'services/portofolioService';
+import { getLabelFromName } from 'util/getLabelFromName';
 
-const { Text, Paragraph } = Typography;
+const { Text, Title, Paragraph } = Typography;
 
 const StyledFormItem = styled(Form.Item)`
   // padding: 2rem;
@@ -19,7 +20,10 @@ const StyledFormItem = styled(Form.Item)`
   // border-radius: 8px;
   // background-color: #ffffff;
 `
+const StyledCard = styled(Card)`
+box-shadow: 0px 2px 8px #888888;
 
+`
 
 const getInputFor = (type, props) => {
   switch (type) {
@@ -39,7 +43,7 @@ const getInputFor = (type, props) => {
 }
 
 
-const JobTemplateField = (props) => {
+const PortofolioField = (props) => {
   const { label, name, required, type } = props;
   const InputComponent = getInputFor(type, props);
   return (
@@ -60,70 +64,59 @@ const EMPTY_ROW = {
 
 const columns = [
   {
-    title: 'No',
-    render: (text, records, index) => <>{index + 1}</>
-  },
-  {
-    title: 'Label',
-    dataIndex: 'label',
-  },
-  {
     title: 'Name',
-    dataIndex: 'name',
+    dataIndex: 'key',
+    render: (text) => getLabelFromName(text)
   },
   {
-    title: 'Required',
-    dataIndex: 'required',
-  },
-  {
-    title: 'Type',
-    dataIndex: 'type',
-  },
+    title: 'Value',
+    dataIndex: 'value',
+  }
 ];
 
-const JobTemplateCard = (props) => {
+const PortofolioCard = (props) => {
 
   const { value } = props;
-
-  console.log(value);
 
   const { id, name, fields } = value || {};
 
   const handleDelete = async (e) => {
     e.stopPropagation();
     Modal.confirm({
-      title: <>To delete Job Template <strong>{name}</strong>?</>,
+      title: <>To delete Portofolio <strong>{name}</strong>?</>,
       onOk: async () => {
-        await deleteJobTemplate(id);
+        await deletePortofolio(id);
         props.onDelete();
       },
       okText: 'Yes, delete it!'
     });
-
   }
+
+  const data = Object.entries(fields).map(([key, value]) => ({key, value}));
 
 
   return (<>
-    <Card
-      title={name}
+    <StyledCard
+      title={<Title>{name}</Title>}
       extra={<Button type="link" onClick={handleDelete} danger>Delete</Button>}
       bodyStyle={{margin: 0, padding: 0}}
       onClick={props.onClick}
     >
       <Table
         style={{ width: '100%' }}
+        size="small"
         footer={false}
         pagination={false}
         columns={columns}
-        dataSource={fields}
+        dataSource={data}
       />
-    </Card>
+    </StyledCard>
   </>
   );
 };
 
-JobTemplateCard.propTypes = {};
+PortofolioCard.propTypes = {};
 
-JobTemplateCard.defaultProps = {};
+PortofolioCard.defaultProps = {};
 
-export default withRouter(JobTemplateCard);
+export default withRouter(PortofolioCard);

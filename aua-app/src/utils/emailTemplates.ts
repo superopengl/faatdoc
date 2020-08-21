@@ -8,7 +8,7 @@ const SIGNATURE_TEXT = `
 Kind regards,
 
 --
-Admin (on behalf of AUA Allied)
+Admin (on behalf of AU Accounting Office)
 https://www.ubcallied.com.au
 `;
 
@@ -17,12 +17,12 @@ const SIGNATURE_HTML = `
 <p>
 --
 <br/>
-Admin (on behalf of AUA Allied)
+Admin (on behalf of AU Accounting Office)
 <br/>
 <a href="https://www.ubcallied.com.au" target="_blank" referrerpolicy="no-referrer">https://www.ubcallied.com.au</a>
 </p>
 <p>
-<img src="https://www.ubcallied.com.au/images/header-logo.jpg" alt="AUA Allied Logo" width="auto" height="60px"/>
+<img src="https://www.ubcallied.com.au/images/header-logo.jpg" alt="AU Accounting Office Logo" width="auto" height="60px"/>
 </p>
 `;
 

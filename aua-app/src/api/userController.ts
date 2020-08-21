@@ -5,7 +5,7 @@ import { assert, assertRole } from '../utils/assert';
 import { validatePasswordStrength } from '../utils/validatePasswordStrength';
 import * as _ from 'lodash';
 import { computeUserSecret } from '../utils/computeUserSecret';
-import { Profile } from '../entity/Profile';
+import { Portofolio } from '../entity/Portofolio';
 import { handlerWrapper } from '../utils/asyncHandler';
 import { Role } from '../enums/Role';
 import { createProfileEntity } from '../utils/createProfileEntity';
@@ -17,7 +17,7 @@ export const getProfile = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
   const { id, role } = (req as any).user as User;
 
-  const profileRepo = getRepository(Profile);
+  const profileRepo = getRepository(Portofolio);
   const profile = await profileRepo.findOne(id);
 
   res.json(profile);
@@ -63,7 +63,7 @@ export const listClients = handlerWrapper(async (req, res) => {
   const clients = await getConnection()
     .createQueryBuilder()
     .from(User, 'u')
-    .innerJoin(q => q.from(Profile, 'p').select('*'), 'p', 'u.id = p.id')
+    .innerJoin(q => q.from(Portofolio, 'p').select('*'), 'p', 'u.id = p.id')
     .select([
       `u.id as id`,
       `"email"`,

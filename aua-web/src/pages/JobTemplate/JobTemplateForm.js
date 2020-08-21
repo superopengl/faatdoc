@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 import { Input, Button, Form, Select, DatePicker, Checkbox, Table, Space, Typography } from 'antd';
-import { FileUploader } from '../FileUploader';
+import { FileUploader } from '../../components/FileUploader';
 import * as moment from 'moment';
 import { GlobalContext } from 'contexts/GlobalContext';
 import { Menu, Dropdown, message, Tooltip } from 'antd';
@@ -147,7 +147,7 @@ const JobTemplateForm = (props) => {
       }
     },
     {
-      title: 'Name',
+      title: 'Associated Portofolio Field',
       dataIndex: 'name',
       render: (text, records, index) => <Input placeholder="name" type="text" allowClear={true} maxLength={50} value={text} onChange={(e) => changeValue(index, 'name', e.target.value)} />
     },
@@ -191,6 +191,7 @@ const JobTemplateForm = (props) => {
         <Text>Job Fields</Text>
       <Table
         style={{ width: '100%' }}
+        size="small"
         columns={columns}
         dataSource={[...data]}
         pagination={false}

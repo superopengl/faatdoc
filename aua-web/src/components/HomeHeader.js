@@ -109,7 +109,8 @@ class HomeHeaderRaw extends React.Component {
                       {isGuest && <Menu.Item key="team"><HashLink to="/#team">Team</HashLink></Menu.Item>}
                       {isGuest && <Menu.Item key="login"><Link to="/login">Log In / Sign Up</Link></Menu.Item>}
                       {isClient && <Menu.Item key="asks"><Link to="/asks">Requests</Link></Menu.Item>}
-                      {isClient && <Menu.Item key="profile"><Link to="/profile">Profile</Link></Menu.Item>}
+                      {isClient && <Menu.Item key="portofolio"><Link to="/portofolio">Portofolios</Link></Menu.Item>}
+                      {isClient && <Menu.Item key="my_lodgement"><Link to="/lodgement">Lodgements</Link></Menu.Item>}
                       {isAdmin && <Menu.Item key="clients"><Link to="/clients">Clients</Link></Menu.Item>}
                       {isAdmin && <Menu.Item key="admin"><Link to="/admin">Admin</Link></Menu.Item>}
                       {isAdmin && <Menu.Item key="job_template"><Link to="/job_template">Job Template</Link></Menu.Item>}
@@ -137,7 +138,8 @@ class HomeHeaderRaw extends React.Component {
                       {isAdmin && <Menu.Item key="job_template"><SettingOutlined /> <Link to="/job_template">Job Template</Link></Menu.Item>}
                       {isAdmin && <Menu.Item key="clients"><SettingOutlined /> <Link to="/clients">Clients</Link></Menu.Item>}
                       {isClient && <Menu.Item key="asks"><IdcardOutlined /> <Link to="/asks">Requests</Link></Menu.Item>}
-                      {isClient && <Menu.Item key="profile"><UserOutlined /> <Link to="/profile">Profile</Link></Menu.Item>}
+                      {isClient && <Menu.Item key="portofolio"><UserOutlined /> <Link to="/portofolio">Portofolios</Link></Menu.Item>}
+                      {isClient && <Menu.Item key="my_lodgement"><UserOutlined /> <Link to="/lodgement">Lodgements</Link></Menu.Item>}
                       {!isGuest && <Menu.Item key="changePassword"><SecurityScanOutlined /> <Link to="/change_password">Change Password</Link></Menu.Item>}
                       <Menu.Item key="home"><HomeOutlined /> <HashLink to="/#home" onClick={this.onClose}>Home</HashLink></Menu.Item>
                       {isGuest && <Menu.Item key="services"><BellOutlined /> <HashLink to="/#services" onClick={this.onClose}>Services</HashLink></Menu.Item>}

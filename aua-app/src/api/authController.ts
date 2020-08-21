@@ -7,7 +7,7 @@ import * as _ from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import { UserStatus } from '../enums/UserStatus';
 import { computeUserSecret } from '../utils/computeUserSecret';
-import { Profile } from '../entity/Profile';
+import { Portofolio } from '../entity/Portofolio';
 import { handlerWrapper } from '../utils/asyncHandler';
 import { createProfileEntity } from '../utils/createProfileEntity';
 import { sendEmail } from '../services/emailService';
@@ -63,8 +63,9 @@ export const logout = handlerWrapper(async (req, res) => {
 
 
 function createUserEntity(payload): User {
-  const { email, password } = payload;
+  const { email, password, role } = payload;
   validatePasswordStrength(password);
+  assert([Role.Client, Role.Agent].includes(role), 400, `Unsupported role ${role}`);
 
   const id = uuidv4();
   const salt = uuidv4();
@@ -74,40 +75,35 @@ function createUserEntity(payload): User {
   user.email = email.toLowerCase();
   user.secret = computeUserSecret(password, salt);
   user.salt = salt;
-  user.role = Role.Client;
+  user.role = role;
   user.status = UserStatus.Enabled;
 
   return user;
 }
 
 
-async function createUser(payload): Promise<{ user: User, profile: Profile }> {
+async function createUser(payload): Promise<User> {
   const user = createUserEntity(payload);
-  const profile = createProfileEntity(user.id, payload);
 
-  await getManager().transaction(async manager => {
-    await manager.save([user, profile]);
-  });
+  const repo = getRepository(User);
+  await repo.save(user);
 
-  return { user, profile };
+  return user;
 }
 
 
 export const signup = handlerWrapper(async (req, res) => {
   const payload = req.body;
 
-  // const isAdmin = _.get(req, 'user.role') === 'admin';
-
-  // payload.email = payload.email.toLowerCase();
   const result = await createUser(payload);
 
-  const { user: { id, email }, profile: { givenName, surname } } = result;
+  const { id, email } = result;
 
-  const name = `${givenName} ${surname}`;
+  const name = `user`;
   const url = process.env.AUA_DOMAIN_NAME;
   // Non-blocking sending email
   sendEmail({
-    subject: 'Welcome to AUA Allied',
+    subject: 'Welcome to AU Accounting Office',
     to: email,
     htmlBody: getSignUpHtmlEmail(name, url),
     textBody: getSignUpTextEmail(name, url),
@@ -137,7 +133,7 @@ export const forgotPassword = handlerWrapper(async (req, res) => {
   user.resetPasswordToken = resetPasswordToken;
   user.status = UserStatus.ResetPassword;
 
-  const { givenName, surname } = await getRepository(Profile).findOne(id);
+  const { fields: {givenName, surname} } = await getRepository(Portofolio).findOne(id);
   const name = `${givenName} ${surname}`;
 
   const url = `${process.env.AUA_DOMAIN_NAME}/reset_password/${resetPasswordToken}/`;

@@ -1,15 +1,15 @@
-swagger: '2.0'
-info: 
+swagger: "2.0"
+info:
   description: AUA backend API
-  version: '1.0.0'
-  title: 'AUA API'
-basePath: '/api/v1'
+  version: "1.0.0"
+  title: "AUA API"
+basePath: "/api/v1"
 schemes:
   - http
   - https
 definitions:
   PingResponse:
-    type: 'object'
+    type: "object"
 paths:
   /image/{id}:
     get:
@@ -59,7 +59,7 @@ paths:
       operationId: forgotPassword
       responses:
         200:
-          description: OK          
+          description: OK
   /auth/reset_password:
     post:
       operationId: resetPassword
@@ -89,7 +89,7 @@ paths:
       operationId: listClients
       responses:
         200:
-          description: OK          
+          description: OK
   /user/profile:
     post:
       operationId: updateProfile
@@ -106,7 +106,7 @@ paths:
       operationId: changePassword
       responses:
         200:
-          description: OK     
+          description: OK
   /job_template:
     post:
       operationId: saveJobTemplate
@@ -117,7 +117,7 @@ paths:
       operationId: listJobTemplates
       responses:
         200:
-          description: OK     
+          description: OK
   /job_template/{id}:
     get:
       operationId: getJobTemplate
@@ -129,7 +129,7 @@ paths:
           required: true
       responses:
         200:
-          description: OK        
+          description: OK
     delete:
       operationId: deleteJobTemplate
       parameters:
@@ -140,4 +140,38 @@ paths:
           required: true
       responses:
         200:
-          description: OK                      
+          description: OK
+  /portofolio:
+    post:
+      operationId: savePortofolio
+      responses:
+        200:
+          description: OK
+    get:
+      operationId: listPortofolio
+      responses:
+        200:
+          description: OK
+  /portofolio/{id}:
+    get:
+      operationId: getPortofolio
+      parameters:
+        - name: id
+          in: path
+          type: string
+          format: uuid
+          required: true
+      responses:
+        200:
+          description: OK
+    delete:
+      operationId: deletePortofolio
+      parameters:
+        - name: id
+          in: path
+          type: string
+          format: uuid
+          required: true
+      responses:
+        200:
+          description: OK

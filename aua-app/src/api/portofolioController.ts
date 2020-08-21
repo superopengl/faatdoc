@@ -15,51 +15,53 @@ import { getForgotPasswordHtmlEmail, getForgotPasswordTextEmail, getSignUpHtmlEm
 import * as moment from 'moment';
 import { logError } from '../utils/logger';
 import { getUtcNow } from '../utils/getUtcNow';
-import { Role } from '../enums/Role';
-import { JobTemplate } from '../entity/JobTemplate';
 import { json } from 'body-parser';
 
 
-export const saveJobTemplate = handlerWrapper(async (req, res) => {
-  assertRole(req, 'admin');
-  const jobTemplate = new JobTemplate();
+export const savePortofolio = handlerWrapper(async (req, res) => {
+  assertRole(req, 'admin', 'client');
+  const portofolio = new Portofolio();
 
-  const { id, name, fields } = req.body;
+  const {user: {id: userId}} = req;
+
+  const { id, name, fields, type } = req.body;
   assert(name, 400, 'name is empty');
-  jobTemplate.id = id || uuidv4();
-  jobTemplate.name = name;
-  jobTemplate.fields = fields;
-  jobTemplate.lastUpdatedAt = getUtcNow();
+  portofolio.id = id || uuidv4();
+  portofolio.userId = userId;
+  portofolio.name = name;
+  portofolio.fields = fields;
+  portofolio.type = type;
+  portofolio.lastUpdatedAt = getUtcNow();
 
-  const repo = getRepository(JobTemplate);
-  await repo.save(jobTemplate);
+  const repo = getRepository(Portofolio);
+  await repo.save(portofolio);
 
   res.json(null);
 });
 
-export const listJobTemplates = handlerWrapper(async (req, res) => {
-  assertRole(req, 'admin', 'client', 'agent');
+export const listPortofolio = handlerWrapper(async (req, res) => {
+  assertRole(req, 'admin', 'client');
 
-  const repo = getRepository(JobTemplate);
+  const repo = getRepository(Portofolio);
   const list = await repo.find({});
 
   res.json(list);
 });
 
-export const getJobTemplate = handlerWrapper(async (req, res) => {
-  assertRole(req, 'admin', 'client', 'agent');
+export const getPortofolio = handlerWrapper(async (req, res) => {
+  assertRole(req, 'admin', 'client');
   const { id } = req.params;
-  const repo = getRepository(JobTemplate);
-  const jobTemplate = await repo.findOne(id);
-  assert(jobTemplate, 404);
+  const repo = getRepository(Portofolio);
+  const portofolio = await repo.findOne(id);
+  assert(portofolio, 404);
 
-  res.json(jobTemplate);
+  res.json(portofolio);
 });
 
-export const deleteJobTemplate = handlerWrapper(async (req, res) => {
-  assertRole(req, 'admin', 'client', 'agent');
+export const deletePortofolio = handlerWrapper(async (req, res) => {
+  assertRole(req, 'admin', 'client');
   const { id } = req.params;
-  const repo = getRepository(JobTemplate);
+  const repo = getRepository(Portofolio);
   await repo.delete({ id });
 
   res.json(null);

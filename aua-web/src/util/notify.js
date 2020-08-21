@@ -25,3 +25,4 @@ export const notify = {
     request('warn', title, content, 5);
   }
 }
+

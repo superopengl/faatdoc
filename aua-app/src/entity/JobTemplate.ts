@@ -1,4 +1,4 @@
-import { Column, PrimaryColumn, Entity } from 'typeorm';
+import { Column, PrimaryColumn, Entity, Index } from 'typeorm';
 
 @Entity()
 export class JobTemplate {
@@ -7,6 +7,7 @@ export class JobTemplate {
 
 
   @Column()
+  @Index({unique: true})
   name: string;
 
 

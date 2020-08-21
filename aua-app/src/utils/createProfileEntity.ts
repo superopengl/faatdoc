@@ -1,23 +1,11 @@
-import { Profile } from '../entity/Profile';
+import { Portofolio } from '../entity/Portofolio';
 import { getUtcNow } from './getUtcNow';
 
-export function createProfileEntity(userId: string, payload: any): Profile {
-  const profile = new Profile();
+export function createProfileEntity(userId: string, payload: any): Portofolio {
+  const profile = new Portofolio();
   profile.id = userId;
-  profile.givenName = payload.givenName;
-  profile.surname = payload.surname;
-  profile.company = payload.company;
-  profile.dob = payload.dob;
-  profile.gender = payload.gender;
-  profile.phone = payload.phone;
-  profile.address = payload.address;
-  profile.wechat = payload.wechat;
-  profile.tfn = payload.tfn;
-  profile.abn = payload.abn;
-  profile.acn = payload.acn;
-  profile.occupation = payload.occupation;
-  profile.industry = payload.industry;
-  profile.remark = payload.remark;
+  profile.name = payload.name;
+  profile.fields = payload.fields;
   profile.lastUpdatedAt = getUtcNow();
 
   return profile;

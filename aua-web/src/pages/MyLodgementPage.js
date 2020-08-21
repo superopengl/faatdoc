@@ -125,7 +125,7 @@ const spanProps = {
   xxl: 6,
 }
 
-class AsksPage extends React.Component {
+class MyLodgementPage extends React.Component {
 
   constructor(props) {
     super(props);
@@ -201,8 +201,8 @@ class AsksPage extends React.Component {
     );
   }
 }
-AsksPage.propTypes = {};
+MyLodgementPage.propTypes = {};
 
-AsksPage.defaultProps = {};
+MyLodgementPage.defaultProps = {};
 
-export default windowSize(AsksPage);
+export default windowSize(MyLodgementPage);

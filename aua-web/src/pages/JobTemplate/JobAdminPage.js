@@ -6,8 +6,8 @@ import GalleryAdminGrid from 'components/grids/GalleryAdminGrid';
 import BusinessAdminGrid from 'components/grids/BusinessAdminGrid';
 import EventAdminGrid from 'components/grids/EventAdminGrid';
 import HomeHeader from 'components/HomeHeader';
-import JobTemplateForm from 'components/forms/JobTemplateForm';
-import JobTemplateCard from 'components/forms/JobTemplateCard';
+import JobTemplateForm from 'pages/JobTemplate/JobTemplateForm';
+import JobTemplateCard from 'pages/JobTemplate/JobTemplateCard';
 import { handleDownloadCsv } from 'services/memberService';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment';
@@ -17,6 +17,8 @@ import {
   ExclamationCircleOutlined
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
+import {LargePlusButton} from 'components/LargePlusButton';
+
 import Modal from 'antd/lib/modal/Modal';
 import { List } from 'antd';
 import { Space } from 'antd';
@@ -51,14 +53,14 @@ export const JobAdminPage = (props) => {
 
   
   const [modalVisible, setModalVisible] = React.useState(false);
-  const [list, setList] = React.useState([]);
+  const [list, setList] = React.useState([{isNewButton: true}]);
   const [currentJob, setCurrentJob] = React.useState();
   const [initialLoaded, setInitialLoaded] = React.useState(false);
   
   const loadList = async (force = false) => {
     if (!initialLoaded || force) {
       const list = await listJobTemplates();
-      setList(list);
+      setList([...list, {isNewButton: true}]);
       setInitialLoaded(true);
     }
   }
@@ -95,22 +97,21 @@ export const JobAdminPage = (props) => {
           <Title level={2} style={{ margin: 'auto' }}>Job Template Management</Title>
         </StyledTitleRow>
         <Space size="large" direction="vertical" style={{ width: '100%' }}>
-
-          <Button size="large" type="primary" onClick={() => openModalToCreate()}>Create New Job Template</Button>
           <List
             grid={{
-              gutter: 16,
+              gutter: 24,
               xs: 1,
               sm: 1,
-              md: 1,
+              md: 2,
               lg: 2,
               xl: 3,
               xxl: 4,
             }}
             dataSource={list}
-            renderItem={job => (
-              <List.Item key={job.id}>
-                <JobTemplateCard onClick={() => openModalToEdit(job)} onDelete={() => handleAfterDelete()} value={job} />
+            renderItem={item => (
+              <List.Item key={item.id}>
+                {item.isNewButton && <LargePlusButton onClick={() => openModalToCreate()} />}
+                {!item.isNewButton && <JobTemplateCard onClick={() => openModalToEdit(item)} onDelete={() => handleAfterDelete()} value={item} />}
               </List.Item>
             )}
           />

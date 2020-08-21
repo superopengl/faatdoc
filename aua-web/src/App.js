@@ -20,8 +20,9 @@ import PrivacyPolicyPage from 'pages/PrivacyPolicyPage';
 import GalleryPage from 'pages/GalleryPage';
 import OtherPage from 'pages/OtherPage';
 import ClientsPage from 'pages/ClientsPage';
-import AsksPage from 'pages/AsksPage';
-import JobAdminPage from 'pages/JobAdminPage';
+import MyLodgementPage from 'pages/MyLodgementPage';
+import JobAdminPage from 'pages/JobTemplate/JobAdminPage';
+import PortofolioPage from 'pages/Portofolio/PortofolioPage';
 
 
 class App extends React.Component {
@@ -70,14 +71,14 @@ class App extends React.Component {
             <Route path="/" exact component={HomePage} />
             {isGuest && <Route path="/login" exact component={LogInPage} />}
             {(isAdmin || isGuest) && <Route path="/signup" component={SignUpPage} />}
-            {isClient && <Route path="/profile" component={ProfilePage} />}
+            {isClient && <Route path="/portofolio" component={PortofolioPage} />}
             <Route path="/forgot_password" exact component={ForgotPasswordPage} />
             <Route path="/reset_password" exact component={ResetPasswordPage} />
             {isAdmin && <Route path="/admin" exact component={AdminPage} />}
             {isAdmin && <Route path="/job_template" exact component={JobAdminPage} />}
             {isAdmin && <Route path="/clients" exact component={ClientsPage} />}
             {isAdmin && <Route path="/tasks" exact component={ClientsPage} />}
-            {isClient && <Route path="/asks" exact component={AsksPage} />}
+            {isClient && <Route path="/lodgement" exact component={MyLodgementPage} />}
             {!isGuest && <Route path="/change_password" exact component={ChangePasswordPage} />}
             <Route path="/terms_and_conditions" exact component={TermAndConditionPage} />
             <Route path="/privacy_policy" exact component={PrivacyPolicyPage} />
