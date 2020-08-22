@@ -9,7 +9,8 @@ import { Menu, Dropdown, message, Tooltip } from 'antd';
 import { UpOutlined, DownOutlined, DeleteOutlined, QuestionOutlined } from '@ant-design/icons';
 import { Divider } from 'antd';
 import { listJobTemplate, deleteJobTemplate } from 'services/jobTemplateService';
-import { getLabelFromName } from 'util/getLabelFromName';
+import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
+import { displayNameAsLabel } from 'util/displayNameAsLabel';
 
 const { Text, Paragraph } = Typography;
 
@@ -45,25 +46,6 @@ const getInputFor = (type, props) => {
 }
 
 
-const JobTemplateField = (props) => {
-  const { label, name, required, type } = props;
-  const InputComponent = getInputFor(type, props);
-  return (
-    <StyledFormItem label={label} name={name} rules={[{ required, whitespace: true, message: ' ' }]}>
-      <InputComponent />
-    </StyledFormItem>
-  );
-}
-
-
-
-const EMPTY_ROW = {
-  label: '',
-  name: '',
-  required: true,
-  type: 'text'
-}
-
 const columns = [
   {
     title: 'No',
@@ -72,12 +54,12 @@ const columns = [
   {
     title: 'Name',
     dataIndex: 'name',
-  render: (text, records, index) => <>{text}{records.required && <Text type="danger"> *</Text>}</>
+    render: (text, records, index) => <>{displayNameAsLabel(text)}{records.required && <Text type="danger"> *</Text>}</>
   },
   {
     title: 'Type',
     dataIndex: 'type',
-    render: (text, records, index) => <>{getLabelFromName(text)}</>
+    render: (text, records, index) => <>{normalizeFieldNameToVar(text)}</>
   },
 ];
 
@@ -107,7 +89,7 @@ const JobTemplateCard = (props) => {
     <StyledCard
       title={name}
       extra={<Button type="link" onClick={handleDelete} danger>Delete</Button>}
-      bodyStyle={{margin: 0, padding: 0}}
+      bodyStyle={{ margin: 0, padding: 0 }}
       onClick={props.onClick}
     >
       <Table

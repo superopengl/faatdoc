@@ -10,7 +10,7 @@ import { Menu, Dropdown, message, Tooltip } from 'antd';
 import { UpOutlined, DownOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { Divider } from 'antd';
 import { BuiltInFieldDef } from "components/FieldDef";
-import { getLabelFromName } from 'util/getLabelFromName';
+import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
 import { listJobTemplate } from 'services/jobTemplateService';
 import { listLodgement } from 'services/lodgementService';
 import { listPortofolio } from 'services/portofolioService';

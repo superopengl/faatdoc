@@ -2,7 +2,7 @@ const thisYear = new Date().getFullYear();
 
 export const BuiltInFieldDef = [
   {
-    name: 'givenName',
+    name: 'Given_Name',
     inputType: 'text',
     rules: [{ required: true, whitespace: true, max: 100, message: ' ' }],
     inputProps: {
@@ -14,7 +14,7 @@ export const BuiltInFieldDef = [
     portofolioType: ['individual'],
   },
   {
-    name: 'surname',
+    name: 'Surname',
     inputType: 'text',
     rules: [{ required: true, whitespace: true, max: 100, message: ' ' }],
     inputProps: {
@@ -26,7 +26,7 @@ export const BuiltInFieldDef = [
     portofolioType: ['individual'],
   },
   {
-    name: 'company',
+    name: 'Company',
     inputType: 'text',
     rules: [{ required: true, whitespace: true, max: 100, message: ' ' }],
     inputProps: {
@@ -38,7 +38,7 @@ export const BuiltInFieldDef = [
     portofolioType: ['business'],
   },
   {
-    name: 'phone',
+    name: 'Phone',
     description: `split with ', ' if there are more than one`,
     inputType: 'text',
     rules: [{ required: true, whitespace: true, max: 30, message: ' ' }],
@@ -52,7 +52,7 @@ export const BuiltInFieldDef = [
     portofolioType: ['individual', 'business'],
   },
   {
-    name: 'wechat',
+    name: 'Wechat',
     inputType: 'text',
     rules: [{ required: false, max: 50, message: ' ' }],
     inputProps: {
@@ -63,7 +63,7 @@ export const BuiltInFieldDef = [
     portofolioType: ['individual', 'business'],
   },
   {
-    name: 'address',
+    name: 'Address',
     inputType: 'text',
     rules: [{ required: true, max: 100, message: ' ' }],
     inputProps: {
@@ -74,7 +74,7 @@ export const BuiltInFieldDef = [
     portofolioType: ['individual', 'business'],
   },
   {
-    name: 'dateOfBirth',
+    name: 'Date_Of_Birth',
     inputType: 'date',
     rules: [{
       required: true,
@@ -92,7 +92,7 @@ export const BuiltInFieldDef = [
     portofolioType: ['individual'],
   },
   {
-    name: 'gender',
+    name: 'Gender',
     inputType: 'select',
     rules: [{ required: false, message: 'Please choose a gender' }],
     options: [
@@ -112,7 +112,7 @@ export const BuiltInFieldDef = [
     portofolioType: ['individual'],
   },
   {
-    name: 'tfn',
+    name: 'TFN',
     inputType: 'text',
     rules: [{ required: true, max: 20, message: ' ' }],
     inputProps: {
@@ -123,7 +123,7 @@ export const BuiltInFieldDef = [
     portofolioType: ['individual'],
   },
   {
-    name: 'abn',
+    name: 'ABN',
     inputType: 'text',
     rules: [{ required: true, max: 20, message: ' ' }],
     inputProps: {
@@ -134,7 +134,7 @@ export const BuiltInFieldDef = [
     portofolioType: ['business'],
   },
   {
-    name: 'acn',
+    name: 'ACN',
     inputType: 'text',
     rules: [{ required: true, max: 20, message: ' ' }],
     inputProps: {
@@ -145,7 +145,7 @@ export const BuiltInFieldDef = [
     portofolioType: ['business'],
   },
   {
-    name: 'occupation',
+    name: 'Occupation',
     inputType: 'text',
     rules: [{ required: false, max: 50, message: ' ' }],
     inputProps: {
@@ -156,7 +156,7 @@ export const BuiltInFieldDef = [
     portofolioType: ['individual'],
   },
   {
-    name: 'industry',
+    name: 'Industry',
     inputType: 'text',
     rules: [{ required: false, max: 50, message: ' ' }],
     inputProps: {
@@ -167,7 +167,7 @@ export const BuiltInFieldDef = [
     portofolioType: ['business'],
   },
   {
-    name: 'remark',
+    name: 'Remark',
     inputType: 'paragraphy',
     rules: [{ required: false, max: 500, message: ' ' }],
     inputProps: {
@@ -178,10 +178,9 @@ export const BuiltInFieldDef = [
     portofolioType: ['individual', 'business'],
   },
   {
-    name: 'year',
-    inputType: 'select',
+    name: 'Year',
+    inputType: 'year',
     rules: [{ required: true, message: 'Please choose a financial year' }],
-    options: [-2,-1,0].map(x => `${thisYear + x - 1} - ${thisYear + x}`).map(x => ({label: x, value: x})),
     portofolioType: [],
   }
 ];

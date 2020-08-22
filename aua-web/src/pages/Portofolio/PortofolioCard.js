@@ -9,7 +9,8 @@ import { Menu, Dropdown, message, Tooltip } from 'antd';
 import { UpOutlined, DownOutlined, DeleteOutlined, QuestionOutlined } from '@ant-design/icons';
 import { Divider } from 'antd';
 import { listPortofolios, deletePortofolio } from 'services/portofolioService';
-import { getLabelFromName } from 'util/getLabelFromName';
+import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
+import { displayNameAsLabel } from 'util/displayNameAsLabel';
 
 const { Text, Title, Paragraph } = Typography;
 
@@ -65,8 +66,8 @@ const EMPTY_ROW = {
 const columns = [
   {
     title: 'Name',
-    dataIndex: 'key',
-    render: (text) => getLabelFromName(text)
+    dataIndex: 'name',
+    render: (text) => displayNameAsLabel(text)
   },
   {
     title: 'Value',
@@ -92,7 +93,7 @@ const PortofolioCard = (props) => {
     });
   }
 
-  const data = Object.entries(fields).map(([key, value]) => ({key, value}));
+  const data = fields;
 
 
   return (<>

@@ -9,11 +9,13 @@ import { Menu, Dropdown, message, Tooltip } from 'antd';
 import { UpOutlined, DownOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { Divider } from 'antd';
 import { BuiltInFieldDef } from "components/FieldDef";
-import { getLabelFromName } from 'util/getLabelFromName';
+import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
 import { listJobTemplate } from 'services/jobTemplateService';
 import { listLodgement, generateLodgement } from 'services/lodgementService';
 import { listPortofolio } from 'services/portofolioService';
 import { ChooseJobTemplateWithPortofolioComponent } from './ChooseJobTemplateWithPortofolioComponent';
+import { displayNameAsLabel } from 'util/displayNameAsLabel';
+import { InputYear } from 'components/InputYear';
 
 const { Text, Paragraph, Title } = Typography;
 
@@ -113,11 +115,9 @@ const MyLodgementForm = (props) => {
   const formInitValues = {
     id,
     name,
-    ...fields,
   };
-
-  if (formInitValues.dateOfBirth) {
-    formInitValues.dateOfBirth = moment(formInitValues.dateOfBirth)
+  if (fields) {
+    fields.forEach(f => formInitValues[f.name] = f.value);
   }
 
 
@@ -131,35 +131,49 @@ const MyLodgementForm = (props) => {
     setLodgement(lodgement);
   }
 
+  const getFormInitialValues = () => {
+    if (lodgement && lodgement.fields) {
+      const values = {};
+      for (const f of lodgement.fields) {
+        if (f.type === 'date' && f.value) {
+          values[f.name] = moment(f.value)
+        } else {
+          values[f.name] = f.value;
+        }
+      }
+      return values;
+    }
+    return null;
+  }
+
   const isIndividual = type === 'individual';
   const isBusiness = type === 'business';
 
   console.log('value', formInitValues);
-
-  const fieldDefs = BuiltInFieldDef.filter(x => x.lodgementType?.includes(type));
 
   return (<>
     <Space direction="vertical" size="large" style={{ width: '100%' }}>
 
       {!lodgement && <ChooseJobTemplateWithPortofolioComponent onChange={handleSelectedTemplate} />}
 
-      {lodgement && <Form form={form} layout="vertical" onFinish={handleSubmit} style={{ textAlign: 'left' }} initialValues={formInitValues}>
-        {fieldDefs.map((fieldDef, i) => {
-          const { name, description, rules, inputType, inputProps } = fieldDef;
+      {lodgement && <Form form={form} layout="vertical" onFinish={handleSubmit} style={{ textAlign: 'left' }} initialValues={getFormInitialValues()}>
+        {lodgement.fields.map((field, i) => {
+          const { name, description, type, value } = field;
           const formItemProps = {
-            label: <>{getLabelFromName(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
+            label: <>{displayNameAsLabel(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
             name,
-            rules
           }
           return (
             <Form.Item key={i} {...formItemProps}>
-              {inputType === 'text' ? <Input {...inputProps} disabled={sending} /> :
-                inputType === 'paragraphy' ? <Input.TextArea {...inputProps} disabled={sending} /> :
-                  inputType === 'date' ? <DatePicker placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD" {...inputProps} /> :
-                    inputType === 'select' ? <Radio.Group buttonStyle="solid">
-                      {fieldDef.options.map((x, i) => <Radio key={i} style={{ display: 'block', height: '2rem' }} value={x.value}>{x.label}</Radio>)}
-                    </Radio.Group> :
-                      null}
+              {type === 'text' ? <Input disabled={sending} /> :
+                type === 'year' ? <InputYear disabled={sending} /> :
+                  type === 'number' ? <Input disabled={sending} type="number" /> :
+                    type === 'paragraphy' ? <Input.TextArea disabled={sending} /> :
+                      type === 'date' ? <DatePicker placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD" /> :
+                        type === 'select' ? <Radio.Group buttonStyle="solid">
+                          {field.options.map((x, i) => <Radio key={i} style={{ display: 'block', height: '2rem' }} value={x.value}>{x.label}</Radio>)}
+                        </Radio.Group> :
+                          null}
             </Form.Item>
           );
         })}

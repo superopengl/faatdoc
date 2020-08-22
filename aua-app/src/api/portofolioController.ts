@@ -16,7 +16,14 @@ import * as moment from 'moment';
 import { logError } from '../utils/logger';
 import { getUtcNow } from '../utils/getUtcNow';
 import { json } from 'body-parser';
+import { normalizeFieldNameToVar } from '../utils/normalizeFieldNameToVar';
 
+function normalizeFieldNames(fields) {
+  fields?.forEach(f => {
+    f.name = normalizeFieldNameToVar(f.name);
+  });
+  return fields;
+}
 
 export const savePortofolio = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
@@ -29,7 +36,7 @@ export const savePortofolio = handlerWrapper(async (req, res) => {
   portofolio.id = id || uuidv4();
   portofolio.userId = userId;
   portofolio.name = name;
-  portofolio.fields = fields;
+  portofolio.fields = normalizeFieldNames(fields);
   portofolio.type = type;
   portofolio.lastUpdatedAt = getUtcNow();
 

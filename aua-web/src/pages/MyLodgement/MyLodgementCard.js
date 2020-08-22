@@ -9,7 +9,7 @@ import { Menu, Dropdown, message, Tooltip } from 'antd';
 import { UpOutlined, DownOutlined, DeleteOutlined, QuestionOutlined } from '@ant-design/icons';
 import { Divider } from 'antd';
 import { listPortofolios, deletePortofolio } from 'services/portofolioService';
-import { getLabelFromName } from 'util/getLabelFromName';
+import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
 
 const { Text, Title, Paragraph } = Typography;
 
@@ -66,7 +66,7 @@ const columns = [
   {
     title: 'Name',
     dataIndex: 'key',
-    render: (text) => getLabelFromName(text)
+    render: (text) => normalizeFieldNameToVar(text)
   },
   {
     title: 'Value',

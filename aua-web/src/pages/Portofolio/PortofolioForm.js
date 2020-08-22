@@ -9,7 +9,8 @@ import { Menu, Dropdown, message, Tooltip } from 'antd';
 import { UpOutlined, DownOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { Divider } from 'antd';
 import { BuiltInFieldDef } from "components/FieldDef";
-import { getLabelFromName } from 'util/getLabelFromName';
+import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
+import { displayNameAsLabel } from 'util/displayNameAsLabel';
 
 const { Text, Paragraph, Title } = Typography;
 
@@ -79,15 +80,15 @@ const PortofolioForm = (props) => {
   }
 
   const handleSubmit = async values => {
-    const {company, givenName, surname, dateOfBirth} = values;
+    const { Company, Given_Name, Surname, Date_Of_Birth } = values;
 
-    values.dateOfBirth = dateOfBirth?.utc().format('YYYY-MM-DD');
+    values.Date_Of_Birth = Date_Of_Birth?.utc().format('YYYY-MM-DD');
 
     const portofolio = {
       id,
-      name: company || `${givenName} ${surname}`,
+      name: Company || `${Given_Name} ${Surname}`,
       type,
-      fields: values
+      fields: Object.entries(values).map(([name, value]) => ({ name, value }))
     }
 
     setSending(true);
@@ -100,13 +101,14 @@ const PortofolioForm = (props) => {
   const formInitValues = {
     id,
     name,
-    ...fields,
   };
 
-  if (formInitValues.dateOfBirth) {
-    formInitValues.dateOfBirth = moment(formInitValues.dateOfBirth)
+  for(const f of fields) {
+    formInitValues[f.name] = f.value;
+    if(f.name === 'Date_Of_Birth' && f.value) {
+      formInitValues[f.name] = moment(f.value);
+    }
   }
-
 
   const handleCancel = () => {
     form.resetFields();
@@ -138,7 +140,7 @@ const PortofolioForm = (props) => {
         {fieldDefs.map((fieldDef, i) => {
           const { name, description, rules, inputType, inputProps } = fieldDef;
           const formItemProps = {
-            label: <>{getLabelFromName(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
+            label: <>{displayNameAsLabel(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
             name,
             rules
           }

@@ -9,7 +9,8 @@ import { Menu, Dropdown, message, Tooltip } from 'antd';
 import { UpOutlined, DownOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { Divider } from 'antd';
 import { BuiltInFieldName } from 'components/FieldDef';
-import { getLabelFromName } from 'util/getLabelFromName';
+import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
+import { displayNameAsLabel } from 'util/displayNameAsLabel';
 
 const { Text } = Typography;
 
@@ -39,26 +40,11 @@ const getInputFor = (type, props) => {
 }
 
 
-const JobTemplateField = (props) => {
-  const { label, name, required, type } = props;
-  const InputComponent = getInputFor(type, props);
-  return (
-    <StyledFormItem label={label} name={name} rules={[{ required, whitespace: true, message: ' ' }]}>
-      <InputComponent />
-    </StyledFormItem>
-  );
-}
-
-
-
-
 const EMPTY_ROW = {
-  label: '',
   name: '',
   required: true,
   type: 'text'
 }
-
 
 
 const JobTemplateForm = (props) => {
@@ -136,7 +122,7 @@ const JobTemplateForm = (props) => {
     props.onCancel();
   }
 
-  const nameOptions = BuiltInFieldName.map(x => ({value: getLabelFromName(x)}));
+  const nameOptions = BuiltInFieldName.map(x => ({value: displayNameAsLabel(x)}));
 
   const columns = [
     {
@@ -151,7 +137,7 @@ const JobTemplateForm = (props) => {
         placeholder="Name" 
         options={nameOptions} allowClear={true} 
         maxLength={50} 
-        value={text} 
+        value={displayNameAsLabel(text)} 
         style={{width: 200}}
         allowClear={true}
         onChange={(value) => changeValue(index, 'name', value)} />
@@ -170,6 +156,7 @@ const JobTemplateForm = (props) => {
         <Select.Option value="paragraph">Paragraph</Select.Option>
         <Select.Option value="number">Number</Select.Option>
         <Select.Option value="date">Date</Select.Option>
+        <Select.Option value="year">Year</Select.Option>
         <Select.Option value="upload">Upload Files</Select.Option>
       </Select>
     },

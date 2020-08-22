@@ -20,13 +20,13 @@ import { JobTemplate } from '../entity/JobTemplate';
 import { Portofolio } from '../entity/Portofolio';
 import { LodgementStatus } from '../enums/LodgementStatus';
 import e = require('express');
-import { getLabelFromName } from '../utils/getLabelFromName';
+import { normalizeFieldNameToVar } from '../utils/normalizeFieldNameToVar';
 
 
 function prefillFieldsWithProtofolio(jobTemplateFields, portofolioFields) {
   if (!portofolioFields) return jobTemplateFields;
 
-  const map = new Map(Object.entries(portofolioFields).map(([k, v]) => [getLabelFromName(k), v]));
+  const map = new Map(portofolioFields.map(({ name, value }) => [name, value]));
   const fields = jobTemplateFields.map(jf => (
     {
       ...jf,
