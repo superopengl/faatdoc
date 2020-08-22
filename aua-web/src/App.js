@@ -20,7 +20,7 @@ import PrivacyPolicyPage from 'pages/PrivacyPolicyPage';
 import GalleryPage from 'pages/GalleryPage';
 import OtherPage from 'pages/OtherPage';
 import ClientsPage from 'pages/ClientsPage';
-import MyLodgementPage from 'pages/MyLodgementPage';
+import MyLodgementPage from 'pages/MyLodgement/MyLodgementPage';
 import JobAdminPage from 'pages/JobTemplate/JobAdminPage';
 import PortofolioPage from 'pages/Portofolio/PortofolioPage';
 

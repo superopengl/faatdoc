@@ -4,7 +4,7 @@ import { LodgementStatus } from '../enums/LodgementStatus';
 @Entity()
 export class Lodgement {
   @PrimaryColumn('uuid')
-  id: string;
+  id?: string;
 
   @Column({ default: () => `timezone('UTC', now())` })
   createdAt?: Date;
@@ -16,13 +16,13 @@ export class Lodgement {
   name: string;
 
   @Column({ default: LodgementStatus.DRAFT })
-  sattus: LodgementStatus;
+  status: LodgementStatus;
 
   @Column('uuid')
   jobTemplateId: string;
 
   @Column('uuid')
-  profileId: string;
+  portofolioId: string;
 
   @Column('uuid')
   userId: string;

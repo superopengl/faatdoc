@@ -175,3 +175,43 @@ paths:
       responses:
         200:
           description: OK
+  /lodgement:
+    post:
+      operationId: saveLodgement
+      responses:
+        200:
+          description: OK
+    get:
+      operationId: listLodgement
+      responses:
+        200:
+          description: OK
+  /lodgement/generate:
+    post:
+      operationId: generateLodgement
+      responses:
+        200:
+          description: OK       
+  /lodgement/{id}:
+    get:
+      operationId: getLodgement
+      parameters:
+        - name: id
+          in: path
+          type: string
+          format: uuid
+          required: true
+      responses:
+        200:
+          description: OK
+    delete:
+      operationId: deleteLodgement
+      parameters:
+        - name: id
+          in: path
+          type: string
+          format: uuid
+          required: true
+      responses:
+        200:
+          description: OK          

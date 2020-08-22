@@ -1,13 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
-import { Input, Button, Form, Select, DatePicker, Checkbox, Table, Space, Typography } from 'antd';
+import { Input, Button, Form, Select, DatePicker, Checkbox, Table, Space, Typography, AutoComplete } from 'antd';
 import { FileUploader } from '../../components/FileUploader';
 import * as moment from 'moment';
 import { GlobalContext } from 'contexts/GlobalContext';
 import { Menu, Dropdown, message, Tooltip } from 'antd';
 import { UpOutlined, DownOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { Divider } from 'antd';
+import { BuiltInFieldName } from 'components/FieldDef';
+import { getLabelFromName } from 'util/getLabelFromName';
 
 const { Text } = Typography;
 
@@ -134,22 +136,26 @@ const JobTemplateForm = (props) => {
     props.onCancel();
   }
 
+  const nameOptions = BuiltInFieldName.map(x => ({value: getLabelFromName(x)}));
+
   const columns = [
     {
       title: 'No',
       render: (text, records, index) => <>{index + 1}</>
     },
     {
-      title: 'Label',
-      dataIndex: 'label',
-      render: (text, records, index) => {
-        return <Input placeholder="label" type="text" allowClear={true} maxLength={50} value={text} onChange={(e) => changeValue(index, 'label', e.target.value)} />
-      }
-    },
-    {
-      title: 'Associated Portofolio Field',
+      title: 'Name',
       dataIndex: 'name',
-      render: (text, records, index) => <Input placeholder="name" type="text" allowClear={true} maxLength={50} value={text} onChange={(e) => changeValue(index, 'name', e.target.value)} />
+      render: (text, records, index) => {
+        return <AutoComplete 
+        placeholder="Name" 
+        options={nameOptions} allowClear={true} 
+        maxLength={50} 
+        value={text} 
+        style={{width: 200}}
+        allowClear={true}
+        onChange={(value) => changeValue(index, 'name', value)} />
+      }
     },
     {
       title: 'Required',
@@ -159,7 +165,7 @@ const JobTemplateForm = (props) => {
     {
       title: 'Type',
       dataIndex: 'type',
-      render: (value, records, index) => <Select value={value} style={{ width: 120 }} onChange={(v) => changeValue(index, 'type', v)}>
+      render: (value, records, index) => <Select value={value} style={{ width: '100%' }} onChange={(v) => changeValue(index, 'type', v)}>
         <Select.Option value="text">Text</Select.Option>
         <Select.Option value="paragraph">Paragraph</Select.Option>
         <Select.Option value="number">Number</Select.Option>

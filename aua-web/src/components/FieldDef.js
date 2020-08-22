@@ -1,3 +1,4 @@
+const thisYear = new Date().getFullYear();
 
 export const BuiltInFieldDef = [
   {
@@ -176,6 +177,13 @@ export const BuiltInFieldDef = [
     },
     portofolioType: ['individual', 'business'],
   },
+  {
+    name: 'year',
+    inputType: 'select',
+    rules: [{ required: true, message: 'Please choose a financial year' }],
+    options: [-2,-1,0].map(x => `${thisYear + x - 1} - ${thisYear + x}`).map(x => ({label: x, value: x})),
+    portofolioType: [],
+  }
 ];
 
 export const BuiltInFieldType = Array.from(new Set(BuiltInFieldDef.map(x => x.inputType)));
