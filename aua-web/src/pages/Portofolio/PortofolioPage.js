@@ -5,7 +5,7 @@ import PosterAdminGrid from 'components/grids/PosterAdminGrid';
 import GalleryAdminGrid from 'components/grids/GalleryAdminGrid';
 import BusinessAdminGrid from 'components/grids/BusinessAdminGrid';
 import EventAdminGrid from 'components/grids/EventAdminGrid';
-import {LargePlusButton} from 'components/LargePlusButton';
+import { LargePlusButton } from 'components/LargePlusButton';
 import HomeHeader from 'components/HomeHeader';
 import { handleDownloadCsv } from 'services/memberService';
 import { saveAs } from 'file-saver';
@@ -48,40 +48,31 @@ const PortofolioPage = (props) => {
 
   const [modalVisible, setModalVisible] = React.useState(false);
   const [list, setList] = React.useState([{ isNewButton: true }]);
-  const [currentItem, setCurrentItem] = React.useState();
-  const [initialLoaded, setInitialLoaded] = React.useState(false);
+  const [currentId, setCurrentId] = React.useState();
 
-  const loadList = async (force = false) => {
-    if (!initialLoaded || force) {
-      const data = await listPortofolio();
-      setList([...data, { isNewButton: true }]);
-      setInitialLoaded(true);
-    }
+  const loadList = async () => {
+    const data = await listPortofolio();
+    setList([...data, { isNewButton: true }]);
   }
 
   React.useEffect(() => {
     loadList();
-  })
+  }, [])
 
   const saveJob = async item => {
     await savePortofolio(item);
-    await loadList(true);
+    await loadList();
     setModalVisible(false);
   }
 
   const openModalToCreate = () => {
-    setCurrentItem({});
-    // setTimeout(() => setModalVisible(true), 1000);
+    setCurrentId();
     setModalVisible(true);
   }
 
-  const openModalToEdit = item => {
-    setCurrentItem({ ...item });
+  const openModalToEdit = id => {
+    setCurrentId(id);
     setModalVisible(true);
-  }
-
-  const handleAfterDelete = async () => {
-    await loadList(true);
   }
 
   return (
@@ -108,7 +99,7 @@ const PortofolioPage = (props) => {
             renderItem={item => (
               <List.Item key={item.id}>
                 {item.isNewButton && <LargePlusButton onClick={() => openModalToCreate()} />}
-                {!item.isNewButton && <PortofolioCard onClick={() => openModalToEdit(item)} onDelete={() => handleAfterDelete()} value={item} />}
+                {!item.isNewButton && <PortofolioCard onClick={() => openModalToEdit(item.id)} onDelete={() => loadList()} id={item.id} name={item.name} />}
               </List.Item>
             )}
           />
@@ -127,7 +118,7 @@ const PortofolioPage = (props) => {
         <PortofolioForm
           onOk={item => saveJob(item)}
           onCancel={() => setModalVisible(false)}
-          value={currentItem}
+          id={currentId}
         />
       </Modal>}
     </LayoutStyled >

@@ -212,7 +212,7 @@ const JobTemplateForm = (props) => {
 };
 
 JobTemplateForm.propTypes = {
-  id: PropTypes.string
+  id: PropTypes.string.isRequired
 };
 
 JobTemplateForm.defaultProps = {};

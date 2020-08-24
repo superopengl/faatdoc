@@ -6,10 +6,12 @@ import {
   ExclamationCircleOutlined, PlusOutlined
 } from '@ant-design/icons';
 
+const {Title} = Typography;
+
 const StyledButton = styled(Button)`
-font-size: 3rem;
-height: 160px;
-box-shadow: 0px 2px 8px #888888;
+font-size: 40px;
+height: 68px;
+box-shadow: 0px 1px 4px #cccccc;
 
 `;
 

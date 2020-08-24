@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
+
 import { Input, Button, Form, Modal, DatePicker, Table, Card, Space, Typography } from 'antd';
 import { FileUploader } from 'components/FileUploader';
 import * as moment from 'moment';
@@ -22,8 +24,10 @@ const StyledFormItem = styled(Form.Item)`
   // background-color: #ffffff;
 `
 const StyledCard = styled(Card)`
-box-shadow: 0px 2px 8px #888888;
-
+box-shadow: 0px 1px 4px #cccccc;
+&:hover {
+  cursor: pointer;
+}
 `
 
 const getInputFor = (type, props) => {
@@ -77,9 +81,7 @@ const columns = [
 
 const PortofolioCard = (props) => {
 
-  const { value } = props;
-
-  const { id, name, fields } = value || {};
+  const { id, name } = props;
 
   const handleDelete = async (e) => {
     e.stopPropagation();
@@ -93,30 +95,35 @@ const PortofolioCard = (props) => {
     });
   }
 
-  const data = fields;
+  // const data = fields;
 
 
   return (<>
     <StyledCard
-      title={<Title>{name}</Title>}
+      hoverable={true}
+      title={<Title style={{ margin: 0 }}>{name}</Title>}
       extra={<Button type="link" onClick={handleDelete} danger>Delete</Button>}
-      bodyStyle={{margin: 0, padding: 0}}
+      bodyStyle={{ margin: 0, padding: 0 }}
       onClick={props.onClick}
     >
-      <Table
+      {/* <Table
         style={{ width: '100%' }}
         size="small"
         footer={false}
         pagination={false}
         columns={columns}
         dataSource={data}
-      />
+      /> */}
     </StyledCard>
   </>
   );
 };
 
-PortofolioCard.propTypes = {};
+PortofolioCard.propTypes = {
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  onDelete: PropTypes.func,
+};
 
 PortofolioCard.defaultProps = {};
 

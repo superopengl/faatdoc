@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
+
 import { withRouter } from 'react-router-dom';
 import { Input, Button, Form, Select, DatePicker, Checkbox, Table, Space, Typography, Radio } from 'antd';
 import { FileUploader } from '../../components/FileUploader';
@@ -11,6 +13,7 @@ import { Divider } from 'antd';
 import { BuiltInFieldDef } from "components/FieldDef";
 import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
 import { displayNameAsLabel } from 'util/displayNameAsLabel';
+import { getPortofolio } from 'services/portofolioService';
 
 const { Text, Paragraph, Title } = Typography;
 
@@ -67,13 +70,27 @@ const EMPTY_ROW = {
 
 
 const PortofolioForm = (props) => {
-  const { value } = props;
+  const { id } = props;
 
-  const { name, id, fields } = value || {};
-
-  const [type, setType] = React.useState(value?.type);
-  const [sending, setSending] = React.useState(false);
+  const [type, setType] = React.useState();
+  const [loading, setLoading] = React.useState(true);
+  const [name, setName] = React.useState('New Portofolio');
+  const [fields, setFields] = React.useState([]);
   const [form] = Form.useForm();
+
+  const loadEntity = async () => {
+    if (id) {
+      const entity = await getPortofolio(id);
+      setName(entity.name);
+      setFields(entity.fields);
+      setType(entity.type);
+    }
+    setLoading(false);
+  }
+
+  React.useEffect(() => {
+    loadEntity()
+  }, []);
 
   const goBack = () => {
     props.history.goBack();
@@ -91,10 +108,10 @@ const PortofolioForm = (props) => {
       fields: Object.entries(values).map(([name, value]) => ({ name, value }))
     }
 
-    setSending(true);
+    setLoading(true);
     form.resetFields();
     await props.onOk(portofolio);
-    setSending(false);
+    setLoading(false);
   }
 
 
@@ -103,9 +120,9 @@ const PortofolioForm = (props) => {
     name,
   };
 
-  for(const f of fields) {
+  for (const f of fields) {
     formInitValues[f.name] = f.value;
-    if(f.name === 'Date_Of_Birth' && f.value) {
+    if (f.name === 'Date_Of_Birth' && f.value) {
       formInitValues[f.name] = moment(f.value);
     }
   }
@@ -114,9 +131,6 @@ const PortofolioForm = (props) => {
     form.resetFields();
     props.onCancel();
   }
-
-  const isIndividual = type === 'individual';
-  const isBusiness = type === 'business';
 
   console.log('value', formInitValues);
 
@@ -146,8 +160,8 @@ const PortofolioForm = (props) => {
           }
           return (
             <Form.Item key={i} {...formItemProps}>
-              {inputType === 'text' ? <Input {...inputProps} disabled={sending} /> :
-                inputType === 'paragraphy' ? <Input.TextArea {...inputProps} disabled={sending} /> :
+              {inputType === 'text' ? <Input {...inputProps} disabled={loading} /> :
+                inputType === 'paragraphy' ? <Input.TextArea {...inputProps} disabled={loading} /> :
                   inputType === 'date' ? <DatePicker placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD" {...inputProps} /> :
                     inputType === 'select' ? <Radio.Group buttonStyle="solid">
                       {fieldDef.options.map((x, i) => <Radio key={i} style={{ display: 'block', height: '2rem' }} value={x.value}>{x.label}</Radio>)}
@@ -157,7 +171,7 @@ const PortofolioForm = (props) => {
           );
         })}
         <Form.Item>
-          <Button block type="primary" htmlType="submit" disabled={sending}>{props.okButtonText || 'Submit'}</Button>
+          <Button block type="primary" htmlType="submit" disabled={loading}>{props.okButtonText || 'Submit'}</Button>
         </Form.Item>
         <Form.Item>
           <Button block size="large" type="link" onClick={() => handleCancel()}>Cancel</Button>
@@ -168,7 +182,10 @@ const PortofolioForm = (props) => {
   );
 };
 
-PortofolioForm.propTypes = {};
+PortofolioForm.propTypes = {
+  id: PropTypes.string,
+
+};
 
 PortofolioForm.defaultProps = {};
 

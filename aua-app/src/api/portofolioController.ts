@@ -29,7 +29,7 @@ export const savePortofolio = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
   const portofolio = new Portofolio();
 
-  const {user: {id: userId}} = req;
+  const { user: { id: userId } } = req;
 
   const { id, name, fields, type } = req.body;
   assert(name, 400, 'name is empty');
@@ -49,8 +49,11 @@ export const savePortofolio = handlerWrapper(async (req, res) => {
 export const listPortofolio = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
 
-  const repo = getRepository(Portofolio);
-  const list = await repo.find({});
+  const list = await getRepository(Portofolio)
+    .createQueryBuilder('x')
+    .orderBy('x.name', 'ASC')
+    .select(['x.id', 'x.name'])
+    .getMany();
 
   res.json(list);
 });
