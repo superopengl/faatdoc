@@ -14,7 +14,7 @@ import { Logo } from './Logo';
 import { GlobalContext } from '../contexts/GlobalContext'
 import { logout } from 'services/authService';
 
-const {Title} = Typography;
+const {Title, Text} = Typography;
 const { Header } = Layout;
 const HeaderStyled = styled(Header)`
 position: fixed;
@@ -43,8 +43,8 @@ margin-bottom: 2px;
 
 const headerHeight = 64;
 
-const HeaderLogo = styled(HashLink)`
-diaplay: flex;
+const HeaderLogo = styled.div`
+display: flex;
 height: ${headerHeight}px;
 `
 
@@ -80,6 +80,7 @@ class HomeHeaderRaw extends React.Component {
             const { role } = context;
             const isAdmin = role === 'admin';
             const isClient = role === 'client';
+            const isAgent = role === 'agent';
             const isGuest = role === 'guest';
 
             const handleLogout = () => {
@@ -97,25 +98,27 @@ class HomeHeaderRaw extends React.Component {
             }
             return (
               <HeaderStyled>
-                <HeaderLogo to="/#home">
-                  {/* <Logo/> <Title style={{display: 'inline', color: '#666666', position: 'relative', top: 16}}>AU Accouting Office</Title> */}
+                <HeaderLogo>
+                  <HashLink to="/#home">
                   <img alt="AUA logo" src="/images/header-logo.png" width="auto" height="60" style={{padding: '2px 0 2px 0'}}></img>
+                  </HashLink>
+                  {/* {isAdmin && <Text>Admin</Text>} */}
                 </HeaderLogo>
                 <MediaQuery minDeviceWidth={801}>
                   <MenuContianer>
                     <Menu mode="horizontal" style={{ border: 0 }}>
-                      <Menu.Item key="home"><HashLink to="/#home">Home</HashLink></Menu.Item>
+                      {!isAdmin && <Menu.Item key="home"><HashLink to="/#home">Home</HashLink></Menu.Item>}
                       {isGuest && <Menu.Item key="services"><HashLink to="/#services">Services</HashLink></Menu.Item>}
                       {isGuest && <Menu.Item key="team"><HashLink to="/#team">Team</HashLink></Menu.Item>}
                       {isGuest && <Menu.Item key="login"><Link to="/login">Log In / Sign Up</Link></Menu.Item>}
-                      {isClient && <Menu.Item key="asks"><Link to="/asks">Requests</Link></Menu.Item>}
                       {isClient && <Menu.Item key="portofolio"><Link to="/portofolio">Portofolios</Link></Menu.Item>}
-                      {isClient && <Menu.Item key="my_lodgement"><Link to="/lodgement">Lodgements</Link></Menu.Item>}
+                      {!isGuest && <Menu.Item key="lodgement"><Link to="/lodgement">Lodgements</Link></Menu.Item>}
                       {isAdmin && <Menu.Item key="clients"><Link to="/clients">Users</Link></Menu.Item>}
-                      {isAdmin && <Menu.Item key="admin"><Link to="/admin">Admin</Link></Menu.Item>}
+                      {/* {isAdmin && <Menu.Item key="admin"><Link to="/admin">Admin</Link></Menu.Item>} */}
                       {isAdmin && <Menu.Item key="job_template"><Link to="/job_template">Job Template</Link></Menu.Item>}
+                      {!isGuest && <Menu.Item key="message"><Link to="/message">Messages</Link></Menu.Item>}
                       {!isGuest && <Menu.Item key="changePassword"><Link to="/change_password">Change Password</Link></Menu.Item>}
-                      {!isGuest && <Menu.Item key="logout" onClick={handleLogout}>Log Out</Menu.Item>}
+            {!isGuest && <Menu.Item key="logout" onClick={handleLogout}>{isAdmin ? 'Admin ' : isAgent ? 'Agent ' : null}Log Out</Menu.Item>}
                     </Menu>
                   </MenuContianer>
                   {/* <Tag>{user?.memberId}</Tag> */}
@@ -134,17 +137,17 @@ class HomeHeaderRaw extends React.Component {
                   >
                     <Menu mode="inline" style={{ border: 0 }} openKeys={['gallery']}>
                       {isGuest && <Menu.Item key="login"><LoginOutlined /> <Link to="/login">Log In / Sign Up</Link></Menu.Item>}
-                      {isAdmin && <Menu.Item key="admin"><SettingOutlined /> <Link to="/admin">Admin</Link></Menu.Item>}
+                      {/* {isAdmin && <Menu.Item key="admin"><SettingOutlined /> <Link to="/admin">Admin</Link></Menu.Item>} */}
                       {isAdmin && <Menu.Item key="job_template"><SettingOutlined /> <Link to="/job_template">Job Template</Link></Menu.Item>}
                       {isAdmin && <Menu.Item key="clients"><SettingOutlined /> <Link to="/clients">Users</Link></Menu.Item>}
-                      {isClient && <Menu.Item key="asks"><IdcardOutlined /> <Link to="/asks">Requests</Link></Menu.Item>}
                       {isClient && <Menu.Item key="portofolio"><UserOutlined /> <Link to="/portofolio">Portofolios</Link></Menu.Item>}
-                      {isClient && <Menu.Item key="my_lodgement"><UserOutlined /> <Link to="/lodgement">Lodgements</Link></Menu.Item>}
+                      {!isGuest && <Menu.Item key="lodgement"><UserOutlined /> <Link to="/lodgement">Lodgements</Link></Menu.Item>}
+                      {!isGuest && <Menu.Item key="messages"><IdcardOutlined /> <Link to="/message">Messages</Link></Menu.Item>}
                       {!isGuest && <Menu.Item key="changePassword"><SecurityScanOutlined /> <Link to="/change_password">Change Password</Link></Menu.Item>}
                       <Menu.Item key="home"><HomeOutlined /> <HashLink to="/#home" onClick={this.onClose}>Home</HashLink></Menu.Item>
                       {isGuest && <Menu.Item key="services"><BellOutlined /> <HashLink to="/#services" onClick={this.onClose}>Services</HashLink></Menu.Item>}
                       {isGuest && <Menu.Item key="team"><BellOutlined /> <HashLink to="/#team" onClick={this.onClose}>Team</HashLink></Menu.Item>}
-                      {!isGuest && <Menu.Item key="logout" onClick={handleLogout}><LogoutOutlined /> Log Out</Menu.Item>}
+                      {!isGuest && <Menu.Item key="logout" onClick={handleLogout}><LogoutOutlined />{isAdmin ? 'Admin ' : isAgent ? 'Agent ' : null}Log Out</Menu.Item>}
                     </Menu>
                   </Drawer>
                 </MediaQuery>

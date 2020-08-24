@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, Typography, Button } from 'antd';
 import styled from 'styled-components';
-import { getImageUrl } from 'util/getImageUrl';
+import { getFileUrl } from 'util/getFileUrl';
 import { LinkOutlined } from '@ant-design/icons';
 const { Meta } = Card;
 const { Text } = Typography;
@@ -55,7 +55,7 @@ export class BusinessCard extends React.Component {
     return (
       <CardStyled
         hoverable
-        cover={<CoverImageStyled style={{ backgroundImage: `url("${getImageUrl(imageId)}")` }}>
+        cover={<CoverImageStyled style={{ backgroundImage: `url("${getFileUrl(imageId)}")` }}>
           {website && <LinkButton type="seconday" shape="circle" target="_blank" href={website} icon={<LinkOutlined />}/>}
         </CoverImageStyled>}
       >

@@ -11,6 +11,7 @@ import { Divider } from 'antd';
 import { listJobTemplate, deleteJobTemplate } from 'services/jobTemplateService';
 import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
 import { displayNameAsLabel } from 'util/displayNameAsLabel';
+import { DateInput } from 'components/DateInput';
 
 const { Text, Paragraph } = Typography;
 
@@ -26,26 +27,6 @@ const StyledCard = styled(Card)`
 box-shadow: 0px 2px 8px #888888;
 
 `
-
-
-const getInputFor = (type, props) => {
-  switch (type) {
-    case 'text':
-      return <Input allowClear={true} type="text" {...props} />;
-    case 'number':
-      return <Input allowClear={true} type="number" {...props} />;
-    case 'paragraph':
-      return <Input.TextArea maxLength={1000} allowClear={true} {...props} />;
-    case 'date':
-      return <DatePicker style={{ display: 'block' }} format="YYYY-MM-DD" {...props} />;
-    case 'upload':
-      return <FileUploader {...props} />;
-    default:
-      throw new Error(`Unsupported job template field type '${type}`);
-  }
-}
-
-
 const columns = [
   {
     title: 'No',

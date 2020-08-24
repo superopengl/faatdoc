@@ -136,10 +136,35 @@ export const saveLodgement = handlerWrapper(async (req, res) => {
 
 export const listLodgement = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
+  const { user: { role } } = req;
 
-  const repo = getRepository(Lodgement);
-  const list = await repo.find({});
+  let query = getConnection()
+    .createQueryBuilder()
+    .from(Lodgement, 'x')
+    .orderBy('x.createdAt', 'DESC');
+  if (role === 'client') {
+    query = query.where('x.userId = :userId', { userId: req.user.id })
+      .select([
+        `x.id as id`,
+        `x.name as name`,
+        `x."createdAt" as "createdAt"`,
+        `x.status as status`,
+      ]);
+  } else if (role === 'admin') {
+    query = query.innerJoin(q => q.from(JobTemplate, 'j').select('*'), 'j', 'j.id = x."jobTemplateId"')
+      .select([
+        `x.id as id`,
+        `x.name as name`,
+        `x."createdAt" as "createdAt"`,
+        `j.name as "jobTemplateName"`,
+        `x.status as status`,
+      ]);
+  } else {
+    assert(false, 400, 'Impossible code path');
+  }
+  query = query;
 
+  const list = await query.execute();
   res.json(list);
 });
 

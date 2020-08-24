@@ -23,6 +23,7 @@ import ClientsPage from 'pages/ClientsPage';
 import MyLodgementPage from 'pages/MyLodgement/MyLodgementPage';
 import JobAdminPage from 'pages/JobTemplate/JobAdminPage';
 import PortofolioPage from 'pages/Portofolio/PortofolioPage';
+import AdminLodgementPage from 'pages/AdminLodgement/AdminLodgementPage';
 
 
 class App extends React.Component {
@@ -79,6 +80,7 @@ class App extends React.Component {
             {isAdmin && <Route path="/clients" exact component={ClientsPage} />}
             {isAdmin && <Route path="/tasks" exact component={ClientsPage} />}
             {isClient && <Route path="/lodgement" exact component={MyLodgementPage} />}
+            {(isAdmin || isAgent) && <Route path="/lodgement" exact component={AdminLodgementPage} />}
             {!isGuest && <Route path="/change_password" exact component={ChangePasswordPage} />}
             <Route path="/terms_and_conditions" exact component={TermAndConditionPage} />
             <Route path="/privacy_policy" exact component={PrivacyPolicyPage} />

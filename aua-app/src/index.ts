@@ -9,7 +9,7 @@ function validateEnvVars() {
     'AUA_DOMAIN_NAME',
     'AUA_S3_BUCKET',
     'AWS_DEFAULT_REGION',
-    'AUA_IMAGE_PREFIX'
+    'AUA_FILE_STORAGE_PATH'
   ];
 
   const missingVars = requiredEnvVars.map(v => process.env[v]).filter(x => !x);

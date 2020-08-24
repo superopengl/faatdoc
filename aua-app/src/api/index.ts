@@ -1,4 +1,4 @@
-export * from './imageController';
+export * from './fileController';
 export * from './authController';
 export * from './userController';
 export * from './portofolioController';

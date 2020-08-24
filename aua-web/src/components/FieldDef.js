@@ -1,3 +1,4 @@
+import * as moment from 'moment';
 const thisYear = new Date().getFullYear();
 
 export const BuiltInFieldDef = [
@@ -80,7 +81,7 @@ export const BuiltInFieldDef = [
       required: true,
       validator: async (rule, value) => {
         if (!value) return;
-        if (value.isAfter()) {
+        if (moment(value).isAfter()) {
           throw new Error();
         }
       },

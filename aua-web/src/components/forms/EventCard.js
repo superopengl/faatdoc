@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, Typography } from 'antd';
 import styled from 'styled-components';
-import { getImageUrl } from 'util/getImageUrl';
+import { getFileUrl } from 'util/getFileUrl';
 const { Meta } = Card;
 const {Text} = Typography;
 
@@ -48,7 +48,7 @@ export class EventCard extends React.Component {
     return (
       <CardStyled
         hoverable
-        cover={<CoverImageStyled style={{ backgroundImage: `url("${getImageUrl(imageId)}")` }} />}
+        cover={<CoverImageStyled style={{ backgroundImage: `url("${getFileUrl(imageId)}")` }} />}
       >
         <MetaStyled title={<Text style={{whiteSpace: 'break-spaces'}}>{title}</Text>} description={description} />
       </CardStyled>

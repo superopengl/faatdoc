@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Tabs, Typography, Layout, Button, Row, Card } from 'antd';
+import { Tabs, Typography, Layout, Button, Row, Table } from 'antd';
 import PosterAdminGrid from 'components/grids/PosterAdminGrid';
 import GalleryAdminGrid from 'components/grids/GalleryAdminGrid';
 import BusinessAdminGrid from 'components/grids/BusinessAdminGrid';
@@ -19,8 +19,7 @@ import { Link } from 'react-router-dom';
 import Modal from 'antd/lib/modal/Modal';
 import { List } from 'antd';
 import { Space } from 'antd';
-import LodgementForm from './MyLodgementForm';
-import LodgementCard from './MyLodgementCard';
+
 import { listLodgement, saveLodgement } from 'services/lodgementService';
 import { random } from 'lodash';
 import { listJobTemplate } from 'services/jobTemplateService';
@@ -46,7 +45,50 @@ const LayoutStyled = styled(Layout)`
 `;
 
 
-const MyLodgementPage = (props) => {
+const columnDef = [
+  {
+    title: 'Name',
+    dataIndex: 'name',
+    key: 'id',
+    render: (text, record) =>text
+  },
+  {
+    title: 'Created At',
+    dataIndex: 'createdAt',
+    key: 'id',
+    render: (text, record) => {
+      return moment(text).format('DD MMM YYYY')
+    }
+  },
+  {
+    title: 'Job',
+    dataIndex: 'jobTemplateName',
+    key: 'id',
+    render: (text, record) => {
+      return text;
+    }
+  },
+  {
+    title: 'Status',
+    dataIndex: 'status',
+    key: 'id',
+    render: (text, record) => {
+      return text;
+    }
+  },
+  {
+    title: 'Action',
+    key: 'action',
+    render: (text, record) => (
+      <Space size="middle">
+        <Link to={`/tasks?u=${record.id}`}>Tasks</Link>
+        <a>Message</a>
+      </Space>
+    ),
+  },
+];
+
+const AdminLodgementPage = (props) => {
 
   const [loading, setLoading] = React.useState(true);
   const [modalVisible, setModalVisible] = React.useState(false);
@@ -96,7 +138,9 @@ const MyLodgementPage = (props) => {
           </StyledTitleRow>
           <Paragraph>Lodgements are predefined information that can be automatically filled into your lodgement. You can save the information like name, phone, address, TFN, and etc. for future usage.</Paragraph>
 
-          <List
+          <Button onClick={() => openModalToCreate()}>Create New Lodgement</Button>
+          <Table columns={columnDef} dataSource={lodgementList}></Table>
+          {/* <List
             grid={{
               gutter: 24,
               xs: 1,
@@ -113,11 +157,11 @@ const MyLodgementPage = (props) => {
                 {!item.isNewButton && <LodgementCard onClick={() => openModalToEdit(item.id)} onDelete={() => loadList()} value={item} />}
               </List.Item>
             )}
-          />
+          /> */}
         </Space>
 
       </ContainerStyled>
-      {modalVisible && <Modal
+      {/* {modalVisible && <Modal
         visible={modalVisible}
         onOk={() => handleModalCancel()}
         onCancel={() => handleModalCancel()}
@@ -131,13 +175,13 @@ const MyLodgementPage = (props) => {
           onCancel={() => handleModalCancel()}
           id={currentId}
         />
-      </Modal>}
+      </Modal>} */}
     </LayoutStyled >
   );
 };
 
-MyLodgementPage.propTypes = {};
+AdminLodgementPage.propTypes = {};
 
-MyLodgementPage.defaultProps = {};
+AdminLodgementPage.defaultProps = {};
 
-export default MyLodgementPage;
+export default AdminLodgementPage;

@@ -12,7 +12,7 @@ function trimTrailingSlash(str) {
   return str ? str.replace(/\/+$/, '') : str;
 }
 
-const baseURL = trimTrailingSlash(process.env.REACT_APP_AUA_API_ENDPOINT);
+export const baseURL = trimTrailingSlash(process.env.REACT_APP_AUA_API_ENDPOINT);
 
 
 function getHeaders(responseType) {

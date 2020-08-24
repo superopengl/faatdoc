@@ -11,3 +11,4 @@ docs/images-to-upload
 *.js.map
 devops/.env.prod
 ubc-app/www
+file_storage

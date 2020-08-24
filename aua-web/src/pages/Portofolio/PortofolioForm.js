@@ -14,6 +14,7 @@ import { BuiltInFieldDef } from "components/FieldDef";
 import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
 import { displayNameAsLabel } from 'util/displayNameAsLabel';
 import { getPortofolio } from 'services/portofolioService';
+import { DateInput } from 'components/DateInput';
 
 const { Text, Paragraph, Title } = Typography;
 
@@ -28,37 +29,6 @@ const StyledTypeButton = styled(Button)`
     white-space: break-spaces; 
   }
 `;
-
-const getInputFor = (type, props) => {
-  switch (type) {
-    case 'text':
-      return <Input allowClear={true} type="text" {...props} />;
-    case 'number':
-      return <Input allowClear={true} type="number" {...props} />;
-    case 'paragraph':
-      return <Input.TextArea maxLength={1000} allowClear={true} {...props} />;
-    case 'date':
-      return <DatePicker style={{ display: 'block' }} format="YYYY-MM-DD" {...props} />;
-    case 'upload':
-      return <FileUploader {...props} />;
-    default:
-      throw new Error(`Unsupported job template field type '${type}`);
-  }
-}
-
-
-const JobTemplateField = (props) => {
-  const { label, name, required, type } = props;
-  const InputComponent = getInputFor(type, props);
-  return (
-    <Form.Item label={label} name={name} rules={[{ required, whitespace: true, message: ' ' }]}>
-      <InputComponent />
-    </Form.Item>
-  );
-}
-
-
-
 
 const EMPTY_ROW = {
   label: '',
@@ -97,9 +67,7 @@ const PortofolioForm = (props) => {
   }
 
   const handleSubmit = async values => {
-    const { Company, Given_Name, Surname, Date_Of_Birth } = values;
-
-    values.Date_Of_Birth = Date_Of_Birth?.utc().format('YYYY-MM-DD');
+    const { Company, Given_Name, Surname } = values;
 
     const portofolio = {
       id,
@@ -122,9 +90,6 @@ const PortofolioForm = (props) => {
 
   for (const f of fields) {
     formInitValues[f.name] = f.value;
-    if (f.name === 'Date_Of_Birth' && f.value) {
-      formInitValues[f.name] = moment(f.value);
-    }
   }
 
   const handleCancel = () => {
@@ -162,7 +127,7 @@ const PortofolioForm = (props) => {
             <Form.Item key={i} {...formItemProps}>
               {inputType === 'text' ? <Input {...inputProps} disabled={loading} /> :
                 inputType === 'paragraphy' ? <Input.TextArea {...inputProps} disabled={loading} /> :
-                  inputType === 'date' ? <DatePicker placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD" {...inputProps} /> :
+                  inputType === 'date' ? <DateInput placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD" {...inputProps} /> :
                     inputType === 'select' ? <Radio.Group buttonStyle="solid">
                       {fieldDef.options.map((x, i) => <Radio key={i} style={{ display: 'block', height: '2rem' }} value={x.value}>{x.label}</Radio>)}
                     </Radio.Group> :

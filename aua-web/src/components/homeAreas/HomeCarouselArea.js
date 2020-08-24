@@ -3,7 +3,7 @@ import { Carousel, Row, Col } from 'antd';
 import styled from 'styled-components';
 import { List, Typography } from 'antd';
 import { listPoster } from 'services/posterService';
-import { getImageUrl } from 'util/getImageUrl';
+import { getFileUrl } from 'util/getFileUrl';
 import windowSize from 'react-window-size';
 
 const { Title, Text } = Typography;

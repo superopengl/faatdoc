@@ -5,7 +5,7 @@ import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { v4 as uuidv4 } from 'uuid';
 import * as mineFormat from 'mime-format';
 import styled from 'styled-components';
-import { getImageUrl } from 'util/getImageUrl';
+import { getFileUrl } from 'util/getFileUrl';
 import { getAuthHeader } from 'services/localStorageService';
 import { notify } from 'util/notify';
 
@@ -39,8 +39,8 @@ export class ImageUploader extends React.Component {
     this.state = {
       loading: false,
       imageId,
-      imageUrl: getImageUrl(imageId),
-      uploadImageId: uuidv4(),
+      imageUrl: getFileUrl(imageId),
+      uploadFileId: uuidv4(),
     }
   }
 
@@ -78,17 +78,17 @@ export class ImageUploader extends React.Component {
       case 'uploading':
         return;
       case 'done':
-        const { uploadImageId } = this.state;
+        const { uploadFileId } = this.state;
         // Get this url from response in real world.
         const imageUrl = await this.getBase64(file.originFileObj)
         this.setState({
           imageUrl,
-          imageId: uploadImageId,
-          uploadImageId: uuidv4(), // Issue a new uuid for next upload
+          imageId: uploadFileId,
+          uploadFileId: uuidv4(), // Issue a new uuid for next upload
           loading: false
         });
 
-        this.props.onChange(uploadImageId);
+        this.props.onChange(uploadFileId);
         break;
       default:
     }
@@ -96,7 +96,7 @@ export class ImageUploader extends React.Component {
   };
 
   render() {
-    const { imageUrl, uploadImageId, loading } = this.state;
+    const { imageUrl, uploadFileId, loading } = this.state;
 
     return (
       <div>
@@ -106,7 +106,7 @@ export class ImageUploader extends React.Component {
           accept="image/*"
           // className="avatar-uploader"
           showUploadList={false}
-          action={`${process.env.REACT_APP_AUA_API_ENDPOINT}/image/${uploadImageId}`}
+          action={`${process.env.REACT_APP_AUA_API_ENDPOINT}/image/${uploadFileId}`}
           headers={getAuthHeader()}
           beforeUpload={this.beforeUpload}
           onChange={this.handleChange}

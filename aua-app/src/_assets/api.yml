@@ -11,9 +11,9 @@ definitions:
   PingResponse:
     type: "object"
 paths:
-  /image/{id}:
+  /file/download/{id}:
     get:
-      operationId: getImage
+      operationId: downloadFile
       parameters:
         - name: id
           in: path
@@ -23,8 +23,20 @@ paths:
       responses:
         200:
           description: OK
+  /file/{id}:
+    get:
+      operationId: getFile
+      parameters:
+        - name: id
+          in: path
+          type: string
+          format: uuid
+          required: true
+      responses:
+        200:
+          description: OK          
     post:
-      operationId: uploadImage
+      operationId: uploadFile
       parameters:
         - name: id
           in: path

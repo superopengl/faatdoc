@@ -5,6 +5,7 @@ import { Input, Button, Form, Radio, DatePicker, Checkbox } from 'antd';
 import { FileUploader } from '../FileUploader';
 import * as moment from 'moment';
 import { GlobalContext } from 'contexts/GlobalContext';
+import { DateInput } from 'components/DateInput';
 
 const StyledFormItem = styled(Form.Item)`
   // padding: 2rem;
@@ -29,6 +30,7 @@ class ProfileForm extends React.Component {
 
   validateDob = async (rule, value) => {
     if (!value) return;
+    console.log('date >>>>', value)
     if (value.isAfter()) {
       throw new Error();
     }
@@ -85,7 +87,7 @@ class ProfileForm extends React.Component {
               </Radio.Group>
             </StyledFormItem>
             <StyledFormItem label="Date of Birth" name="dob" rules={[{ required: false, validator: this.validateDob, message: 'Invalid date or not a past date' }]}>
-              <DatePicker placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD" onChange={() => { }} />
+              <DateInput placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD" />
             </StyledFormItem>
             <StyledFormItem label="Phone (split with ',' if there are more than one)" name="phone" rules={[{ required: true, max: 100, message: ' ' }]}>
               <Input placeholder="Phone" type="tel" allowClear={true} maxLength="100" disabled={loading} />

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Lightbox from 'react-image-lightbox';
-import { getImageUrl } from 'util/getImageUrl';
+import { getFileUrl } from 'util/getFileUrl';
 import ReactPlayer from "react-player";
 
 
@@ -41,7 +41,7 @@ export class GalleryCard extends React.Component {
     const { imageId, type, videoUrl } = this.props.data;
 
     if (type === 'image' && imageId) {
-      const imageUrl = getImageUrl(imageId);
+      const imageUrl = getFileUrl(imageId);
       return (
         <div>
           <CoverImageStyled style={{ backgroundImage: `url("${imageUrl}")` }} onClick={() => this.setState({ previewing: true })} />

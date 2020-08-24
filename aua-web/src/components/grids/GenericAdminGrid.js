@@ -6,7 +6,7 @@ import { Typography, Tag } from 'antd';
 import { EditOutlined, StopOutlined, QuestionOutlined } from '@ant-design/icons';
 import { Card } from 'antd';
 import { Modal, Popconfirm } from 'antd';
-import { getImageUrl } from 'util/getImageUrl';
+import { getFileUrl } from 'util/getFileUrl';
 import styled from 'styled-components';
 import ReactPlayer from "react-player";
 
@@ -114,9 +114,9 @@ export class GenericAdminGrid extends React.Component {
           {list && list.map((item, i) => (
             <Col key={i} {...spanProps}>
               <CardStyled hoverable
-                // cover={<img alt="example" src={getImageUrl(item.imageId)} style={{ padding: '1px' }} />}
+                // cover={<img alt="example" src={getFileUrl(item.imageId)} style={{ padding: '1px' }} />}
                 cover={<div style={{ padding: '1px' }}>
-                  {item.imageId && <ImageDiv style={{backgroundImage: `url("${getImageUrl(item.imageId)}")`}} />}
+                  {item.imageId && <ImageDiv style={{backgroundImage: `url("${getFileUrl(item.imageId)}")`}} />}
                   {item.videoUrl && <ReactPlayer url={item.videoUrl} width="100%" controls={true} />}
                 </div>}
                 actions={[

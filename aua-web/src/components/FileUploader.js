@@ -42,7 +42,7 @@ class FileUploaderRaw extends React.Component {
       previewVisible: false,
       previewImage: '',
       previewTitle: '',
-      uploadImageId: uuidv4(),
+      uploadFileId: uuidv4(),
       fileList: (value || []).map(img => ({
         uid: img.id,
         name: img.fileName,
@@ -89,7 +89,7 @@ class FileUploaderRaw extends React.Component {
     const { fileList } = info;
     this.setState({
       fileList,
-      uploadImageId: uuidv4()
+      uploadFileId: uuidv4()
     });
 
     const fileIds = fileList.filter(f => f.status === 'done').map(f => _.get(f, 'response.id', f.uid));
@@ -97,7 +97,7 @@ class FileUploaderRaw extends React.Component {
   };
 
   render() {
-    const { previewVisible, previewImage, fileList, previewTitle, uploadImageId } = this.state;
+    const { previewVisible, previewImage, fileList, previewTitle, uploadFileId } = this.state;
     const { size, disabled } = this.props;
 
     const maxSize = size || 20;
@@ -105,7 +105,7 @@ class FileUploaderRaw extends React.Component {
     return (
       <Container className="clearfix">
         <Upload
-          action={`${process.env.REACT_APP_AUA_API_ENDPOINT}/image/${uploadImageId}`}
+          action={`${process.env.REACT_APP_AUA_API_ENDPOINT}/file/${uploadFileId}`}
           headers={getAuthHeader()}
           accept="*/*"
           listType="picture"
@@ -118,7 +118,7 @@ class FileUploaderRaw extends React.Component {
         >
           <div style={{ marginTop: '1rem' }}>
             <Button disabled={disabled || fileList.length >= maxSize}>
-              <UploadOutlined /> Upload (maximum {maxSize} pictures)
+              <UploadOutlined /> Upload (maximum {maxSize} files)
           </Button>
           </div>
         </Upload>
