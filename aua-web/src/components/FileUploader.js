@@ -100,14 +100,14 @@ class FileUploaderRaw extends React.Component {
     const { previewVisible, previewImage, fileList, previewTitle, uploadImageId } = this.state;
     const { size, disabled } = this.props;
 
-    const maxSize = size || 5;
+    const maxSize = size || 20;
 
     return (
       <Container className="clearfix">
         <Upload
           action={`${process.env.REACT_APP_AUA_API_ENDPOINT}/image/${uploadImageId}`}
           headers={getAuthHeader()}
-          accept="image/*"
+          accept="*/*"
           listType="picture"
           fileList={fileList}
           onPreview={this.handlePreview}
@@ -116,46 +116,13 @@ class FileUploaderRaw extends React.Component {
           iconRender={() => <UploadOutlined />}
           disabled={disabled}
         >
-          <div>
-            <Text type="secondary">You can drag and drop the picture to adjust the order. The first picture will be used as the avatar/logo on the member card.</Text>
-          </div>
           <div style={{ marginTop: '1rem' }}>
             <Button disabled={disabled || fileList.length >= maxSize}>
               <UploadOutlined /> Upload (maximum {maxSize} pictures)
           </Button>
           </div>
         </Upload>
-        {fileList && (
-        <DragDropContext onDragEnd={this.onDragEnd}>
-          <Droppable droppableId="droppable">
-            {provided => (
-              <div ref={provided.innerRef} {...provided.droppableProps}>
-                {fileList.map((item, index) => (
-                  <Draggable key={item.uid} draggableId={item.uid} index={index}>
-                    {provided => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                      >
-                        <UploadList
-                          showDownloadIcon={false}
-                          listType="picture"
-                          locale={en_US}
-                          onPreview={this.handlePreview}
-                          onRemove={this.onRemove}
-                          items={[item]}
-                        />
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-      )}
+
         <Modal
           visible={previewVisible}
           title={previewTitle}

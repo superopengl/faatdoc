@@ -63,28 +63,14 @@ export const listClients = handlerWrapper(async (req, res) => {
   const clients = await getConnection()
     .createQueryBuilder()
     .from(User, 'u')
-    .innerJoin(q => q.from(Portofolio, 'p').select('*'), 'p', 'u.id = p.id')
+    .innerJoin(q => q.from(Portofolio, 'p').select('*'), 'p', 'u.id = p."userId"')
     .select([
       `u.id as id`,
       `"email"`,
-      `"givenName"`,
-      `"surname"`,
-      `"company"`,
-      `"createdAt" AT TIME ZONE 'UTC' AT TIME ZONE 'Australia/Sydney'`,
+      `p."createdAt" AT TIME ZONE 'UTC' AT TIME ZONE 'Australia/Sydney'`,
       `"lastLoggedInAt" AT TIME ZONE 'UTC' AT TIME ZONE 'Australia/Sydney'`,
-      `"lastUpdatedAt" AT TIME ZONE 'UTC' AT TIME ZONE 'Australia/Sydney'`,
-      `"status"`,
-      `"phone"`,
-      `"tfn"`,
-      `"abn"`,
-      `"acn"`,
-      `"address"`,
-      `"dob"`,
-      `"gender"`,
-      `"remark"`,
-      `"wechat"`,
-      `"occupation"`,
-      `"industry"`,
+      `p."lastUpdatedAt" AT TIME ZONE 'UTC' AT TIME ZONE 'Australia/Sydney'`,
+      `fields`,
     ])
     .execute();
 

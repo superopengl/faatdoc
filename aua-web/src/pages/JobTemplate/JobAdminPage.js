@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Tabs, Typography, Layout, Button, Row, Card } from 'antd';
+import { Tabs, Typography, Layout, Button, Row, Card, Col, Modal } from 'antd';
 import PosterAdminGrid from 'components/grids/PosterAdminGrid';
 import GalleryAdminGrid from 'components/grids/GalleryAdminGrid';
 import BusinessAdminGrid from 'components/grids/BusinessAdminGrid';
@@ -14,21 +14,32 @@ import * as moment from 'moment';
 import windowSize from 'react-window-size';
 import Text from 'antd/lib/typography/Text';
 import {
-  ExclamationCircleOutlined
+  ExclamationCircleOutlined,
+  CloseOutlined,
+  PlusOutlined
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
-import {LargePlusButton} from 'components/LargePlusButton';
-
-import Modal from 'antd/lib/modal/Modal';
+import { LargePlusButton } from 'components/LargePlusButton';
 import { List } from 'antd';
 import { Space } from 'antd';
-import { listJobTemplate, saveJobTemplate } from 'services/jobTemplateService';
+import { listJobTemplate, saveJobTemplate, deleteJobTemplate } from 'services/jobTemplateService';
 
 const { Title } = Typography;
 const { TabPane } = Tabs;
 
 const ContainerStyled = styled.div`
   margin: 6rem 0.5rem 2rem 0.5rem;
+  height: 100%;
+  // height: calc(100vh - 64px);
+`;
+
+const StyledTabs = styled(Tabs)`
+height: 100%;
+ .ant-tabs-tab, .ant-tabs-nav-add {
+  justify-content: space-between;
+  height: 4rem;
+ }
+
 `;
 
 const StyledTitleRow = styled.div`
@@ -41,8 +52,12 @@ const StyledTitleRow = styled.div`
 const LayoutStyled = styled(Layout)`
   margin: 0 auto 0 auto;
   background-color: #ffffff;
+  height: calc(100vh - 64px);
 `;
 
+const NEW_JOB_TEMPLATE = {
+  name: 'New Job Template'
+}
 
 
 export const JobAdminPage = (props) => {
@@ -51,43 +66,84 @@ export const JobAdminPage = (props) => {
 
   // const initialList = await listJobTemplates();
 
-  
-  const [modalVisible, setModalVisible] = React.useState(false);
-  const [list, setList] = React.useState([{isNewButton: true}]);
-  const [currentJob, setCurrentJob] = React.useState();
-  const [initialLoaded, setInitialLoaded] = React.useState(false);
-  
-  const loadList = async (force = false) => {
-    if (!initialLoaded || force) {
+  const [list, setList] = React.useState([]);
+  const [currentActiveTab, setCurrentActiveTab] = React.useState();
+
+  const loadList = async () => {
       const list = await listJobTemplate();
-      setList([...list, {isNewButton: true}]);
-      setInitialLoaded(true);
-    }
+      setList(list);
   }
 
   React.useEffect(() => {
     loadList();
-  })
+  }, [])
 
-  const saveJob = async job => {
-    await saveJobTemplate(job);
-    await loadList(true);
-    setModalVisible(false);
+  const handleTabClick = (key, e) => {
+    // const item = list[currentActiveTab];
+    // if(item && !item.id) {
+    //   Modal.error({
+    //     title: 'There is a unsaved job template. Please save it before other operation'
+    //   });
+    //   e.stopPropagation();
+    //   debugger;
+    //   return;
+    // }
+    // setCurrentTab(key);
   }
 
-  const openModalToCreate = () => {
-    setCurrentJob(undefined);
-    setModalVisible(true);
+  const handleTabChange = activeKey => {
+    const item = list[currentActiveTab];
+    if(item && !item.id) {
+      Modal.error({
+        title: 'There is a unsaved job template. Please save or delete it before other operations.'
+      });
+      return;
+    }
+    setCurrentTab(activeKey);
   }
 
-  const openModalToEdit = job => {
-    setCurrentJob(job);
-    setModalVisible(true);
+  const refreshList = async () => {
+    await loadList();
   }
 
-  const handleAfterDelete = async () =>  {
-    await loadList(true);
+  const setCurrentTab = (key) => {
+    setCurrentActiveTab(`${key}`)
   }
+
+  const hasUnsavedNewTemplate = () => {
+    return list.some(item => !item.id);
+  }
+
+  const handleEdit = async (targetKey, action) => {
+    switch (action) {
+      case 'add':
+        if (hasUnsavedNewTemplate()) {
+          Modal.error({
+            title: 'There is a unsaved job template. Please save it before adding new one'
+          });
+          return;
+        }
+        setList([...list, NEW_JOB_TEMPLATE]);
+        setCurrentTab(list.length);
+
+        break;
+      case 'remove':
+        const item = list[targetKey];
+        Modal.confirm({
+          title: <>To delete Job Template <strong>{item.name}</strong>?</>,
+          onOk: async () => {
+            if (item.id) {
+              await deleteJobTemplate(item.id);
+            }
+            refreshList();
+          },
+          okText: 'Yes, delete it!'
+        });
+        break;
+      default:
+        break;
+    }
+  };
 
   return (
     <LayoutStyled>
@@ -96,43 +152,26 @@ export const JobAdminPage = (props) => {
         <StyledTitleRow>
           <Title level={2} style={{ margin: 'auto' }}>Job Template Management</Title>
         </StyledTitleRow>
-        <Space size="large" direction="vertical" style={{ width: '100%' }}>
-          <List
-            grid={{
-              gutter: 24,
-              xs: 1,
-              sm: 1,
-              md: 2,
-              lg: 2,
-              xl: 3,
-              xxl: 4,
-            }}
-            dataSource={list}
-            renderItem={item => (
-              <List.Item key={item.id}>
-                {item.isNewButton && <LargePlusButton onClick={() => openModalToCreate()} />}
-                {!item.isNewButton && <JobTemplateCard onClick={() => openModalToEdit(item)} onDelete={() => handleAfterDelete()} value={item} />}
-              </List.Item>
-            )}
-          />
-        </Space>
+
+          {/* <Button type="primary" onClick={() => handleCreateNew()} icon={<PlusOutlined />}>Create New Job Template</Button> */}
+          <StyledTabs
+            // size="large"
+            tabPosition="left"
+            activeKey={currentActiveTab}
+            onTabClick={handleTabClick}
+            onChange={handleTabChange}
+            onEdit={handleEdit}
+            type="editable-card"
+          >
+            {list.map((item, i) => <Tabs.TabPane key={i} tab={<>{item.name}{item.id ? null : ' *'}</>}>
+              <JobTemplateForm
+                id={item.id}
+                onOk={() => refreshList()}
+              />
+            </Tabs.TabPane>)}
+          </StyledTabs>
 
       </ContainerStyled>
-      <Modal
-        visible={modalVisible}
-        onOk={() => setModalVisible(false)}
-        onCancel={() => setModalVisible(false)}
-        footer={null}
-        title="Create/Edit Job Template"
-        width="90vw"
-        style={{ maxWidth: 1000 }}
-      >
-        <JobTemplateForm
-          onOk={job => saveJob(job)}
-          onCancel={() => setModalVisible(false)}
-          initialValue={currentJob}
-        />
-      </Modal>
     </LayoutStyled >
   );
 };

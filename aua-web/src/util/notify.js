@@ -7,7 +7,7 @@ function request(level, title, content, duration) {
     key: title,
     duration: duration || 4,
     placement: 'topLeft',
-    style: {width: '85vw', maxWidth: '380px'}
+    style: { width: '85vw', maxWidth: '380px' }
   })
 }
 

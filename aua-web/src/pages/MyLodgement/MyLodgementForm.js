@@ -73,7 +73,9 @@ const MyLodgementForm = (props) => {
   const [initialLoaded, setInitialLoaded] = React.useState(false);
 
   const [lodgementList, setLodgementList] = React.useState([]);
-  const [lodgement, setLodgement] = React.useState(null);
+  const [lodgement, setLodgement] = React.useState(props.lodgement);
+  const [jobTemplateId, setJobTemplateId] = React.useState();
+  const [portofolioId, setPortofolioId] = React.useState();
 
   const loadList = async (force = false) => {
     if (!initialLoaded || force) {
@@ -93,14 +95,20 @@ const MyLodgementForm = (props) => {
   }
 
 
+  const saveDraft = async () => {
+
+  }
+
   const handleSubmit = async values => {
-    const { company, givenName, surname, dateOfBirth } = values;
+    const { name, givenName, surname, dateOfBirth } = values;
 
     values.dateOfBirth = dateOfBirth?.utc().format('YYYY-MM-DD');
 
     const lodgement = {
       id,
-      name: company || `${givenName} ${surname}`,
+      jobTemplateId,
+      portofolioId,
+      name,
       type,
       fields: values
     }
@@ -127,6 +135,8 @@ const MyLodgementForm = (props) => {
   }
 
   const handleSelectedTemplate = async (values) => {
+    setJobTemplateId(values.jobTemplateId);
+    setPortofolioId(values.portofolioId);
     const lodgement = await generateLodgement(values);
     setLodgement(lodgement);
   }
@@ -146,6 +156,7 @@ const MyLodgementForm = (props) => {
     return null;
   }
 
+
   const isIndividual = type === 'individual';
   const isBusiness = type === 'business';
 
@@ -157,31 +168,39 @@ const MyLodgementForm = (props) => {
       {!lodgement && <ChooseJobTemplateWithPortofolioComponent onChange={handleSelectedTemplate} />}
 
       {lodgement && <Form form={form} layout="vertical" onFinish={handleSubmit} style={{ textAlign: 'left' }} initialValues={getFormInitialValues()}>
+        <Form.Item label="Name" name="name" rules={[{ required: true, message: ' ' }]}>
+          <Input disabled={sending} />
+        </Form.Item>
+
         {lodgement.fields.map((field, i) => {
-          const { name, description, type, value } = field;
+          const { name, description, type, required } = field;
           const formItemProps = {
             label: <>{displayNameAsLabel(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
             name,
+            rules: [{ required, message: ' ' }]
           }
           return (
             <Form.Item key={i} {...formItemProps}>
               {type === 'text' ? <Input disabled={sending} /> :
                 type === 'year' ? <InputYear disabled={sending} /> :
                   type === 'number' ? <Input disabled={sending} type="number" /> :
-                    type === 'paragraphy' ? <Input.TextArea disabled={sending} /> :
-                      type === 'date' ? <DatePicker placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD" /> :
-                        type === 'select' ? <Radio.Group buttonStyle="solid">
-                          {field.options.map((x, i) => <Radio key={i} style={{ display: 'block', height: '2rem' }} value={x.value}>{x.label}</Radio>)}
-                        </Radio.Group> :
-                          null}
+                    type === 'paragraph' ? <Input.TextArea disabled={sending} /> :
+                      type === 'date' ? <DatePicker disabled={sending} placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD" /> :
+                        type === 'upload' ? <FileUploader disabled={sending} /> :
+                          type === 'select' ? <Radio.Group disabled={sending} buttonStyle="solid">
+                            {field.options.map((x, i) => <Radio key={i} style={{ display: 'block', height: '2rem' }} value={x.value}>{x.label}</Radio>)}
+                          </Radio.Group> :
+                            null}
             </Form.Item>
           );
         })}
+        <Divider />
         <Form.Item>
-          <Button block type="primary" htmlType="submit" disabled={sending}>{props.okButtonText || 'Submit'}</Button>
-        </Form.Item>
-        <Form.Item>
-          <Button block size="large" type="link" onClick={() => handleCancel()}>Cancel</Button>
+          <Space direction="vertical" style={{ width: '100%' }} size="middle">
+            <Button block ghost type="primary" disabled={sending} onClick={() => saveDraft()}>Save As Draft</Button>
+            <Button block type="primary" htmlType="submit" disabled={sending}>Submit Now</Button>
+            <Button block type="link" onClick={() => handleCancel()}>Cancel</Button>
+          </Space>
         </Form.Item>
       </Form>}
     </Space>

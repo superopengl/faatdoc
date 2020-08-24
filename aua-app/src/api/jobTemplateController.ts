@@ -47,8 +47,11 @@ export const saveJobTemplate = handlerWrapper(async (req, res) => {
 export const listJobTemplates = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client', 'agent');
 
-  const repo = getRepository(JobTemplate);
-  const list = await repo.find({});
+  const list = await getRepository(JobTemplate)
+    .createQueryBuilder('x')
+    .orderBy('x.createdAt', 'ASC')
+    .select(['x.id', 'x.name'])
+    .getMany();
 
   res.json(list);
 });

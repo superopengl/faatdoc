@@ -30,7 +30,7 @@ const PosterContainer = styled.div`
 background-repeat: no-repeat;
 background-size: cover;
 background-position: center;
-background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0, 0, 0, 0.4)),url("images/poster.jpg");
+background-image: radial-gradient(rgba(0,0,0,0.8), rgba(0, 0, 0, 0.0)),url("images/poster.jpg");
 width: 100%;
 min-height: 200px;
 display: flex;

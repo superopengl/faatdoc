@@ -8,8 +8,9 @@ import { GlobalContext } from 'contexts/GlobalContext';
 import { Menu, Dropdown, message, Tooltip } from 'antd';
 import { UpOutlined, DownOutlined, DeleteOutlined, QuestionOutlined } from '@ant-design/icons';
 import { Divider } from 'antd';
-import { listPortofolios, deletePortofolio } from 'services/portofolioService';
+import { listLodgement, deleteLodgement } from 'services/lodgementService';
 import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
+import { displayNameAsLabel } from 'util/displayNameAsLabel';
 
 const { Text, Title, Paragraph } = Typography;
 
@@ -42,31 +43,11 @@ const getInputFor = (type, props) => {
   }
 }
 
-
-const PortofolioField = (props) => {
-  const { label, name, required, type } = props;
-  const InputComponent = getInputFor(type, props);
-  return (
-    <StyledFormItem label={label} name={name} rules={[{ required, whitespace: true, message: ' ' }]}>
-      <InputComponent />
-    </StyledFormItem>
-  );
-}
-
-
-
-const EMPTY_ROW = {
-  label: '',
-  name: '',
-  required: true,
-  type: 'text'
-}
-
 const columns = [
   {
     title: 'Name',
     dataIndex: 'key',
-    render: (text) => normalizeFieldNameToVar(text)
+    render: (text) => displayNameAsLabel(text)
   },
   {
     title: 'Value',
@@ -83,9 +64,9 @@ const MyLodgementCard = (props) => {
   const handleDelete = async (e) => {
     e.stopPropagation();
     Modal.confirm({
-      title: <>To delete Portofolio <strong>{name}</strong>?</>,
+      title: <>To delete lodgement <strong>{name}</strong>?</>,
       onOk: async () => {
-        await deletePortofolio(id);
+        await deleteLodgement(id);
         props.onDelete();
       },
       okText: 'Yes, delete it!'
