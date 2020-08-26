@@ -23,6 +23,12 @@ paths:
       responses:
         200:
           description: OK
+  /file/search:
+    post:
+      operationId: searchFileList
+      responses:
+        200:
+          description: OK
   /file/{id}:
     get:
       operationId: getFile
@@ -34,7 +40,7 @@ paths:
           required: true
       responses:
         200:
-          description: OK          
+          description: OK
     post:
       operationId: uploadFile
       parameters:
@@ -46,6 +52,7 @@ paths:
       responses:
         200:
           description: OK
+
   /auth/login:
     post:
       operationId: login
@@ -96,6 +103,12 @@ paths:
       responses:
         200:
           description: OK
+  /auth/user:
+    get:
+      operationId: getAuthUser
+      responses:
+        200:
+          description: OK               
   /user:
     get:
       operationId: listClients
@@ -203,7 +216,7 @@ paths:
       operationId: generateLodgement
       responses:
         200:
-          description: OK       
+          description: OK
   /lodgement/{id}:
     get:
       operationId: getLodgement
@@ -226,4 +239,4 @@ paths:
           required: true
       responses:
         200:
-          description: OK          
+          description: OK

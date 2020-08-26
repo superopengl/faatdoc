@@ -1,8 +1,9 @@
 import * as axios from 'axios';
-import { getAuthHeader } from './localStorageService';
 import * as _ from 'lodash';
 import { logout } from './authService';
 import { notify } from 'util/notify';
+
+axios.defaults.withCredentials = true;
 
 function trimSlash(str) {
   return str ? str.replace(/^\/+/, '').replace(/\/+$/, '') : str;
@@ -16,10 +17,9 @@ export const baseURL = trimTrailingSlash(process.env.REACT_APP_AUA_API_ENDPOINT)
 
 
 function getHeaders(responseType) {
-  const headers = _.merge({
+  const headers = {
     'Content-Type': responseType === 'json' ? 'application/json; charset=utf-8' : 'text/plain; charset=utf-8',
-  }, getAuthHeader());
-
+  };
 
   return headers;
 }

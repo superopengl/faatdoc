@@ -17,6 +17,11 @@ import { logError } from '../utils/logger';
 import { getUtcNow } from '../utils/getUtcNow';
 import { Role } from '../enums/Role';
 
+export const getAuthUser = handlerWrapper(async (req, res) => {
+  const { user } = (req as any);
+  res.json(user || null);
+});
+
 
 export const login = handlerWrapper(async (req, res) => {
   const { name, password } = req.body;
@@ -48,6 +53,12 @@ export const login = handlerWrapper(async (req, res) => {
 
   await repo.save(user);
 
+  res.cookie('session', user.sessionId, {
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 * 24, // 24 hours
+    expires: moment(getUtcNow()).add(24, 'hours').toDate()
+  });
+
   const returnedUser = _.pick(user, ['id', 'email', 'memberId', 'role', 'sessionId', 'lastLoggedInAt', 'expiryDate', 'status']);
   res.json(returnedUser);
 });
@@ -56,8 +67,8 @@ export const logout = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
   const { user: { id } } = req as any;
   const repo = getRepository(User);
-  await repo.update({ id: id }, { sessionId: null });
-
+  repo.update({ id: id }, { sessionId: null }).catch(() => {});
+  res.clearCookie('session');
   res.json();
 });
 

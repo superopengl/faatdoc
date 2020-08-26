@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Tabs, Typography, Layout, Button, Row, Card } from 'antd';
+import { Tabs, Typography, Layout, Button, Row, Modal } from 'antd';
 import PosterAdminGrid from 'components/grids/PosterAdminGrid';
 import GalleryAdminGrid from 'components/grids/GalleryAdminGrid';
 import BusinessAdminGrid from 'components/grids/BusinessAdminGrid';
@@ -16,7 +16,6 @@ import {
   ExclamationCircleOutlined, PlusOutlined
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
-import Modal from 'antd/lib/modal/Modal';
 import { List } from 'antd';
 import { Space } from 'antd';
 import LodgementForm from './MyLodgementForm';
@@ -86,6 +85,16 @@ const MyLodgementPage = (props) => {
     loadList();
   }
 
+  const handleConfirmAndCancel = () => {
+    Modal.confirm({
+      title: 'Disgard the changes without saving?',
+      icon: <ExclamationCircleOutlined />,
+      okText: 'Yes, disgard the changes',
+      onOk: () => handleModalCancel(),
+      // cancelText: 'No, continue changing'
+    })
+  }
+
   return (
     <LayoutStyled>
       <HomeHeader></HomeHeader>
@@ -101,10 +110,10 @@ const MyLodgementPage = (props) => {
               gutter: 24,
               xs: 1,
               sm: 1,
-              md: 2,
+              md: 1,
               lg: 2,
-              xl: 3,
-              xxl: 4,
+              xl: 2,
+              xxl: 3,
             }}
             dataSource={lodgementList}
             renderItem={item => (
@@ -120,7 +129,7 @@ const MyLodgementPage = (props) => {
       {modalVisible && <Modal
         visible={modalVisible}
         onOk={() => handleModalCancel()}
-        onCancel={() => handleModalCancel()}
+        onCancel={() => handleConfirmAndCancel()}
         footer={null}
         title="Create/Edit Lodgement"
         width="90vw"

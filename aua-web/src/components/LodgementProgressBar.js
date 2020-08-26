@@ -26,10 +26,11 @@ function getLabelFromStatus(status) {
   return <small>{(status || '').replace(/_/g, ' ')}</small>
 }
 
-export const LodgementProgressBar = ({ status }) => {
+export const LodgementProgressBar = ({ status, ...props }) => {
   return <Progress type="circle"
     percent={percentage[status]}
     status={progressStatus[status]}
     format={() => getLabelFromStatus(status)} 
+    {...props}
     />
 }

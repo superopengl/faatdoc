@@ -89,7 +89,8 @@ const JobTemplateForm = (props) => {
   }
 
   const changeValue = (index, name, v) => {
-    fields[index][name] = v.target.value;
+
+    fields[index][name] = v;
     setFields([...fields]);
   }
 
@@ -126,7 +127,7 @@ const JobTemplateForm = (props) => {
           style={{ width: 200 }}
           allowClear={true}
           autoComplete="off"
-          onBlur={(value) => changeValue(index, 'name', value)}
+          onBlur={(e) => changeValue(index, 'name', e.target.value)}
         />
       }
     },

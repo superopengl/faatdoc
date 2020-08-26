@@ -9,7 +9,7 @@ import * as _ from 'lodash';
 import { saveProfile, getProfile } from 'services/userService';
 import { notify } from 'util/notify';
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 const PageContainer = styled.div`
   width: 100%;

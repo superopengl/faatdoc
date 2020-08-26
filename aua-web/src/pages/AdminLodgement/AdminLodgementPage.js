@@ -24,6 +24,7 @@ import { listLodgement, saveLodgement } from 'services/lodgementService';
 import { random } from 'lodash';
 import { listJobTemplate } from 'services/jobTemplateService';
 import { listPortofolio } from 'services/portofolioService';
+import { LodgementProgressBar } from 'components/LodgementProgressBar';
 
 const { Title, Paragraph } = Typography;
 const { TabPane } = Tabs;
@@ -73,7 +74,7 @@ const columnDef = [
     dataIndex: 'status',
     key: 'id',
     render: (text, record) => {
-      return text;
+      return <LodgementProgressBar status={text} width={50}/>;
     }
   },
   {
@@ -81,7 +82,7 @@ const columnDef = [
     key: 'action',
     render: (text, record) => (
       <Space size="middle">
-        <Link to={`/tasks?u=${record.id}`}>Tasks</Link>
+        <Link to={`/lodgement/proceed/${record.id}`}>Proceed</Link>
         <a>Message</a>
       </Space>
     ),

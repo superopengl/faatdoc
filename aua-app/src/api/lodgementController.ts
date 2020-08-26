@@ -58,6 +58,7 @@ export const generateLodgement = handlerWrapper(async (req, res) => {
   const { user: { id: userId } } = req;
   const fields = prefillFieldsWithProtofolio(jobTemplate.fields, portofolio?.fields);
 
+  lodgement.name = `New ${jobTemplate.name} for ${portofolio.name}`;
   lodgement.userId = userId;
   lodgement.jobTemplateId = jobTemplateId;
   lodgement.portofolioId = portofolioId;

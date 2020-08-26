@@ -18,7 +18,7 @@ import { listPortofolio } from 'services/portofolioService';
 const { Text, Paragraph, Title } = Typography;
 
 
-export const ChooseJobTemplateWithPortofolioComponent = props => {
+export const LodgementGenerator = props => {
   const [initialLoaded, setInitialLoaded] = React.useState(false);
 
   const [jobTemplateList, setJobTemplateList] = React.useState([]);

@@ -6,7 +6,6 @@ import { v4 as uuidv4 } from 'uuid';
 import * as mineFormat from 'mime-format';
 import styled from 'styled-components';
 import { getFileUrl } from 'util/getFileUrl';
-import { getAuthHeader } from 'services/localStorageService';
 import { notify } from 'util/notify';
 
 const UploadStyled = styled(Upload)`
@@ -104,10 +103,10 @@ export class ImageUploader extends React.Component {
           name="file"
           listType="picture-card"
           accept="image/*"
+          withCredentials={true}
           // className="avatar-uploader"
           showUploadList={false}
           action={`${process.env.REACT_APP_AUA_API_ENDPOINT}/image/${uploadFileId}`}
-          headers={getAuthHeader()}
           beforeUpload={this.beforeUpload}
           onChange={this.handleChange}
         // customRequest={this.onRequest}

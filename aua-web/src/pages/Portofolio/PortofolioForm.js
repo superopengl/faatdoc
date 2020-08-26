@@ -136,7 +136,7 @@ const PortofolioForm = (props) => {
           );
         })}
         <Form.Item>
-          <Button block type="primary" htmlType="submit" disabled={loading}>{props.okButtonText || 'Submit'}</Button>
+          <Button block type="primary" htmlType="submit" disabled={loading}>Save</Button>
         </Form.Item>
         <Form.Item>
           <Button block size="large" type="link" onClick={() => handleCancel()}>Cancel</Button>

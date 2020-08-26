@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
-import { Input, Button, Form, Select, DatePicker, Checkbox, Modal, Space, Typography, Radio } from 'antd';
-import { FileUploader } from '../../components/FileUploader';
+import { Input, Button, Form, Select, DatePicker, Layout, Modal, Space, Typography, Radio } from 'antd';
+import { FileUploader } from 'components/FileUploader';
+import HomeHeader from 'components/HomeHeader';
+
 import * as moment from 'moment';
 import { GlobalContext } from 'contexts/GlobalContext';
 import { Menu, Dropdown, message, Tooltip } from 'antd';
@@ -15,29 +17,32 @@ import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
 import { listJobTemplate } from 'services/jobTemplateService';
 import { deleteLodgement, generateLodgement, getLodgement, saveLodgement } from 'services/lodgementService';
 import { listPortofolio } from 'services/portofolioService';
-import { LodgementGenerator } from './LodgementGenerator';
 import { displayNameAsLabel } from 'util/displayNameAsLabel';
 import { InputYear } from 'components/InputYear';
 import { DateInput } from 'components/DateInput';
 
 const { Text, Paragraph, Title } = Typography;
-
-const StyledTypeButton = styled(Button)`
-  height: 100%;
-
-  h1, div {
-    margin: 0;
-  }
-
-  div {
-    white-space: break-spaces; 
-  }
+const ContainerStyled = styled.div`
+  margin: 6rem auto 2rem auto;
+  padding: 1rem;
+  max-width: 700px;
+  width: 100%;
 `;
 
+const StyledTitleRow = styled.div`
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ width: 100%;
+`
 
-const MyLodgementForm = (props) => {
-  const { id } = props;
+const LayoutStyled = styled(Layout)`
+  margin: 0 auto 0 auto;
+  background-color: #ffffff;
+`;
 
+const ProceedLodgementPage = (props) => {
+  const id = props.match.params.id;
   // const { name, id, fields } = value || {};
 
   const [loading, setLoading] = React.useState(true);
@@ -146,10 +151,11 @@ const MyLodgementForm = (props) => {
 
   // console.log('value', formInitValues);
 
-  return (<>
+  return (<LayoutStyled>
+    <HomeHeader></HomeHeader>
+    <ContainerStyled>
     <Space direction="vertical" size="large" style={{ width: '100%' }}>
 
-      {!lodgement && <LodgementGenerator onChange={handleSelectedTemplate} />}
 
       {(lodgement && !canEdit) && <Text type="warning">Cannot edit the lodgement of status '{lodgement.status}'.</Text>}
       {lodgement && <Form form={form} layout="vertical"
@@ -165,7 +171,7 @@ const MyLodgementForm = (props) => {
           const formItemProps = {
             label: <>{displayNameAsLabel(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
             name,
-            rules: [{ required }]
+            // rules: [{ required }]
           }
           return (
             <Form.Item key={i} {...formItemProps}>
@@ -182,6 +188,17 @@ const MyLodgementForm = (props) => {
             </Form.Item>
           );
         })}
+        {/* <Form.Item>
+          <div>
+            <Input.Search style={{ marginBottom: 8 }} placeholder="Search" onChange={this.onChange} />
+            <Tree
+              onExpand={this.onExpand}
+              expandedKeys={expandedKeys}
+              autoExpandParent={autoExpandParent}
+              treeData={loop(gData)}
+            />
+          </div>
+        </Form.Item> */}
         <Divider />
         <Form.Item>
           <Space direction="vertical" style={{ width: '100%' }} size="middle">
@@ -190,19 +207,18 @@ const MyLodgementForm = (props) => {
             <Button block type="link" onClick={() => handleCancel()}>Cancel</Button>
           </Space>
         </Form.Item>
-        {(id && lodgement?.status === 'draft') && <Form.Item>
-          <Button block type="primary" danger disabled={loading} onClick={handleDelete}>Delete</Button>
-        </Form.Item>}
       </Form>}
     </Space>
-  </>
+      </ContainerStyled>
+    </LayoutStyled >
+
   );
 };
 
-MyLodgementForm.propTypes = {
+ProceedLodgementPage.propTypes = {
   id: PropTypes.string
 };
 
-MyLodgementForm.defaultProps = {};
+ProceedLodgementPage.defaultProps = {};
 
-export default withRouter(MyLodgementForm);
+export default withRouter(ProceedLodgementPage);

@@ -1,5 +1,4 @@
-import { httpPost } from './http';
-import { clearLocalStorage } from './localStorageService';
+import { httpPost, httpGet } from './http';
 
 export async function login(name, password) {
   const data = { name, password };
@@ -27,9 +26,11 @@ export async function logout() {
     } catch { }
   })
 
-  clearLocalStorage('user', null);
   window.location = '/';
-  // history.push('/');
+}
+
+export async function getAuthUser() {
+  return httpGet(`auth/user`);
 }
 
 

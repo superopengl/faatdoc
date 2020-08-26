@@ -9,7 +9,6 @@ import ResetPasswordPage from 'pages/ResetPasswordPage';
 import MembershipPage from 'pages/MembershipPage';
 import { GlobalContext } from './contexts/GlobalContext';
 import ForgotPasswordPage from 'pages/ForgotPasswordPage';
-import { loadFromLocalStorage, saveLocalStorage } from 'services/localStorageService';
 import * as _ from 'lodash';
 import ChangePasswordPage from 'pages/ChangePasswordPage';
 import SignUpPage from 'pages/SignUpPage';
@@ -24,19 +23,18 @@ import MyLodgementPage from 'pages/MyLodgement/MyLodgementPage';
 import JobAdminPage from 'pages/JobTemplate/JobAdminPage';
 import PortofolioPage from 'pages/Portofolio/PortofolioPage';
 import AdminLodgementPage from 'pages/AdminLodgement/AdminLodgementPage';
+import ProceedLodgementPage from 'pages/AdminLodgement/ProceedLodgementPage';
+import { getAuthUser } from 'services/authService';
 
 
 class App extends React.Component {
   constructor(props) {
     super(props);
 
-    const user = loadFromLocalStorage('user');
-    const profile = loadFromLocalStorage('profile');
-
     this.state = {
-      user,
-      role: _.get(user, 'role', 'guest'),
-      profile,
+      user: null,
+      role: 'guest',
+      profile: null,
       loading: false,
       setUser: this.setUser,
       setProfile: this.setProfile,
@@ -44,13 +42,20 @@ class App extends React.Component {
     };
   }
 
+  async componentDidMount() {
+    const user = await getAuthUser();
+    if (user) {
+      this.setUser(user);
+      // const profile = await getProfile();
+      // this.setProfile(profile);
+    }
+  }
+
   setUser = (user) => {
-    saveLocalStorage('user', user);
     this.setState({ user, role: user ? user.role : 'guest' });
   }
 
   setProfile = (profile) => {
-    saveLocalStorage('profile', profile);
     this.setState({ profile });
   }
 
@@ -81,6 +86,7 @@ class App extends React.Component {
             {isAdmin && <Route path="/tasks" exact component={ClientsPage} />}
             {isClient && <Route path="/lodgement" exact component={MyLodgementPage} />}
             {(isAdmin || isAgent) && <Route path="/lodgement" exact component={AdminLodgementPage} />}
+            {(isAdmin || isAgent) && <Route path="/lodgement/proceed/:id" exact component={ProceedLodgementPage} />}
             {!isGuest && <Route path="/change_password" exact component={ChangePasswordPage} />}
             <Route path="/terms_and_conditions" exact component={TermAndConditionPage} />
             <Route path="/privacy_policy" exact component={PrivacyPolicyPage} />

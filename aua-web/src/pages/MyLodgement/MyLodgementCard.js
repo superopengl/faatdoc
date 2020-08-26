@@ -42,11 +42,11 @@ const MyLodgementCard = (props) => {
   return (<>
     <StyledCard
       title={<>
-      <Title>{name}</Title>
+      <Text style={{whiteSpace: 'break-spaces'}}>{name}</Text>
       {/* <Button type="link" onClick={handleDelete} danger>Delete</Button> */}
       </>}
       extra={<>
-        <LodgementProgressBar status={status} />
+        <LodgementProgressBar status={status} width={80} />
       </>}
       bodyStyle={{ margin: 0, padding: 0 }}
       onClick={props.onClick}

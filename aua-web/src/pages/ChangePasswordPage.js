@@ -5,7 +5,7 @@ import { Layout, Typography, Input, Button, Form } from 'antd';
 import { changePassword } from 'services/userService';
 import HomeHeader from 'components/HomeHeader';
 import { notify } from 'util/notify';
-import { loadFromLocalStorage } from 'services/localStorageService';
+import { GlobalContext } from 'contexts/GlobalContext';
 
 const ContainerStyled = styled.div`
   margin: 4rem auto 2rem auto;
@@ -69,33 +69,42 @@ class ChangePasswordPage extends React.Component {
   render() {
     const { sending } = this.state;
 
-    const user = loadFromLocalStorage('user');
     return (
-      <LayoutStyled>
-        <HomeHeader></HomeHeader>
-        <ContainerStyled>
-          <Title level={2}>Change Password</Title>
-          <Text  code>{user.email}</Text>
-          <br/>
-          <br/>
-          <Form layout="vertical" onFinish={this.handleSubmit} style={{ textAlign: 'left' }}>
-            <Form.Item label="Old Password" name="password" rules={[{ required: true, message: ' ' }]}>
-              <Input.Password placeholder="Old Password" maxLength="50" autoComplete="current-password" disabled={sending} visibilityToggle={false} autoFocus={true} />
-            </Form.Item>
-            <Form.Item label="New Password (at least 8 letters)" name="newPassword" rules={[{ required: true, min: 8, message: ' ' }]}>
-              <Input.Password placeholder="New Password" maxLength="50" autoComplete="new-password" disabled={sending} visibilityToggle={false} />
-            </Form.Item>
-            <Form.Item label="Confirm New Password" name="confirmPassword" rules={[{ required: true, min: 8, message: ' ' }, this.validateConfirmPasswordRule]}>
-              <Input.Password placeholder="Confirm New Password" maxLength="50" autoComplete="new-password" disabled={sending} visibilityToggle={false} />
-            </Form.Item>
-            <Form.Item style={{ marginTop: '2rem' }}>
-              <Button block type="primary" htmlType="submit" disabled={sending}>Change password</Button>
-              <Button block size="large" type="link" onClick={() => this.goBack()}>Cancel</Button>
-            </Form.Item>
-          </Form>
-        </ContainerStyled>
-      </LayoutStyled>
+      <GlobalContext.Consumer>
+        {
+          context => {
+            const {user} = context;
 
+            return (
+              <LayoutStyled>
+              <HomeHeader></HomeHeader>
+              <ContainerStyled>
+                <Title level={2}>Change Password</Title>
+                <Text  code>{user.email}</Text>
+                <br/>
+                <br/>
+                <Form layout="vertical" onFinish={this.handleSubmit} style={{ textAlign: 'left' }}>
+                  <Form.Item label="Old Password" name="password" rules={[{ required: true, message: ' ' }]}>
+                    <Input.Password placeholder="Old Password" maxLength="50" autoComplete="current-password" disabled={sending} visibilityToggle={false} autoFocus={true} />
+                  </Form.Item>
+                  <Form.Item label="New Password (at least 8 letters)" name="newPassword" rules={[{ required: true, min: 8, message: ' ' }]}>
+                    <Input.Password placeholder="New Password" maxLength="50" autoComplete="new-password" disabled={sending} visibilityToggle={false} />
+                  </Form.Item>
+                  <Form.Item label="Confirm New Password" name="confirmPassword" rules={[{ required: true, min: 8, message: ' ' }, this.validateConfirmPasswordRule]}>
+                    <Input.Password placeholder="Confirm New Password" maxLength="50" autoComplete="new-password" disabled={sending} visibilityToggle={false} />
+                  </Form.Item>
+                  <Form.Item style={{ marginTop: '2rem' }}>
+                    <Button block type="primary" htmlType="submit" disabled={sending}>Change password</Button>
+                    <Button block size="large" type="link" onClick={() => this.goBack()}>Cancel</Button>
+                  </Form.Item>
+                </Form>
+              </ContainerStyled>
+            </LayoutStyled>      
+            )
+          }
+
+        }
+      </GlobalContext.Consumer>
     );
   }
 }

@@ -20,7 +20,7 @@ function errorHandler(err, req, res, next) {
   if (res.headersSent) {
     return next(err);
   }
-  res.status(500);
+  res.status(err.status || 500);
   res.json(err);
 }
 
@@ -43,7 +43,10 @@ const staticWwwDir = path.resolve(__dirname, '..', 'www');
 // create and setup express app
 export function createAppInstance() {
   const app = express();
-  app.use(cors());
+  app.use(cors({
+    origin: ['http://localhost:6001'],
+    credentials: true,
+  }));
   app.use(cookieParser());
   app.use(bodyParser.json({ limit: '4mb' }));
   app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));

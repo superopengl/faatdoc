@@ -29,8 +29,8 @@ const { TabPane } = Tabs;
 
 const ContainerStyled = styled.div`
   margin: 6rem 0.5rem 2rem 0.5rem;
-  height: 100%;
-  // height: calc(100vh - 64px);
+  // height: 100%;
+  // height: calc(100vh + 64px);
 `;
 
 const StyledTabs = styled(Tabs)`

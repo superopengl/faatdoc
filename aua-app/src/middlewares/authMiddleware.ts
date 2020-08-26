@@ -10,7 +10,7 @@ function sendSessionExpired(res) {
 
 export const authMiddleware = async (req, res, next) => {
   try {
-    const token = req.headers['x-access-token'] || req.headers['authorization'] || req.cookies['session'];
+    const token = req.cookies['session'];
     if (token) {
       const repo = getRepository(User);
       const user = await repo.findOne({ sessionId: token });

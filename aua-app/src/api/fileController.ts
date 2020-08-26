@@ -8,6 +8,7 @@ import { awsConfig } from '../utils/awsConfig';
 import * as path from 'path';
 import * as fse from 'fs-extra';
 import { uuidToRelativePath } from '../utils/uuidToRelativePath';
+import { assertRole } from '../utils';
 
 function getPathByFileId(uuid) {
   const localPath = process.env.AUA_FILE_STORAGE_PATH;
@@ -28,7 +29,7 @@ export const downloadFile = handlerWrapper(async (req, res) => {
   // const file = await repo.findOne(id);
   // assert(file, 404);
 
-  const {full} = getPathByFileId(id);
+  const { full } = getPathByFileId(id);
   res.download(full);
 });
 
@@ -40,15 +41,24 @@ export const getFile = handlerWrapper(async (req, res) => {
   res.json(image);
 });
 
+export const searchFileList = handlerWrapper(async (req, res) => {
+  const { ids } = req.body;
+  const files = await getRepository(File)
+    .createQueryBuilder()
+    .where('id IN(:...ids)', { ids })
+    .getMany();
+  res.json(files);
+});
+
 
 export const uploadFile = handlerWrapper(async (req, res) => {
-  // assertRole(req, 'admin', 'business', 'individual');
+  assertRole(req, 'admin', 'client', 'agent');
   const { id } = req.params;
   assert(id, 404, 'Image ID not specified');
   const { file } = (req as any).files;
   assert(file, 404, 'No file uploaded');
   const { name, data, mimetype, md5 } = file;
-  const {full, relative} = getPathByFileId(id);
+  const { full, relative } = getPathByFileId(id);
 
   await fse.outputFile(full, data);
 
