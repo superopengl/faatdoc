@@ -83,13 +83,9 @@ function validateLodgementStatusChange(oldStatus, newStatus) {
       nextStatii = [s.DRAFT, s.SUBMITTED];
       break;
     case s.SUBMITTED:
-      nextStatii = [s.READY, s.TO_REVISE];
-      break;
-    case s.TO_REVISE:
-      nextStatii = [s.SUBMITTED, s.TO_REVISE];
-      break;
-    case s.READY:
-      nextStatii = [s.TO_SIGN, s.DONE];
+      nextStatii = [s.DRAFT, s.TO_SIGN, s.DONE];
+    case s.TO_SIGN:
+      nextStatii = [s.DONE];
     case s.DONE:
     default:
   }

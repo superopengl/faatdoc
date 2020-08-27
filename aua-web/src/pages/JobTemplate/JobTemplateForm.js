@@ -132,22 +132,28 @@ const JobTemplateForm = (props) => {
       }
     },
     {
-      title: 'Required',
+      title: 'Required ?',
       dataIndex: 'required',
-      key: 'required',
+      key: 'id',
       render: (value, records, index) => <Checkbox checked={value} onChange={(e) => changeValue(index, 'required', e.target.checked)} />
+    },
+    {
+      title: 'Official Only ?',
+      dataIndex: 'officialOnly',
+      key: 'id',
+      render: (value, records, index) => <Checkbox checked={value} onChange={(e) => changeValue(index, 'officialOnly', e.target.checked)} />
     },
     {
       title: 'Type',
       dataIndex: 'type',
-      key: 'type',
+      key: 'id',
       render: (value, records, index) => <Select value={value} style={{ width: '100%' }} onChange={(v) => changeValue(index, 'type', v)}>
         {BuiltInFieldType.map((f, i) => <Select.Option key={i} value={f}>{f}</Select.Option>)}
       </Select>
     },
     {
       title: 'Action',
-      key: 'action',
+      key: 'id',
       render: (text, record, index) => (
         <Space size="middle">
           <Button type="link" icon={<UpOutlined />} onClick={() => moveUp(index)} />

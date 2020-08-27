@@ -156,7 +156,7 @@ const MyLodgementForm = (props) => {
           <Input disabled={loading} />
         </Form.Item>
 
-        {lodgement.fields.map((field, i) => {
+        {lodgement.fields.filter(field => !field.officialOnly).map((field, i) => {
           const { name, description, type, required } = field;
           const formItemProps = {
             label: <>{displayNameAsLabel(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
@@ -168,7 +168,7 @@ const MyLodgementForm = (props) => {
               {type === 'text' ? <Input disabled={loading} /> :
                 type === 'year' ? <DateInput picker="year" placeholder="YYYY" disabled={loading} /> :
                   type === 'monthRange' ? <RangePicker picker="month" disabled={loading} /> :
-                    type === 'number' ? <Input disabled={loading} type="number" /> :
+                    type === 'number' ? <Input disabled={loading} type="number" pattern="[0-9.]*" /> :
                       type === 'paragraph' ? <Input.TextArea disabled={loading} /> :
                         type === 'date' ? <DateInput picker="date" disabled={loading} placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD" /> :
                           type === 'upload' ? <FileUploader disabled={loading} /> :

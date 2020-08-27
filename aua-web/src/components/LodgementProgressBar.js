@@ -6,18 +6,14 @@ const { Step } = Steps;
 
 const percentage = {
   'draft': 0,
-  'submitted': 25,
-  'to_revise': 25,
-  'ready': 50,
-  'to_sign': 75,
+  'submitted': 33,
+  'to_sign': 67,
   'done': 100
 }
 
 const progressStatus = {
   'draft': 'normal',
   'submitted': 'active',
-  'to_revise': 'exception',
-  'ready': 'active',
   'to_sign': 'exception',
   'done': 'success'
 }
