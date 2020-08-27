@@ -18,19 +18,34 @@ const { Dragger } = Upload;
 
 const Container = styled.div`
 & {
+  .ant-upload-list-item {
+    height: 60px;
+  }
   .ant-upload-list-item-card-actions-btn {
     // background-color: yellow !important;
     width: 60px;
     height: 60px;
     position: relative;
-    top: -20px;
+    opacity: 0.5;
+  }
+
+  .ant-upload-list-item-info > span {
+    display: flex;
+    align-items: center;
+  }
+
+  .ant-upload-text-icon {
+    display: inline-block;
+  }
+  .ant-upload-list-item-name {
+    width: auto;
   }
 }
 `
 
 const StyledFileIcon = styled.div`
-  width: 2rem;
-  height: 2rem;
+  width: 40px;
+  height: 50px;
   display: inline-block;
 `;
 
@@ -128,11 +143,14 @@ export const FileUploader = (props) => {
         action={`${process.env.REACT_APP_AUA_API_ENDPOINT}/file/${uploadFileId}`}
         withCredentials={true}
         accept="*/*"
-        listType="picture-card"
+        listType="text"
         fileList={fileList}
         onPreview={handlePreview}
         onChange={handleChange}
-        showUploadList={true}
+        showUploadList={{
+          showDownloadIcon: true,
+          showRemoveIcon: true,
+        }}
         // iconRender={() => <UploadOutlined />}
         disabled={disabled || fileList.length >= maxSize}
         iconRender={getFileIcon}
@@ -151,7 +169,6 @@ export const FileUploader = (props) => {
           Support for a single or bulk upload.
     </p>
       </Dragger>
-
       <Modal
         visible={previewVisible}
         title={previewTitle}
