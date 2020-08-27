@@ -183,6 +183,24 @@ export const BuiltInFieldDef = [
     inputType: 'year',
     rules: [{ required: true, message: 'Please choose a financial year' }],
     portofolioType: [],
+  },
+  {
+    name: 'Month_Range',
+    inputType: 'monthRange',
+    rules: [{ required: true, message: 'Please choose start/end months' }],
+    portofolioType: [],
+  },
+  {
+    name: 'Upload_Files',
+    inputType: 'upload',
+    rules: [{ required: true, message: 'Please upload files' }],
+    portofolioType: [],
+  },
+  {
+    name: 'To_Sign_Files',
+    inputType: 'upload',
+    rules: [{ required: false, message: 'Please upload files' }],
+    portofolioType: [],
   }
 ];
 

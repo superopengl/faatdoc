@@ -15,7 +15,7 @@ import Text from 'antd/lib/typography/Text';
 import {
   ExclamationCircleOutlined, PlusOutlined
 } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { List } from 'antd';
 import { Space } from 'antd';
 import LodgementForm from './MyLodgementForm';
@@ -50,13 +50,20 @@ const MyLodgementPage = (props) => {
   const [loading, setLoading] = React.useState(true);
   const [modalVisible, setModalVisible] = React.useState(false);
   const [lodgementList, setLodgementList] = React.useState([{ isNewButton: true }]);
+  const [jobTemplateList, setJobTemplateList] = React.useState([]);
+  const [portofolioList, setPortofolioList] = React.useState([]);
   const [currentId, setCurrentId] = React.useState();
 
 
   const loadList = async () => {
     setLoading(true);
     const list = await listLodgement();
+    const jobTemplateList = await listJobTemplate() || [];
+    const portofolioList = await listPortofolio() || [];
+
     setLodgementList([...list, { isNewButton: true }]);
+    setJobTemplateList(jobTemplateList);
+    setPortofolioList(portofolioList);
     setLoading(false);
   }
 
@@ -65,12 +72,17 @@ const MyLodgementPage = (props) => {
     loadList();
   }, [])
 
-  const saveJob = async () => {
-    await loadList();
-    setModalVisible(false);
-  }
 
   const openModalToCreate = () => {
+    if(!portofolioList.length) {
+      Modal.confirm({
+        title: 'No portofolio',
+        content: 'Please create portofolio before creating lodgement. Go to create protofolio now?',
+        okText: 'Yes, go to create portofolio',
+        onOk: () => props.history.push('/portofolio')
+      });
+      return;
+    }
     setCurrentId();
     setModalVisible(true);
   }
@@ -91,6 +103,7 @@ const MyLodgementPage = (props) => {
       icon: <ExclamationCircleOutlined />,
       okText: 'Yes, disgard the changes',
       onOk: () => handleModalCancel(),
+      maskClosable: true,
       // cancelText: 'No, continue changing'
     })
   }
@@ -138,6 +151,8 @@ const MyLodgementPage = (props) => {
         <LodgementForm
           onChange={() => handleModalCancel()}
           onCancel={() => handleModalCancel()}
+          jobTemplateList={jobTemplateList}
+          portofolioList={portofolioList}
           id={currentId}
         />
       </Modal>}
@@ -149,4 +164,4 @@ MyLodgementPage.propTypes = {};
 
 MyLodgementPage.defaultProps = {};
 
-export default MyLodgementPage;
+export default withRouter(MyLodgementPage);

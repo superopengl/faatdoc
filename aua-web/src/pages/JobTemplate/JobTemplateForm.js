@@ -9,7 +9,7 @@ import { GlobalContext } from 'contexts/GlobalContext';
 import { Menu, Dropdown, message, Tooltip } from 'antd';
 import { UpOutlined, DownOutlined, DeleteOutlined, PlusOutlined, CloseOutlined } from '@ant-design/icons';
 import { Divider } from 'antd';
-import { BuiltInFieldName } from 'components/FieldDef';
+import { BuiltInFieldName, BuiltInFieldType } from 'components/FieldDef';
 import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
 import { displayNameAsLabel } from 'util/displayNameAsLabel';
 import { listJobTemplate, deleteJobTemplate, saveJobTemplate, getJobTemplate } from 'services/jobTemplateService';
@@ -142,12 +142,7 @@ const JobTemplateForm = (props) => {
       dataIndex: 'type',
       key: 'type',
       render: (value, records, index) => <Select value={value} style={{ width: '100%' }} onChange={(v) => changeValue(index, 'type', v)}>
-        <Select.Option value="text">Text</Select.Option>
-        <Select.Option value="paragraph">Paragraph</Select.Option>
-        <Select.Option value="number">Number</Select.Option>
-        <Select.Option value="date">Date</Select.Option>
-        <Select.Option value="year">Year</Select.Option>
-        <Select.Option value="upload">Upload Files</Select.Option>
+        {BuiltInFieldType.map((f, i) => <Select.Option key={i} value={f}>{f}</Select.Option>)}
       </Select>
     },
     {

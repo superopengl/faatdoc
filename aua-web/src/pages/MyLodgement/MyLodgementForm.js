@@ -21,6 +21,7 @@ import { InputYear } from 'components/InputYear';
 import { DateInput } from 'components/DateInput';
 
 const { Text, Paragraph, Title } = Typography;
+const { RangePicker } = DatePicker;
 
 const StyledTypeButton = styled(Button)`
   height: 100%;
@@ -36,7 +37,7 @@ const StyledTypeButton = styled(Button)`
 
 
 const MyLodgementForm = (props) => {
-  const { id } = props;
+  const { id, jobTemplateList, portofolioList } = props;
 
   // const { name, id, fields } = value || {};
 
@@ -44,9 +45,6 @@ const MyLodgementForm = (props) => {
   const [form] = Form.useForm();
 
   const [lodgement, setLodgement] = React.useState();
-  const [jobTemplateId, setJobTemplateId] = React.useState();
-  const [portofolioId, setPortofolioId] = React.useState();
-
 
   const loadEntity = async () => {
     setLoading(true);
@@ -99,8 +97,6 @@ const MyLodgementForm = (props) => {
   }
 
   const handleSelectedTemplate = async (values) => {
-    setJobTemplateId(values.jobTemplateId);
-    setPortofolioId(values.portofolioId);
     setLoading(true);
     const lodgement = await generateLodgement(values);
     setLodgement(lodgement);
@@ -149,7 +145,7 @@ const MyLodgementForm = (props) => {
   return (<>
     <Space direction="vertical" size="large" style={{ width: '100%' }}>
 
-      {!lodgement && <LodgementGenerator onChange={handleSelectedTemplate} />}
+      {!lodgement && <LodgementGenerator onChange={handleSelectedTemplate} jobTemplateList={jobTemplateList} portofolioList={portofolioList} />}
 
       {(lodgement && !canEdit) && <Text type="warning">Cannot edit the lodgement of status '{lodgement.status}'.</Text>}
       {lodgement && <Form form={form} layout="vertical"
@@ -171,14 +167,15 @@ const MyLodgementForm = (props) => {
             <Form.Item key={i} {...formItemProps}>
               {type === 'text' ? <Input disabled={loading} /> :
                 type === 'year' ? <DateInput picker="year" placeholder="YYYY" disabled={loading} /> :
-                  type === 'number' ? <Input disabled={loading} type="number" /> :
-                    type === 'paragraph' ? <Input.TextArea disabled={loading} /> :
-                      type === 'date' ? <DateInput picker="date" disabled={loading} placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD" /> :
-                        type === 'upload' ? <FileUploader disabled={loading} /> :
-                          type === 'select' ? <Radio.Group disabled={loading} buttonStyle="solid">
-                            {field.options.map((x, i) => <Radio key={i} style={{ display: 'block', height: '2rem' }} value={x.value}>{x.label}</Radio>)}
-                          </Radio.Group> :
-                            null}
+                  type === 'monthRange' ? <RangePicker picker="month" disabled={loading} /> :
+                    type === 'number' ? <Input disabled={loading} type="number" /> :
+                      type === 'paragraph' ? <Input.TextArea disabled={loading} /> :
+                        type === 'date' ? <DateInput picker="date" disabled={loading} placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD" /> :
+                          type === 'upload' ? <FileUploader disabled={loading} /> :
+                            type === 'select' ? <Radio.Group disabled={loading} buttonStyle="solid">
+                              {field.options.map((x, i) => <Radio key={i} style={{ display: 'block', height: '2rem' }} value={x.value}>{x.label}</Radio>)}
+                            </Radio.Group> :
+                              null}
             </Form.Item>
           );
         })}
