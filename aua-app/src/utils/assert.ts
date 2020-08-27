@@ -7,8 +7,8 @@ export function assert(condition, httpCode = 500, message?) {
 
 export const assertRole = (req, ...roles) => {
   if (roles && roles.length) {
-    assert(req.cookies['session'], 401, 'Session expired');
-    assert(roles.some(r => r === _.get(req, 'user.role')), 403, 'Invalid permission');
+    const role = req?.user?.role;
+    assert(roles.includes(role), 403, `Invalid permission ('${role}' is to access '${roles.join()}')`);
   }
 };
 

@@ -14,8 +14,8 @@ paths:
   /file/download/{id}:
     get:
       operationId: downloadFile
-      security:
-        - authLoggedInUser: []
+      # security:
+      #   - authLoggedInUser: []
       parameters:
         - name: id
           in: path
@@ -28,16 +28,16 @@ paths:
   /file/search:
     post:
       operationId: searchFileList
-      security:
-        - authLoggedInUser: []
+      # security:
+      #   - authLoggedInUser: []
       responses:
         200:
           description: OK
   /file/{id}:
     get:
       operationId: getFile
-      security:
-        - authLoggedInUser: []
+      # security:
+      #   - authLoggedInUser: []
       parameters:
         - name: id
           in: path
@@ -49,8 +49,8 @@ paths:
           description: OK
     post:
       operationId: uploadFile
-      security:
-        - authLoggedInUser: []
+      # security:
+      #   - authLoggedInUser: []
       parameters:
         - name: id
           in: path
@@ -60,12 +60,11 @@ paths:
       responses:
         200:
           description: OK
-
   /auth/login:
     post:
       operationId: login
-      security:
-        - authAnyRole: []
+      # security:
+        # - authAnyRole: []
       #   - business: []
       #   - individual: []
       #   - admin: []
@@ -75,8 +74,8 @@ paths:
   /auth/logout:
     post:
       operationId: logout
-      security:
-        - authAnyRole: []
+      # security:
+      #   - authAnyRole: []
       # security:
       #   - business: []
       #   - individual: []
@@ -87,24 +86,24 @@ paths:
   /auth/forgot_password:
     post:
       operationId: forgotPassword
-      security:
-        - authAnyRole: []
+      # security:
+      #   - authAnyRole: []
       responses:
         200:
           description: OK
   /auth/reset_password:
     post:
       operationId: resetPassword
-      security:
-        - authAnyRole: []
+      # security:
+      #   - authAnyRole: []
       responses:
         200:
           description: OK
   /auth/reset_password/{token}:
     get:
       operationId: retrievePassword
-      security:
-        - authAnyRole: []
+      # security:
+      #   - authAnyRole: []
       parameters:
         - name: token
           in: path
@@ -117,8 +116,8 @@ paths:
   /auth/signup:
     post:
       operationId: signup
-      security:
-        - authAnyRole: []
+      # security:
+      #   - authAnyRole: []
       responses:
         200:
           description: OK
@@ -131,8 +130,8 @@ paths:
   /user:
     get:
       operationId: listClients
-      security:
-        - authAdminOrAgent: []
+      # security:
+      #   - authAdminOrAgent: []
       responses:
         200:
           description: OK
@@ -150,31 +149,31 @@ paths:
   /user/change_password:
     post:
       operationId: changePassword
-      security:
-        - authLoggedInUser: []
+      # security:
+      #   - authLoggedInUser: []
       responses:
         200:
           description: OK
   /job_template:
     post:
       operationId: saveJobTemplate
-      security:
-        - authAdmin: []
+      # security:
+      #   - authAdmin: []
       responses:
         200:
           description: OK
     get:
       operationId: listJobTemplates
-      security:
-        - authLoggedInUser: []
+      # security:
+      #   - authLoggedInUser: []
       responses:
         200:
           description: OK
   /job_template/{id}:
     get:
       operationId: getJobTemplate
-      security:
-        - authLoggedInUser: []
+      # security:
+      #   - authLoggedInUser: []
       parameters:
         - name: id
           in: path
@@ -186,8 +185,8 @@ paths:
           description: OK
     delete:
       operationId: deleteJobTemplate
-      security:
-        - authAdmin: []
+      # security:
+      #   - authAdmin: []
       parameters:
         - name: id
           in: path
@@ -200,23 +199,23 @@ paths:
   /portofolio:
     post:
       operationId: savePortofolio
-      security:
-        - authClient: []
+      # security:
+      #   - authClient: []
       responses:
         200:
           description: OK
     get:
       operationId: listPortofolio
-      security:
-        - authClient: []
+      # security:
+      #   - authClient: []
       responses:
         200:
           description: OK
   /portofolio/{id}:
     get:
       operationId: getPortofolio
-      security:
-        - authClient: []
+      # security:
+      #   - authClient: []
       parameters:
         - name: id
           in: path
@@ -228,8 +227,8 @@ paths:
           description: OK
     delete:
       operationId: deletePortofolio
-      security:
-        - authClient: []
+      # security:
+      #   - authClient: []
       parameters:
         - name: id
           in: path
@@ -242,31 +241,31 @@ paths:
   /lodgement:
     post:
       operationId: saveLodgement
-      security:
-        - authClient: []
+      # security:
+      #   - authClient: []
       responses:
         200:
           description: OK
     get:
       operationId: listLodgement
-      security:
-        - authLoggedInUser: []
+      # security:
+      #   - authLoggedInUser: []
       responses:
         200:
           description: OK
   /lodgement/generate:
     post:
       operationId: generateLodgement
-      security:
-        - authClient: []
+      # security:
+      #   - authClient: []
       responses:
         200:
           description: OK
   /lodgement/{id}:
     get:
       operationId: getLodgement
-      security:
-        - authLoggedInUser: []
+      # security:
+      #   - authLoggedInUser: []
       parameters:
         - name: id
           in: path
@@ -278,8 +277,8 @@ paths:
           description: OK
     delete:
       operationId: deleteLodgement
-      security:
-        - authLoggedInUser: []
+      # security:
+      #   - authLoggedInUser: []
       parameters:
         - name: id
           in: path

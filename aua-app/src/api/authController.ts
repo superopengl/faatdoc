@@ -16,39 +16,52 @@ import * as moment from 'moment';
 import { logError } from '../utils/logger';
 import { getUtcNow } from '../utils/getUtcNow';
 import { Role } from '../enums/Role';
+import * as jwt from 'jsonwebtoken';
+import { attachJwtCookie, clearJwtCookie } from '../utils/jwt';
 
 export const getAuthUser = handlerWrapper(async (req, res) => {
   const { user } = (req as any);
   res.json(user || null);
 });
 
-
 export const login = handlerWrapper(async (req, res) => {
-  const user: User = {
-    ...req.user,
-    lastLoggedInAt: getUtcNow(),
-    resetPasswordToken: null,
-    status: UserStatus.Enabled
-  };
+  const { name, password } = req.body;
 
+  const repo = getRepository(User);
+  const user: User = await repo
+    .createQueryBuilder()
+    .where(
+      'LOWER(email) = LOWER(:name) AND status != :status',
+      {
+        name,
+        status: UserStatus.Disabled
+      })
+    .getOne();
+
+  assert(user, 400, 'User or password is not valid');
+
+  // Validate passpord
+  const hash = computeUserSecret(password, user.salt);
+  assert(hash === user.secret, 400, 'User or password is not valid');
+
+  user.lastLoggedInAt = getUtcNow();
+  user.resetPasswordToken = null;
+  user.status = UserStatus.Enabled;
 
   await getRepository(User).save(user);
 
-  res.cookie('session', user.sessionId, {
-    httpOnly: true,
-    maxAge: 1000 * 60 * 60 * 24, // 24 hours
-    expires: moment(getUtcNow()).add(24, 'hours').toDate()
-  });
+  attachJwtCookie({
+    id: user.id,
+    ...user
+  }, res);
 
-  const returnedUser = _.pick(user, ['id', 'email', 'memberId', 'role', 'sessionId', 'lastLoggedInAt', 'expiryDate', 'status']);
+  // res.session.save();
+  const returnedUser = _.pick(user, ['id', 'email', 'role', 'lastLoggedInAt', 'status']);
   res.json(returnedUser);
 });
 
 export const logout = handlerWrapper(async (req, res) => {
-  const { user: { id } } = req as any;
-  const repo = getRepository(User);
-  repo.update({ id: id }, { sessionId: null }).catch(() => { });
-  res.clearCookie('session');
+  clearJwtCookie(res);
   res.json();
 });
 

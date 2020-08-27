@@ -23,10 +23,6 @@ export class User {
   @Column({ default: 'local' })
   loginType: string;
 
-  @Index('user_sessionId_unique', { unique: true })
-  @Column({ type: 'uuid', nullable: true })
-  sessionId?: string;
-
   @Column()
   secret!: string;
 
