@@ -16,5 +16,7 @@ export async function listClients() {
   return httpGet(`user`);
 }
 
-
+export async function listAgents() {
+  return httpGet(`user/agent`);
+}
 

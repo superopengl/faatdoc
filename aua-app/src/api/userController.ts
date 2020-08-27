@@ -11,7 +11,7 @@ import { Role } from '../enums/Role';
 import { createProfileEntity } from '../utils/createProfileEntity';
 import { File } from '../entity/File';
 import { v4 as uuidv4 } from 'uuid';
-
+import { Agent } from '../entity/Agent';
 
 export const getProfile = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
@@ -58,7 +58,7 @@ export const changePassword = handlerWrapper(async (req, res) => {
 });
 
 export const listClients = handlerWrapper(async (req, res) => {
-  assertRole(req, 'admin');
+  assertRole(req, 'admin', 'agent');
 
   const clients = await getConnection()
     .createQueryBuilder()
@@ -71,6 +71,25 @@ export const listClients = handlerWrapper(async (req, res) => {
       `"lastLoggedInAt" AT TIME ZONE 'UTC' AT TIME ZONE 'Australia/Sydney'`,
       `p."lastUpdatedAt" AT TIME ZONE 'UTC' AT TIME ZONE 'Australia/Sydney'`,
       `fields`,
+    ])
+    .execute();
+
+  res.json(clients);
+});
+
+
+export const listAgents = handlerWrapper(async (req, res) => {
+  assertRole(req, 'admin', 'agent');
+
+  const clients = await getConnection()
+    .createQueryBuilder()
+    .from(User, 'u')
+    .innerJoin(q => q.from(Agent, 'a').select('*'), 'a', 'u.id = a.id')
+    .select([
+      `u.id as id`,
+      `u.email as email`,
+      `a."givenName" as "givenName"`,
+      `a.surname as surname`,
     ])
     .execute();
 

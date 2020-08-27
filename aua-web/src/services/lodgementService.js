@@ -19,3 +19,12 @@ export async function listLodgement() {
 export async function generateLodgement(item) {
   return httpPost('lodgement/generate', item);
 }
+
+export async function assignLodgement(lodgementId, agentId) {
+  return httpPost(`lodgement/${lodgementId}/assign`, { agentId });
+}
+
+export async function logLodgement(lodgementId, event, extra) {
+  return httpPost(`lodgement/${lodgementId}/log/${event}`, extra || undefined);
+
+}

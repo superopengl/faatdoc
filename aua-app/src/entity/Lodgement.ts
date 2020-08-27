@@ -24,9 +24,13 @@ export class Lodgement {
   @Column('uuid')
   portofolioId: string;
 
+  @Column('uuid', {nullable: true})
+  agentId?: string;
+
   @Column('uuid')
   userId: string;
 
   @Column({type: 'json'})
   fields: any;
 }
+

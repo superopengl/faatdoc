@@ -125,7 +125,6 @@ const JobTemplateForm = (props) => {
           maxLength={50}
           defaultValue={displayNameAsLabel(text)}
           style={{ width: 200 }}
-          allowClear={true}
           autoComplete="off"
           onBlur={(e) => changeValue(index, 'name', e.target.value)}
         />

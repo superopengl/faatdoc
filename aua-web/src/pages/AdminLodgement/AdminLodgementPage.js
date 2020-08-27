@@ -25,6 +25,8 @@ import { random } from 'lodash';
 import { listJobTemplate } from 'services/jobTemplateService';
 import { listPortofolio } from 'services/portofolioService';
 import { LodgementProgressBar } from 'components/LodgementProgressBar';
+import { AutoComplete } from 'antd';
+import { listAgents } from 'services/userService';
 
 const { Title, Paragraph } = Typography;
 const { TabPane } = Tabs;
@@ -46,61 +48,105 @@ const LayoutStyled = styled(Layout)`
 `;
 
 
-const columnDef = [
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'id',
-    render: (text, record) =>text
-  },
-  {
-    title: 'Created At',
-    dataIndex: 'createdAt',
-    key: 'id',
-    render: (text, record) => {
-      return moment(text).format('DD MMM YYYY')
-    }
-  },
-  {
-    title: 'Job',
-    dataIndex: 'jobTemplateName',
-    key: 'id',
-    render: (text, record) => {
-      return text;
-    }
-  },
-  {
-    title: 'Status',
-    dataIndex: 'status',
-    key: 'id',
-    render: (text, record) => {
-      return <LodgementProgressBar status={text} width={50}/>;
-    }
-  },
-  {
-    title: 'Action',
-    key: 'action',
-    render: (text, record) => (
-      <Space size="middle">
-        <Link to={`/lodgement/proceed/${record.id}`}>Proceed</Link>
-        <a>Message</a>
-      </Space>
-    ),
-  },
-];
+
 
 const AdminLodgementPage = (props) => {
+
+  const columnDef = [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'id',
+      render: (text, record) => text
+    },
+    {
+      title: 'From',
+      dataIndex: 'from',
+      key: 'id',
+      render: (text, record) => text
+    },
+    {
+      title: 'Created At',
+      dataIndex: 'createdAt',
+      key: 'id',
+      render: (text, record) => {
+        return moment(text).format('DD MMM YYYY')
+      }
+    },
+    {
+      title: 'Job',
+      dataIndex: 'jobTemplateName',
+      key: 'id',
+      render: (text, record) => {
+        return text;
+      }
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'id',
+      render: (text, record) => {
+        return <LodgementProgressBar status={text} width={50} />;
+      }
+    },
+    {
+      title: 'Assignee',
+      dataIndex: 'assignee',
+      key: 'id',
+      render: (text, record) => <AutoComplete
+        placeholder="Assignee"
+        allowClear={true}
+        options={agentList.map(a => ({value: `${a.givenName} ${a.surname}`}))}
+        maxLength={50}
+        style={{ width: 200 }}
+        autoComplete="off"
+        onBlur={e => assignLodgementToAgent(record, e.target.value)}
+      />
+    },
+    {
+      title: 'Last Read At',
+      dataIndex: 'lastReadAt',
+      key: 'id',
+      render: (text, record) => {
+        return <>{moment(text).toString()}</>;
+      }
+    },
+    {
+      title: 'Signed At',
+      dataIndex: 'signedAt',
+      key: 'id',
+      render: (text, record) => {
+        return <>{moment(text).toString()}</>;
+      }
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (text, record) => (
+        <Space size="middle">
+          <Link to={`/lodgement/proceed/${record.id}`}>Proceed</Link>
+          <a>Message</a>
+        </Space>
+      ),
+    },
+  ];
 
   const [loading, setLoading] = React.useState(true);
   const [modalVisible, setModalVisible] = React.useState(false);
   const [lodgementList, setLodgementList] = React.useState([{ isNewButton: true }]);
   const [currentId, setCurrentId] = React.useState();
+  const [agentList, setAgentList] = React.useState([]);
 
+  const assignLodgementToAgent = (lodgement, assignee) => {
+
+  }
 
   const loadList = async () => {
     setLoading(true);
     const list = await listLodgement();
+    const agentList = await listAgents();
     setLodgementList([...list, { isNewButton: true }]);
+    setAgentList(agentList);
     setLoading(false);
   }
 

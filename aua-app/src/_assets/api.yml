@@ -64,7 +64,7 @@ paths:
     post:
       operationId: login
       # security:
-        # - authAnyRole: []
+      # - authAnyRole: []
       #   - business: []
       #   - individual: []
       #   - admin: []
@@ -126,10 +126,18 @@ paths:
       operationId: getAuthUser
       responses:
         200:
-          description: OK               
+          description: OK
   /user:
     get:
       operationId: listClients
+      # security:
+      #   - authAdminOrAgent: []
+      responses:
+        200:
+          description: OK
+  /user/agent:
+    get:
+      operationId: listAgents
       # security:
       #   - authAdminOrAgent: []
       responses:
@@ -281,6 +289,39 @@ paths:
       #   - authLoggedInUser: []
       parameters:
         - name: id
+          in: path
+          type: string
+          format: uuid
+          required: true
+      responses:
+        200:
+          description: OK
+  /lodgement/{id}/assign:
+    post:
+      operationId: assignLodgment
+      # security:
+      #   - authClient: []
+      parameters:
+        - name: id
+          in: path
+          type: string
+          format: uuid
+          required: true
+      responses:
+        200:
+          description: OK
+  /lodgement/{id}/log/{event}:
+    post:
+      operationId: logLodgmentEvent
+      # security:
+      #   - authClient: []
+      parameters:
+        - name: id
+          in: path
+          type: string
+          format: uuid
+          required: true
+        - name: event
           in: path
           type: string
           format: uuid

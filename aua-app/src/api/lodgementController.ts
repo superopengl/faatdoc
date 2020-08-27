@@ -21,6 +21,7 @@ import { Portofolio } from '../entity/Portofolio';
 import { LodgementStatus } from '../enums/LodgementStatus';
 import e = require('express');
 import { normalizeFieldNameToVar } from '../utils/normalizeFieldNameToVar';
+import { LodgementLog } from '../entity/LodgementLog';
 
 
 function prefillFieldsWithProtofolio(jobTemplateFields, portofolioFields) {
@@ -180,6 +181,36 @@ export const deleteLodgement = handlerWrapper(async (req, res) => {
   const { id } = req.params;
   const repo = getRepository(Lodgement);
   await repo.delete({ id });
+
+  res.json(null);
+});
+
+
+export const assignLodgment = handlerWrapper(async (req, res) => {
+  assertRole(req, 'admin');
+  const { id } = req.params;
+  const { agentId } = req.body;
+  assert(agentId, 400, 'Missing agentId in request body');
+
+  await getRepository(Lodgement).update(id, { agentId });
+
+  res.json(null);
+});
+
+
+export const logLodgmentEvent = handlerWrapper(async (req, res) => {
+  assertRole(req, 'client');
+  const { id, event } = req.params;
+  const repo = getRepository(Lodgement);
+  const lodgement = await repo.findOne(id);
+  assert(lodgement, 404);
+
+  const lodgementLog = new LodgementLog();
+  lodgementLog.lodgementId = id;
+  lodgementLog.event = event;
+  lodgementLog.extra = req.body;
+
+  await getRepository(LodgementLog).save(lodgementLog);
 
   res.json(null);
 });
