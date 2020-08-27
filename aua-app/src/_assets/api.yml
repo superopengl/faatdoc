@@ -14,6 +14,8 @@ paths:
   /file/download/{id}:
     get:
       operationId: downloadFile
+      security:
+        - authLoggedInUser: []
       parameters:
         - name: id
           in: path
@@ -26,12 +28,16 @@ paths:
   /file/search:
     post:
       operationId: searchFileList
+      security:
+        - authLoggedInUser: []
       responses:
         200:
           description: OK
   /file/{id}:
     get:
       operationId: getFile
+      security:
+        - authLoggedInUser: []
       parameters:
         - name: id
           in: path
@@ -43,6 +49,8 @@ paths:
           description: OK
     post:
       operationId: uploadFile
+      security:
+        - authLoggedInUser: []
       parameters:
         - name: id
           in: path
@@ -56,7 +64,8 @@ paths:
   /auth/login:
     post:
       operationId: login
-      # security:
+      security:
+        - authAnyRole: []
       #   - business: []
       #   - individual: []
       #   - admin: []
@@ -66,6 +75,8 @@ paths:
   /auth/logout:
     post:
       operationId: logout
+      security:
+        - authAnyRole: []
       # security:
       #   - business: []
       #   - individual: []
@@ -76,18 +87,24 @@ paths:
   /auth/forgot_password:
     post:
       operationId: forgotPassword
+      security:
+        - authAnyRole: []
       responses:
         200:
           description: OK
   /auth/reset_password:
     post:
       operationId: resetPassword
+      security:
+        - authAnyRole: []
       responses:
         200:
           description: OK
   /auth/reset_password/{token}:
     get:
       operationId: retrievePassword
+      security:
+        - authAnyRole: []
       parameters:
         - name: token
           in: path
@@ -100,6 +117,8 @@ paths:
   /auth/signup:
     post:
       operationId: signup
+      security:
+        - authAnyRole: []
       responses:
         200:
           description: OK
@@ -112,6 +131,8 @@ paths:
   /user:
     get:
       operationId: listClients
+      security:
+        - authAdminOrAgent: []
       responses:
         200:
           description: OK
@@ -129,23 +150,31 @@ paths:
   /user/change_password:
     post:
       operationId: changePassword
+      security:
+        - authLoggedInUser: []
       responses:
         200:
           description: OK
   /job_template:
     post:
       operationId: saveJobTemplate
+      security:
+        - authAdmin: []
       responses:
         200:
           description: OK
     get:
       operationId: listJobTemplates
+      security:
+        - authLoggedInUser: []
       responses:
         200:
           description: OK
   /job_template/{id}:
     get:
       operationId: getJobTemplate
+      security:
+        - authLoggedInUser: []
       parameters:
         - name: id
           in: path
@@ -157,6 +186,8 @@ paths:
           description: OK
     delete:
       operationId: deleteJobTemplate
+      security:
+        - authAdmin: []
       parameters:
         - name: id
           in: path
@@ -169,17 +200,23 @@ paths:
   /portofolio:
     post:
       operationId: savePortofolio
+      security:
+        - authClient: []
       responses:
         200:
           description: OK
     get:
       operationId: listPortofolio
+      security:
+        - authClient: []
       responses:
         200:
           description: OK
   /portofolio/{id}:
     get:
       operationId: getPortofolio
+      security:
+        - authClient: []
       parameters:
         - name: id
           in: path
@@ -191,6 +228,8 @@ paths:
           description: OK
     delete:
       operationId: deletePortofolio
+      security:
+        - authClient: []
       parameters:
         - name: id
           in: path
@@ -203,23 +242,31 @@ paths:
   /lodgement:
     post:
       operationId: saveLodgement
+      security:
+        - authClient: []
       responses:
         200:
           description: OK
     get:
       operationId: listLodgement
+      security:
+        - authLoggedInUser: []
       responses:
         200:
           description: OK
   /lodgement/generate:
     post:
       operationId: generateLodgement
+      security:
+        - authClient: []
       responses:
         200:
           description: OK
   /lodgement/{id}:
     get:
       operationId: getLodgement
+      security:
+        - authLoggedInUser: []
       parameters:
         - name: id
           in: path
@@ -231,6 +278,8 @@ paths:
           description: OK
     delete:
       operationId: deleteLodgement
+      security:
+        - authLoggedInUser: []
       parameters:
         - name: id
           in: path

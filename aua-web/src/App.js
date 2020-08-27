@@ -12,7 +12,6 @@ import ForgotPasswordPage from 'pages/ForgotPasswordPage';
 import * as _ from 'lodash';
 import ChangePasswordPage from 'pages/ChangePasswordPage';
 import SignUpPage from 'pages/SignUpPage';
-import ProfilePage from 'pages/ProfilePage';
 import TermAndConditionPage from 'pages/TermAndConditionPage';
 import Error404 from 'pages/Error404';
 import PrivacyPolicyPage from 'pages/PrivacyPolicyPage';
@@ -34,10 +33,8 @@ class App extends React.Component {
     this.state = {
       user: null,
       role: 'guest',
-      profile: null,
       loading: false,
       setUser: this.setUser,
-      setProfile: this.setProfile,
       setLoading: this.setLoading,
     };
   }
@@ -46,17 +43,11 @@ class App extends React.Component {
     const user = await getAuthUser();
     if (user) {
       this.setUser(user);
-      // const profile = await getProfile();
-      // this.setProfile(profile);
     }
   }
 
   setUser = (user) => {
     this.setState({ user, role: user ? user.role : 'guest' });
-  }
-
-  setProfile = (profile) => {
-    this.setState({ profile });
   }
 
   setLoading = (value) => {

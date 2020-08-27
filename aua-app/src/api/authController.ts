@@ -24,34 +24,15 @@ export const getAuthUser = handlerWrapper(async (req, res) => {
 
 
 export const login = handlerWrapper(async (req, res) => {
-  const { name, password } = req.body;
+  const user: User = {
+    ...req.user,
+    lastLoggedInAt: getUtcNow(),
+    resetPasswordToken: null,
+    status: UserStatus.Enabled
+  };
 
-  const repo = getRepository(User);
 
-  const user: User = await repo
-    .createQueryBuilder()
-    .where(
-      'LOWER(email) = LOWER(:name) AND status != :status',
-      {
-        name,
-        status: UserStatus.Disabled
-      })
-    .getOne();
-  assert(user, 400, 'User or password is not valid');
-
-  // Validate passpord
-  const hash = computeUserSecret(password, user.salt);
-  assert(hash === user.secret, 400, 'User or password is not valid');
-
-  // Reissue session
-  const utcNow = getUtcNow();
-  user.sessionId = uuidv4();
-  user.lastLoggedInAt = utcNow;
-  user.lastNudgedAt = utcNow;
-  user.resetPasswordToken = null;
-  user.status = UserStatus.Enabled;
-
-  await repo.save(user);
+  await getRepository(User).save(user);
 
   res.cookie('session', user.sessionId, {
     httpOnly: true,
@@ -64,10 +45,9 @@ export const login = handlerWrapper(async (req, res) => {
 });
 
 export const logout = handlerWrapper(async (req, res) => {
-  assertRole(req, 'admin', 'client');
   const { user: { id } } = req as any;
   const repo = getRepository(User);
-  repo.update({ id: id }, { sessionId: null }).catch(() => {});
+  repo.update({ id: id }, { sessionId: null }).catch(() => { });
   res.clearCookie('session');
   res.json();
 });
@@ -144,7 +124,7 @@ export const forgotPassword = handlerWrapper(async (req, res) => {
   user.resetPasswordToken = resetPasswordToken;
   user.status = UserStatus.ResetPassword;
 
-  const { fields: {givenName, surname} } = await getRepository(Portofolio).findOne(id);
+  const { fields: { givenName, surname } } = await getRepository(Portofolio).findOne(id);
   const name = `${givenName} ${surname}`;
 
   const url = `${process.env.AUA_DOMAIN_NAME}/reset_password/${resetPasswordToken}/`;

@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as compression from 'compression';
 import * as bodyParser from 'body-parser';
+import * as expressSession from 'express-session';
 import * as listEndpoints from 'express-list-endpoints';
 import * as cors from 'cors';
 import * as path from 'path';
@@ -8,10 +9,14 @@ import * as fileUpload from 'express-fileupload';
 import * as YAML from 'yamljs';
 import { connector } from 'swagger-routes-express';
 import * as api from './api';
-import { securityAdminAuthMiddleware, securityBusinessAuthMiddleware, securityIndividualAuthMiddleware } from './middlewares/securityAdminAuthMiddleware';
+import { authAnyRole, authAdmin, authGuest, authLoggedInUser, authAdminOrAgent, authClient } from './middlewares/securityAdminAuthMiddleware';
 import { authMiddleware } from './middlewares/authMiddleware';
 import * as cookieParser from 'cookie-parser';
 import { logError } from './utils/logger';
+import * as passport from 'passport';
+import { v4 as uuidv4 } from 'uuid';
+
+import './middlewares/passport';
 
 function errorHandler(err, req, res, next) {
   if (err && !/^4/.test(res.status)) {
@@ -28,9 +33,12 @@ function connectSwaggerRoutes(app, ymlFile) {
   const apiDefinition = YAML.load(ymlFile);
   const connect = connector(api, apiDefinition, {
     security: {
-      admin: securityAdminAuthMiddleware,
-      business: securityBusinessAuthMiddleware,
-      individual: securityIndividualAuthMiddleware
+      authAnyRole,
+      authAdmin,
+      authGuest,
+      authLoggedInUser,
+      authAdminOrAgent,
+      authClient
     }
   });
   connect(app);
@@ -50,6 +58,14 @@ export function createAppInstance() {
   app.use(cookieParser());
   app.use(bodyParser.json({ limit: '4mb' }));
   app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
+  // app.use(expressSession({
+  //   name: 'session',
+  //   cookie: {
+  //     httpOnly: true
+  //   },
+  //   genid: () => uuidv4(),
+  //   rolling: true,
+  // }));
 
   app.use(fileUpload({
     createParentPath: true
@@ -64,7 +80,9 @@ export function createAppInstance() {
   // });
   // connectPassport(app);
 
-  app.use(authMiddleware);
+  // app.use(authMiddleware);
+  app.use(passport.initialize());
+  app.use(passport.session());
 
   app.use(compression({ filter: (req, res) => !req.headers['x-no-compression'] && compression.filter(req, res) }));
   // Connect to /api/v*/ with the swagger file

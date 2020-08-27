@@ -18,14 +18,7 @@ export async function resetPassword(token, password) {
 }
 
 export async function logout() {
-  await new Promise(async (resolve) => {
-    setTimeout(() => resolve(), 1000);
-    try {
-      await httpPost(`auth/logout`);
-      resolve();
-    } catch { }
-  })
-
+  httpPost(`auth/logout`).catch(() => {});
   window.location = '/';
 }
 

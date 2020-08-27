@@ -2,6 +2,7 @@ import * as axios from 'axios';
 import * as _ from 'lodash';
 import { logout } from './authService';
 import { notify } from 'util/notify';
+import { WindowsFilled } from '@ant-design/icons';
 
 axios.defaults.withCredentials = true;
 
@@ -41,7 +42,7 @@ export async function request(method, path, queryParams, body, responseType = 'j
     const code = _.get(e, 'response.status', null);
     if (code === 401) {
       notify.error('Session timeout.');
-      await logout();
+      Window.location = '/';
       return;
     }
     const errorMessage = _.get(e, 'response.data.message', e.message);

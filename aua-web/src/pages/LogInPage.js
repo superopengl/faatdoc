@@ -60,7 +60,7 @@ class LogInPage extends React.Component {
       <GlobalContext.Consumer>
         {
           context => {
-            const { setUser, setProfile } = context;
+            const { setUser } = context;
             const { windowHeight } = this.props;
             const shouldShowSignUpLink = windowHeight < 800;
 
@@ -75,9 +75,6 @@ class LogInPage extends React.Component {
                 const user = await login(values.name, values.password);
                 setUser(user);
 
-                const profile = await getProfile();
-                setProfile(profile);
-
                 this.props.history.push(user.role === 'admin' ? '/tasks' : '/requests');
               } catch {
                 this.setState({ sending: false });
@@ -91,10 +88,10 @@ class LogInPage extends React.Component {
                   <Form.Item label="Email" name="name"
                     rules={[{ required: true, validator: this.validateName, whitespace: true, max: 100, message: 'Please input valid email address' }]}
                   >
-                    <Input placeholder="abc@xyz.com" autoComplete="email" allowClear={true} maxLength="100" disabled={sending} autoFocus={true} />
+                    <Input placeholder="abc@xyz.com" type="email" autoComplete="email" allowClear={true} maxLength="100" disabled={sending} autoFocus={true} />
                   </Form.Item>
                   <Form.Item label="Password" name="password" autoComplete="current-password" rules={[{ required: true, message: 'Please input password' }]}>
-                    <Input.Password placeholder="Password" maxLength="50" disabled={sending} />
+                    <Input.Password placeholder="Password" autoComplete="current-password" maxLength="50" disabled={sending} />
                   </Form.Item>
                   <Form.Item>
                     <Button block type="primary" htmlType="submit" disabled={sending}>Log In</Button>

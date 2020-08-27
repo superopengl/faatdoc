@@ -1,18 +1,30 @@
 
 import { assert } from '../utils/assert';
 import * as _ from 'lodash';
+import passport from './passport';
 
-export const securityAdminAuthMiddleware = (req, res, next) => {
-  assert(_.get(req, 'user.role') === 'admin', 403, 'Access denied.');
-  next();
-};
+function createRoleBasedAuthCheckFunction(...roles) {
+  return (req, res, next) => {
+    // assert(_.get(req, 'user.role') === 'individual', 403, 'Access denied.');
+    passport.authenticate('local', (err, user, info) => {
+      if (err) {
+        return next(err);
+      }
 
-export const securityBusinessAuthMiddleware = (req, res, next) => {
-  assert(_.get(req, 'user.role') === 'business', 403, 'Access denied.');
-  next();
-};
+      try {
+        assert(!roles.length || roles.includes(user?.role), 403, `Invalid permission ('${user?.role}' to access '${roles.join()}')`);
+        req.user = user;
+        next();
+      } catch (err) {
+        next(err);
+      }
+    })(req, res, next);
+  };
+}
 
-export const securityIndividualAuthMiddleware = (req, res, next) => {
-  assert(_.get(req, 'user.role') === 'individual', 403, 'Access denied.');
-  next();
-};
+export const authAnyRole = createRoleBasedAuthCheckFunction();
+export const authAdmin = createRoleBasedAuthCheckFunction('admin');
+export const authGuest = createRoleBasedAuthCheckFunction('guest');
+export const authLoggedInUser = createRoleBasedAuthCheckFunction('admin', 'client', 'agent');
+export const authAdminOrAgent = createRoleBasedAuthCheckFunction('admin', 'agent');
+export const authClient = createRoleBasedAuthCheckFunction('client');
