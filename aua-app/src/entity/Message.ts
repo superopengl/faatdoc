@@ -9,6 +9,9 @@ export class Message {
   @Column({ default: () => `timezone('UTC', now())` })
   createdAt?: Date;
 
+  @Column('uuid')
+  lodgementId: string;
+
   @Column()
   type: MessageType;
 

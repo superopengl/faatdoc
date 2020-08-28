@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Tabs, Typography, Layout, Button, Row, Table } from 'antd';
+import { Tabs, Typography, Layout, Button, Select, Table } from 'antd';
 import PosterAdminGrid from 'components/grids/PosterAdminGrid';
 import GalleryAdminGrid from 'components/grids/GalleryAdminGrid';
 import BusinessAdminGrid from 'components/grids/BusinessAdminGrid';
@@ -13,14 +13,14 @@ import * as moment from 'moment';
 import windowSize from 'react-window-size';
 import Text from 'antd/lib/typography/Text';
 import {
-  ExclamationCircleOutlined, PlusOutlined
+  ExclamationCircleOutlined, EditOutlined
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import Modal from 'antd/lib/modal/Modal';
 import { List } from 'antd';
 import { Space } from 'antd';
 
-import { listLodgement, saveLodgement } from 'services/lodgementService';
+import { listLodgement, saveLodgement, assignLodgement } from 'services/lodgementService';
 import { random } from 'lodash';
 import { listJobTemplate } from 'services/jobTemplateService';
 import { listPortofolio } from 'services/portofolioService';
@@ -48,16 +48,25 @@ const LayoutStyled = styled(Layout)`
 `;
 
 
+const AdminLodgementListPage = (props) => {
 
-
-const AdminLodgementPage = (props) => {
+  const [loading, setLoading] = React.useState(true);
+  const [modalVisible, setModalVisible] = React.useState(false);
+  const [lodgementList, setLodgementList] = React.useState([{ isNewButton: true }]);
+  const [currentId, setCurrentId] = React.useState();
+  const [agentList, setAgentList] = React.useState([]);
+  const [filteredInfo, setFilteredInfo] = React.useState({});
+  const [sortedInfo, setSortedInfo] = React.useState({});
 
   const columnDef = [
     {
       title: 'Name',
       dataIndex: 'name',
       key: 'id',
-      render: (text, record) => text
+      // filteredValue: filteredInfo.name || null,
+      onFilter: (value, record) => record.name.includes(value),
+      render: (text, record) => text,
+      ellipsis: true
     },
     {
       title: 'From',
@@ -69,8 +78,9 @@ const AdminLodgementPage = (props) => {
       title: 'Created At',
       dataIndex: 'createdAt',
       key: 'id',
+      sorter: (a, b) => moment(a.createdAt).toDate() - moment(b.createdAt).toDate(),
       render: (text, record) => {
-        return moment(text).format('DD MMM YYYY')
+        return moment(text).format('DD MMM YYYY HH:mm')
       }
     },
     {
@@ -79,73 +89,86 @@ const AdminLodgementPage = (props) => {
       key: 'id',
       render: (text, record) => {
         return text;
-      }
+      },
+      ellipsis: true
     },
     {
       title: 'Status',
       dataIndex: 'status',
       key: 'id',
+      filters: ['draft', 'submitted', 'done', 'to_sign', 'archive'].map(a => ({ text: a, value: a })),
+      onFilter: (value, record) => record.status === value,
       render: (text, record) => {
         return <LodgementProgressBar status={text} width={50} />;
       }
     },
     {
       title: 'Assignee',
-      dataIndex: 'assignee',
+      dataIndex: 'agentId',
       key: 'id',
-      render: (text, record) => <AutoComplete
-        placeholder="Assignee"
-        allowClear={true}
-        options={agentList.map(a => ({value: `${a.givenName} ${a.surname}`}))}
-        maxLength={50}
-        style={{ width: 200 }}
-        autoComplete="off"
-        onBlur={e => assignLodgementToAgent(record, e.target.value)}
-      />
+      // filteredValue: filteredInfo.agentId || null,
+      filters: agentList.map(a => ({ text: `${a.givenName} ${a.surname}`, value: a.id })),
+      onFilter: (value, record) => record.agentId === value,
+      render: (text, record) => <Select
+        placeholder="Select an agent"
+        style={{ width: 120 }}
+        onChange={value => assignLodgementToAgent(record, value)}
+        value={text}
+      >
+        {agentList.map((a, i) => <Select.Option key={i} value={a.id}>{a.givenName} {a.surname}</Select.Option>)}
+      </Select>
     },
     {
       title: 'Last Read At',
       dataIndex: 'lastReadAt',
+      sorter: (a, b) => moment(a.createdAt).toDate() - moment(b.createdAt).toDate(),
       key: 'id',
       render: (text, record) => {
-        return <>{moment(text).toString()}</>;
+        return <>{text && moment(text).format('DD MMM YYYY HH:mm')}</>;
       }
     },
     {
       title: 'Signed At',
       dataIndex: 'signedAt',
+      sorter: (a, b) => moment(a.createdAt).toDate() - moment(b.createdAt).toDate(),
       key: 'id',
       render: (text, record) => {
-        return <>{moment(text).toString()}</>;
+        return <>{text && moment(text).format('DD MMM YYYY HH:mm')}</>;
       }
     },
     {
       title: 'Action',
       key: 'action',
+      // fixed: 'right',
+      // width: 200,
       render: (text, record) => (
         <Space size="middle">
-          <Link to={`/lodgement/proceed/${record.id}`}>Proceed</Link>
-          <a>Message</a>
+          <Link to={`/lodgement/proceed/${record.id}`}><Button type="primary" ghost icon={<EditOutlined />}>Proceed</Button></Link>
         </Space>
       ),
     },
   ];
 
-  const [loading, setLoading] = React.useState(true);
-  const [modalVisible, setModalVisible] = React.useState(false);
-  const [lodgementList, setLodgementList] = React.useState([{ isNewButton: true }]);
-  const [currentId, setCurrentId] = React.useState();
-  const [agentList, setAgentList] = React.useState([]);
+  const handleTableChange = (pagination, filters, sorter) => {
+    setFilteredInfo(filters);
+    setSortedInfo(sorter);
+  }
 
-  const assignLodgementToAgent = (lodgement, assignee) => {
+  const clearAllFilters = () => {
+    setFilteredInfo({});
+    setSortedInfo({});
+  }
 
+  const assignLodgementToAgent = async (lodgement, agentId) => {
+    await assignLodgement(lodgement.id, agentId);
+    await loadList();
   }
 
   const loadList = async () => {
     setLoading(true);
     const list = await listLodgement();
     const agentList = await listAgents();
-    setLodgementList([...list, { isNewButton: true }]);
+    setLodgementList(list);
     setAgentList(agentList);
     setLoading(false);
   }
@@ -154,26 +177,6 @@ const AdminLodgementPage = (props) => {
   React.useEffect(() => {
     loadList();
   }, [])
-
-  const saveJob = async () => {
-    await loadList();
-    setModalVisible(false);
-  }
-
-  const openModalToCreate = () => {
-    setCurrentId();
-    setModalVisible(true);
-  }
-
-  const openModalToEdit = id => {
-    setCurrentId(id);
-    setModalVisible(true);
-  }
-
-  const handleModalCancel = () => {
-    setModalVisible(false);
-    loadList();
-  }
 
   return (
     <LayoutStyled>
@@ -185,8 +188,17 @@ const AdminLodgementPage = (props) => {
           </StyledTitleRow>
           <Paragraph>Lodgements are predefined information that can be automatically filled into your lodgement. You can save the information like name, phone, address, TFN, and etc. for future usage.</Paragraph>
 
-          <Button onClick={() => openModalToCreate()}>Create New Lodgement</Button>
-          <Table columns={columnDef} dataSource={lodgementList}></Table>
+          <Button onClick={() => clearAllFilters()}>Create All Filters</Button>
+          <Table columns={columnDef} 
+          dataSource={lodgementList} 
+          // scroll={{x: 1000}}
+          onChange={handleTableChange}
+          onRow={(record, index) => ({
+            onDoubleClick: e => {
+              props.history.push(`/lodgement/proceed/${record.id}`);
+            }
+          })}
+          ></Table>
           {/* <List
             grid={{
               gutter: 24,
@@ -227,8 +239,8 @@ const AdminLodgementPage = (props) => {
   );
 };
 
-AdminLodgementPage.propTypes = {};
+AdminLodgementListPage.propTypes = {};
 
-AdminLodgementPage.defaultProps = {};
+AdminLodgementListPage.defaultProps = {};
 
-export default AdminLodgementPage;
+export default AdminLodgementListPage;

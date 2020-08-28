@@ -22,6 +22,9 @@ import { LodgementStatus } from '../enums/LodgementStatus';
 import e = require('express');
 import { normalizeFieldNameToVar } from '../utils/normalizeFieldNameToVar';
 import { LodgementLog } from '../entity/LodgementLog';
+import { Message } from '../entity/Message';
+import { MessageType } from '../enums/MessageType';
+import { AnalysisSchemeLanguage } from 'aws-sdk/clients/cloudsearch';
 
 
 function prefillFieldsWithProtofolio(jobTemplateFields, portofolioFields) {
@@ -65,6 +68,7 @@ export const generateLodgement = handlerWrapper(async (req, res) => {
   lodgement.portofolioId = portofolioId;
   lodgement.fields = fields;
   lodgement.lastUpdatedAt = getUtcNow();
+  lodgement.status = LodgementStatus.DRAFT;
 
   // This API create an empty lodgment for clients. No need to save to database.
   // const repo = getRepository(Lodgement);
@@ -146,6 +150,7 @@ export const listLodgement = handlerWrapper(async (req, res) => {
         `x.id as id`,
         `x.name as name`,
         `x."createdAt" as "createdAt"`,
+        `x.agentId as "agentId"`,
         `x.status as status`,
       ]);
   } else if (role === 'admin') {
@@ -155,6 +160,7 @@ export const listLodgement = handlerWrapper(async (req, res) => {
         `x.name as name`,
         `x."createdAt" as "createdAt"`,
         `j.name as "jobTemplateName"`,
+        `x.agentId as "agentId"`,
         `x.status as status`,
       ]);
   } else {
@@ -194,9 +200,39 @@ export const assignLodgment = handlerWrapper(async (req, res) => {
 
   await getRepository(Lodgement).update(id, { agentId });
 
-  res.json(null);
+  res.json();
 });
 
+export const requstSignLodgement = handlerWrapper(async (req, res) => {
+  assertRole(req, 'admin', 'agent');
+  const { id } = req.params;
+
+  await getRepository(Lodgement).update(id, { status: LodgementStatus.TO_SIGN });
+
+  res.json();
+});
+
+export const completeLodgement = handlerWrapper(async (req, res) => {
+  assertRole(req, 'admin', 'agent');
+  const { id } = req.params;
+  const repo =  getRepository(Lodgement);
+  const lodgement = await repo.findOne(id);
+  assert(lodgement, 404);
+  assert(['submitted', 'to_sign'].includes(lodgement.status), 400, 'Status invalid');
+
+  await repo.update(id, { status: LodgementStatus.DONE });
+
+  res.json();
+});
+
+export const archiveLodgement = handlerWrapper(async (req, res) => {
+  assertRole(req, 'admin', 'agent');
+  const { id } = req.params;
+
+  await getRepository(Lodgement).update(id, { status: LodgementStatus.ARCHIVE });
+
+  res.json();
+});
 
 export const logLodgmentEvent = handlerWrapper(async (req, res) => {
   assertRole(req, 'client');
@@ -212,5 +248,48 @@ export const logLodgmentEvent = handlerWrapper(async (req, res) => {
 
   await getRepository(LodgementLog).save(lodgementLog);
 
-  res.json(null);
+  res.json();
+});
+
+export const newLodgmentMessage = handlerWrapper(async (req, res) => {
+  assertRole(req, 'admin', 'agent');
+  const { id } = req.params;
+  const { content } = req.body;
+
+  const lodgement = await getRepository(Lodgement).findOne(id);
+  assert(lodgement, 404);
+
+  const message = new Message();
+  message.lodgementId = id;
+  message.type = MessageType.OUTBOUND;
+  message.clientUserId = lodgement.userId;
+  message.agentUserId = req.user.id;
+  message.content = content;
+
+  const repo = getRepository(Message);
+  await repo.save(message);
+
+  res.json();
+});
+
+export const listLodgementMessage = handlerWrapper(async (req, res) => {
+  assertRole(req, 'admin', 'agent', 'client');
+  const { id } = req.params;
+  const { from, size } = req.query;
+
+  let query = getRepository(Message).createQueryBuilder()
+    .where({ lodgementId: id });
+  if (req.user.role === 'client') {
+    query = query.where({ clientUserId: req.user.id });
+  }
+  if (from) {
+    query = query.where(`"createdAt" >= :from`, { from: moment(from).toDate() })
+  }
+
+  query = query.orderBy('"createdAt"', 'DESC')
+    .limit(size || 20);
+
+  const list = await query.getMany();
+
+  res.json(list);
 });

@@ -21,7 +21,7 @@ import ClientsPage from 'pages/ClientsPage';
 import MyLodgementPage from 'pages/MyLodgement/MyLodgementPage';
 import JobAdminPage from 'pages/JobTemplate/JobAdminPage';
 import PortofolioPage from 'pages/Portofolio/PortofolioPage';
-import AdminLodgementPage from 'pages/AdminLodgement/AdminLodgementPage';
+import AdminLodgementListPage from 'pages/AdminLodgement/AdminLodgementListPage';
 import ProceedLodgementPage from 'pages/AdminLodgement/ProceedLodgementPage';
 import { getAuthUser } from 'services/authService';
 
@@ -76,7 +76,7 @@ class App extends React.Component {
             {isAdmin && <Route path="/clients" exact component={ClientsPage} />}
             {isAdmin && <Route path="/tasks" exact component={ClientsPage} />}
             {isClient && <Route path="/lodgement" exact component={MyLodgementPage} />}
-            {(isAdmin || isAgent) && <Route path="/lodgement" exact component={AdminLodgementPage} />}
+            {(isAdmin || isAgent) && <Route path="/lodgement" exact component={AdminLodgementListPage} />}
             {(isAdmin || isAgent) && <Route path="/lodgement/proceed/:id" exact component={ProceedLodgementPage} />}
             {!isGuest && <Route path="/change_password" exact component={ChangePasswordPage} />}
             <Route path="/terms_and_conditions" exact component={TermAndConditionPage} />

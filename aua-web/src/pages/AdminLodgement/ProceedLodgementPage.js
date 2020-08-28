@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
-import { Input, Button, Form, Select, DatePicker, Layout, Modal, Space, Typography, Radio } from 'antd';
+import { Input, Button, Form, Select, DatePicker, Layout, Modal, Space, Typography, Radio, Row, Col } from 'antd';
 import { FileUploader } from 'components/FileUploader';
 import HomeHeader from 'components/HomeHeader';
 
@@ -15,18 +15,20 @@ import { Divider } from 'antd';
 import { BuiltInFieldDef } from "components/FieldDef";
 import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
 import { listJobTemplate } from 'services/jobTemplateService';
-import { deleteLodgement, generateLodgement, getLodgement, saveLodgement } from 'services/lodgementService';
+import { archiveLodgement, generateLodgement, getLodgement, saveLodgement, completeLodgement } from 'services/lodgementService';
 import { listPortofolio } from 'services/portofolioService';
 import { displayNameAsLabel } from 'util/displayNameAsLabel';
 import { InputYear } from 'components/InputYear';
 import { DateInput } from 'components/DateInput';
+import LodgementChat from './LodgementChat';
 
 const { Text, Paragraph, Title } = Typography;
 const ContainerStyled = styled.div`
-  margin: 6rem auto 2rem auto;
+  margin-top: 5rem;
   padding: 1rem;
-  max-width: 700px;
-  width: 100%;
+  // max-width: 700px;
+  width: 67vw;
+  display: flex;
 `;
 
 const StyledTitleRow = styled.div`
@@ -92,15 +94,17 @@ const ProceedLodgementPage = (props) => {
 
     // debugger;
     setLoading(true);
-    await saveLodgement({ ...lodgement, status: 'submitted' });
+    await saveLodgement({ ...lodgement });
     // form.resetFields();
-    await props.onChange();
     setLoading(false);
   }
 
   const handleCancel = () => {
-    form.resetFields();
-    props.onCancel();
+    goToListPage();
+  }
+
+  const goToListPage = () => {
+    props.history.push('/lodgement');
   }
 
   const handleSelectedTemplate = async (values) => {
@@ -125,92 +129,108 @@ const ProceedLodgementPage = (props) => {
     return values;
   }
 
-  const handleDelete = async (e) => {
-    e.stopPropagation();
+  const handleArchiveLodgement = () => {
     Modal.confirm({
-      title: <>To delete lodgement <strong>{lodgement.name}</strong>?</>,
+      title: 'Archive this lodgement',
+      okText: 'Yes, Archive it',
       onOk: async () => {
-        await deleteLodgement(lodgement.id);
-        props.onChange();
-      },
-      okText: 'Yes, delete it!'
-    });
+        await archiveLodgement(lodgement.id);
+        goToListPage();
+      }
+    })
   }
 
-  const checkIfCanEdit = (lodgement) => {
-    if (!lodgement) return false;
-    const { status, id } = lodgement;
-    const isUnsaved = !id;
-    const isDraft = status === 'draft';
-    const isToRevise = status === 'to_revise';
-    if (loading) return false;
-    return isUnsaved || isDraft || isToRevise;
+  const handleCompleteLodgement = () => {
+    Modal.confirm({
+      title: 'Complete this lodgement',
+      okText: 'Yes, Complete it',
+      onOk: async () => {
+        await completeLodgement(lodgement.id);
+        goToListPage();
+      }
+    })
   }
-
-  const canEdit = checkIfCanEdit(lodgement);
-
-  // console.log('value', formInitValues);
 
   return (<LayoutStyled>
     <HomeHeader></HomeHeader>
     <ContainerStyled>
-    <Space direction="vertical" size="large" style={{ width: '100%' }}>
-
-
-      {(lodgement && !canEdit) && <Text type="warning">Cannot edit the lodgement of status '{lodgement.status}'.</Text>}
       {lodgement && <Form form={form} layout="vertical"
         onValuesChange={handleValuesChange}
         onFinish={handleSubmit}
-        style={{ textAlign: 'left' }} initialValues={getFormInitialValues()}>
-        <Form.Item label="Name" name="name" rules={[{ required: true }]}>
-          <Input disabled={loading} />
-        </Form.Item>
+        style={{ textAlign: 'left', width: '100%' }} initialValues={getFormInitialValues()}>
+        <Title>{lodgement.name}</Title>
+        <Divider />
+        <Row gutter={32}>
+          <Col span={12}>
+            {lodgement.fields.filter(f => f.type !== 'upload').map((field, i) => {
+              const { name, description, type, required } = field;
+              const formItemProps = {
+                label: <>{displayNameAsLabel(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
+                name,
+                // rules: [{ required }]
+              }
+              return (
+                <Form.Item key={i} {...formItemProps}>
+                  {type === 'text' ? <Input disabled={loading} /> :
+                    type === 'year' ? <DateInput picker="year" placeholder="YYYY" disabled={loading} /> :
+                      type === 'number' ? <Input disabled={loading} type="number" /> :
+                        type === 'paragraph' ? <Input.TextArea disabled={loading} /> :
+                          type === 'date' ? <DateInput picker="date" disabled={loading} placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD" /> :
+                            type === 'select' ? <Radio.Group disabled={loading} buttonStyle="solid">
+                              {field.options.map((x, i) => <Radio key={i} style={{ display: 'block', height: '2rem' }} value={x.value}>{x.label}</Radio>)}
+                            </Radio.Group> :
+                              null}
+                </Form.Item>
+              );
+            })}
+          </Col>
+          <Col span={12}>
 
-        {lodgement.fields.map((field, i) => {
-          const { name, description, type, required } = field;
-          const formItemProps = {
-            label: <>{displayNameAsLabel(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
-            name,
-            // rules: [{ required }]
-          }
-          return (
-            <Form.Item key={i} {...formItemProps}>
-              {type === 'text' ? <Input disabled={loading} /> :
-                type === 'year' ? <DateInput picker="year" placeholder="YYYY" disabled={loading} /> :
-                  type === 'number' ? <Input disabled={loading} type="number" /> :
-                    type === 'paragraph' ? <Input.TextArea disabled={loading} /> :
-                      type === 'date' ? <DateInput picker="date" disabled={loading} placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD" /> :
-                        type === 'upload' ? <FileUploader disabled={loading} /> :
-                          type === 'select' ? <Radio.Group disabled={loading} buttonStyle="solid">
-                            {field.options.map((x, i) => <Radio key={i} style={{ display: 'block', height: '2rem' }} value={x.value}>{x.label}</Radio>)}
-                          </Radio.Group> :
-                            null}
-            </Form.Item>
-          );
-        })}
-        {/* <Form.Item>
-          <div>
-            <Input.Search style={{ marginBottom: 8 }} placeholder="Search" onChange={this.onChange} />
-            <Tree
-              onExpand={this.onExpand}
-              expandedKeys={expandedKeys}
-              autoExpandParent={autoExpandParent}
-              treeData={loop(gData)}
-            />
-          </div>
-        </Form.Item> */}
+            {lodgement.fields.filter(f => f.type === 'upload').map((field, i) => {
+              const { name, description, type, required } = field;
+              const formItemProps = {
+                label: <>{displayNameAsLabel(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
+                name,
+                // rules: [{ required }]
+              }
+              return (
+                <Form.Item key={i} {...formItemProps}>
+                  <FileUploader disabled={loading} />
+                </Form.Item>
+              );
+            })}
+          </Col>
+        </Row>
         <Divider />
         <Form.Item>
-          <Space direction="vertical" style={{ width: '100%' }} size="middle">
-            {canEdit && <Button block ghost type="primary" disabled={loading} onClick={() => saveDraft()}>Save As Draft</Button>}
-            {canEdit && <Button block type="primary" htmlType="submit" disabled={loading}>Submit Now</Button>}
+          <Space direction="horizontal" style={{ width: '100%' }} size="middle">
             <Button block type="link" onClick={() => handleCancel()}>Cancel</Button>
+            <Button block type="primary" danger disabled={loading} onClick={() => handleArchiveLodgement()}>Archive</Button>
+            <Button block type="primary" ghost disabled={loading} onClick={() => handleCompleteLodgement()}>Complete</Button>
+            <Button block type="primary" ghost disabled={loading}>Request Sign</Button>
+            <Button block type="primary" htmlType="submit" disabled={loading}>Save</Button>
           </Space>
         </Form.Item>
-      </Form>}
-    </Space>
-      </ContainerStyled>
-    </LayoutStyled >
+      </Form>
+      }
+      {/* <Divider type="vertical" style={{ height: "100%" }} /> */}
+    </ContainerStyled>
+    <Layout.Sider
+      width="33vw"
+      theme="light"
+      style={{
+        height: '100vh',
+        position: 'fixed',
+        right: 0,
+        overflow: 'auto',
+        backgroundColor: '#143e86'
+
+        // display: 'flex'
+      }}
+    >
+      {lodgement && <LodgementChat lodgementId={lodgement.id} />}
+    </Layout.Sider>
+  </LayoutStyled >
 
   );
 };

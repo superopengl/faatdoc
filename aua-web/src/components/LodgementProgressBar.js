@@ -8,14 +8,16 @@ const percentage = {
   'draft': 0,
   'submitted': 33,
   'to_sign': 67,
-  'done': 100
+  'done': 100,
+  'archive': 0
 }
 
 const progressStatus = {
   'draft': 'normal',
   'submitted': 'active',
   'to_sign': 'exception',
-  'done': 'success'
+  'done': 'success',
+  'archive': 'normal'
 }
 
 function getLabelFromStatus(status) {

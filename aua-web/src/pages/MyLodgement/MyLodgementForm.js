@@ -19,6 +19,7 @@ import { LodgementGenerator } from './LodgementGenerator';
 import { displayNameAsLabel } from 'util/displayNameAsLabel';
 import { InputYear } from 'components/InputYear';
 import { DateInput } from 'components/DateInput';
+import { RangePickerInput } from 'components/RangePickerInput';
 
 const { Text, Paragraph, Title } = Typography;
 const { RangePicker } = DatePicker;
@@ -129,31 +130,27 @@ const MyLodgementForm = (props) => {
   }
 
   const checkIfCanEdit = (lodgement) => {
+    if (loading) return false;
     if (!lodgement) return false;
     const { status, id } = lodgement;
-    const isUnsaved = !id;
-    const isDraft = status === 'draft';
-    const isToRevise = status === 'to_revise';
-    if (loading) return false;
-    return isUnsaved || isDraft || isToRevise;
+    return ['draft', 'submitted'].includes(status);
   }
 
   const canEdit = checkIfCanEdit(lodgement);
+  const disabled = !canEdit || loading;
 
   // console.log('value', formInitValues);
 
   return (<>
     <Space direction="vertical" size="large" style={{ width: '100%' }}>
-
       {!lodgement && <LodgementGenerator onChange={handleSelectedTemplate} jobTemplateList={jobTemplateList} portofolioList={portofolioList} />}
 
-      {(lodgement && !canEdit) && <Text type="warning">Cannot edit the lodgement of status '{lodgement.status}'.</Text>}
       {lodgement && <Form form={form} layout="vertical"
         onValuesChange={handleValuesChange}
         onFinish={handleSubmit}
         style={{ textAlign: 'left' }} initialValues={getFormInitialValues()}>
         <Form.Item label="Name" name="name" rules={[{ required: true }]}>
-          <Input disabled={loading} />
+          <Input disabled={disabled} />
         </Form.Item>
 
         {lodgement.fields.filter(field => !field.officialOnly).map((field, i) => {
@@ -165,14 +162,14 @@ const MyLodgementForm = (props) => {
           }
           return (
             <Form.Item key={i} {...formItemProps}>
-              {type === 'text' ? <Input disabled={loading} /> :
-                type === 'year' ? <DateInput picker="year" placeholder="YYYY" disabled={loading} /> :
-                  type === 'monthRange' ? <RangePicker picker="month" disabled={loading} /> :
-                    type === 'number' ? <Input disabled={loading} type="number" pattern="[0-9.]*" /> :
-                      type === 'paragraph' ? <Input.TextArea disabled={loading} /> :
-                        type === 'date' ? <DateInput picker="date" disabled={loading} placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD" /> :
-                          type === 'upload' ? <FileUploader disabled={loading} /> :
-                            type === 'select' ? <Radio.Group disabled={loading} buttonStyle="solid">
+              {type === 'text' ? <Input disabled={disabled} /> :
+                type === 'year' ? <DateInput picker="year" placeholder="YYYY" disabled={disabled} /> :
+                  type === 'monthRange' ? <RangePickerInput picker="month" disabled={disabled} /> :
+                    type === 'number' ? <Input disabled={disabled} type="number" pattern="[0-9.]*" /> :
+                      type === 'paragraph' ? <Input.TextArea disabled={disabled} /> :
+                        type === 'date' ? <DateInput picker="date" disabled={disabled} placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD" /> :
+                          type === 'upload' ? <FileUploader disabled={disabled} /> :
+                            type === 'select' ? <Radio.Group disabled={disabled} buttonStyle="solid">
                               {field.options.map((x, i) => <Radio key={i} style={{ display: 'block', height: '2rem' }} value={x.value}>{x.label}</Radio>)}
                             </Radio.Group> :
                               null}
@@ -182,13 +179,13 @@ const MyLodgementForm = (props) => {
         <Divider />
         <Form.Item>
           <Space direction="vertical" style={{ width: '100%' }} size="middle">
-            {canEdit && <Button block ghost type="primary" disabled={loading} onClick={() => saveDraft()}>Save As Draft</Button>}
-            {canEdit && <Button block type="primary" htmlType="submit" disabled={loading}>Submit Now</Button>}
+            {(canEdit && lodgement.status === 'draft') && <Button block ghost type="primary" disabled={disabled} onClick={() => saveDraft()}>Save As Draft</Button>}
+            {canEdit && <Button block type="primary" htmlType="submit" disabled={disabled}>Submit Now</Button>}
             <Button block type="link" onClick={() => handleCancel()}>Cancel</Button>
           </Space>
         </Form.Item>
         {(id && lodgement?.status === 'draft') && <Form.Item>
-          <Button block type="primary" danger disabled={loading} onClick={handleDelete}>Delete</Button>
+          <Button block type="primary" danger disabled={disabled} onClick={handleDelete}>Delete</Button>
         </Form.Item>}
       </Form>}
     </Space>
