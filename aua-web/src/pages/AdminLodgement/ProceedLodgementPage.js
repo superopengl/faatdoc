@@ -15,7 +15,7 @@ import { Divider } from 'antd';
 import { BuiltInFieldDef } from "components/FieldDef";
 import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
 import { listJobTemplate } from 'services/jobTemplateService';
-import { archiveLodgement, generateLodgement, getLodgement, saveLodgement, completeLodgement } from 'services/lodgementService';
+import { deleteLodgement, generateLodgement, getLodgement, saveLodgement, completeLodgement } from 'services/lodgementService';
 import { listPortofolio } from 'services/portofolioService';
 import { getDisplayNameFromVarName } from 'util/getDisplayNameFromVarName';
 import { InputYear } from 'components/InputYear';
@@ -107,15 +107,6 @@ const ProceedLodgementPage = (props) => {
     props.history.push('/lodgement');
   }
 
-  const handleSelectedTemplate = async (values) => {
-    setJobTemplateId(values.jobTemplateId);
-    setPortofolioId(values.portofolioId);
-    setLoading(true);
-    const lodgement = await generateLodgement(values);
-    setLodgement(lodgement);
-    setLoading(false);
-  }
-
   const getFormInitialValues = () => {
     const values = {
       name: lodgement?.name || 'New Lodgement',
@@ -134,7 +125,7 @@ const ProceedLodgementPage = (props) => {
       title: 'Archive this lodgement',
       okText: 'Yes, Archive it',
       onOk: async () => {
-        await archiveLodgement(lodgement.id);
+        await deleteLodgement(lodgement.id);
         goToListPage();
       }
     })

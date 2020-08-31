@@ -99,7 +99,10 @@ const JobTemplateForm = (props) => {
     notify.success(<>Successfully saved job template <strong>{name}</strong></>)
   }
 
-  const nameOptions = BuiltInFieldName.map(x => ({ value: getDisplayNameFromVarName(x) }));
+  const nameOptions = BuiltInFieldName.map(x => ({ 
+    value: x, 
+    // label: getDisplayNameFromVarName(x) 
+  }));
 
   const columns = [
     {
@@ -117,7 +120,8 @@ const JobTemplateForm = (props) => {
           options={nameOptions}
           allowClear={true}
           maxLength={50}
-          defaultValue={getDisplayNameFromVarName(text)}
+          defaultValue={text}
+          // defaultValue={getDisplayNameFromVarName(text)}
           style={{ width: 200 }}
           autoComplete="off"
           onBlur={(e) => changeValue(index, 'name', e.target.value)}

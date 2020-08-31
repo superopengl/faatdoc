@@ -62,10 +62,6 @@ const PortofolioForm = (props) => {
     loadEntity()
   }, []);
 
-  const goBack = () => {
-    props.history.goBack();
-  }
-
   const handleSubmit = async values => {
     const portofolio = {
       id,

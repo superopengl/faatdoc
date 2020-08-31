@@ -20,13 +20,6 @@ import { JobTemplate } from '../entity/JobTemplate';
 import { json } from 'body-parser';
 import { normalizeFieldNameToVar } from '../utils/normalizeFieldNameToVar';
 
-function normalizeFieldNames(fields) {
-  fields?.forEach(f => {
-    f.name = normalizeFieldNameToVar(f.name);
-  });
-  return fields;
-}
-
 export const saveJobTemplate = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin');
   const jobTemplate = new JobTemplate();
@@ -35,7 +28,7 @@ export const saveJobTemplate = handlerWrapper(async (req, res) => {
   assert(name, 400, 'name is empty');
   jobTemplate.id = id || uuidv4();
   jobTemplate.name = name;
-  jobTemplate.fields = normalizeFieldNames(fields);
+  jobTemplate.fields = fields;
   jobTemplate.lastUpdatedAt = getUtcNow();
 
   const repo = getRepository(JobTemplate);

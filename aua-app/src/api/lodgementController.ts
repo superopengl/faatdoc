@@ -172,6 +172,7 @@ const adminListLodgement = async (req, res) => {
   let query = getConnection()
     .createQueryBuilder()
     .from(Lodgement, 'x')
+    .where(`x.status != :status`, { status: LodgementStatus.ARCHIVE })
     .orderBy('x.createdAt', 'DESC')
     .innerJoin(q => q.from(JobTemplate, 'j').select('*'), 'j', 'j.id = x."jobTemplateId"')
     .select([
@@ -213,9 +214,16 @@ export const deleteLodgement = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
   const { id } = req.params;
   const repo = getRepository(Lodgement);
-  await repo.delete({ id });
+  const lodgement = await repo.findOne(id);
+  if (lodgement.status === LodgementStatus.DRAFT) {
+    // If it's a draft then hard delete it.
+    await repo.delete(id);
+  } else {
+    // If it's not a draft then soft delete it.
+    await repo.update(id, { status: LodgementStatus.ARCHIVE });
+  }
 
-  res.json(null);
+  res.json();
 });
 
 
@@ -247,15 +255,6 @@ export const completeLodgement = handlerWrapper(async (req, res) => {
   assert(['submitted', 'to_sign'].includes(lodgement.status), 400, 'Status invalid');
 
   await repo.update(id, { status: LodgementStatus.DONE });
-
-  res.json();
-});
-
-export const archiveLodgement = handlerWrapper(async (req, res) => {
-  assertRole(req, 'admin', 'agent');
-  const { id } = req.params;
-
-  await getRepository(Lodgement).update(id, { status: LodgementStatus.ARCHIVE });
 
   res.json();
 });

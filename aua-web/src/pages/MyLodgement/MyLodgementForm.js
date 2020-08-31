@@ -104,7 +104,8 @@ const MyLodgementForm = (props) => {
 
   const handleSelectedTemplate = async (values) => {
     setLoading(true);
-    const lodgement = await generateLodgement(values);
+    const {jobTemplateId, portofolioId} = values;
+    const lodgement = await generateLodgement(jobTemplateId, portofolioId);
     setLodgement(lodgement);
     setLoading(false);
   }

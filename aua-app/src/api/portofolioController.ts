@@ -19,12 +19,6 @@ import { json } from 'body-parser';
 import { normalizeFieldNameToVar } from '../utils/normalizeFieldNameToVar';
 import { guessDisplayNameFromFields } from '../utils/guessDisplayNameFromFields';
 
-function normalizeFieldNames(fields) {
-  fields?.forEach(f => {
-    f.name = normalizeFieldNameToVar(f.name);
-  });
-  return fields;
-}
 
 export const savePortofolio = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
@@ -36,7 +30,7 @@ export const savePortofolio = handlerWrapper(async (req, res) => {
   portofolio.id = id || uuidv4();
   portofolio.userId = userId;
   portofolio.name = guessDisplayNameFromFields(fields);
-  portofolio.fields = normalizeFieldNames(fields);
+  portofolio.fields = fields;
   portofolio.type = type;
   portofolio.lastUpdatedAt = getUtcNow();
 

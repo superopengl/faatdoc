@@ -16,8 +16,8 @@ export async function listLodgement() {
   return httpGet('lodgement');
 }
 
-export async function generateLodgement(item) {
-  return httpPost('lodgement/generate', item);
+export async function generateLodgement(jobTemplateId, portofolioId) {
+  return httpPost('lodgement/generate', {jobTemplateId, portofolioId});
 }
 
 export async function assignLodgement(lodgementId, agentId) {
@@ -44,8 +44,4 @@ export async function requestSignLodgement(lodgementId) {
 
 export async function completeLodgement(lodgementId) {
   return httpPost(`lodgement/${lodgementId}/complete`);
-}
-
-export async function archiveLodgement(lodgementId) {
-  return httpPost(`lodgement/${lodgementId}/archive`);
 }
