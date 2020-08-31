@@ -17,6 +17,7 @@ import { logError } from '../utils/logger';
 import { getUtcNow } from '../utils/getUtcNow';
 import { json } from 'body-parser';
 import { normalizeFieldNameToVar } from '../utils/normalizeFieldNameToVar';
+import { guessDisplayNameFromFields } from '../utils/guessDisplayNameFromFields';
 
 function normalizeFieldNames(fields) {
   fields?.forEach(f => {
@@ -31,11 +32,10 @@ export const savePortofolio = handlerWrapper(async (req, res) => {
 
   const { user: { id: userId } } = req;
 
-  const { id, name, fields, type } = req.body;
-  assert(name, 400, 'name is empty');
+  const { id, fields, type } = req.body;
   portofolio.id = id || uuidv4();
   portofolio.userId = userId;
-  portofolio.name = name;
+  portofolio.name = guessDisplayNameFromFields(fields);
   portofolio.fields = normalizeFieldNames(fields);
   portofolio.type = type;
   portofolio.lastUpdatedAt = getUtcNow();

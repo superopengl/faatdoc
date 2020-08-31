@@ -17,7 +17,7 @@ import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
 import { listJobTemplate } from 'services/jobTemplateService';
 import { deleteLodgement, generateLodgement, sendLodgementMessage, listLodgementMessages } from 'services/lodgementService';
 import { listPortofolio } from 'services/portofolioService';
-import { displayNameAsLabel } from 'util/displayNameAsLabel';
+import { getDisplayNameFromVarName } from 'util/getDisplayNameFromVarName';
 import { InputYear } from 'components/InputYear';
 import { DateInput } from 'components/DateInput';
 import 'react-chat-elements/dist/main.css';

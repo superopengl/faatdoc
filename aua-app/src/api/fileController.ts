@@ -7,11 +7,13 @@ import { handlerWrapper } from '../utils/asyncHandler';
 import { awsConfig } from '../utils/awsConfig';
 import * as path from 'path';
 import * as fse from 'fs-extra';
+import * as fs from 'fs';
 import { uuidToRelativePath } from '../utils/uuidToRelativePath';
 import { assertRole } from '../utils';
 
-function getPathByFileId(uuid) {
+function getDirByFileId(uuid) {
   const localPath = process.env.AUA_FILE_STORAGE_PATH;
+  assert(localPath, 500, `AUA_FILE_STORAGE_PATH is not configured`);
   const env = process.env.NODE_ENV;
   const subDir = uuidToRelativePath(uuid);
   const relative = `${env}/${subDir}`;
@@ -23,14 +25,22 @@ function getPathByFileId(uuid) {
   };
 }
 
+function getFilePathByFileId(uuid, name) {
+  const { full, relative } = getDirByFileId(uuid);
+  return {
+    full: path.resolve(full, name),
+    relative: `${relative}/${name}`
+  };
+}
+
 export const downloadFile = handlerWrapper(async (req, res) => {
   const { id } = req.params;
-  // const repo = getRepository(File);
-  // const file = await repo.findOne(id);
-  // assert(file, 404);
+  const file = await getRepository(File).findOne(id);
+  assert(file, 404);
 
-  const { full } = getPathByFileId(id);
-  res.download(full);
+  const fullPath = path.resolve(process.env.AUA_FILE_STORAGE_PATH, file.location);
+
+  res.download(fullPath);
 });
 
 export const getFile = handlerWrapper(async (req, res) => {
@@ -58,7 +68,7 @@ export const uploadFile = handlerWrapper(async (req, res) => {
   const { file } = (req as any).files;
   assert(file, 404, 'No file uploaded');
   const { name, data, mimetype, md5 } = file;
-  const { full, relative } = getPathByFileId(id);
+  const { full, relative } = getFilePathByFileId(id, name);
 
   await fse.outputFile(full, data);
 

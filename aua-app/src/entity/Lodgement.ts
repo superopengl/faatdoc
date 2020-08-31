@@ -15,6 +15,9 @@ export class Lodgement {
   @Column()
   name: string;
 
+  @Column()
+  displayName: string;
+
   @Column({ default: LodgementStatus.DRAFT })
   status: LodgementStatus;
 
@@ -30,7 +33,11 @@ export class Lodgement {
   @Column('uuid')
   userId: string;
 
+  @Column({nullable: true})
+  signedAt?: Date;
+
   @Column({type: 'json'})
   fields: any;
 }
+
 

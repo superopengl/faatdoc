@@ -17,7 +17,7 @@ import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
 import { listJobTemplate } from 'services/jobTemplateService';
 import { archiveLodgement, generateLodgement, getLodgement, saveLodgement, completeLodgement } from 'services/lodgementService';
 import { listPortofolio } from 'services/portofolioService';
-import { displayNameAsLabel } from 'util/displayNameAsLabel';
+import { getDisplayNameFromVarName } from 'util/getDisplayNameFromVarName';
 import { InputYear } from 'components/InputYear';
 import { DateInput } from 'components/DateInput';
 import LodgementChat from './LodgementChat';
@@ -165,7 +165,7 @@ const ProceedLodgementPage = (props) => {
             {lodgement.fields.filter(f => f.type !== 'upload').map((field, i) => {
               const { name, description, type, required } = field;
               const formItemProps = {
-                label: <>{displayNameAsLabel(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
+                label: <>{getDisplayNameFromVarName(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
                 name,
                 // rules: [{ required }]
               }
@@ -189,7 +189,7 @@ const ProceedLodgementPage = (props) => {
             {lodgement.fields.filter(f => f.type === 'upload').map((field, i) => {
               const { name, description, type, required } = field;
               const formItemProps = {
-                label: <>{displayNameAsLabel(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
+                label: <>{getDisplayNameFromVarName(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
                 name,
                 // rules: [{ required }]
               }

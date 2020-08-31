@@ -10,7 +10,7 @@ import { UpOutlined, DownOutlined, DeleteOutlined, QuestionOutlined } from '@ant
 import { Divider } from 'antd';
 import { listLodgement, deleteLodgement } from 'services/lodgementService';
 import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
-import { displayNameAsLabel } from 'util/displayNameAsLabel';
+import { getDisplayNameFromVarName } from 'util/getDisplayNameFromVarName';
 import { Tag } from 'antd';
 import { Progress } from 'antd';
 import { Steps, Popover } from 'antd';
@@ -35,7 +35,7 @@ const MyLodgementCard = (props) => {
 
   const { value } = props;
 
-  const { id, name, status } = value || {};
+  const { id, name, status, createdAt } = value || {};
 
 
 
@@ -43,6 +43,7 @@ const MyLodgementCard = (props) => {
     <StyledCard
       title={<>
       <Text style={{whiteSpace: 'break-spaces'}}>{name}</Text>
+      <Paragraph type="secondary"><small>{moment(createdAt).format('DD MMM YYYY')}</small></Paragraph>
       {/* <Button type="link" onClick={handleDelete} danger>Delete</Button> */}
       </>}
       extra={<>

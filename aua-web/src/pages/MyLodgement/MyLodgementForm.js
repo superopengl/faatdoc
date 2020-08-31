@@ -16,10 +16,11 @@ import { listJobTemplate } from 'services/jobTemplateService';
 import { deleteLodgement, generateLodgement, getLodgement, saveLodgement } from 'services/lodgementService';
 import { listPortofolio } from 'services/portofolioService';
 import { LodgementGenerator } from './LodgementGenerator';
-import { displayNameAsLabel } from 'util/displayNameAsLabel';
+import { getDisplayNameFromVarName } from 'util/getDisplayNameFromVarName';
 import { InputYear } from 'components/InputYear';
 import { DateInput } from 'components/DateInput';
 import { RangePickerInput } from 'components/RangePickerInput';
+import { notify } from 'util/notify';
 
 const { Text, Paragraph, Title } = Typography;
 const { RangePicker } = DatePicker;
@@ -83,13 +84,17 @@ const MyLodgementForm = (props) => {
   }
 
   const handleSubmit = async values => {
-
     // debugger;
     setLoading(true);
-    await saveLodgement({ ...lodgement, status: 'submitted' });
-    // form.resetFields();
-    await props.onChange();
-    setLoading(false);
+    try {
+      await saveLodgement({ ...lodgement, status: 'submitted' });
+      // form.resetFields();
+      await props.onChange();
+    } catch (e) {
+      notify.error('Failed to save lodgement', e.message);
+    } finally {
+      setLoading(false);
+    }
   }
 
   const handleCancel = () => {
@@ -156,7 +161,7 @@ const MyLodgementForm = (props) => {
         {lodgement.fields.filter(field => !field.officialOnly).map((field, i) => {
           const { name, description, type, required } = field;
           const formItemProps = {
-            label: <>{displayNameAsLabel(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
+            label: <>{getDisplayNameFromVarName(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
             name,
             rules: [{ required }]
           }

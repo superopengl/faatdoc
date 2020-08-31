@@ -12,7 +12,7 @@ import { UpOutlined, DownOutlined, DeleteOutlined, PlusOutlined } from '@ant-des
 import { Divider } from 'antd';
 import { BuiltInFieldDef } from "components/FieldDef";
 import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
-import { displayNameAsLabel } from 'util/displayNameAsLabel';
+import { getDisplayNameFromVarName } from 'util/getDisplayNameFromVarName';
 import { getPortofolio } from 'services/portofolioService';
 import { DateInput } from 'components/DateInput';
 
@@ -67,11 +67,8 @@ const PortofolioForm = (props) => {
   }
 
   const handleSubmit = async values => {
-    const { Company, Given_Name, Surname } = values;
-
     const portofolio = {
       id,
-      name: Company || `${Given_Name} ${Surname}`,
       type,
       fields: Object.entries(values).map(([name, value]) => ({ name, value }))
     }
@@ -119,7 +116,7 @@ const PortofolioForm = (props) => {
         {fieldDefs.map((fieldDef, i) => {
           const { name, description, rules, inputType, inputProps } = fieldDef;
           const formItemProps = {
-            label: <>{displayNameAsLabel(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
+            label: <>{getDisplayNameFromVarName(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
             name,
             rules
           }

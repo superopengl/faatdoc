@@ -3,7 +3,7 @@ const thisYear = new Date().getFullYear();
 
 export const BuiltInFieldDef = [
   {
-    name: 'Given_Name',
+    name: 'givenName',
     inputType: 'text',
     rules: [{ required: true, whitespace: true, max: 100, message: ' ' }],
     inputProps: {
@@ -15,7 +15,7 @@ export const BuiltInFieldDef = [
     portofolioType: ['individual'],
   },
   {
-    name: 'Surname',
+    name: 'surname',
     inputType: 'text',
     rules: [{ required: true, whitespace: true, max: 100, message: ' ' }],
     inputProps: {
@@ -27,7 +27,7 @@ export const BuiltInFieldDef = [
     portofolioType: ['individual'],
   },
   {
-    name: 'Company',
+    name: 'company',
     inputType: 'text',
     rules: [{ required: true, whitespace: true, max: 100, message: ' ' }],
     inputProps: {
@@ -39,7 +39,7 @@ export const BuiltInFieldDef = [
     portofolioType: ['business'],
   },
   {
-    name: 'Phone',
+    name: 'phone',
     description: `split with ', ' if there are more than one`,
     inputType: 'text',
     rules: [{ required: true, whitespace: true, max: 30, message: ' ' }],
@@ -53,7 +53,7 @@ export const BuiltInFieldDef = [
     portofolioType: ['individual', 'business'],
   },
   {
-    name: 'Wechat',
+    name: 'wechat',
     inputType: 'text',
     rules: [{ required: false, max: 50, message: ' ' }],
     inputProps: {
@@ -64,7 +64,7 @@ export const BuiltInFieldDef = [
     portofolioType: ['individual', 'business'],
   },
   {
-    name: 'Address',
+    name: 'address',
     inputType: 'text',
     rules: [{ required: true, max: 100, message: ' ' }],
     inputProps: {
@@ -75,7 +75,7 @@ export const BuiltInFieldDef = [
     portofolioType: ['individual', 'business'],
   },
   {
-    name: 'Date_Of_Birth',
+    name: 'dateOfBirth',
     inputType: 'date',
     rules: [{
       required: true,
@@ -93,7 +93,7 @@ export const BuiltInFieldDef = [
     portofolioType: ['individual'],
   },
   {
-    name: 'Gender',
+    name: 'gender',
     inputType: 'select',
     rules: [{ required: false, message: 'Please choose a gender' }],
     options: [
@@ -113,7 +113,7 @@ export const BuiltInFieldDef = [
     portofolioType: ['individual'],
   },
   {
-    name: 'TFN',
+    name: 'tfn',
     inputType: 'text',
     rules: [{ required: true, max: 20, message: ' ' }],
     inputProps: {
@@ -124,7 +124,7 @@ export const BuiltInFieldDef = [
     portofolioType: ['individual'],
   },
   {
-    name: 'ABN',
+    name: 'abn',
     inputType: 'text',
     rules: [{ required: true, max: 20, message: ' ' }],
     inputProps: {
@@ -135,7 +135,7 @@ export const BuiltInFieldDef = [
     portofolioType: ['business'],
   },
   {
-    name: 'ACN',
+    name: 'acn',
     inputType: 'text',
     rules: [{ required: true, max: 20, message: ' ' }],
     inputProps: {
@@ -146,7 +146,7 @@ export const BuiltInFieldDef = [
     portofolioType: ['business'],
   },
   {
-    name: 'Occupation',
+    name: 'occupation',
     inputType: 'text',
     rules: [{ required: false, max: 50, message: ' ' }],
     inputProps: {
@@ -157,7 +157,7 @@ export const BuiltInFieldDef = [
     portofolioType: ['individual'],
   },
   {
-    name: 'Industry',
+    name: 'industry',
     inputType: 'text',
     rules: [{ required: false, max: 50, message: ' ' }],
     inputProps: {
@@ -168,7 +168,7 @@ export const BuiltInFieldDef = [
     portofolioType: ['business'],
   },
   {
-    name: 'Remark',
+    name: 'remark',
     inputType: 'paragraphy',
     rules: [{ required: false, max: 500, message: ' ' }],
     inputProps: {
@@ -179,25 +179,25 @@ export const BuiltInFieldDef = [
     portofolioType: ['individual', 'business'],
   },
   {
-    name: 'Year',
+    name: 'year',
     inputType: 'year',
     rules: [{ required: true, message: 'Please choose a financial year' }],
     portofolioType: [],
   },
   {
-    name: 'Month_Range',
+    name: 'monthRange',
     inputType: 'monthRange',
     rules: [{ required: true, message: 'Please choose start/end months' }],
     portofolioType: [],
   },
   {
-    name: 'Upload_Files',
+    name: 'uploadFiles',
     inputType: 'upload',
     rules: [{ required: true, message: 'Please upload files' }],
     portofolioType: [],
   },
   {
-    name: 'To_Sign_Files',
+    name: 'requireSign',
     inputType: 'upload',
     rules: [{ required: false, message: 'Please upload files' }],
     portofolioType: [],

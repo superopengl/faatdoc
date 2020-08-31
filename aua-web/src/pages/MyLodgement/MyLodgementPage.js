@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Tabs, Typography, Layout, Button, Row, Modal } from 'antd';
+import { Tabs, Typography, Layout, Button, Row, Modal, Divider } from 'antd';
 import PosterAdminGrid from 'components/grids/PosterAdminGrid';
 import GalleryAdminGrid from 'components/grids/GalleryAdminGrid';
 import BusinessAdminGrid from 'components/grids/BusinessAdminGrid';
@@ -52,7 +52,7 @@ const MyLodgementPage = (props) => {
   const [lodgementList, setLodgementList] = React.useState([{ isNewButton: true }]);
   const [jobTemplateList, setJobTemplateList] = React.useState([]);
   const [portofolioList, setPortofolioList] = React.useState([]);
-  const [currentId, setCurrentId] = React.useState();
+  const [currentLodgement, setCurrentLodgement] = React.useState();
 
 
   const loadList = async () => {
@@ -74,7 +74,7 @@ const MyLodgementPage = (props) => {
 
 
   const openModalToCreate = () => {
-    if(!portofolioList.length) {
+    if (!portofolioList.length) {
       Modal.confirm({
         title: 'No portofolio',
         content: 'Please create portofolio before creating lodgement. Go to create protofolio now?',
@@ -83,12 +83,12 @@ const MyLodgementPage = (props) => {
       });
       return;
     }
-    setCurrentId();
+    setCurrentLodgement();
     setModalVisible(true);
   }
 
-  const openModalToEdit = id => {
-    setCurrentId(id);
+  const openModalToEdit = lodgement => {
+    setCurrentLodgement(lodgement);
     setModalVisible(true);
   }
 
@@ -98,14 +98,18 @@ const MyLodgementPage = (props) => {
   }
 
   const handleConfirmAndCancel = () => {
-    Modal.confirm({
-      title: 'Disgard the changes without saving?',
-      icon: <ExclamationCircleOutlined />,
-      okText: 'Yes, disgard the changes',
-      onOk: () => handleModalCancel(),
-      maskClosable: true,
-      // cancelText: 'No, continue changing'
-    })
+    if (currentLodgement?.status === 'done') {
+      setModalVisible(false);
+    } else {
+      Modal.confirm({
+        title: 'Disgard the changes without saving?',
+        icon: <ExclamationCircleOutlined />,
+        okText: 'Yes, disgard the changes',
+        onOk: () => handleModalCancel(),
+        maskClosable: true,
+        // cancelText: 'No, continue changing'
+      });
+    }
   }
 
   return (
@@ -116,6 +120,7 @@ const MyLodgementPage = (props) => {
           <StyledTitleRow>
             <Title level={2} style={{ margin: 'auto' }}>Lodgement</Title>
           </StyledTitleRow>
+          <Divider>Ongoing Lodgments</Divider>
           <Paragraph>Lodgements are predefined information that can be automatically filled into your lodgement. You can save the information like name, phone, address, TFN, and etc. for future usage.</Paragraph>
 
           <List
@@ -128,11 +133,29 @@ const MyLodgementPage = (props) => {
               xl: 2,
               xxl: 3,
             }}
-            dataSource={lodgementList}
+            dataSource={lodgementList.filter(x => x.status !== 'done')}
             renderItem={item => (
               <List.Item key={item.id}>
                 {item.isNewButton && <LargePlusButton onClick={() => openModalToCreate()} />}
-                {!item.isNewButton && <LodgementCard onClick={() => openModalToEdit(item.id)} onDelete={() => loadList()} value={item} />}
+                {!item.isNewButton && <LodgementCard onClick={() => openModalToEdit(item)} onDelete={() => loadList()} value={item} />}
+              </List.Item>
+            )}
+          />
+          <Divider>Finished Lodgments</Divider>
+          <List
+            grid={{
+              gutter: 24,
+              xs: 1,
+              sm: 1,
+              md: 1,
+              lg: 2,
+              xl: 2,
+              xxl: 3,
+            }}
+            dataSource={lodgementList.filter(x => x.status === 'done')}
+            renderItem={item => (
+              <List.Item key={item.id}>
+                <LodgementCard onClick={() => openModalToEdit(item)} value={item} />
               </List.Item>
             )}
           />
@@ -153,7 +176,7 @@ const MyLodgementPage = (props) => {
           onCancel={() => handleModalCancel()}
           jobTemplateList={jobTemplateList}
           portofolioList={portofolioList}
-          id={currentId}
+          id={currentLodgement?.id}
         />
       </Modal>}
     </LayoutStyled >

@@ -70,7 +70,7 @@ const AdminLodgementListPage = (props) => {
     },
     {
       title: 'From',
-      dataIndex: 'from',
+      dataIndex: 'displayName',
       key: 'id',
       render: (text, record) => text
     },
@@ -111,10 +111,11 @@ const AdminLodgementListPage = (props) => {
       onFilter: (value, record) => record.agentId === value,
       render: (text, record) => <Select
         placeholder="Select an agent"
-        style={{ width: 120 }}
+        style={{ width: 130 }}
         onChange={value => assignLodgementToAgent(record, value)}
         value={text}
       >
+        <Select.Option key={-1} value={null}>{' '}</Select.Option>
         {agentList.map((a, i) => <Select.Option key={i} value={a.id}>{a.givenName} {a.surname}</Select.Option>)}
       </Select>
     },

@@ -11,9 +11,10 @@ import { UpOutlined, DownOutlined, DeleteOutlined, PlusOutlined, CloseOutlined }
 import { Divider } from 'antd';
 import { BuiltInFieldName, BuiltInFieldType } from 'components/FieldDef';
 import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
-import { displayNameAsLabel } from 'util/displayNameAsLabel';
+import { getDisplayNameFromVarName } from 'util/getDisplayNameFromVarName';
 import { listJobTemplate, deleteJobTemplate, saveJobTemplate, getJobTemplate } from 'services/jobTemplateService';
 import { notify } from 'util/notify';
+import { getVarNameFromDisplayName } from 'util/getVarNameFromDisplayName';
 
 const { Text } = Typography;
 
@@ -42,7 +43,7 @@ const JobTemplateForm = (props) => {
   const [loading, setLoading] = React.useState(true);
 
   const loadEntity = async () => {
-    if(!id) return;
+    if (!id) return;
     const entity = await getJobTemplate(id);
     setEntity(entity);
     setName(entity.name);
@@ -53,13 +54,6 @@ const JobTemplateForm = (props) => {
   React.useEffect(() => {
     loadEntity();
   }, [])
-
-  const handleSubmit = async values => {
-    if (values.dob) {
-      values.dob = values.dob.utc().format('YYYY-MM-DD');
-    }
-    await props.onOk(values);
-  }
 
 
   const addNewRow = () => {
@@ -98,14 +92,14 @@ const JobTemplateForm = (props) => {
     const newEntity = {
       ...entity,
       name,
-      fields
+      fields: fields.map(f => ({ name: getVarNameFromDisplayName(f.name), ...f })),
     }
     await saveJobTemplate(newEntity);
     props.onOk();
-  notify.success(<>Successfully saved job template <strong>{name}</strong></>)
+    notify.success(<>Successfully saved job template <strong>{name}</strong></>)
   }
 
-  const nameOptions = BuiltInFieldName.map(x => ({ value: displayNameAsLabel(x) }));
+  const nameOptions = BuiltInFieldName.map(x => ({ value: getDisplayNameFromVarName(x) }));
 
   const columns = [
     {
@@ -123,7 +117,7 @@ const JobTemplateForm = (props) => {
           options={nameOptions}
           allowClear={true}
           maxLength={50}
-          defaultValue={displayNameAsLabel(text)}
+          defaultValue={getDisplayNameFromVarName(text)}
           style={{ width: 200 }}
           autoComplete="off"
           onBlur={(e) => changeValue(index, 'name', e.target.value)}

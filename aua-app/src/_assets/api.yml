@@ -298,7 +298,7 @@ paths:
           description: OK
   /lodgement/{id}/assign:
     post:
-      operationId: assignLodgment
+      operationId: assignLodgement
       # security:
       #   - authClient: []
       parameters:

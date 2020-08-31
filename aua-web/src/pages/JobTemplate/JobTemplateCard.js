@@ -10,7 +10,7 @@ import { UpOutlined, DownOutlined, DeleteOutlined, QuestionOutlined } from '@ant
 import { Divider } from 'antd';
 import { listJobTemplate, deleteJobTemplate } from 'services/jobTemplateService';
 import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
-import { displayNameAsLabel } from 'util/displayNameAsLabel';
+import { getDisplayNameFromVarName } from 'util/getDisplayNameFromVarName';
 import { DateInput } from 'components/DateInput';
 
 const { Text, Paragraph } = Typography;
@@ -35,7 +35,7 @@ const columns = [
   {
     title: 'Name',
     dataIndex: 'name',
-    render: (text, records, index) => <>{displayNameAsLabel(text)}{records.required && <Text type="danger"> *</Text>}</>
+    render: (text, records, index) => <>{getDisplayNameFromVarName(text)}{records.required && <Text type="danger"> *</Text>}</>
   },
   {
     title: 'Type',
