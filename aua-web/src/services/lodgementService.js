@@ -16,6 +16,10 @@ export async function listLodgement() {
   return httpGet('lodgement');
 }
 
+export async function searchLodgement(query) {
+  return httpPost('lodgement/search', query);
+}
+
 export async function generateLodgement(jobTemplateId, portofolioId) {
   return httpPost('lodgement/generate', {jobTemplateId, portofolioId});
 }

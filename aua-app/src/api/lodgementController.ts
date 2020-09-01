@@ -1,5 +1,5 @@
 
-import { getRepository, getManager, getConnection } from 'typeorm';
+import { getRepository, getManager, getConnection, In } from 'typeorm';
 import { User } from '../entity/User';
 import { assert, assertRole } from '../utils/assert';
 import { validatePasswordStrength } from '../utils/validatePasswordStrength';
@@ -134,7 +134,63 @@ export const saveLodgement = handlerWrapper(async (req, res) => {
   res.json(null);
 });
 
-const listMyLodgement = async (req, res) => {
+interface ISearchLodgementQuery {
+  text?: string;
+  page?: number;
+  size?: number;
+  status?: LodgementStatus[];
+  assignee?: string;
+  orderField?: string;
+  orderDirection?: 'ASC' | 'DESC';
+}
+
+const defaultSearch: ISearchLodgementQuery = {
+  page: 1,
+  size: 50,
+  status: [LodgementStatus.SUBMITTED, LodgementStatus.TO_SIGN],
+  orderField: 'lastUpdatedAt',
+  orderDirection: 'DESC'
+};
+
+export const searchLodgement = handlerWrapper(async (req, res) => {
+  assertRole(req, 'admin', 'agent');
+  const option: ISearchLodgementQuery = { ...defaultSearch, ...req.body };
+
+  const { text, status, page, assignee, orderDirection, orderField } = option;
+  const size = option.size;
+  const skip = (page - 1) * size;
+
+  let query = getManager()
+    .createQueryBuilder()
+    .from(Lodgement, 'x')
+    .where(`x.status IN (:...status)`, { status });
+  if (assignee) {
+    query = query.where('x."agentId" = :assignee', { assignee });
+  }
+  query = query.innerJoin(q => q.from(JobTemplate, 'j').select('*'), 'j', 'j.id = x."jobTemplateId"')
+    .select([
+      `x.id as id`,
+      `x.name as name`,
+      `x."displayName" as "displayName"`,
+      `x."createdAt" as "createdAt"`,
+      `j.name as "jobTemplateName"`,
+      `x.agentId as "agentId"`,
+      `x.status as status`,
+    ]);
+  if (text) {
+    query = query.where('x.name ILIKE :text OR x."displayName" ILIKE :text OR j.name ILIKE :text', { text: `%${text}%` });
+  }
+  const total = await query.getCount();
+  const list = await query
+    .orderBy(`x."${orderField}"`, orderDirection)
+    .skip(skip)
+    .take(size)
+    .execute();
+
+  res.json({ data: list, pagination: { page, size, total } });
+});
+
+export const listLodgement = handlerWrapper(async (req, res) => {
   assertRole(req, 'client');
   const query = getConnection()
     .createQueryBuilder()
@@ -157,47 +213,6 @@ const listMyLodgement = async (req, res) => {
 
   const list = await query.execute();
   res.json(list);
-};
-
-const adminListLodgement = async (req, res) => {
-  assertRole(req, 'admin', 'agent');
-  const { user: { role } } = req;
-  const { page, size, text, status, assignee, order } = req.query;
-  const skip = (page || 0) * size;
-  const limit = size;
-  const orderDirection = order ? order.chatAt(0) === '-' ? 'DESC' : 'ASC' : 'DESC';
-  const orderField = order ? order.replace(/^-/, '') : 'lastUpdatedAt';
-
-
-  let query = getConnection()
-    .createQueryBuilder()
-    .from(Lodgement, 'x')
-    .where(`x.status != :status`, { status: LodgementStatus.ARCHIVE })
-    .orderBy('x.createdAt', 'DESC')
-    .innerJoin(q => q.from(JobTemplate, 'j').select('*'), 'j', 'j.id = x."jobTemplateId"')
-    .select([
-      `x.id as id`,
-      `x.name as name`,
-      `x."displayName" as "displayName"`,
-      `x."createdAt" as "createdAt"`,
-      `j.name as "jobTemplateName"`,
-      `x.agentId as "agentId"`,
-      `x.status as status`,
-    ]);
-
-
-  const list = await query.getMany();
-  res.json(list);
-};
-
-export const listLodgement = handlerWrapper(async (req, res) => {
-  const role = req.user?.role;
-  if (role === 'client') {
-    await listMyLodgement(req, res);
-  } else if (role === 'admin' || role === 'agent') {
-    await adminListLodgement(req, res);
-  }
-  assert(false, 403, 'Invalid role');
 });
 
 export const getLodgement = handlerWrapper(async (req, res) => {

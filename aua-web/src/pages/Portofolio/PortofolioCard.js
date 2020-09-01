@@ -61,6 +61,9 @@ const PortofolioCard = (props) => {
         await deletePortofolio(id);
         props.onDelete();
       },
+      okButtonProps: {
+        danger: true
+      },
       okText: 'Yes, delete it!'
     });
   }

@@ -127,6 +127,9 @@ const ProceedLodgementPage = (props) => {
       onOk: async () => {
         await deleteLodgement(lodgement.id);
         goToListPage();
+      },
+      okButtonProps: {
+        danger: true
       }
     })
   }

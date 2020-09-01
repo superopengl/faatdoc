@@ -261,6 +261,14 @@ paths:
       responses:
         200:
           description: OK
+  /lodgement/search:
+    post:
+      operationId: searchLodgement
+      # security:
+      #   - authLoggedInUser: []
+      responses:
+        200:
+          description: OK          
   /lodgement/generate:
     post:
       operationId: generateLodgement

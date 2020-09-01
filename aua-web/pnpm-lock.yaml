@@ -21,6 +21,7 @@ dependencies:
   react-dom: 16.13.1_react@16.13.1
   react-file-icon: 1.0.0_react-dom@16.13.1+react@16.13.1
   react-google-maps: 9.4.5_react-dom@16.13.1+react@16.13.1
+  react-highlight-words: 0.16.0_react@16.13.1
   react-icons: 3.10.0_react@16.13.1
   react-image-lightbox: 5.1.1_react-dom@16.13.1+react@16.13.1
   react-multi-carousel: 2.5.5
@@ -5944,6 +5945,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-l9sfDFsuqtOqKDsQdqrMRk0U85RZc0RtOR9yPI7mRVOa4FsR/BVnZ0shmQRM96Ji99kYZP/7hn1cedc1+ApsTQ==
+  /highlight-words-core/1.2.2:
+    dev: false
+    resolution:
+      integrity: sha512-BXUKIkUuh6cmmxzi5OIbUJxrG8OAk2MqoL1DtO3Wo9D2faJg2ph5ntyuQeLqaHJmzER6H5tllCDA9ZnNe9BVGg==
   /history/4.10.1:
     dependencies:
       '@babel/runtime': 7.11.2
@@ -7896,6 +7901,10 @@ packages:
       node: '>=6'
     resolution:
       integrity: sha512-qX2bG48pTqYRVmDB37rn/6PT7LcR8T7oAX3bf99u1Tt1nzxYfxkgqDwUwolPlXweM0XzBOBFzSx4kfp7KP1s/w==
+  /memoize-one/4.0.3:
+    dev: false
+    resolution:
+      integrity: sha512-QmpUu4KqDmX0plH4u+tf0riMc1KHE1+lw95cMrLlXQAFOx/xnBtwhZ52XJxd9X2O6kwKBqX32kmhbhlobD0cuw==
   /memoize-one/5.1.1:
     dev: false
     resolution:
@@ -10675,6 +10684,17 @@ packages:
       react-dom: ^15.0.0 || ^16.0.0
     resolution:
       integrity: sha512-8z5nX9DxIcBCXuEiurmRT1VXVwnzx0C6+3Es6lxB2/OyY2SLax2/LcDu6Aldxnl3HegefTL7NJzGeaKAJ61pOA==
+  /react-highlight-words/0.16.0_react@16.13.1:
+    dependencies:
+      highlight-words-core: 1.2.2
+      memoize-one: 4.0.3
+      prop-types: 15.7.2
+      react: 16.13.1
+    dev: false
+    peerDependencies:
+      react: ^0.14.0 || ^15.0.0 || ^16.0.0-0
+    resolution:
+      integrity: sha512-q34TwCSJOL+5pVDv6LUj3amaoyXdNDwd7zRqVAvceOrO9g1haWLAglK6WkGLMNUa3PFN8EgGedLg/k8Gpndxqg==
   /react-icon-base/2.1.0_eb0d650be231ffd0ace4a30b38162117:
     dependencies:
       prop-types: 15.7.2
@@ -13575,6 +13595,7 @@ specifiers:
   react-dom: ^16.13.1
   react-file-icon: ^1.0.0
   react-google-maps: ^9.4.5
+  react-highlight-words: ^0.16.0
   react-icons: ^3.10.0
   react-image-lightbox: ^5.1.1
   react-multi-carousel: ^2.5.5

@@ -60,6 +60,9 @@ const JobTemplateCard = (props) => {
         await deleteJobTemplate(id);
         props.onDelete();
       },
+      okButtonProps: {
+        danger: true
+      },
       okText: 'Yes, delete it!'
     });
 

@@ -25,6 +25,7 @@
     "react-dom": "^16.13.1",
     "react-file-icon": "^1.0.0",
     "react-google-maps": "^9.4.5",
+    "react-highlight-words": "^0.16.0",
     "react-icons": "^3.10.0",
     "react-image-lightbox": "^5.1.1",
     "react-multi-carousel": "^2.5.5",

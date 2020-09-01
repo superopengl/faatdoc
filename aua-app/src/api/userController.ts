@@ -12,6 +12,9 @@ import { createProfileEntity } from '../utils/createProfileEntity';
 import { File } from '../entity/File';
 import { v4 as uuidv4 } from 'uuid';
 import { Agent } from '../entity/Agent';
+import { UserStatus } from '../enums/UserStatus';
+import { UserRole } from 'aws-sdk/clients/workmail';
+import { Lodgement } from '../entity/Lodgement';
 
 export const getProfile = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
@@ -60,21 +63,20 @@ export const changePassword = handlerWrapper(async (req, res) => {
 export const listClients = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent');
 
-  const clients = await getConnection()
+  const list = await getConnection()
     .createQueryBuilder()
     .from(User, 'u')
-    .innerJoin(q => q.from(Portofolio, 'p').select('*'), 'p', 'u.id = p."userId"')
+    .where(`u.status != :status`, {status: UserStatus.Disabled})
+    .where(`u.role = :role`, {role: 'client'})
+    .leftJoin(q => q.from(Portofolio, 'p').select('*'), 'p', 'u.id = p."userId"')
+    .leftJoin(l => l.from(Lodgement, 'l').select('*'), 'l', 'p.id = l."portofolioId"')
     .select([
-      `u.id as id`,
-      `"email"`,
-      `p."createdAt" AT TIME ZONE 'UTC' AT TIME ZONE 'Australia/Sydney'`,
-      `"lastLoggedInAt" AT TIME ZONE 'UTC' AT TIME ZONE 'Australia/Sydney'`,
-      `p."lastUpdatedAt" AT TIME ZONE 'UTC' AT TIME ZONE 'Australia/Sydney'`,
-      `fields`,
+      `u.email AS email`,
+      `u."lastLoggedInAt" AT TIME ZONE 'UTC' AT TIME ZONE 'Australia/Sydney' AS "lastLoggedInAt"`,
     ])
     .execute();
 
-  res.json(clients);
+  res.json(list);
 });
 
 

@@ -44,7 +44,6 @@ const MyLodgementCard = (props) => {
       title={<>
       <Text style={{whiteSpace: 'break-spaces'}}>{name}</Text>
       <Paragraph type="secondary"><small>{moment(createdAt).format('DD MMM YYYY')}</small></Paragraph>
-      {/* <Button type="link" onClick={handleDelete} danger>Delete</Button> */}
       </>}
       extra={<>
         <LodgementProgressBar status={status} width={80} />

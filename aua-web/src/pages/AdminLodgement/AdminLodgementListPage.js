@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Tabs, Typography, Layout, Button, Select, Table } from 'antd';
+import { Tabs, Typography, Layout, Button, Select, Table, Input } from 'antd';
 import PosterAdminGrid from 'components/grids/PosterAdminGrid';
 import GalleryAdminGrid from 'components/grids/GalleryAdminGrid';
 import BusinessAdminGrid from 'components/grids/BusinessAdminGrid';
@@ -13,20 +13,21 @@ import * as moment from 'moment';
 import windowSize from 'react-window-size';
 import Text from 'antd/lib/typography/Text';
 import {
-  ExclamationCircleOutlined, EditOutlined
+  ExclamationCircleOutlined, EditOutlined, SearchOutlined
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import Modal from 'antd/lib/modal/Modal';
 import { List } from 'antd';
 import { Space } from 'antd';
 
-import { listLodgement, saveLodgement, assignLodgement } from 'services/lodgementService';
+import { listLodgement, searchLodgement, assignLodgement } from 'services/lodgementService';
 import { random } from 'lodash';
 import { listJobTemplate } from 'services/jobTemplateService';
 import { listPortofolio } from 'services/portofolioService';
 import { LodgementProgressBar } from 'components/LodgementProgressBar';
 import { AutoComplete } from 'antd';
 import { listAgents } from 'services/userService';
+import Highlighter from "react-highlight-words";
 
 const { Title, Paragraph } = Typography;
 const { TabPane } = Tabs;
@@ -47,6 +48,15 @@ const LayoutStyled = styled(Layout)`
   background-color: #ffffff;
 `;
 
+const DEFAULT_QUERY_INFO = {
+  text: '',
+  page: 1,
+  size: 50,
+  total: 0,
+  status: ['submitted', 'to_sign'],
+  orderField: 'lastUpdatedAt',
+  orderDirection: 'DESC'
+};
 
 const AdminLodgementListPage = (props) => {
 
@@ -55,8 +65,8 @@ const AdminLodgementListPage = (props) => {
   const [lodgementList, setLodgementList] = React.useState([{ isNewButton: true }]);
   const [currentId, setCurrentId] = React.useState();
   const [agentList, setAgentList] = React.useState([]);
-  const [filteredInfo, setFilteredInfo] = React.useState({});
-  const [sortedInfo, setSortedInfo] = React.useState({});
+
+  const [queryInfo, setQueryInfo] = React.useState(DEFAULT_QUERY_INFO)
 
   const columnDef = [
     {
@@ -65,14 +75,14 @@ const AdminLodgementListPage = (props) => {
       key: 'id',
       // filteredValue: filteredInfo.name || null,
       onFilter: (value, record) => record.name.includes(value),
-      render: (text, record) => text,
-      ellipsis: true
+      render: (text, record) => <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text}/>,
+      ellipsis: true,
     },
     {
       title: 'From',
       dataIndex: 'displayName',
       key: 'id',
-      render: (text, record) => text
+      render: (text, record) => <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text}/>
     },
     {
       title: 'Created At',
@@ -87,9 +97,7 @@ const AdminLodgementListPage = (props) => {
       title: 'Job',
       dataIndex: 'jobTemplateName',
       key: 'id',
-      render: (text, record) => {
-        return text;
-      },
+      render: (text, record) => <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text}/>,
       ellipsis: true
     },
     {
@@ -151,13 +159,18 @@ const AdminLodgementListPage = (props) => {
   ];
 
   const handleTableChange = (pagination, filters, sorter) => {
-    setFilteredInfo(filters);
-    setSortedInfo(sorter);
+    debugger;
+    const newQueryInfo = {
+      ...queryInfo,
+    }
+    if (sorter) {
+      newQueryInfo.orderField = sorter.field;
+      newQueryInfo.orderDirection = sorter.order
+    }
   }
 
   const clearAllFilters = () => {
-    setFilteredInfo({});
-    setSortedInfo({});
+    setQueryInfo({ ...DEFAULT_QUERY_INFO });
   }
 
   const assignLodgementToAgent = async (lodgement, agentId) => {
@@ -165,15 +178,34 @@ const AdminLodgementListPage = (props) => {
     await loadList();
   }
 
+  const loadLodgementWithQuery = async (queryInfo) => {
+    setLoading(true);
+    const { data, pagination: { total } } = await searchLodgement(queryInfo);
+
+    setLodgementList(data);
+    setQueryInfo({ ...queryInfo, total })
+    setLoading(false);
+  }
+
   const loadList = async () => {
     setLoading(true);
-    const list = await listLodgement();
+    await loadLodgementWithQuery(DEFAULT_QUERY_INFO);
     const agentList = await listAgents();
-    setLodgementList(list);
     setAgentList(agentList);
     setLoading(false);
   }
 
+  const handleSearch = async (value) => {
+    const text = value?.trim();
+    if(!text) return;
+
+    const newQueryInfo = {
+      ...queryInfo,
+      text
+    }
+
+    await loadLodgementWithQuery(newQueryInfo);
+  }
 
   React.useEffect(() => {
     loadList();
@@ -188,17 +220,28 @@ const AdminLodgementListPage = (props) => {
             <Title level={2} style={{ margin: 'auto' }}>Lodgement</Title>
           </StyledTitleRow>
           <Paragraph>Lodgements are predefined information that can be automatically filled into your lodgement. You can save the information like name, phone, address, TFN, and etc. for future usage.</Paragraph>
-
-          <Button onClick={() => clearAllFilters()}>Create All Filters</Button>
-          <Table columns={columnDef} 
-          dataSource={lodgementList} 
-          // scroll={{x: 1000}}
-          onChange={handleTableChange}
-          onRow={(record, index) => ({
-            onDoubleClick: e => {
-              props.history.push(`/lodgement/proceed/${record.id}`);
-            }
-          })}
+          <Space>
+            <Input.Search
+              placeholder="input search text"
+              enterButton={<><SearchOutlined /> Search</>}
+              onSearch={value => handleSearch(value)}
+              loading={loading}
+              allowClear
+            />
+            <Button onClick={() => clearAllFilters()}>Create All Filters</Button>
+          </Space>
+          <Table columns={columnDef}
+            dataSource={lodgementList}
+            // scroll={{x: 1000}}
+            rowKey={record => record.id}
+            loading={loading}
+            pagination={queryInfo}
+            onChange={handleTableChange}
+            onRow={(record, index) => ({
+              onDoubleClick: e => {
+                props.history.push(`/lodgement/proceed/${record.id}`);
+              }
+            })}
           ></Table>
           {/* <List
             grid={{

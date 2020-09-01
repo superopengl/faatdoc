@@ -131,6 +131,9 @@ const MyLodgementForm = (props) => {
         await deleteLodgement(lodgement.id);
         props.onChange();
       },
+      okButtonProps: {
+        danger: true
+      },
       okText: 'Yes, delete it!'
     });
   }

@@ -10,6 +10,7 @@ import * as fse from 'fs-extra';
 import * as fs from 'fs';
 import { uuidToRelativePath } from '../utils/uuidToRelativePath';
 import { assertRole } from '../utils';
+import { getUtcNow } from '../utils/getUtcNow';
 
 function getDirByFileId(uuid) {
   const localPath = process.env.AUA_FILE_STORAGE_PATH;
@@ -35,8 +36,12 @@ function getFilePathByFileId(uuid, name) {
 
 export const downloadFile = handlerWrapper(async (req, res) => {
   const { id } = req.params;
-  const file = await getRepository(File).findOne(id);
+  const repo = getRepository(File);
+  const file = await repo.findOne(id);
   assert(file, 404);
+
+  file.lastReadAt = getUtcNow();
+  await repo.save(file);
 
   const fullPath = path.resolve(process.env.AUA_FILE_STORAGE_PATH, file.location);
 
@@ -64,6 +69,7 @@ export const searchFileList = handlerWrapper(async (req, res) => {
 export const uploadFile = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client', 'agent');
   const { id } = req.params;
+  const { requiresSign } = req.query;
   assert(id, 404, 'Image ID not specified');
   const { file } = (req as any).files;
   assert(file, 404, 'No file uploaded');
@@ -77,7 +83,8 @@ export const uploadFile = handlerWrapper(async (req, res) => {
     fileName: name,
     mime: mimetype,
     location: relative,
-    md5
+    md5,
+    requiresSign: Boolean(requiresSign)
   };
 
   const repo = getRepository(File);
