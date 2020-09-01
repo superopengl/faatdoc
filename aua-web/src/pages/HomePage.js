@@ -33,15 +33,15 @@ display: flex;
 align-items: center;
 justify-content: center;
 border: none;
-// background-color: rgba(34, 7, 94, 0.8);
-background-color: rgba(255,255,255, 0.8);
-color: rgba(34, 7, 94, 0.8);
-box-shadow: 1px 1px 5px #22075e;
+background-color: rgba(20, 62, 134, 0.8);
+color: white;
+// box-shadow: 1px 1px 5px #222222;
+border: 2px solid white;
 
 &:focus,&:hover,&:active {
-  border: none;
-  background-color: rgba(255,255,255, 0.8);
-  color: rgb(34, 7, 94);
+color: white;
+background-color: rgba(20, 62, 134, 0.8);
+border: 2px solid white;
 }
 `;
 
