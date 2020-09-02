@@ -141,7 +141,7 @@ const AdminLodgementListPage = (props) => {
       dataIndex: 'signedAt',
       sorter: (a, b) => moment(a.createdAt).toDate() - moment(b.createdAt).toDate(),
       render: (text, record) => {
-        return <Space size="small"><TimeAgo value={text} /><Button shape="circle" icon={<SearchOutlined />} onClick={() => handleShowSignDetail(record.id)} /></Space>;
+        return <Space size="small"><TimeAgo value={text} extra={<Button shape="circle" icon={<SearchOutlined />} onClick={() => handleShowSignDetail(record.id)} />}/></Space>;
       }
     },
     {

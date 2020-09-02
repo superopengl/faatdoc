@@ -99,7 +99,7 @@ const MyLodgementForm = (props) => {
 
   const handleCancel = () => {
     form.resetFields();
-    props.onFinish();
+    props.onCancel();
   }
 
   const handleSelectedTemplate = async (values) => {

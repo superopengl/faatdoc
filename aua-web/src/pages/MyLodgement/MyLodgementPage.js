@@ -99,7 +99,7 @@ const MyLodgementPage = (props) => {
     }
   }
 
-  const handleModalOk = async () => {
+  const handleModalExit = async () => {
     setEditModalVisible(false);
     setSignModalVisible(false);
     await loadList();
@@ -110,13 +110,15 @@ const MyLodgementPage = (props) => {
       setEditModalVisible(false);
     } else {
       Modal.confirm({
-        title: 'Disgard the changes without saving?',
+        title: 'Exit editing without saving?',
         icon: <ExclamationCircleOutlined />,
-        okText: 'Yes, disgard the changes',
-        okButtonProps: {
-          danger: true
+        okText: 'Continue editing',
+        cancelText : `Exit without save`,
+        cancelButtonProps: {
+          danger: true,
+          ghost: true
         },
-        onOk: () => handleModalOk(),
+        onCancel: () => handleModalExit(),
         maskClosable: true,
         // cancelText: 'No, continue changing'
       });
@@ -173,7 +175,7 @@ const MyLodgementPage = (props) => {
       </ContainerStyled>
       {editModalVisible && <Modal
         visible={editModalVisible}
-        onOk={() => handleModalOk()}
+        onOk={() => handleModalExit()}
         onCancel={() => handleConfirmAndCancel()}
         footer={null}
         title="Create/Edit Lodgement"
@@ -181,8 +183,8 @@ const MyLodgementPage = (props) => {
         style={{ maxWidth: 700 }}
       >
         <LodgementForm
-          onChange={() => handleModalOk()}
-          onCancel={() => handleModalOk()}
+          onChange={() => handleModalExit()}
+          onCancel={() => handleModalExit()}
           jobTemplateList={jobTemplateList}
           portofolioList={portofolioList}
           id={currentLodgement?.id}
@@ -198,10 +200,10 @@ const MyLodgementPage = (props) => {
       >
         <Tabs>
           <Tabs.TabPane tab="Review and Sign" key="sign">
-            <ReviewSignPage id={currentLodgement?.id} onFinish={() => handleModalOk()} onCancel={() => setSignModalVisible(false)}/>
+            <ReviewSignPage id={currentLodgement?.id} onFinish={() => handleModalExit()} onCancel={() => setSignModalVisible(false)}/>
           </Tabs.TabPane>
           <Tabs.TabPane tab="Lodgement" key="view">
-            <LodgementForm id={currentLodgement?.id} onFinish={() => handleModalOk()} onCancel={() => setSignModalVisible(false)}/>
+            <LodgementForm id={currentLodgement?.id} onFinish={() => handleModalExit()} onCancel={() => setSignModalVisible(false)}/>
           </Tabs.TabPane>
         </Tabs>
       </Modal>}
