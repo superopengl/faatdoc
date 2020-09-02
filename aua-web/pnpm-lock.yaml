@@ -34,6 +34,7 @@ dependencies:
   react-time-ago: 6.0.1_react-dom@16.13.1+react@16.13.1
   react-to-print: 2.9.0_react-dom@16.13.1+react@16.13.1
   react-window-size: 1.2.2_react@16.13.1
+  reactjs-localstorage: 1.0.1
   styled-components: 5.1.1_479e60ee9c1aa71dc1eb81036e3619dc
   uuid: 8.3.0
   validator: 13.1.1
@@ -11012,6 +11013,10 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha512-YMZQQq32xHLX0bz5Mnibv1/LHb3Sqzngu7xstSM+vrkE5Kzr9xE0yMByK5kMoTK30YVJE61WfbxIFFvfeDKT1w==
+  /reactjs-localstorage/1.0.1:
+    dev: false
+    resolution:
+      integrity: sha512-eNSwfiVyVDhfjw9h83PBvgqQcFxmyK6KGPrPlutuaaTlALRZVQLZ0MAN72iU9UT+bKtscwtdogHQ2ikZ7rjT+w==
   /read-pkg-up/2.0.0:
     dependencies:
       find-up: 2.1.0
@@ -13632,6 +13637,7 @@ specifiers:
   react-time-ago: ^6.0.1
   react-to-print: ^2.9.0
   react-window-size: ^1.2.2
+  reactjs-localstorage: ^1.0.1
   styled-components: ^5.1.0
   uuid: ^8.3.0
   validator: ^13.1.1

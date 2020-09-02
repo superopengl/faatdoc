@@ -1,4 +1,5 @@
 import { httpPost, httpGet } from './http';
+import {reactLocalStorage} from 'reactjs-localstorage';
 
 export async function login(name, password) {
   const data = { name, password };
@@ -18,6 +19,7 @@ export async function resetPassword(token, password) {
 }
 
 export async function logout() {
+  reactLocalStorage.clear();
   httpPost(`auth/logout`).catch(() => {});
   window.location = '/';
 }

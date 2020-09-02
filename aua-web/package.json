@@ -38,6 +38,7 @@
     "react-time-ago": "^6.0.1",
     "react-to-print": "^2.9.0",
     "react-window-size": "^1.2.2",
+    "reactjs-localstorage": "^1.0.1",
     "styled-components": "^5.1.0",
     "uuid": "^8.3.0",
     "validator": "^13.1.1"

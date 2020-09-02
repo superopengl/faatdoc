@@ -29,6 +29,7 @@ import { listAgents } from 'services/userService';
 import Highlighter from "react-highlight-words";
 import ReviewSignPage from 'pages/MyLodgement/ReviewSignPage';
 import { TimeAgo } from 'components/TimeAgo';
+import {reactLocalStorage} from 'reactjs-localstorage';
 
 const { Title, Paragraph } = Typography;
 const { TabPane } = Tabs;
@@ -67,7 +68,12 @@ const AdminLodgementListPage = (props) => {
   const [currentId, setCurrentId] = React.useState();
   const [agentList, setAgentList] = React.useState([]);
 
-  const [queryInfo, setQueryInfo] = React.useState(DEFAULT_QUERY_INFO)
+  const [queryInfo, setQueryInfoRaw] = React.useState(reactLocalStorage.getObject('query', DEFAULT_QUERY_INFO, true))
+
+  const setQueryInfo = (queryInfo) => {
+    reactLocalStorage.setObject('query', queryInfo);
+    setQueryInfoRaw(queryInfo);
+  }
 
   const columnDef = [
     {
@@ -235,6 +241,7 @@ const AdminLodgementListPage = (props) => {
               onSearch={value => handleSearch(value)}
               onPressEnter={e => handleSearch(e.target.value)}
               loading={loading}
+              defaultValue={queryInfo?.text}
               allowClear
             />
 
@@ -245,7 +252,7 @@ const AdminLodgementListPage = (props) => {
               allowClear
               style={{ width: '100%' }}
               placeholder="Status filter"
-              defaultValue={['submitted', 'to_sign', 'signed']}
+              defaultValue={queryInfo?.status || []}
               onChange={handleStatusFilter}
             >
               <Select.Option value='draft'>Draft</Select.Option>
