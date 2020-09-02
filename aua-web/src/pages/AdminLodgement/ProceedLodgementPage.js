@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
-import { Input, Button, Form, Select, DatePicker, Layout, Modal, Space, Typography, Radio, Row, Col } from 'antd';
+import { Input, Button, Form, Select, Drawer, Layout, Modal, Space, Typography, Radio, Row, Col } from 'antd';
 import { FileUploader } from 'components/FileUploader';
 import HomeHeader from 'components/HomeHeader';
 
@@ -176,11 +176,11 @@ const ProceedLodgementPage = (props) => {
         <Space style={{ width: '100%', justifyContent: 'space-between' }}>
           <LodgementProgressBar status={lodgement.status} width={80} />
           <Space direction="horizontal" style={{ width: '100%', justifyContent: 'flex-end' }} size="middle">
-            <Button block type="link" onClick={() => handleCancel()}>Cancel</Button>
+            <Button block type="link" onClick={() => handleCancel()}>Go to List</Button>
             <Button block type="primary" danger disabled={loading} onClick={() => handleArchiveLodgement()}>Archive</Button>
             <Button block type="primary" ghost disabled={loading} onClick={() => handleCompleteLodgement()}>Complete</Button>
             <Button block type="primary" ghost disabled={loading} onClick={() => handleRequestSign()}>Request Sign</Button>
-            <Button block type="primary" ghost disabled={loading} onClick={() => handleMessage()}>Message</Button>
+            <Button block type="primary" ghost disabled={loading} onClick={() => handleMessage()}>Communication</Button>
             <Button block type="primary" htmlType="submit" disabled={loading}>Save</Button>
           </Space>
         </Space>
@@ -200,12 +200,12 @@ const ProceedLodgementPage = (props) => {
                   {type === 'text' ? <Input disabled={loading} /> :
                     type === 'year' ? <DateInput picker="year" placeholder="YYYY" disabled={loading} /> :
                       type === 'number' ? <Input disabled={loading} type="number" /> :
-                          type === 'paragraph' ? <Input.TextArea disabled={loading} /> :
-                            type === 'date' ? <DateInput picker="date" disabled={loading} placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD" /> :
-                              type === 'select' ? <Radio.Group disabled={loading} buttonStyle="solid">
-                                {field.options.map((x, i) => <Radio key={i} style={{ display: 'block', height: '2rem' }} value={x.value}>{x.label}</Radio>)}
-                              </Radio.Group> :
-                                null}
+                        type === 'paragraph' ? <Input.TextArea disabled={loading} /> :
+                          type === 'date' ? <DateInput picker="date" disabled={loading} placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD" /> :
+                            type === 'select' ? <Radio.Group disabled={loading} buttonStyle="solid">
+                              {field.options.map((x, i) => <Radio key={i} style={{ display: 'block', height: '2rem' }} value={x.value}>{x.label}</Radio>)}
+                            </Radio.Group> :
+                              null}
                 </Form.Item>
               );
             })}
@@ -222,7 +222,7 @@ const ProceedLodgementPage = (props) => {
               return (
                 <Form.Item key={i} {...formItemProps}>
                   <FileUploader disabled={loading} />
-            </Form.Item>
+                </Form.Item>
               );
             })}
           </Col>
@@ -232,17 +232,19 @@ const ProceedLodgementPage = (props) => {
       }
       {/* <Divider type="vertical" style={{ height: "100%" }} /> */}
     </ContainerStyled>
-    {lodgement && <Modal
+    {/* {lodgement && <Modal
       title="Communication"
       visible={showsMessage}
       onCancel={() => setShowsMessage(false)}
       onOk={() => setShowsMessage(false)}
       footer={null}
       width={700}
-      bodyStyle={{maxHeight: '90vh'}}
+      bodyStyle={{ maxHeight: '90vh' }}
     >
       <LodgementChat lodgementId={lodgement.id} />
-    </Modal>}
+    </Modal>} */}
+
+      {lodgement && <LodgementChat visible={showsMessage} onClose={() => setShowsMessage(false)} lodgementId={lodgement?.id} />}
 
   </LayoutStyled >
 

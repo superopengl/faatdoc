@@ -85,29 +85,6 @@ class HomePage extends React.Component {
           <section>
             <HomeCarouselArea></HomeCarouselArea>
           </section>
-          {/* <section>
-        <HomeBusinessArea title="Top Business" bgColor="#ffffff" group="top"></HomeBusinessArea>
-      </section>
-      <section>
-        <HomeBusinessArea title="New Business" bgColor="#f5f5f5" group="new"></HomeBusinessArea>
-      </section>
-      <section>
-        <HomeBusinessArea title="Restaurant" bgColor="#ffffff" group="restaurant"></HomeBusinessArea>
-      </section>
-      <section>
-        <HomeBusinessArea title="Life" bgColor="#f5f5f5" group="life"></HomeBusinessArea>
-      </section>
-      <section>
-        <HomeBusinessArea title="Auto" bgColor="#ffffff" group="auto"></HomeBusinessArea>
-      </section>
-      <HashAnchorPlaceholder id="events" />
-      <section>
-        <HomeEventArea title="Upcoming Events" bgColor="#f5f5f5"></HomeEventArea>
-      </section> */}
-          {/* <section id="gallery">
-        <HomeGalleryArea title="Gallery" bgColor="#ffffff"></HomeGalleryArea>
-      </section> */}
-          {/* <section id="about"><HomeAboutArea bgColor="#ffffff" row={2}></HomeAboutArea></section> */}
           <HashAnchorPlaceholder id="services" />
           <section><HomeServiceArea /></section>
           <HashAnchorPlaceholder id="team" />

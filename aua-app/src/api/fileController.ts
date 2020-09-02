@@ -40,8 +40,11 @@ export const downloadFile = handlerWrapper(async (req, res) => {
   const file = await repo.findOne(id);
   assert(file, 404);
 
-  file.lastReadAt = getUtcNow();
-  await repo.save(file);
+  if (req.user?.role === 'client') {
+    // Only record the read by client
+    file.lastReadAt = getUtcNow();
+    await repo.save(file);
+  }
 
   const fullPath = path.resolve(process.env.AUA_FILE_STORAGE_PATH, file.location);
 

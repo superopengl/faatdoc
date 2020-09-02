@@ -199,10 +199,11 @@ const AdminLodgementListPage = (props) => {
 
   const handleShowSignDetail = async (lodgementId) => {
     Modal.info({
-      title: 'Client sign details',
+      title: 'Client Review And Sign Details',
       content: <ReviewSignPage id={lodgementId} readonly={true} />,
       width: 700,
-      icon: null
+      icon: null,
+      maskClosable: true,
     });
   }
 

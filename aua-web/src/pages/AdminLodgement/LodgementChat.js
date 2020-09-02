@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
-import { Input, Button, Form, Select, DatePicker, Layout, Modal, Space, Typography, Radio, Row, Col } from 'antd';
+import { Input, Button, Form, Select, DatePicker, Layout, Drawer, Space, Typography, Radio, Row, Col } from 'antd';
 import { FileUploader } from 'components/FileUploader';
 import HomeHeader from 'components/HomeHeader';
 
@@ -67,18 +67,13 @@ border: 1px solid #eeeeee;
 const MessageListInner = styled.div`
 display: flex;
 flex-direction: column-reverse;
-height: 100%;
+// height: 100%;
 `;
 
-const StyledMessage = (props) => <div style={{ margin: '0.5rem 0' }}><MessageBox {...props} /></div>
-
-const LayoutStyled = styled(Layout)`
-  margin: 0 auto 0 auto;
-  background-color: #ffffff;
-`;
+const StyledMessage = (props) => <MessageBox {...props} />
 
 const LodgementChat = (props) => {
-  const { lodgementId } = props;
+  const { lodgementId, visible, onClose } = props;
   // const { name, id, fields } = value || {};
 
   const [loading, setLoading] = React.useState(true);
@@ -111,51 +106,52 @@ const LodgementChat = (props) => {
     setLoading(false);
   }
 
-  return (<Space direction="vertical" style={{width: '100%'}}>
-    <MessageListContainer>
-      <MessageListInner>
-      {list.map((x, i) => <StyledMessage
-        key={i}
-        position="right"
-        type="text"
-        text={x.content}
-        date={moment(x.createdAt).toDate()}
-        status={x.status || 'sent'} // waiting, sent, received, read
-        notch={false}
-      />)}
-      </MessageListInner>
-    </MessageListContainer>
-    <ChatInputContainer>
-      <Form onFinish={sendMessage} form={form}>
-        <Form.Item name="content" style={{marginBottom: 4}}>
+  return (
+    <Drawer
+      title="Communication"
+      placement="right"
+      closable={true}
+      visible={visible}
+      onClose={() => onClose()}
+      width={800}
+      bodyStyle={{padding: '0 10px'}}
+      footer={<Form onFinish={sendMessage} form={form}>
+        <Form.Item name="content" style={{ marginBottom: 4 }}>
           <Input.TextArea autoSize={{ minRows: 3, maxRows: 20 }} maxLength={2000} placeholder="Type here ..." allowClear disabled={loading} />
         </Form.Item>
         <Button type="primary" ghost block icon={<SendOutlined />} htmlType="submit" disabled={loading} >Send</Button>
-      </Form>
-      {/* <ChatInput
-        style={{ position: 'absolute', bottom: 0 }}
-        placeholder="Type here..."
-        multiline={true}
-        autoHeight={true}
-        minHeight={40}
-        maxHeight={120}
-        rightButtons={
-          <ChatButton
-            color='white'
-            backgroundColor='black'
-            text='Send' />
-        } /> */}
-
-    </ChatInputContainer>
-  </Space>
-
+      </Form>}
+    >
+      <Space direction="vertical" style={{ width: '100%', backgroundColor: '#143e86', padding: '10px 0', flexDirection: 'column-reverse' }}>
+        {list.map((x, i) => <StyledMessage
+          key={i}
+          position="right"
+          type="text"
+          text={x.content}
+          date={moment(x.createdAt).toDate()}
+          status={x.status || 'sent'} // waiting, sent, received, read
+          notch={false}
+        />)}
+        {/* <ChatInputContainer>
+          <Form onFinish={sendMessage} form={form}>
+            <Form.Item name="content" style={{ marginBottom: 4 }}>
+              <Input.TextArea autoSize={{ minRows: 3, maxRows: 20 }} maxLength={2000} placeholder="Type here ..." allowClear disabled={loading} />
+            </Form.Item>
+            <Button type="primary" ghost block icon={<SendOutlined />} htmlType="submit" disabled={loading} >Send</Button>
+          </Form>
+        </ChatInputContainer> */}
+      </Space>
+    </Drawer>
   );
 };
 
 LodgementChat.propTypes = {
-  lodgementId: PropTypes.string.isRequired
+  lodgementId: PropTypes.string.isRequired,
+  visible: PropTypes.bool.isRequired
 };
 
-LodgementChat.defaultProps = {};
+LodgementChat.defaultProps = {
+  visible: false
+};
 
 export default withRouter(LodgementChat);
