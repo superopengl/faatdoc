@@ -129,9 +129,9 @@ const SignUpPage = (props) => {
               }]}>
                 <Checkbox disabled={sending}>I have read and agree to the <a target="_blank" href="/terms_and_conditions">terms & conditions</a> and <a target="_blank" href="/privacy_policy">privacy policy</a>.</Checkbox>
               </Form.Item>
-              <Form.Item label="" name="isEmployee" rules={[{ required: false }]}>
+              {/* <Form.Item label="" name="isEmployee" rules={[{ required: false }]}>
                 <Checkbox disabled={sending}>I am an employee of AU Accounting Office</Checkbox>
-              </Form.Item>
+              </Form.Item> */}
               <Form.Item>
                 <Button block type="primary" htmlType="submit" disabled={sending}>Sign Up</Button>
               </Form.Item>

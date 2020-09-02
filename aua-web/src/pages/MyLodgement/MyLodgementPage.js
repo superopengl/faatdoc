@@ -64,7 +64,7 @@ const MyLodgementPage = (props) => {
     const jobTemplateList = await listJobTemplate() || [];
     const portofolioList = await listPortofolio() || [];
 
-    setLodgementList([...list, { isNewButton: true }]);
+    setLodgementList(list);
     setJobTemplateList(jobTemplateList);
     setPortofolioList(portofolioList);
     setLoading(false);
@@ -131,9 +131,8 @@ const MyLodgementPage = (props) => {
           <StyledTitleRow>
             <Title level={2} style={{ margin: 'auto' }}>Lodgement</Title>
           </StyledTitleRow>
+          <Button type="primary" ghost icon={<PlusOutlined/>} onClick={() => openModalToCreate()}>Create New Lodgement</Button>
           <Divider>Ongoing Lodgments</Divider>
-          <Paragraph>Lodgements are predefined information that can be automatically filled into your lodgement. You can save the information like name, phone, address, TFN, and etc. for future usage.</Paragraph>
-
           <List
             grid={{
               gutter: 24,
@@ -147,8 +146,8 @@ const MyLodgementPage = (props) => {
             dataSource={lodgementList.filter(x => x.status !== 'done')}
             renderItem={item => (
               <List.Item key={item.id}>
-                {item.isNewButton && <LargePlusButton onClick={() => openModalToCreate()} />}
-                {!item.isNewButton && <LodgementCard onClick={() => openLodgement(item)} onDelete={() => loadList()} value={item} />}
+                {/* {item.isNewButton && <LargePlusButton onClick={() => openModalToCreate()} />} */}
+                <LodgementCard onClick={() => openLodgement(item)} onDelete={() => loadList()} value={item} />
               </List.Item>
             )}
           />

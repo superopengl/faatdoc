@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Tabs, Typography, Layout, Button, Row, Card } from 'antd';
+import { Tabs, Typography, Layout, Button, Row, Divider } from 'antd';
 import PosterAdminGrid from 'components/grids/PosterAdminGrid';
 import GalleryAdminGrid from 'components/grids/GalleryAdminGrid';
 import BusinessAdminGrid from 'components/grids/BusinessAdminGrid';
@@ -52,7 +52,7 @@ const PortofolioPage = (props) => {
 
   const loadList = async () => {
     const data = await listPortofolio();
-    setList([...data, { isNewButton: true }]);
+    setList(data);
   }
 
   React.useEffect(() => {
@@ -84,7 +84,8 @@ const PortofolioPage = (props) => {
             <Title level={2} style={{ margin: 'auto' }}>Portofolio</Title>
           </StyledTitleRow>
           <Paragraph>Portofolios are predefined information that can be automatically filled into your lodgement. You can save the information like name, phone, address, TFN, and etc. for future usage.</Paragraph>
-
+          <Button type="primary" ghost icon={<PlusOutlined/>} onClick={() => openModalToCreate()}>Create New Portofolio</Button>
+          <Divider/>
           <List
             grid={{
               gutter: 24,
@@ -98,8 +99,7 @@ const PortofolioPage = (props) => {
             dataSource={list}
             renderItem={item => (
               <List.Item key={item.id}>
-                {item.isNewButton && <LargePlusButton onClick={() => openModalToCreate()} />}
-                {!item.isNewButton && <PortofolioCard onClick={() => openModalToEdit(item.id)} onDelete={() => loadList()} id={item.id} name={item.name} />}
+                <PortofolioCard onClick={() => openModalToEdit(item.id)} onDelete={() => loadList()} id={item.id} name={item.name} />
               </List.Item>
             )}
           />
