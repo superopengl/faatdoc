@@ -52,7 +52,7 @@ const MyLodgementPage = (props) => {
   const [loading, setLoading] = React.useState(true);
   const [editModalVisible, setEditModalVisible] = React.useState(false);
   const [signModalVisible, setSignModalVisible] = React.useState(false);
-  const [lodgementList, setLodgementList] = React.useState([{ isNewButton: true }]);
+  const [lodgementList, setLodgementList] = React.useState([]);
   const [jobTemplateList, setJobTemplateList] = React.useState([]);
   const [portofolioList, setPortofolioList] = React.useState([]);
   const [currentLodgement, setCurrentLodgement] = React.useState();
@@ -146,7 +146,6 @@ const MyLodgementPage = (props) => {
             dataSource={lodgementList.filter(x => x.status !== 'done')}
             renderItem={item => (
               <List.Item key={item.id}>
-                {/* {item.isNewButton && <LargePlusButton onClick={() => openModalToCreate()} />} */}
                 <LodgementCard onClick={() => openLodgement(item)} onDelete={() => loadList()} value={item} />
               </List.Item>
             )}

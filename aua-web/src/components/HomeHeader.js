@@ -99,7 +99,7 @@ class HomeHeaderRaw extends React.Component {
             return (
               <HeaderStyled>
                 <HeaderLogo>
-                  <HashLink to="/#home">
+                  <HashLink to="/">
                   <img alt="AUA logo" src="/images/header-logo.png" width="auto" height="60" style={{padding: '2px 0 2px 0'}}></img>
                   </HashLink>
                   {/* {isAdmin && <Text>Admin</Text>} */}

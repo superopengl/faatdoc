@@ -155,7 +155,10 @@ class ClientsPage extends React.Component {
             <Title level={2} style={{ margin: 'auto' }}>Clients Management</Title>
           </StyledTitleRow>
           {showNarrowScreenWarning && <Text type="warning"><ExclamationCircleOutlined /> This admin page will be more convenient on wide screens.</Text>}
-          <Table columns={columnDef} dataSource={data} />
+          <Table 
+          rowKey={record => record.id}
+          columns={columnDef} 
+          dataSource={data} />
         </ContainerStyled>
       </LayoutStyled >
     );

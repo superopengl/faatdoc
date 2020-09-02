@@ -49,7 +49,6 @@ const SignUpPage = (props) => {
   }
 
   const handleSignUp = async (values) => {
-    debugger;
     if (sending) {
       return;
     }

@@ -71,6 +71,7 @@ export const listClients = handlerWrapper(async (req, res) => {
     .leftJoin(q => q.from(Portofolio, 'p').select('*'), 'p', 'u.id = p."userId"')
     .leftJoin(l => l.from(Lodgement, 'l').select('*'), 'l', 'p.id = l."portofolioId"')
     .select([
+      `u.id AS id`,
       `u.email AS email`,
       `u."lastLoggedInAt" AT TIME ZONE 'UTC' AT TIME ZONE 'Australia/Sydney' AS "lastLoggedInAt"`,
     ])

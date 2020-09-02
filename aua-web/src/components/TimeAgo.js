@@ -32,5 +32,6 @@ TimeAgo.propTypes = {
 };
 
 TimeAgo.defaultProps = {
-  direction: 'vertical'
+  direction: 'vertical',
+  value: ''
 };

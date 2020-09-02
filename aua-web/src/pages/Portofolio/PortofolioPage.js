@@ -47,7 +47,7 @@ const LayoutStyled = styled(Layout)`
 const PortofolioPage = (props) => {
 
   const [modalVisible, setModalVisible] = React.useState(false);
-  const [list, setList] = React.useState([{ isNewButton: true }]);
+  const [list, setList] = React.useState([]);
   const [currentId, setCurrentId] = React.useState();
 
   const loadList = async () => {

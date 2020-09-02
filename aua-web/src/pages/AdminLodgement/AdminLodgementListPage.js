@@ -63,7 +63,7 @@ const AdminLodgementListPage = (props) => {
 
   const [loading, setLoading] = React.useState(true);
   const [modalVisible, setModalVisible] = React.useState(false);
-  const [lodgementList, setLodgementList] = React.useState([{ isNewButton: true }]);
+  const [lodgementList, setLodgementList] = React.useState([]);
   const [currentId, setCurrentId] = React.useState();
   const [agentList, setAgentList] = React.useState([]);
 
@@ -73,49 +73,42 @@ const AdminLodgementListPage = (props) => {
     {
       title: 'Name',
       dataIndex: 'name',
-      key: 'id',
       // filteredValue: filteredInfo.name || null,
       onFilter: (value, record) => record.name.includes(value),
-      render: (text, record) => <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text} />,
+      render: (text, record) => <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text || ''} />,
       ellipsis: false,
     },
     {
       title: 'For',
       dataIndex: 'displayName',
-      key: 'id',
-      render: (text, record) => <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text} />
+      render: (text, record) => <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text || ''} />
     },
     {
       title: 'Client',
       dataIndex: 'email',
-      key: 'id',
       render: (text, record) => text
     },
     {
       title: 'Created At',
       dataIndex: 'createdAt',
-      key: 'id',
       sorter: (a, b) => moment(a.createdAt).toDate() - moment(b.createdAt).toDate(),
       render: (text, record) => <TimeAgo value={text} />
     },
     {
       title: 'Job',
       dataIndex: 'jobTemplateName',
-      key: 'id',
-      render: (text, record) => <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text} />,
+      render: (text, record) => <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text || ''} />,
       ellipsis: false
     },
     {
       title: 'Status',
       dataIndex: 'status',
-      key: 'id',
       render: (text, record) => <LodgementProgressBar width={50} status={text}></LodgementProgressBar>,
       ellipsis: false
     },
     {
       title: 'Assignee',
       dataIndex: 'agentId',
-      key: 'id',
       // filteredValue: filteredInfo.agentId || null,
       // filters: agentList.map(a => ({ text: `${a.givenName} ${a.surname}`, value: a.id })),
       onFilter: (value, record) => record.agentId === value,
@@ -133,7 +126,6 @@ const AdminLodgementListPage = (props) => {
       title: 'Last Update At',
       dataIndex: 'lastUpdatedAt',
       sorter: (a, b) => moment(a.createdAt).toDate() - moment(b.createdAt).toDate(),
-      key: 'id',
       render: (text, record) => {
         return <TimeAgo value={text} />;
       }
@@ -142,14 +134,12 @@ const AdminLodgementListPage = (props) => {
       title: 'Signed At',
       dataIndex: 'signedAt',
       sorter: (a, b) => moment(a.createdAt).toDate() - moment(b.createdAt).toDate(),
-      key: 'id',
       render: (text, record) => {
         return <Space size="small"><TimeAgo value={text} /><Button shape="circle" icon={<SearchOutlined />} onClick={() => handleShowSignDetail(record.id)} /></Space>;
       }
     },
     {
       title: 'Action',
-      key: 'action',
       // fixed: 'right',
       // width: 200,
       render: (text, record) => (
@@ -161,7 +151,6 @@ const AdminLodgementListPage = (props) => {
   ];
 
   const handleTableChange = (pagination, filters, sorter) => {
-    debugger;
     const newQueryInfo = {
       ...queryInfo,
     }
@@ -268,7 +257,7 @@ const AdminLodgementListPage = (props) => {
           <Table columns={columnDef}
             dataSource={lodgementList}
             // scroll={{x: 1000}}
-            rowKey={record => record.id}
+            rowKey="id"
             loading={loading}
             pagination={queryInfo}
             onChange={handleTableChange}
@@ -278,42 +267,9 @@ const AdminLodgementListPage = (props) => {
               }
             })}
           ></Table>
-          {/* <List
-            grid={{
-              gutter: 24,
-              xs: 1,
-              sm: 1,
-              md: 2,
-              lg: 2,
-              xl: 3,
-              xxl: 4,
-            }}
-            dataSource={lodgementList}
-            renderItem={item => (
-              <List.Item key={item.id}>
-                {item.isNewButton && <LargePlusButton onClick={() => openModalToCreate()} />}
-                {!item.isNewButton && <LodgementCard onClick={() => openModalToEdit(item.id)} onDelete={() => loadList()} value={item} />}
-              </List.Item>
-            )}
-          /> */}
         </Space>
 
       </ContainerStyled>
-      {/* {modalVisible && <Modal
-        visible={modalVisible}
-        onOk={() => handleModalCancel()}
-        onCancel={() => handleModalCancel()}
-        footer={null}
-        title="Create/Edit Lodgement"
-        width="90vw"
-        style={{ maxWidth: 700 }}
-      >
-        <LodgementForm
-          onChange={() => handleModalCancel()}
-          onCancel={() => handleModalCancel()}
-          id={currentId}
-        />
-      </Modal>} */}
     </LayoutStyled >
   );
 };

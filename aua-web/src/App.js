@@ -1,7 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import 'antd/dist/antd.less';
 import 'react-image-lightbox/style.css';
-import { Route, BrowserRouter, Switch } from 'react-router-dom';
+import { Route, BrowserRouter, Switch, Redirect } from 'react-router-dom';
 import HomePage from 'pages/HomePage';
 import AdminPage from 'pages/AdminPage';
 import LogInPage from 'pages/LogInPage';
@@ -24,7 +26,23 @@ import PortofolioPage from 'pages/Portofolio/PortofolioPage';
 import AdminLodgementListPage from 'pages/AdminLodgement/AdminLodgementListPage';
 import ProceedLodgementPage from 'pages/AdminLodgement/ProceedLodgementPage';
 import { getAuthUser } from 'services/authService';
+import { Spin } from 'antd';
 
+
+const RoleRoute = props => {
+  const { visible, loading, component, ...otherProps } = props;
+  return <Route {...otherProps} component={loading ? null : visible ? component : OtherPage} />
+}
+
+PortofolioPage.propTypes = {
+  visible: PropTypes.bool,
+  loading: PropTypes.bool
+};
+
+RoleRoute.defaultProps = {
+  visible: true,
+  loading: true
+}
 
 class App extends React.Component {
   constructor(props) {
@@ -33,17 +51,19 @@ class App extends React.Component {
     this.state = {
       user: null,
       role: 'guest',
-      loading: false,
+      loading: true,
       setUser: this.setUser,
       setLoading: this.setLoading,
     };
   }
 
   async componentDidMount() {
+    this.setLoading(true);
     const user = await getAuthUser();
     if (user) {
       this.setUser(user);
     }
+    this.setLoading(false);
   }
 
   setUser = (user) => {
@@ -55,7 +75,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { role } = this.state;
+    const { role, loading } = this.state;
     const isAdmin = role === 'admin';
     const isGuest = role === 'guest';
     const isClient = role === 'client';
@@ -65,24 +85,22 @@ class App extends React.Component {
       <GlobalContext.Provider value={this.state}>
         <BrowserRouter basename="/">
           <Switch>
-            <Route path="/" exact component={HomePage} />
-            {isGuest && <Route path="/login" exact component={LogInPage} />}
-            {(isAdmin || isGuest) && <Route path="/signup" component={SignUpPage} />}
-            {isClient && <Route path="/portofolio" component={PortofolioPage} />}
-            <Route path="/forgot_password" exact component={ForgotPasswordPage} />
-            <Route path="/reset_password" exact component={ResetPasswordPage} />
-            {isAdmin && <Route path="/admin" exact component={AdminPage} />}
-            {isAdmin && <Route path="/job_template" exact component={JobAdminPage} />}
-            {isAdmin && <Route path="/clients" exact component={ClientsPage} />}
-            {isAdmin && <Route path="/tasks" exact component={ClientsPage} />}
-            {isClient && <Route path="/lodgement" exact component={MyLodgementPage} />}
-            {(isAdmin || isAgent) && <Route path="/lodgement" exact component={AdminLodgementListPage} />}
-            {(isAdmin || isAgent) && <Route path="/lodgement/proceed/:id" exact component={ProceedLodgementPage} />}
-            {!isGuest && <Route path="/change_password" exact component={ChangePasswordPage} />}
-            <Route path="/terms_and_conditions" exact component={TermAndConditionPage} />
-            <Route path="/privacy_policy" exact component={PrivacyPolicyPage} />
-            <Route component={OtherPage} />
-            {/* {(isMember || isAdmin) && <Route component={Error404} />} */}
+            <RoleRoute loading={loading} path="/" exact component={HomePage} />
+            <RoleRoute visible={isGuest} loading={loading} path="/login" exact component={LogInPage} />
+            <RoleRoute visible={isAdmin || isGuest} loading={loading} path="/signup" component={SignUpPage} />
+            <RoleRoute loading={loading} path="/forgot_password" exact component={ForgotPasswordPage} />
+            <RoleRoute visible={isClient} loading={loading} path="/portofolio" component={PortofolioPage} />
+            <RoleRoute loading={loading} path="/reset_password" exact component={ResetPasswordPage} />
+            <RoleRoute visible={isAdmin} loading={loading} path="/admin" exact component={AdminPage} />
+            <RoleRoute visible={isAdmin} loading={loading} path="/job_template" exact component={JobAdminPage} />
+            <RoleRoute visible={isAdmin} loading={loading} path="/clients" exact component={ClientsPage} />
+            <RoleRoute visible={isAdmin} loading={loading} path="/tasks" exact component={ClientsPage} />
+            <RoleRoute visible={isAdmin || isAgent || isClient} loading={loading} path="/lodgement" exact component={isClient ? MyLodgementPage : AdminLodgementListPage} />
+            <RoleRoute visible={isAdmin || isAgent} loading={loading} path="/lodgement/proceed/:id" exact component={ProceedLodgementPage} />
+            <RoleRoute visible={!isGuest} loading={loading} path="/change_password" exact component={ChangePasswordPage} />
+            <RoleRoute loading={loading} path="/terms_and_conditions" exact component={TermAndConditionPage} />
+            <RoleRoute loading={loading} path="/privacy_policy" exact component={PrivacyPolicyPage} />
+            <Redirect to="/" />
           </Switch>
         </BrowserRouter>
       </GlobalContext.Provider>
