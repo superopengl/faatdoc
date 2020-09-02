@@ -139,19 +139,16 @@ export const FileUploader = (props) => {
         iconRender={getFileIcon}
         showUploadList={true}
       >
-        {/* <div style={{ marginTop: '1rem' }}>
-            <Button disabled={disabled || fileList.length >= maxSize}>
-              <UploadOutlined /> Upload (maximum {maxSize} files)
-          </Button>
-          </div> */}
-
-        <p className="ant-upload-drag-icon">
-          <InboxOutlined />
-        </p>
-        <p className="ant-upload-text">Click or drag file to this area to upload</p>
-        <p className="ant-upload-hint">
-          Support for a single or bulk upload.
-    </p>
+        {disabled ? <p>File upload is disabled</p>
+        : <>
+          <p className="ant-upload-drag-icon">
+            <InboxOutlined />
+          </p>
+          <p className="ant-upload-text">Click or drag file to this area to upload</p>
+          <p className="ant-upload-hint">
+            Support for a single or bulk upload.
+          </p>
+        </>}
       </Dragger>
     </Container>
   );

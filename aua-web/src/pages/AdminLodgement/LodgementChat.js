@@ -73,7 +73,7 @@ flex-direction: column-reverse;
 const StyledMessage = (props) => <MessageBox {...props} />
 
 const LodgementChat = (props) => {
-  const { lodgementId, visible, onClose } = props;
+  const { lodgementId, visible, onClose, readonly } = props;
   // const { name, id, fields } = value || {};
 
   const [loading, setLoading] = React.useState(true);
@@ -115,7 +115,7 @@ const LodgementChat = (props) => {
       onClose={() => onClose()}
       width={800}
       bodyStyle={{padding: '0 10px'}}
-      footer={<Form onFinish={sendMessage} form={form}>
+      footer={readonly ? null : <Form onFinish={sendMessage} form={form}>
         <Form.Item name="content" style={{ marginBottom: 4 }}>
           <Input.TextArea autoSize={{ minRows: 3, maxRows: 20 }} maxLength={2000} placeholder="Type here ..." allowClear disabled={loading} />
         </Form.Item>
@@ -147,11 +147,13 @@ const LodgementChat = (props) => {
 
 LodgementChat.propTypes = {
   lodgementId: PropTypes.string.isRequired,
-  visible: PropTypes.bool.isRequired
+  visible: PropTypes.bool.isRequired,
+  readonly: PropTypes.bool.isRequired,
 };
 
 LodgementChat.defaultProps = {
-  visible: false
+  visible: false,
+  readonly: false
 };
 
 export default withRouter(LodgementChat);

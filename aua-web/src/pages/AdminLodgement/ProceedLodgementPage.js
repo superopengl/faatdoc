@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
-import { Input, Button, Form, Select, Drawer, Layout, Modal, Space, Typography, Radio, Row, Col } from 'antd';
+import { Input, Button, Form, PageHeader, Drawer, Layout, Modal, Descriptions, Typography, Radio, Row, Col } from 'antd';
 import { FileUploader } from 'components/FileUploader';
 import HomeHeader from 'components/HomeHeader';
 
@@ -161,9 +161,13 @@ const ProceedLodgementPage = (props) => {
     setShowsMessage(true);
   }
 
-  const handleSignDocChange = (value) => {
-
-  }
+  const inputDisabled = loading || ['draft', 'archive', 'done'].includes(lodgement.status);
+  const archiveDisabled = loading || ['draft', 'archive', 'done'].includes(lodgement.status);
+  const completeDisabled = loading || ['draft', 'archive', 'done'].includes(lodgement.status);
+  const requiresSignDisabled = loading || 'submitted' !== lodgement.status;
+  const communicateDisabled = loading;
+  const saveDisabled = loading || ['draft', 'archive', 'done', 'signed'].includes(lodgement.status);
+  const communicationReadonly = loading || ['draft', 'archive', 'done'].includes(lodgement.status);
 
   return (<LayoutStyled>
     <HomeHeader></HomeHeader>
@@ -172,19 +176,19 @@ const ProceedLodgementPage = (props) => {
         onValuesChange={handleValuesChange}
         onFinish={handleSubmit}
         style={{ textAlign: 'left', width: '100%' }} initialValues={getFormInitialValues()}>
-        <Title>{lodgement.name}</Title>
-        <Space style={{ width: '100%', justifyContent: 'space-between' }}>
-          <LodgementProgressBar status={lodgement.status} width={80} />
-          <Space direction="horizontal" style={{ width: '100%', justifyContent: 'flex-end' }} size="middle">
-            <Button block type="link" onClick={() => handleCancel()}>Go to List</Button>
-            <Button block type="primary" danger disabled={loading} onClick={() => handleArchiveLodgement()}>Archive</Button>
-            <Button block type="primary" ghost disabled={loading} onClick={() => handleCompleteLodgement()}>Complete</Button>
-            <Button block type="primary" ghost disabled={loading} onClick={() => handleRequestSign()}>Request Sign</Button>
-            <Button block type="primary" ghost disabled={loading} onClick={() => handleMessage()}>Communication</Button>
-            <Button block type="primary" htmlType="submit" disabled={loading}>Save</Button>
-          </Space>
-        </Space>
-
+        <PageHeader
+          onBack={() => handleCancel()}
+          title={lodgement.name}
+          subTitle={<LodgementProgressBar status={lodgement.status} width={60} />}
+          extra={[
+            <Button key="1" type="primary" danger disabled={archiveDisabled} onClick={() => handleArchiveLodgement()}>Archive</Button>,
+            <Button key="2" type="primary" ghost disabled={completeDisabled} onClick={() => handleCompleteLodgement()}>Complete</Button>,
+            <Button key="3" type="primary" ghost disabled={requiresSignDisabled} onClick={() => handleRequestSign()}>Request Sign</Button>,
+            <Button key="4" type="primary" ghost disabled={communicateDisabled} onClick={() => handleMessage()}>Communication</Button>,
+            <Button key="5" type="primary" htmlType="submit" disabled={saveDisabled}>Save</Button>,
+          ]}
+        >
+        </PageHeader>
         <Divider />
         <Row gutter={32}>
           <Col span={12}>
@@ -197,12 +201,12 @@ const ProceedLodgementPage = (props) => {
               }
               return (
                 <Form.Item key={i} {...formItemProps}>
-                  {type === 'text' ? <Input disabled={loading} /> :
-                    type === 'year' ? <DateInput picker="year" placeholder="YYYY" disabled={loading} /> :
-                      type === 'number' ? <Input disabled={loading} type="number" /> :
-                        type === 'paragraph' ? <Input.TextArea disabled={loading} /> :
-                          type === 'date' ? <DateInput picker="date" disabled={loading} placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD" /> :
-                            type === 'select' ? <Radio.Group disabled={loading} buttonStyle="solid">
+                  {type === 'text' ? <Input disabled={inputDisabled} /> :
+                    type === 'year' ? <DateInput picker="year" placeholder="YYYY" disabled={inputDisabled} /> :
+                      type === 'number' ? <Input disabled={inputDisabled} type="number" /> :
+                        type === 'paragraph' ? <Input.TextArea disabled={inputDisabled} /> :
+                          type === 'date' ? <DateInput picker="date" disabled={inputDisabled} placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD" /> :
+                            type === 'select' ? <Radio.Group disabled={inputDisabled} buttonStyle="solid">
                               {field.options.map((x, i) => <Radio key={i} style={{ display: 'block', height: '2rem' }} value={x.value}>{x.label}</Radio>)}
                             </Radio.Group> :
                               null}
@@ -221,7 +225,7 @@ const ProceedLodgementPage = (props) => {
               }
               return (
                 <Form.Item key={i} {...formItemProps}>
-                  <FileUploader disabled={loading} />
+                  <FileUploader disabled={inputDisabled} />
                 </Form.Item>
               );
             })}
@@ -244,7 +248,7 @@ const ProceedLodgementPage = (props) => {
       <LodgementChat lodgementId={lodgement.id} />
     </Modal>} */}
 
-      {lodgement && <LodgementChat visible={showsMessage} onClose={() => setShowsMessage(false)} lodgementId={lodgement?.id} />}
+    {lodgement && <LodgementChat visible={showsMessage} onClose={() => setShowsMessage(false)} lodgementId={lodgement?.id} readonly={communicationReadonly} />}
 
   </LayoutStyled >
 

@@ -71,7 +71,7 @@ const AdminLodgementListPage = (props) => {
 
   const columnDef = [
     {
-      title: 'Name',
+      title: 'Lodgement Name',
       dataIndex: 'name',
       // filteredValue: filteredInfo.name || null,
       onFilter: (value, record) => record.name.includes(value),
@@ -79,7 +79,7 @@ const AdminLodgementListPage = (props) => {
       ellipsis: false,
     },
     {
-      title: 'For',
+      title: 'For Whom',
       dataIndex: 'displayName',
       render: (text, record) => <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text || ''} />
     },
