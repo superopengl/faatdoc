@@ -31,13 +31,13 @@ const ContainerStyled = styled.div`
   width: 100%;
 `;
 
-const Container = styled.div`
-padding-top: 64px;
+const Container = styled(Space)`
+// padding-top: 2rem;
 width: 100%;
 height: 100%;
-position: relative;
-display: flex;
-flex-direction: column-reverse;
+// position: relative;
+// display: flex;
+// flex-direction: column-reverse;
 `
 const ChatInputContainer = styled.div`
 // position: absolute;
@@ -45,19 +45,29 @@ bottom: 0;
 right: 0;
 left: 0;
 width: 100%;
-background-color: white;
-border: 1px solid rgb(217, 217, 217);
+// background-color: white;
+// border: 1px solid rgb(217, 217, 217);
 // border-radius: 4px;
 // padding: 4px;
 `;
 
 const MessageListContainer = styled.div`
-display: flex;
-flex-direction: column-reverse;
+
 // padding: 1rem;
 overflow-x: hidden;
 overflow-y: auto;
-// background-color: #143e86;
+background-color: #143e86;
+border: 1px solid #eeeeee;
+
+.rce-mbox {
+  margin-right: 5px;
+}
+`;
+
+const MessageListInner = styled.div`
+display: flex;
+flex-direction: column-reverse;
+height: 100%;
 `;
 
 const StyledMessage = (props) => <div style={{ margin: '0.5rem 0' }}><MessageBox {...props} /></div>
@@ -101,13 +111,26 @@ const LodgementChat = (props) => {
     setLoading(false);
   }
 
-  return (<Container>
+  return (<Space direction="vertical" style={{width: '100%'}}>
+    <MessageListContainer>
+      <MessageListInner>
+      {list.map((x, i) => <StyledMessage
+        key={i}
+        position="right"
+        type="text"
+        text={x.content}
+        date={moment(x.createdAt).toDate()}
+        status={x.status || 'sent'} // waiting, sent, received, read
+        notch={false}
+      />)}
+      </MessageListInner>
+    </MessageListContainer>
     <ChatInputContainer>
       <Form onFinish={sendMessage} form={form}>
         <Form.Item name="content" style={{marginBottom: 4}}>
-          <Input.TextArea autoSize={{ minRows: 2, maxRows: 20 }} placeholder="Type here ..." allowClear disabled={loading} />
+          <Input.TextArea autoSize={{ minRows: 3, maxRows: 20 }} maxLength={2000} placeholder="Type here ..." allowClear disabled={loading} />
         </Form.Item>
-        <Button type="primary" ghost icon={<SendOutlined />} htmlType="submit" disabled={loading} >Send</Button>
+        <Button type="primary" ghost block icon={<SendOutlined />} htmlType="submit" disabled={loading} >Send</Button>
       </Form>
       {/* <ChatInput
         style={{ position: 'absolute', bottom: 0 }}
@@ -124,18 +147,7 @@ const LodgementChat = (props) => {
         } /> */}
 
     </ChatInputContainer>
-    <MessageListContainer>
-      {list.map((x, i) => <StyledMessage
-        key={i}
-        position="right"
-        type="text"
-        text={x.content}
-        date={moment(x.createdAt).toDate()}
-        status={x.status || 'sent'} // waiting, sent, received, read
-        notch={false}
-      />)}
-    </MessageListContainer>
-  </Container>
+  </Space>
 
   );
 };

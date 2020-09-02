@@ -39,6 +39,7 @@ const JobTemplateForm = (props) => {
 
   const [entity, setEntity] = React.useState();
   const [name, setName] = React.useState('');
+  const [requiresSign, setRequiresSign] = React.useState(true);
   const [fields, setFields] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
 
@@ -92,6 +93,7 @@ const JobTemplateForm = (props) => {
     const newEntity = {
       ...entity,
       name,
+      requiresSign,
       fields: fields.map(f => ({ name: getVarNameFromDisplayName(f.name), ...f })),
     }
     await saveJobTemplate(newEntity);
@@ -167,6 +169,7 @@ const JobTemplateForm = (props) => {
       <Space direction="vertical" size="small" style={{ width: '100%' }}>
         <Text>Name</Text>
         <Input placeholder="Job Template Name" value={name} onChange={e => setName(e.target.value)} />
+        <Checkbox checked={requiresSign} onChange={e => setRequiresSign(e.target.checked)}>Client signature is required</Checkbox>
       </Space>
       <Space direction="vertical" size="small" style={{ width: '100%' }}>
         <Text>Field Definitions</Text>

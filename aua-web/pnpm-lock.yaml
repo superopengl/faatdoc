@@ -11,6 +11,7 @@ dependencies:
   google-map-react: 2.0.8_react-dom@16.13.1+react@16.13.1
   google-maps-react: 2.0.6_react-dom@16.13.1+react@16.13.1
   history: 5.0.0
+  javascript-time-ago: 2.0.13
   lodash: 4.17.19
   mime-format: 2.0.0
   moment: 2.27.0
@@ -30,6 +31,7 @@ dependencies:
   react-router-dom: 5.2.0_react@16.13.1
   react-router-hash-link: 2.0.0_f32e785fa5e199175d00c0f3e09c74b3
   react-scripts: 3.4.1
+  react-time-ago: 6.0.1_react-dom@16.13.1+react@16.13.1
   react-to-print: 2.9.0_react-dom@16.13.1+react@16.13.1
   react-window-size: 1.2.2_react@16.13.1
   styled-components: 5.1.1_479e60ee9c1aa71dc1eb81036e3619dc
@@ -6849,6 +6851,12 @@ packages:
       node: '>=6'
     resolution:
       integrity: sha512-uu1F/L1o5Y6LzPVSVZXNOoD/KXpJue9aeLRd0sM9uMXfZvzomB0WxVamWb5ue8kA2vVWEmW7EG+A5n3f1kqHKg==
+  /javascript-time-ago/2.0.13:
+    dependencies:
+      relative-time-format: 0.1.3
+    dev: false
+    resolution:
+      integrity: sha512-zH+obXUQ4vlc9UlERFe637rNJQaVYLizwODUfGzYN/cNW/owkk5wzb327gAfEXFpI4yhFcStEaoqoJtMGAmrAg==
   /jest-changed-files/24.9.0:
     dependencies:
       '@jest/types': 24.9.0
@@ -10962,6 +10970,18 @@ packages:
     dev: false
     resolution:
       integrity: sha1-Mf2vThgXd2bFfRsfMzApD4SSqFo=
+  /react-time-ago/6.0.1_react-dom@16.13.1+react@16.13.1:
+    dependencies:
+      javascript-time-ago: 2.0.13
+      prop-types: 15.7.2
+      react: 16.13.1
+      react-dom: 16.13.1_react@16.13.1
+    dev: false
+    peerDependencies:
+      react: '>=0.16.8'
+      react-dom: '>=0.16.8'
+    resolution:
+      integrity: sha512-ivRY3ooB52PXoDdm4sbpdAkEYnw91Lhz8IRQ951L9iSv5dmGonQ225u3cm0XfF7aaEQhpEf+U8YS268WhzIa9w==
   /react-to-print/2.9.0_react-dom@16.13.1+react@16.13.1:
     dependencies:
       prop-types: 15.7.2
@@ -11218,6 +11238,10 @@ packages:
       node: '>= 0.10'
     resolution:
       integrity: sha1-VNvzd+UUQKypCkzSdGANP/LYiKk=
+  /relative-time-format/0.1.3:
+    dev: false
+    resolution:
+      integrity: sha512-0O6i4fKjsx8qhz57zorG+LrIDnF9pSvP5s7H9R1Nb5nSqih5dvRyKzNKs6MxhL3bv4iwsz4DuDwAyw+c47QFIA==
   /remove-trailing-separator/1.1.0:
     dev: false
     resolution:
@@ -13583,6 +13607,7 @@ specifiers:
   google-map-react: ^2.0.8
   google-maps-react: ^2.0.6
   history: ^5.0.0
+  javascript-time-ago: ^2.0.13
   lodash: ^4.17.15
   mime-format: ^2.0.0
   moment: ^2.25.3
@@ -13604,6 +13629,7 @@ specifiers:
   react-router-dom: ^5.2.0
   react-router-hash-link: ^2.0.0
   react-scripts: 3.4.1
+  react-time-ago: ^6.0.1
   react-to-print: ^2.9.0
   react-window-size: ^1.2.2
   styled-components: ^5.1.0

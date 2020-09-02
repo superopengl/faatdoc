@@ -18,6 +18,8 @@ export class JobTemplate {
   @Column()
   lastUpdatedAt: Date;
 
+  @Column()
+  requiresSign: boolean;
 
   @Column({ type: 'json' })
   fields: any;

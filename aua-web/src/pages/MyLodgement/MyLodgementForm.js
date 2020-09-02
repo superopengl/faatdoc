@@ -99,7 +99,7 @@ const MyLodgementForm = (props) => {
 
   const handleCancel = () => {
     form.resetFields();
-    props.onCancel();
+    props.onFinish();
   }
 
   const handleSelectedTemplate = async (values) => {
@@ -149,10 +149,11 @@ const MyLodgementForm = (props) => {
   const disabled = !canEdit || loading;
 
   // console.log('value', formInitValues);
+  const showsGenerator = !lodgement && jobTemplateList && portofolioList;
 
   return (<>
     <Space direction="vertical" size="large" style={{ width: '100%' }}>
-      {!lodgement && <LodgementGenerator onChange={handleSelectedTemplate} jobTemplateList={jobTemplateList} portofolioList={portofolioList} />}
+      {showsGenerator && <LodgementGenerator onChange={handleSelectedTemplate} jobTemplateList={jobTemplateList} portofolioList={portofolioList} />}
 
       {lodgement && <Form form={form} layout="vertical"
         onValuesChange={handleValuesChange}

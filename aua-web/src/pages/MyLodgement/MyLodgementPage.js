@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Tabs, Typography, Layout, Button, Row, Modal, Divider } from 'antd';
+import { Tabs, Typography, Layout, Button, Modal, Divider } from 'antd';
 import PosterAdminGrid from 'components/grids/PosterAdminGrid';
 import GalleryAdminGrid from 'components/grids/GalleryAdminGrid';
 import BusinessAdminGrid from 'components/grids/BusinessAdminGrid';
@@ -24,6 +24,8 @@ import { listLodgement, saveLodgement } from 'services/lodgementService';
 import { random } from 'lodash';
 import { listJobTemplate } from 'services/jobTemplateService';
 import { listPortofolio } from 'services/portofolioService';
+import ReviewSignPage from './ReviewSignPage';
+import { TabPaneProps } from 'antd/lib/tabs';
 
 const { Title, Paragraph } = Typography;
 const { TabPane } = Tabs;
@@ -48,7 +50,8 @@ const LayoutStyled = styled(Layout)`
 const MyLodgementPage = (props) => {
 
   const [loading, setLoading] = React.useState(true);
-  const [modalVisible, setModalVisible] = React.useState(false);
+  const [editModalVisible, setEditModalVisible] = React.useState(false);
+  const [signModalVisible, setSignModalVisible] = React.useState(false);
   const [lodgementList, setLodgementList] = React.useState([{ isNewButton: true }]);
   const [jobTemplateList, setJobTemplateList] = React.useState([]);
   const [portofolioList, setPortofolioList] = React.useState([]);
@@ -84,28 +87,36 @@ const MyLodgementPage = (props) => {
       return;
     }
     setCurrentLodgement();
-    setModalVisible(true);
+    setEditModalVisible(true);
   }
 
-  const openModalToEdit = lodgement => {
+  const openLodgement = lodgement => {
     setCurrentLodgement(lodgement);
-    setModalVisible(true);
+    if (lodgement.status === 'to_sign') {
+      setSignModalVisible(true);
+    } else {
+      setEditModalVisible(true);
+    }
   }
 
-  const handleModalCancel = () => {
-    setModalVisible(false);
-    loadList();
+  const handleModalOk = async () => {
+    setEditModalVisible(false);
+    setSignModalVisible(false);
+    await loadList();
   }
 
   const handleConfirmAndCancel = () => {
     if (currentLodgement?.status === 'done') {
-      setModalVisible(false);
+      setEditModalVisible(false);
     } else {
       Modal.confirm({
         title: 'Disgard the changes without saving?',
         icon: <ExclamationCircleOutlined />,
         okText: 'Yes, disgard the changes',
-        onOk: () => handleModalCancel(),
+        okButtonProps: {
+          danger: true
+        },
+        onOk: () => handleModalOk(),
         maskClosable: true,
         // cancelText: 'No, continue changing'
       });
@@ -137,7 +148,7 @@ const MyLodgementPage = (props) => {
             renderItem={item => (
               <List.Item key={item.id}>
                 {item.isNewButton && <LargePlusButton onClick={() => openModalToCreate()} />}
-                {!item.isNewButton && <LodgementCard onClick={() => openModalToEdit(item)} onDelete={() => loadList()} value={item} />}
+                {!item.isNewButton && <LodgementCard onClick={() => openLodgement(item)} onDelete={() => loadList()} value={item} />}
               </List.Item>
             )}
           />
@@ -155,16 +166,16 @@ const MyLodgementPage = (props) => {
             dataSource={lodgementList.filter(x => x.status === 'done')}
             renderItem={item => (
               <List.Item key={item.id}>
-                <LodgementCard onClick={() => openModalToEdit(item)} value={item} />
+                <LodgementCard onClick={() => openLodgement(item)} value={item} />
               </List.Item>
             )}
           />
         </Space>
 
       </ContainerStyled>
-      {modalVisible && <Modal
-        visible={modalVisible}
-        onOk={() => handleModalCancel()}
+      {editModalVisible && <Modal
+        visible={editModalVisible}
+        onOk={() => handleModalOk()}
         onCancel={() => handleConfirmAndCancel()}
         footer={null}
         title="Create/Edit Lodgement"
@@ -172,12 +183,29 @@ const MyLodgementPage = (props) => {
         style={{ maxWidth: 700 }}
       >
         <LodgementForm
-          onChange={() => handleModalCancel()}
-          onCancel={() => handleModalCancel()}
+          onChange={() => handleModalOk()}
+          onCancel={() => handleModalOk()}
           jobTemplateList={jobTemplateList}
           portofolioList={portofolioList}
           id={currentLodgement?.id}
         />
+      </Modal>}
+      {signModalVisible && <Modal
+        title={currentLodgement?.name || 'New Lodgement'}
+        visible={signModalVisible}
+        onCancel={() => setSignModalVisible(false)}
+        onOk={() => setSignModalVisible(false)}
+        footer={null}
+        width={700}
+      >
+        <Tabs>
+          <Tabs.TabPane tab="Review and Sign" key="sign">
+            <ReviewSignPage id={currentLodgement?.id} onFinish={() => handleModalOk()} onCancel={() => setSignModalVisible(false)}/>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Lodgement" key="view">
+            <LodgementForm id={currentLodgement?.id} onFinish={() => handleModalOk()} onCancel={() => setSignModalVisible(false)}/>
+          </Tabs.TabPane>
+        </Tabs>
       </Modal>}
     </LayoutStyled >
   );

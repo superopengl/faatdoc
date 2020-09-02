@@ -42,6 +42,7 @@ function prefillFieldsWithProtofolio(jobTemplateFields, portofolioFields) {
   return fields;
 }
 
+
 export const generateLodgement = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
   const { jobTemplateId, portofolioId, name } = req.body;
@@ -152,6 +153,7 @@ const defaultSearch: ISearchLodgementQuery = {
   orderDirection: 'DESC'
 };
 
+
 export const searchLodgement = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent');
   const option: ISearchLodgementQuery = { ...defaultSearch, ...req.body };
@@ -162,20 +164,26 @@ export const searchLodgement = handlerWrapper(async (req, res) => {
 
   let query = getManager()
     .createQueryBuilder()
-    .from(Lodgement, 'x')
-    .where(`x.status IN (:...status)`, { status });
+    .from(Lodgement, 'x');
+  if (status?.length) {
+    query = query.where(`x.status IN (:...status)`, { status });
+  }
   if (assignee) {
     query = query.where('x."agentId" = :assignee', { assignee });
   }
   query = query.innerJoin(q => q.from(JobTemplate, 'j').select('*'), 'j', 'j.id = x."jobTemplateId"')
+    .innerJoin(q => q.from(User, 'u').select('*'), 'u', 'x."userId" = u.id')
     .select([
       `x.id as id`,
       `x.name as name`,
       `x."displayName" as "displayName"`,
+      `u.email as email`,
       `x."createdAt" as "createdAt"`,
       `j.name as "jobTemplateName"`,
       `x.agentId as "agentId"`,
       `x.status as status`,
+      `x."lastUpdatedAt" as "lastUpdatedAt"`,
+      `x."signedAt" as "signedAt"`,
     ]);
   if (text) {
     query = query.where('x.name ILIKE :text OR x."displayName" ILIKE :text OR j.name ILIKE :text', { text: `%${text}%` });
@@ -252,11 +260,16 @@ export const assignLodgement = handlerWrapper(async (req, res) => {
   res.json();
 });
 
-export const requstSignLodgement = handlerWrapper(async (req, res) => {
-  assertRole(req, 'admin', 'agent');
+export const signLodgement = handlerWrapper(async (req, res) => {
+  assertRole(req, 'client');
   const { id } = req.params;
 
-  await getRepository(Lodgement).update(id, { status: LodgementStatus.TO_SIGN });
+  const now = getUtcNow();
+  await getRepository(Lodgement).update(id, {
+    signedAt: now,
+    lastUpdatedAt: now,
+    status: LodgementStatus.SIGNED
+  });
 
   res.json();
 });
@@ -267,7 +280,7 @@ export const completeLodgement = handlerWrapper(async (req, res) => {
   const repo = getRepository(Lodgement);
   const lodgement = await repo.findOne(id);
   assert(lodgement, 404);
-  assert(['submitted', 'to_sign'].includes(lodgement.status), 400, 'Status invalid');
+  assert(['submitted', 'to_sign', 'signed'].includes(lodgement.status), 400, 'Status invalid');
 
   await repo.update(id, { status: LodgementStatus.DONE });
 

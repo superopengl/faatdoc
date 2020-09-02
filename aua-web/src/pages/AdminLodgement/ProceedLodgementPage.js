@@ -15,19 +15,20 @@ import { Divider } from 'antd';
 import { BuiltInFieldDef } from "components/FieldDef";
 import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
 import { listJobTemplate } from 'services/jobTemplateService';
-import { deleteLodgement, generateLodgement, getLodgement, saveLodgement, completeLodgement } from 'services/lodgementService';
+import { deleteLodgement, generateLodgement, getLodgement, saveLodgement, completeLodgement, sendLodgementMessage } from 'services/lodgementService';
 import { listPortofolio } from 'services/portofolioService';
 import { getDisplayNameFromVarName } from 'util/getDisplayNameFromVarName';
 import { InputYear } from 'components/InputYear';
 import { DateInput } from 'components/DateInput';
 import LodgementChat from './LodgementChat';
+import { LodgementProgressBar } from 'components/LodgementProgressBar';
 
 const { Text, Paragraph, Title } = Typography;
 const ContainerStyled = styled.div`
   margin-top: 5rem;
   padding: 1rem;
   // max-width: 700px;
-  width: 67vw;
+  width: 100%;
   display: flex;
 `;
 
@@ -53,6 +54,7 @@ const ProceedLodgementPage = (props) => {
   const [lodgement, setLodgement] = React.useState();
   const [jobTemplateId, setJobTemplateId] = React.useState();
   const [portofolioId, setPortofolioId] = React.useState();
+  const [showsMessage, setShowsMessage] = React.useState(false);
 
 
   const loadEntity = async () => {
@@ -76,13 +78,6 @@ const ProceedLodgementPage = (props) => {
     })
 
     return lodgement;
-  }
-
-  const saveDraft = async () => {
-    setLoading(true);
-    await saveLodgement({ name: 'New Lodgment', ...lodgement, status: 'draft' });
-    await props.onChange();
-    setLoading(false);
   }
 
   const handleValuesChange = (changedValues, allValues) => {
@@ -145,6 +140,31 @@ const ProceedLodgementPage = (props) => {
     })
   }
 
+  const handleRequestSign = async () => {
+    const signFiles = lodgement.fields.find(x => x.name === 'requireSign');
+    if (!signFiles?.value?.length) {
+      Modal.error({
+        title: 'Cannot request sign',
+        content: `No files to require sign. Please upload files to the 'Require Sign' field before request sign.`
+      });
+      return;
+    }
+    lodgement.status = 'to_sign';
+    setLoading(true);
+    await saveLodgement(lodgement);
+    await sendLodgementMessage(lodgement.id, `Please sign the documents for lodgement '${lodgement.name}'`);
+    loadEntity();
+    setLoading(false);
+  }
+
+  const handleMessage = () => {
+    setShowsMessage(true);
+  }
+
+  const handleSignDocChange = (value) => {
+
+  }
+
   return (<LayoutStyled>
     <HomeHeader></HomeHeader>
     <ContainerStyled>
@@ -153,6 +173,18 @@ const ProceedLodgementPage = (props) => {
         onFinish={handleSubmit}
         style={{ textAlign: 'left', width: '100%' }} initialValues={getFormInitialValues()}>
         <Title>{lodgement.name}</Title>
+        <Space style={{ width: '100%', justifyContent: 'space-between' }}>
+          <LodgementProgressBar status={lodgement.status} width={80} />
+          <Space direction="horizontal" style={{ width: '100%', justifyContent: 'flex-end' }} size="middle">
+            <Button block type="link" onClick={() => handleCancel()}>Cancel</Button>
+            <Button block type="primary" danger disabled={loading} onClick={() => handleArchiveLodgement()}>Archive</Button>
+            <Button block type="primary" ghost disabled={loading} onClick={() => handleCompleteLodgement()}>Complete</Button>
+            <Button block type="primary" ghost disabled={loading} onClick={() => handleRequestSign()}>Request Sign</Button>
+            <Button block type="primary" ghost disabled={loading} onClick={() => handleMessage()}>Message</Button>
+            <Button block type="primary" htmlType="submit" disabled={loading}>Save</Button>
+          </Space>
+        </Space>
+
         <Divider />
         <Row gutter={32}>
           <Col span={12}>
@@ -168,12 +200,12 @@ const ProceedLodgementPage = (props) => {
                   {type === 'text' ? <Input disabled={loading} /> :
                     type === 'year' ? <DateInput picker="year" placeholder="YYYY" disabled={loading} /> :
                       type === 'number' ? <Input disabled={loading} type="number" /> :
-                        type === 'paragraph' ? <Input.TextArea disabled={loading} /> :
-                          type === 'date' ? <DateInput picker="date" disabled={loading} placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD" /> :
-                            type === 'select' ? <Radio.Group disabled={loading} buttonStyle="solid">
-                              {field.options.map((x, i) => <Radio key={i} style={{ display: 'block', height: '2rem' }} value={x.value}>{x.label}</Radio>)}
-                            </Radio.Group> :
-                              null}
+                          type === 'paragraph' ? <Input.TextArea disabled={loading} /> :
+                            type === 'date' ? <DateInput picker="date" disabled={loading} placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD" /> :
+                              type === 'select' ? <Radio.Group disabled={loading} buttonStyle="solid">
+                                {field.options.map((x, i) => <Radio key={i} style={{ display: 'block', height: '2rem' }} value={x.value}>{x.label}</Radio>)}
+                              </Radio.Group> :
+                                null}
                 </Form.Item>
               );
             })}
@@ -190,40 +222,28 @@ const ProceedLodgementPage = (props) => {
               return (
                 <Form.Item key={i} {...formItemProps}>
                   <FileUploader disabled={loading} />
-                </Form.Item>
+            </Form.Item>
               );
             })}
           </Col>
         </Row>
-        <Divider />
-        <Form.Item>
-          <Space direction="horizontal" style={{ width: '100%' }} size="middle">
-            <Button block type="link" onClick={() => handleCancel()}>Cancel</Button>
-            <Button block type="primary" danger disabled={loading} onClick={() => handleArchiveLodgement()}>Archive</Button>
-            <Button block type="primary" ghost disabled={loading} onClick={() => handleCompleteLodgement()}>Complete</Button>
-            <Button block type="primary" ghost disabled={loading}>Request Sign</Button>
-            <Button block type="primary" htmlType="submit" disabled={loading}>Save</Button>
-          </Space>
-        </Form.Item>
+
       </Form>
       }
       {/* <Divider type="vertical" style={{ height: "100%" }} /> */}
     </ContainerStyled>
-    <Layout.Sider
-      width="33vw"
-      theme="light"
-      style={{
-        height: '100vh',
-        position: 'fixed',
-        right: 0,
-        overflow: 'auto',
-        backgroundColor: '#143e86'
-
-        // display: 'flex'
-      }}
+    {lodgement && <Modal
+      title="Communication"
+      visible={showsMessage}
+      onCancel={() => setShowsMessage(false)}
+      onOk={() => setShowsMessage(false)}
+      footer={null}
+      width={700}
+      bodyStyle={{maxHeight: '90vh'}}
     >
-      {lodgement && <LodgementChat lodgementId={lodgement.id} />}
-    </Layout.Sider>
+      <LodgementChat lodgementId={lodgement.id} />
+    </Modal>}
+
   </LayoutStyled >
 
   );

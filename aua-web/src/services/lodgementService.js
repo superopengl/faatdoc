@@ -20,6 +20,10 @@ export async function searchLodgement(query) {
   return httpPost('lodgement/search', query);
 }
 
+export async function signLodgement(id) {
+  return httpPost(`lodgement/${id}/sign`);
+}
+
 export async function generateLodgement(jobTemplateId, portofolioId) {
   return httpPost('lodgement/generate', {jobTemplateId, portofolioId});
 }
@@ -40,10 +44,6 @@ export async function sendLodgementMessage(lodgementId, msg) {
   const content = msg?.trim();
   if (!content) return;
   return httpPost(`lodgement/${lodgementId}/message`, { content });
-}
-
-export async function requestSignLodgement(lodgementId) {
-  return httpPost(`lodgement/${lodgementId}/request_sign`);
 }
 
 export async function completeLodgement(lodgementId) {

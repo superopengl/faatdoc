@@ -12,7 +12,8 @@ import styled from 'styled-components';
 import { InboxOutlined } from '@ant-design/icons';
 import { searchFile } from 'services/fileService';
 import { getFileUrl } from 'util/getFileUrl';
-import { FileIcon, defaultStyles } from 'react-file-icon';
+import * as moment from 'moment';
+import { FileIcon } from './FileIcon';
 
 const { Dragger } = Upload;
 
@@ -102,20 +103,6 @@ export const FileUploader = (props) => {
     loadFileList();
   }, []);
 
-
-
-  const handleCancel = () => setPreviewVisible(false);
-
-  const handlePreview = async file => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-
-    setPreviewVisible(false);
-    setPreviewImage(file.url || file.preview);
-    setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
-  };
-
   const handleChange = (info) => {
     const { fileList } = info;
     setFileList(fileList);
@@ -130,11 +117,7 @@ export const FileUploader = (props) => {
 
   const maxSize = size || 20;
 
-  const getFileIcon = (file, listType) => {
-    const tokens = file.name.split('.');
-    const ext = tokens[tokens.length -1];
-    return <StyledFileIcon><FileIcon extension={ext}  /></StyledFileIcon>;
-  }
+  const getFileIcon = file => <FileIcon name={file.name} />
 
   return (
     <Container className="clearfix">
@@ -145,7 +128,7 @@ export const FileUploader = (props) => {
         accept="*/*"
         listType="text"
         fileList={fileList}
-        onPreview={handlePreview}
+        // onPreview={handlePreview}
         onChange={handleChange}
         showUploadList={{
           showDownloadIcon: true,
@@ -154,6 +137,7 @@ export const FileUploader = (props) => {
         // iconRender={() => <UploadOutlined />}
         disabled={disabled || fileList.length >= maxSize}
         iconRender={getFileIcon}
+        showUploadList={true}
       >
         {/* <div style={{ marginTop: '1rem' }}>
             <Button disabled={disabled || fileList.length >= maxSize}>
@@ -169,14 +153,6 @@ export const FileUploader = (props) => {
           Support for a single or bulk upload.
     </p>
       </Dragger>
-      <Modal
-        visible={previewVisible}
-        title={previewTitle}
-        footer={null}
-        onCancel={handleCancel}
-      >
-        <a href={previewImage}>Click to download</a>
-      </Modal>
     </Container>
   );
 

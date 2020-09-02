@@ -304,6 +304,20 @@ paths:
       responses:
         200:
           description: OK
+  /lodgement/{id}/sign:
+    post:
+      operationId: signLodgement
+      # security:
+      #   - authClient: []
+      parameters:
+        - name: id
+          in: path
+          type: string
+          format: uuid
+          required: true
+      responses:
+        200:
+          description: OK           
   /lodgement/{id}/assign:
     post:
       operationId: assignLodgement
@@ -317,7 +331,7 @@ paths:
           required: true
       responses:
         200:
-          description: OK
+          description: OK      
   /lodgement/{id}/message:
     get:
       operationId: listLodgementMessage
@@ -344,21 +358,7 @@ paths:
           required: true
       responses:
         200:
-          description: OK
-  /lodgement/{id}/request_sign:
-    post:
-      operationId: requstSignLodgement
-      # security:
-      #   - authClient: []
-      parameters:
-        - name: id
-          in: path
-          type: string
-          format: uuid
-          required: true
-      responses:
-        200:
-          description: OK    
+          description: OK 
   /lodgement/{id}/complete:
     post:
       operationId: completeLodgement
