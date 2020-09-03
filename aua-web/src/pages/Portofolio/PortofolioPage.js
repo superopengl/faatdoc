@@ -79,7 +79,7 @@ const PortofolioPage = (props) => {
     <LayoutStyled>
       <HomeHeader></HomeHeader>
       <ContainerStyled>
-        <Space size="large" direction="vertical" style={{ width: '100%' }}>
+        <Space size="small" direction="vertical" style={{ width: '100%' }}>
           <StyledTitleRow>
             <Title level={2} style={{ margin: 'auto' }}>Portofolio</Title>
           </StyledTitleRow>

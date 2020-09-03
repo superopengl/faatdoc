@@ -109,7 +109,7 @@ const AdminLodgementListPage = (props) => {
     {
       title: 'Status',
       dataIndex: 'status',
-      render: (text, record) => <LodgementProgressBar width={50} status={text}></LodgementProgressBar>,
+      render: (text, record) => <LodgementProgressBar width={60} status={text}></LodgementProgressBar>,
       ellipsis: false
     },
     {
@@ -150,7 +150,7 @@ const AdminLodgementListPage = (props) => {
       // width: 200,
       render: (text, record) => (
         <Space size="middle">
-          <Link to={`/lodgement/proceed/${record.id}`}><Button type="primary" ghost icon={<EditOutlined />}>Proceed</Button></Link>
+          <Link to={`/lodgement/proceed/${record.id}`}><Button shape="circle" icon={<EditOutlined />}></Button></Link>
         </Space>
       ),
     },
@@ -231,7 +231,7 @@ const AdminLodgementListPage = (props) => {
       <ContainerStyled>
         <Space size="large" direction="vertical" style={{ width: '100%' }}>
           <StyledTitleRow>
-            <Title level={2} style={{ margin: 'auto' }}>Lodgement</Title>
+            <Title level={2} style={{ margin: 'auto' }}>Lodgement Management</Title>
           </StyledTitleRow>
           <Paragraph>Lodgements are predefined information that can be automatically filled into your lodgement. You can save the information like name, phone, address, TFN, and etc. for future usage.</Paragraph>
           <Space>
@@ -246,11 +246,10 @@ const AdminLodgementListPage = (props) => {
             />
 
             <Button onClick={() => clearAllFilters()}>Create All Filters</Button>
-          </Space>
           <Select
               mode="multiple"
               allowClear
-              style={{ width: '100%' }}
+              style={{ width: '520px' }}
               placeholder="Status filter"
               defaultValue={queryInfo?.status || []}
               onChange={handleStatusFilter}
@@ -262,6 +261,7 @@ const AdminLodgementListPage = (props) => {
               <Select.Option value='done'>Done</Select.Option>
               <Select.Option value='archive'>Archive</Select.Option>
             </Select>
+          </Space>
           <Table columns={columnDef}
             dataSource={lodgementList}
             // scroll={{x: 1000}}

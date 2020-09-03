@@ -27,22 +27,8 @@ import AdminLodgementListPage from 'pages/AdminLodgement/AdminLodgementListPage'
 import ProceedLodgementPage from 'pages/AdminLodgement/ProceedLodgementPage';
 import { getAuthUser } from 'services/authService';
 import { Spin } from 'antd';
+import {RoleRoute} from 'components/RoleRoute';
 
-
-const RoleRoute = props => {
-  const { visible, loading, component, ...otherProps } = props;
-  return <Route {...otherProps} component={loading ? null : visible ? component : OtherPage} />
-}
-
-PortofolioPage.propTypes = {
-  visible: PropTypes.bool,
-  loading: PropTypes.bool
-};
-
-RoleRoute.defaultProps = {
-  visible: true,
-  loading: true
-}
 
 class App extends React.Component {
   constructor(props) {
@@ -100,7 +86,9 @@ class App extends React.Component {
             <RoleRoute visible={!isGuest} loading={loading} path="/change_password" exact component={ChangePasswordPage} />
             <RoleRoute loading={loading} path="/terms_and_conditions" exact component={TermAndConditionPage} />
             <RoleRoute loading={loading} path="/privacy_policy" exact component={PrivacyPolicyPage} />
-            <Redirect to="/" />
+            {/* <Redirect to="/" /> */}
+            <RoleRoute loading={loading} component={Error404} />
+
           </Switch>
         </BrowserRouter>
       </GlobalContext.Provider>

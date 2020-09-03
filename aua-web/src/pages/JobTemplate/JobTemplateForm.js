@@ -89,14 +89,19 @@ const JobTemplateForm = (props) => {
     setFields([...fields]);
   }
 
+  const validField = (field) => {
+    return field && field.name?.trim() && field.type?.trim();
+  }
+
   const handleSave = async () => {
     const newEntity = {
       ...entity,
       name,
       requiresSign,
-      fields: fields.map(f => ({ name: getVarNameFromDisplayName(f.name), ...f })),
+      fields: fields.filter(f => validField(f)).map(f => ({ name: getVarNameFromDisplayName(f.name), ...f })),
     }
     await saveJobTemplate(newEntity);
+    await loadEntity();
     props.onOk();
     notify.success(<>Successfully saved job template <strong>{name}</strong></>)
   }

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { Typography } from 'antd';
+import { Typography, Result, Button } from 'antd';
 import { HomeOutlined, CloseCircleOutlined } from '@ant-design/icons';
 const ContainerStyled = styled.div`
   margin: 2rem;
@@ -9,12 +9,12 @@ const ContainerStyled = styled.div`
 `;
 const { Title } = Typography;
 const Error404 = () => (
-  <ContainerStyled>
-    <Title type="danger"><CloseCircleOutlined/></Title>
-    <Title>404 Page Not Found</Title>
-    <Link to="/"><HomeOutlined /> Back to home</Link>
-  </ContainerStyled>
-
+<Result
+  status="error"
+  title="404 Page Not Found"
+  subTitle="Sorry, the page you visited does not exist."
+  extra={<Link to="/"><Button type="link" icon={<HomeOutlined />}>Back Home</Button></Link>}
+/>
 );
 
 Error404.propTypes = {};

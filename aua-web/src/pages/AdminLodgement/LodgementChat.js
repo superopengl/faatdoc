@@ -70,6 +70,19 @@ flex-direction: column-reverse;
 // height: 100%;
 `;
 
+const StyledDrawer = styled(Drawer)`
+.rce-mbox {
+  background-color: #143e86;
+  color: rgba(255,255,255,0.9);
+  padding-bottom: 2rem;
+
+  .rce-mbox-time {
+    color: rgba(255,255,255,0.7);
+    bottom: -1.5rem;
+  }
+}
+`;
+
 const StyledMessage = (props) => <MessageBox {...props} />
 
 const LodgementChat = (props) => {
@@ -107,14 +120,14 @@ const LodgementChat = (props) => {
   }
 
   return (
-    <Drawer
+    <StyledDrawer
       title="Communication"
       placement="right"
       closable={true}
       visible={visible}
       onClose={() => onClose()}
       width={800}
-      bodyStyle={{padding: '0 10px'}}
+      bodyStyle={{padding: '0 10px', verticalAlign: 'bottom'}}
       footer={readonly ? null : <Form onFinish={sendMessage} form={form}>
         <Form.Item name="content" style={{ marginBottom: 4 }}>
           <Input.TextArea autoSize={{ minRows: 3, maxRows: 20 }} maxLength={2000} placeholder="Type here ..." allowClear disabled={loading} />
@@ -122,7 +135,7 @@ const LodgementChat = (props) => {
         <Button type="primary" ghost block icon={<SendOutlined />} htmlType="submit" disabled={loading} >Send</Button>
       </Form>}
     >
-      <Space direction="vertical" style={{ width: '100%', backgroundColor: '#143e86', padding: '10px 0', flexDirection: 'column-reverse' }}>
+      <Space direction="vertical" style={{ width: '100%', padding: '10px 0', flexDirection: 'column-reverse' }}>
         {list.map((x, i) => <StyledMessage
           key={i}
           position="right"
@@ -141,7 +154,7 @@ const LodgementChat = (props) => {
           </Form>
         </ChatInputContainer> */}
       </Space>
-    </Drawer>
+    </StyledDrawer>
   );
 };
 

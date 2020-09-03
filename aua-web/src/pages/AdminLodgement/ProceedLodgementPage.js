@@ -179,7 +179,7 @@ const ProceedLodgementPage = (props) => {
         <PageHeader
           onBack={() => handleCancel()}
           title={lodgement.name}
-          subTitle={<LodgementProgressBar status={lodgement.status} width={60} />}
+          subTitle={<LodgementProgressBar status={lodgement.status} width={80} />}
           extra={[
             <Button key="1" type="primary" danger disabled={archiveDisabled} onClick={() => handleArchiveLodgement()}>Archive</Button>,
             <Button key="2" type="primary" ghost disabled={completeDisabled} onClick={() => handleCompleteLodgement()}>Complete</Button>,

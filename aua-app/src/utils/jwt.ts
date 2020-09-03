@@ -7,6 +7,7 @@ import { UserRole } from 'aws-sdk/clients/workmail';
 import { assert } from './assert';
 
 const cookieName = 'jwt';
+const isProd = process.env.NODE_ENV === 'prod';
 
 export function attachJwtCookie(user: { id: string, email: string, role: UserRole }, res) {
   const payload = {
@@ -22,6 +23,9 @@ export function attachJwtCookie(user: { id: string, email: string, role: UserRol
     maxAge: 1000 * 60 * 60 * 24, // 24 hours
     expires: moment(getUtcNow()).add(24, 'hours').toDate(),
     signed: false,
+    sameSite: isProd ? 'strict' : undefined,
+    secure: isProd ? true : undefined,
+ 
   });
 
 }

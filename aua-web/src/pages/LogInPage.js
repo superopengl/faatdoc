@@ -75,7 +75,7 @@ class LogInPage extends React.Component {
                 const user = await login(values.name, values.password);
                 setUser(user);
 
-                this.props.history.push(user.role === 'admin' ? '/tasks' : '/requests');
+                this.props.history.push('/lodgement');
               } catch {
                 this.setState({ sending: false });
               }
