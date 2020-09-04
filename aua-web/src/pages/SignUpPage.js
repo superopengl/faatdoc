@@ -108,11 +108,8 @@ const SignUpPage = (props) => {
           <ContainerStyled>
             <LogoContainer><Logo /></LogoContainer>
             <Title level={2}>Sign Up</Title>
-            <Form layout="vertical" onFinish={handleSignUp} style={{ textAlign: 'left' }} initialValues={{ role: 'client' }}>
-              <Form.Item>
                 <Link to="/login"><Button size="small" block type="link">Already a user? Click to log in</Button></Link>
-              </Form.Item>
-
+            <Form layout="vertical" onFinish={handleSignUp} style={{ textAlign: 'left' }} initialValues={{ role: 'client' }}>
               <Form.Item label="Email" name="email" rules={[{ required: true, type: 'email', whitespace: true, max: 100, message: ' ' }]}>
                 <Input placeholder="abc@xyz.com" type="email" autoComplete="email" allowClear={true} maxLength="100" autoFocus={true} />
               </Form.Item>
@@ -131,7 +128,7 @@ const SignUpPage = (props) => {
               {/* <Form.Item label="" name="isEmployee" rules={[{ required: false }]}>
                 <Checkbox disabled={sending}>I am an employee of AU Accounting Office</Checkbox>
               </Form.Item> */}
-              <Form.Item>
+              <Form.Item style={{marginTop: '1rem'}}>
                 <Button block type="primary" htmlType="submit" disabled={sending}>Sign Up</Button>
               </Form.Item>
               <Form.Item>

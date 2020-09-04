@@ -9,18 +9,18 @@ const {Text} = Typography;
 
 const percentage = {
   'draft': 0,
-  'submitted': 33,
-  'to_sign': 67,
-  'signed': 67,
+  'submitted': 25,
+  'to_sign': 50,
+  'signed': 75,
   'done': 100,
   'archive': 0
 }
 
 const progressStatus = {
   'draft': 'normal',
-  'submitted': 'active',
+  'submitted': 'normal',
   'to_sign': 'exception',
-  'signed': 'active',
+  'signed': 'normal',
   'done': 'success',
   'archive': 'normal'
 }
@@ -41,10 +41,13 @@ function getLabelFromStatus(status) {
 export const LodgementProgressBar = ({ status, shape, ...props }) => {
   const label = getLabelFromStatus(status);
   if (shape === 'circle') {
-    return <Progress type="circle"
+    return <Progress 
+    type="circle"
       percent={percentage[status]}
+      // steps={4}
+      strokeWidth={3}
       status={progressStatus[status]}
-      format={() => <Text ellipsis={true}><small>{label}</small></Text>}
+      format={() => <Text type="secondary"><small>{label}</small></Text>}
       {...props}
     />
   }

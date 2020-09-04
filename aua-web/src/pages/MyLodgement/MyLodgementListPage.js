@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Tabs, Typography, Layout, Button, Modal, Divider } from 'antd';
+import { Tabs, Typography, Layout, Button, Modal, Row } from 'antd';
 import PosterAdminGrid from 'components/grids/PosterAdminGrid';
 import GalleryAdminGrid from 'components/grids/GalleryAdminGrid';
 import BusinessAdminGrid from 'components/grids/BusinessAdminGrid';
@@ -20,7 +20,7 @@ import { List } from 'antd';
 import { Space } from 'antd';
 import LodgementForm from './MyLodgementForm';
 import LodgementCard from './MyLodgementCard';
-import { listLodgement, saveLodgement } from 'services/lodgementService';
+import { listLodgement, deleteLodgement } from 'services/lodgementService';
 import { random } from 'lodash';
 import { listJobTemplate } from 'services/jobTemplateService';
 import { listPortofolio } from 'services/portofolioService';
@@ -96,7 +96,7 @@ const MyLodgementListPage = (props) => {
     goToLodgement();
   }
 
-  const editLodgement = lodgement => {
+  const actionOnLodgement = lodgement => {
     // setCurrentLodgement(lodgement);
     if (lodgement.status === 'to_sign') {
       setSignModalVisible(true);
@@ -130,6 +130,35 @@ const MyLodgementListPage = (props) => {
     }
   }
 
+  const getActionLabel = status => {
+    return {
+      draft: 'edit',
+      submitted: 'edit',
+      to_sign: 'sign',
+      signed: 'view',
+      done: 'view',
+      archive: 'view'
+    }[status];
+  }
+
+  const handleDelete = async (e, item) => {
+    e.stopPropagation();
+    Modal.confirm({
+      title: <>To delete lodgement <strong>{item.name}</strong>?</>,
+      onOk: async () => {
+        setLoading(true);
+        await deleteLodgement(item.id);
+        await loadList();
+        setLoading(false);
+      },
+      maskClosable: true,
+      okButtonProps: {
+        danger: true
+      },
+      okText: 'Yes, delete it!'
+    });
+  }
+
   const RenderListFilteredByStatus = (statuses = []) => {
     const data = lodgementList.filter(x => statuses.includes(x.status));
 
@@ -138,12 +167,20 @@ const MyLodgementListPage = (props) => {
       dataSource={data}
       size="large"
       renderItem={item => (
-        <List.Item key={item.id}
-          onClick={() => editLodgement(item)}
-          extra={[<LodgementProgressBar key="1" status={item.status} width={60} />]}
+        <List.Item
+          style={{ paddingLeft: 0, paddingRight: 0 }}
+          key={item.id}
+          onClick={() => actionOnLodgement(item)}
+          extra={[
+            <LodgementProgressBar key="1" status={item.status} width={80} />
+          ]}
+          actions={[
+            <Button type="link" key="action" onClick={() => actionOnLodgement(item)}>{getActionLabel(item.status)}</Button>,
+          item.status === 'draft' ? <Button type="link" key="delete" danger onClick={e => handleDelete(e, item)}>delete</Button> : null,
+          ]}
         >
           <List.Item.Meta
-            title={item.name}
+            title={<Text style={{ fontSize: '1.3rem' }}>{item.name}</Text>}
             description={<TimeAgo value={item.lastUpdatedAt} surfix="Last Updated" />}
           />
         </List.Item>
@@ -157,12 +194,16 @@ const MyLodgementListPage = (props) => {
       <ContainerStyled>
         <Space size="large" direction="vertical" style={{ width: '100%' }}>
           <StyledTitleRow>
-            <Title level={2} style={{ margin: 'auto' }}>Lodgement</Title>
+            <Title level={2} style={{ margin: 'auto' }}>My Lodgements</Title>
           </StyledTitleRow>
+          <Row style={{ flexDirection: 'row-reverse' }}>
 
-          <Button type="primary" ghost icon={<PlusOutlined />} onClick={() => createNewLodgement()}>Create New Lodgement</Button>
+            <Button type="primary"
+              size="large" ghost icon={<PlusOutlined />} onClick={() => createNewLodgement()}>New Lodgement</Button>
+          </Row>
+
           <Tabs defaultActiveKey="ongoing" type="card">
-            <TabPane tab="Ongoing" key="ongoing">
+            <TabPane tab="In Progress" key="ongoing">
               {RenderListFilteredByStatus(['submitted', 'to_sign', 'signed'])}
 
             </TabPane>

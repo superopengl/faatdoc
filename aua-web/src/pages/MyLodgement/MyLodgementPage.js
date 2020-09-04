@@ -95,7 +95,7 @@ const MyLodgementCard = (props) => {
     <LayoutStyled>
       <HomeHeader />
       <ContainerStyled>
-        <Title level={2} style={{ margin: 'auto' }}>{isNew ? 'New Lodgement' : 'Edit Lodgement'}</Title>
+        {/* <Title level={2} style={{ margin: 'auto' }}>{isNew ? 'New Lodgement' : 'Edit Lodgement'}</Title> */}
 
         <MyLodgementForm
           onChange={() => onOk()}

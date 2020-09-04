@@ -129,7 +129,10 @@ const PortofolioForm = (props) => {
             </Form.Item>
           );
         })}
-        {isNew && <Form.Item name="agree" rules={[{required: true, message: 'You have to agree before saving'}]}>
+        {isNew && <Form.Item name="" valuePropName="checked" rules={[{
+          validator: (_, value) =>
+            value ? Promise.resolve() : Promise.reject('You have to agree to continue.'),
+        }]}>
           <Checkbox>I have read and agree on the disclaimer</Checkbox>
         </Form.Item>}
         <Form.Item>

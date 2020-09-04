@@ -129,9 +129,9 @@ const LodgementChat = (props) => {
 
   const sendMessage = async (values) => {
     const { content } = values;
+    form.resetFields();
     if (!content?.trim()) return;
     setList([...list, { createdAt: new Date(), content, status: 'waiting' }]);
-    form.resetFields();
     setLoading(true);
     await sendLodgementMessage(lodgementId, content);
     await loadMessages();
@@ -161,6 +161,9 @@ const LodgementChat = (props) => {
           >
             <Space direction="vertical" style={{ width: '100%', padding: '10px 0', flexDirection: 'column-reverse' }}>
               {/* {!list.length && <Text type="secondary">No communication yet</Text>} */}
+              {readonly && <Divider>
+              <Text type="secondary" strong={false}><small>The communication for this lodgement is closed.</small></Text>
+                </Divider>}
               {list.map((x, i) => {
                 const MessageComponent = x.sender === myUserId ? SentMessage : ReceivedMessage;
                 return <MessageComponent

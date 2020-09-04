@@ -41,7 +41,7 @@ TimeAgo.propTypes = {
   value: PropTypes.any.isRequired,
   defaultContent: PropTypes.string,
   direction: PropTypes.string,
-  extra: PropTypes.any.isRequired,
+  extra: PropTypes.any,
 };
 
 TimeAgo.defaultProps = {

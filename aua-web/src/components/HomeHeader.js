@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import { Layout, Menu, Drawer, Button, Modal, Typography } from 'antd';
 import MediaQuery from 'react-responsive'
 import {
-  MenuOutlined, HomeOutlined, PhoneOutlined, SmileOutlined, PictureOutlined,
+  MenuOutlined, HomeOutlined, MailOutlined, SmileOutlined, PictureOutlined,
   BellOutlined, SettingOutlined,
   IdcardOutlined, UserOutlined, LogoutOutlined, SecurityScanOutlined,
-  LoginOutlined
+  LoginOutlined, TeamOutlined, SnippetsOutlined
 } from '@ant-design/icons';
 import { Link, withRouter } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
@@ -112,12 +112,12 @@ class HomeHeaderRaw extends React.Component {
                 <MediaQuery minDeviceWidth={801}>
                   <MenuContianer>
                     <Menu mode="horizontal" style={{ border: 0 }}>
-                      {!isAdmin && <Menu.Item key="home"><HashLink to="/#home">Home</HashLink></Menu.Item>}
+                      {isGuest && <Menu.Item key="home"><HashLink to="/#home">Home</HashLink></Menu.Item>}
                       {isGuest && <Menu.Item key="services"><HashLink to="/#services">Services</HashLink></Menu.Item>}
                       {isGuest && <Menu.Item key="team"><HashLink to="/#team">Team</HashLink></Menu.Item>}
                       {isGuest && <Menu.Item key="login"><Link to="/login">Log In / Sign Up</Link></Menu.Item>}
-                      {isClient && <Menu.Item key="portofolio"><Link to="/portofolio">Portofolios</Link></Menu.Item>}
                       {!isGuest && <Menu.Item key="lodgement"><Link to="/lodgement">Lodgements</Link></Menu.Item>}
+                      {isClient && <Menu.Item key="portofolio"><Link to="/portofolio">Portofolios</Link></Menu.Item>}
                       {isAdmin && <Menu.Item key="clients"><Link to="/clients">Users</Link></Menu.Item>}
                       {/* {isAdmin && <Menu.Item key="admin"><Link to="/admin">Admin</Link></Menu.Item>} */}
                       {isAdmin && <Menu.Item key="job_template"><Link to="/job_template">Job Template</Link></Menu.Item>}
@@ -145,13 +145,13 @@ class HomeHeaderRaw extends React.Component {
                       {/* {isAdmin && <Menu.Item key="admin"><SettingOutlined /> <Link to="/admin">Admin</Link></Menu.Item>} */}
                       {isAdmin && <Menu.Item key="job_template"><SettingOutlined /> <Link to="/job_template">Job Template</Link></Menu.Item>}
                       {isAdmin && <Menu.Item key="clients"><SettingOutlined /> <Link to="/clients">Users</Link></Menu.Item>}
-                      {isClient && <Menu.Item key="portofolio"><UserOutlined /> <Link to="/portofolio">Portofolios</Link></Menu.Item>}
-                      {!isGuest && <Menu.Item key="lodgement"><UserOutlined /> <Link to="/lodgement">Lodgements</Link></Menu.Item>}
-                      {!isGuest && <Menu.Item key="messages"><IdcardOutlined /> <Link to="/message">Messages</Link></Menu.Item>}
+                      {!isGuest && <Menu.Item key="lodgement"><SnippetsOutlined /> <Link to="/lodgement">Lodgements</Link></Menu.Item>}
+                      {isClient && <Menu.Item key="portofolio"><IdcardOutlined /> <Link to="/portofolio">Portofolios</Link></Menu.Item>}
+                      {!isGuest && <Menu.Item key="messages"><MailOutlined /> <Link to="/message">Messages</Link></Menu.Item>}
                       {!isGuest && <Menu.Item key="changePassword"><SecurityScanOutlined /> <Link to="/change_password">Change Password</Link></Menu.Item>}
-                      <Menu.Item key="home"><HomeOutlined /> <HashLink to="/#home" onClick={this.onClose}>Home</HashLink></Menu.Item>
+                      {isGuest && <Menu.Item key="home"><HomeOutlined /> <HashLink to="/#home" onClick={this.onClose}>Home</HashLink></Menu.Item>}
                       {isGuest && <Menu.Item key="services"><BellOutlined /> <HashLink to="/#services" onClick={this.onClose}>Services</HashLink></Menu.Item>}
-                      {isGuest && <Menu.Item key="team"><BellOutlined /> <HashLink to="/#team" onClick={this.onClose}>Team</HashLink></Menu.Item>}
+                      {isGuest && <Menu.Item key="team"><TeamOutlined /> <HashLink to="/#team" onClick={this.onClose}>Team</HashLink></Menu.Item>}
                       {!isGuest && <Menu.Item key="logout" onClick={handleLogout}><LogoutOutlined />{isAdmin ? 'Admin ' : isAgent ? 'Agent ' : null}Log Out</Menu.Item>}
                     </Menu>
                   </Drawer>

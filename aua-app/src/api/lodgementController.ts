@@ -115,13 +115,13 @@ export const saveLodgement = handlerWrapper(async (req, res) => {
     // New lodgment
     validateLodgementStatusChange(null, status);
     lodgement = new Lodgement();
-    lodgement.id = id || uuidv4();
+    lodgement.id = uuidv4();
     lodgement.userId = userId;
-    lodgement.name = name;
     lodgement.jobTemplateId = jobTemplateId;
     lodgement.portofolioId = portofolioId;
   }
 
+  lodgement.name = name;
   lodgement.forWhom = guessDisplayNameFromFields(fields);
   lodgement.fields = fields;
   lodgement.status = status;

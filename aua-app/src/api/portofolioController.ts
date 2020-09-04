@@ -41,12 +41,13 @@ export const savePortofolio = handlerWrapper(async (req, res) => {
 });
 
 export const listPortofolio = handlerWrapper(async (req, res) => {
-  assertRole(req, 'admin', 'client');
+  assertRole(req, 'client');
 
   const list = await getRepository(Portofolio)
     .createQueryBuilder('x')
+    .where({userId: req.user.id})
     .orderBy('x.name', 'ASC')
-    .select(['x.id', 'x.name'])
+    .select(['x.id', 'x.name', 'x.lastUpdatedAt'])
     .getMany();
 
   res.json(list);

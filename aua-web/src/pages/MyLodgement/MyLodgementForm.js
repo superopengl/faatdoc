@@ -23,6 +23,7 @@ import { RangePickerInput } from 'components/RangePickerInput';
 import { notify } from 'util/notify';
 import { PageHeader } from 'antd';
 import LodgementChat from 'pages/AdminLodgement/LodgementChat';
+import * as _ from 'lodash';
 
 const { Text, Paragraph, Title } = Typography;
 const { RangePicker } = DatePicker;
@@ -39,6 +40,13 @@ const StyledTypeButton = styled(Button)`
   }
 `;
 
+const StyledPageHeader = styled(PageHeader)`
+// .ant-page-header-heading-extra {
+//   justify-content: flex-end;
+//   width: 100%;
+//   display: flex;
+// }
+`;
 
 const MyLodgementForm = (props) => {
   const { id, jobTemplateList, portofolioList } = props;
@@ -103,7 +111,8 @@ const MyLodgementForm = (props) => {
 
   const handleCancel = () => {
     // form.resetFields();
-    props.onCancel();
+    // props.onCancel();
+    props.history.goBack();
   }
 
   const handleSelectedTemplate = async (values) => {
@@ -127,21 +136,6 @@ const MyLodgementForm = (props) => {
     return values;
   }
 
-  const handleDelete = async (e) => {
-    e.stopPropagation();
-    Modal.confirm({
-      title: <>To delete lodgement <strong>{lodgement.name}</strong>?</>,
-      onOk: async () => {
-        await deleteLodgement(lodgement.id);
-        props.onChange();
-      },
-      okButtonProps: {
-        danger: true
-      },
-      okText: 'Yes, delete it!'
-    });
-  }
-
   const checkIfCanEdit = (lodgement) => {
     if (loading) return false;
     if (!lodgement) return false;
@@ -154,17 +148,22 @@ const MyLodgementForm = (props) => {
 
   // console.log('value', formInitValues);
   const showsGenerator = !lodgement && jobTemplateList && portofolioList;
+  const communicationReadonly = loading || isNew || ['draft', 'archive', 'done'].includes(lodgement.status);
 
   return (<>
     <Space direction="vertical" size="large" style={{ width: '100%' }}>
       {showsGenerator && <LodgementGenerator onChange={handleSelectedTemplate} jobTemplateList={jobTemplateList} portofolioList={portofolioList} />}
 
       {lodgement && <>
-      <PageHeader
+      <StyledPageHeader
+        onBack={() => handleCancel()}
+        title={lodgement.name}
         style={{padding: '0'}}
         extra={[
           isNew || ['draft', 'archive'].includes(lodgement.status) ? null : <Button key="message" onClick={() => setShowsMessage(true)}>Communication</Button>,
-          lodgement?.status === 'draft' ? <Button key="delete" type="primary" danger disabled={disabled} onClick={handleDelete}>Delete</Button> : null
+          // lodgement?.status === 'draft' ? <Button key="delete" danger disabled={disabled} onClick={handleDelete}>Delete</Button> : null,
+          (canEdit && lodgement.status === 'draft') ? <Button key="save" ghost type="primary" disabled={disabled} onClick={() => saveDraft()}>Save As Draft</Button> : null,
+          canEdit ? <Button key="submit" type="primary" htmlType="submit" disabled={disabled}>Submit Now</Button> : null,
         ]}
       />
       <Form form={form} layout="vertical"
@@ -198,18 +197,10 @@ const MyLodgementForm = (props) => {
             </Form.Item>
           );
         })}
-        <Divider />
-        <Form.Item>
-          <Space direction="vertical" style={{ width: '100%' }} size="middle">
-            {(canEdit && lodgement.status === 'draft') && <Button block ghost type="primary" disabled={disabled} onClick={() => saveDraft()}>Save As Draft</Button>}
-            {canEdit && <Button block type="primary" htmlType="submit" disabled={disabled}>Submit Now</Button>}
-            <Button block type="link" onClick={() => handleCancel()}>Cancel</Button>
-          </Space>
-        </Form.Item>
       </Form>
       </>}
     </Space>
-    {(lodgement && showsMessage) && <LodgementChat visible={showsMessage} onClose={() => setShowsMessage(false)} lodgementId={lodgement?.id} readonly={false} />}
+    {lodgement && <LodgementChat visible={showsMessage} onClose={() => setShowsMessage(false)} lodgementId={lodgement?.id} readonly={communicationReadonly} />}
   </>
   );
 };

@@ -94,7 +94,7 @@ class ChangePasswordPage extends React.Component {
                     <Input.Password placeholder="Confirm New Password" maxLength="50" autoComplete="new-password" disabled={sending} visibilityToggle={false} />
                   </Form.Item>
                   <Form.Item style={{ marginTop: '2rem' }}>
-                    <Button block type="primary" htmlType="submit" disabled={sending}>Change password</Button>
+                    <Button block type="primary" htmlType="submit" disabled={sending}>Change Password</Button>
                     <Button block size="large" type="link" onClick={() => this.goBack()}>Cancel</Button>
                   </Form.Item>
                 </Form>
