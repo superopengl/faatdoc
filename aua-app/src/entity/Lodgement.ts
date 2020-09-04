@@ -16,7 +16,7 @@ export class Lodgement {
   name: string;
 
   @Column()
-  displayName: string;
+  forWhom: string;
 
   @Column({ default: LodgementStatus.DRAFT })
   status: LodgementStatus;

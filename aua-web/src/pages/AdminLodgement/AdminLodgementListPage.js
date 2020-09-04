@@ -86,7 +86,7 @@ const AdminLodgementListPage = (props) => {
     },
     {
       title: 'For Whom',
-      dataIndex: 'displayName',
+      dataIndex: 'forWhom',
       render: (text, record) => <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text || ''} />
     },
     {

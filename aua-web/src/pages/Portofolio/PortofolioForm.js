@@ -42,6 +42,7 @@ const EMPTY_ROW = {
 const PortofolioForm = (props) => {
   const { id } = props;
 
+  const isNew = !id;
   const [type, setType] = React.useState();
   const [loading, setLoading] = React.useState(true);
   const [name, setName] = React.useState('New Portofolio');
@@ -49,7 +50,7 @@ const PortofolioForm = (props) => {
   const [form] = Form.useForm();
 
   const loadEntity = async () => {
-    if (id) {
+    if (!isNew) {
       const entity = await getPortofolio(id);
       setName(entity.name);
       setFields(entity.fields);
@@ -128,6 +129,9 @@ const PortofolioForm = (props) => {
             </Form.Item>
           );
         })}
+        {isNew && <Form.Item name="agree" rules={[{required: true, message: 'You have to agree before saving'}]}>
+          <Checkbox>I have read and agree on the disclaimer</Checkbox>
+        </Form.Item>}
         <Form.Item>
           <Button block type="primary" htmlType="submit" disabled={loading}>Save</Button>
         </Form.Item>

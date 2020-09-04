@@ -1,5 +1,4 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-import { MessageType } from '../enums/MessageType';
 
 @Entity()
 export class Message {
@@ -12,8 +11,8 @@ export class Message {
   @Column('uuid')
   lodgementId: string;
 
-  @Column()
-  type: MessageType;
+  @Column('uuid')
+  sender: string;
 
   @Column('uuid')
   clientUserId: string;

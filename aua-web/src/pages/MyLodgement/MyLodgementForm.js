@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
-import { Input, Button, Form, Select, DatePicker, Checkbox, Modal, Space, Typography, Radio } from 'antd';
+import { Input, Button, Form, Drawer, DatePicker, Checkbox, Modal, Space, Typography, Radio } from 'antd';
 import { FileUploader } from '../../components/FileUploader';
 import * as moment from 'moment';
 import { GlobalContext } from 'contexts/GlobalContext';
@@ -21,6 +21,8 @@ import { InputYear } from 'components/InputYear';
 import { DateInput } from 'components/DateInput';
 import { RangePickerInput } from 'components/RangePickerInput';
 import { notify } from 'util/notify';
+import { PageHeader } from 'antd';
+import LodgementChat from 'pages/AdminLodgement/LodgementChat';
 
 const { Text, Paragraph, Title } = Typography;
 const { RangePicker } = DatePicker;
@@ -41,9 +43,11 @@ const StyledTypeButton = styled(Button)`
 const MyLodgementForm = (props) => {
   const { id, jobTemplateList, portofolioList } = props;
 
+  const isNew = !id;
   // const { name, id, fields } = value || {};
 
   const [loading, setLoading] = React.useState(true);
+  const [showsMessage, setShowsMessage] = React.useState(false);
   const [form] = Form.useForm();
 
   const [lodgement, setLodgement] = React.useState();
@@ -155,7 +159,13 @@ const MyLodgementForm = (props) => {
     <Space direction="vertical" size="large" style={{ width: '100%' }}>
       {showsGenerator && <LodgementGenerator onChange={handleSelectedTemplate} jobTemplateList={jobTemplateList} portofolioList={portofolioList} />}
 
-      {lodgement && <Form form={form} layout="vertical"
+      {lodgement && <>
+      <PageHeader
+        extra={[
+          <Button key="message" onClick={() => setShowsMessage(true)}>Communication</Button>
+        ]}
+      />
+      <Form form={form} layout="vertical"
         onValuesChange={handleValuesChange}
         onFinish={handleSubmit}
         style={{ textAlign: 'left' }} initialValues={getFormInitialValues()}>
@@ -197,8 +207,10 @@ const MyLodgementForm = (props) => {
         {(id && lodgement?.status === 'draft') && <Form.Item>
           <Button block type="primary" danger disabled={disabled} onClick={handleDelete}>Delete</Button>
         </Form.Item>}
-      </Form>}
+      </Form>
+      </>}
     </Space>
+    {(lodgement && showsMessage) && <LodgementChat visible={showsMessage} onClose={() => setShowsMessage(false)} lodgementId={lodgement?.id} readonly={false} />}
   </>
   );
 };

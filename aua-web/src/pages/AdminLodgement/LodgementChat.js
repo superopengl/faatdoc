@@ -71,19 +71,41 @@ flex-direction: column-reverse;
 `;
 
 const StyledDrawer = styled(Drawer)`
+
+.ant-drawer-content-wrapper {
+  max-width: 90vw;
+}
+
 .rce-mbox {
-  background-color: #143e86;
-  color: rgba(255,255,255,0.9);
   padding-bottom: 2rem;
 
   .rce-mbox-time {
-    color: rgba(255,255,255,0.7);
     bottom: -1.5rem;
   }
 }
 `;
 
-const StyledMessage = (props) => <MessageBox {...props} />
+const StyledSentMessageBox = styled(MessageBox)`
+.rce-mbox {
+  background-color: #143e86;
+  color: rgba(255,255,255,0.9);
+
+  .rce-mbox-time {
+    color: rgba(255,255,255,0.7);
+  }
+}
+`;
+
+const StyledReceivedMessageBox = styled(MessageBox)`
+.rce-mbox {
+  // background-color: #143e86;
+  // color: rgba(255,255,255,0.9);
+}
+`;
+
+const SentMessage = (props) => <StyledSentMessageBox {...props} position="right" />
+
+const ReceivedMessage = (props) => <StyledReceivedMessageBox {...props} position="left" />
 
 const LodgementChat = (props) => {
   const { lodgementId, visible, onClose, readonly } = props;
@@ -93,9 +115,6 @@ const LodgementChat = (props) => {
   const [form] = Form.useForm();
 
   const [list, setList] = React.useState([]);
-  const [jobTemplateId, setJobTemplateId] = React.useState();
-  const [portofolioId, setPortofolioId] = React.useState();
-
 
   const loadMessages = async () => {
     setLoading(true);
@@ -120,41 +139,52 @@ const LodgementChat = (props) => {
   }
 
   return (
-    <StyledDrawer
-      title="Communication"
-      placement="right"
-      closable={true}
-      visible={visible}
-      onClose={() => onClose()}
-      width={800}
-      bodyStyle={{padding: '0 10px', verticalAlign: 'bottom'}}
-      footer={readonly ? null : <Form onFinish={sendMessage} form={form}>
-        <Form.Item name="content" style={{ marginBottom: 4 }}>
-          <Input.TextArea autoSize={{ minRows: 3, maxRows: 20 }} maxLength={2000} placeholder="Type here ..." allowClear disabled={loading} />
-        </Form.Item>
-        <Button type="primary" ghost block icon={<SendOutlined />} htmlType="submit" disabled={loading} >Send</Button>
-      </Form>}
-    >
-      <Space direction="vertical" style={{ width: '100%', padding: '10px 0', flexDirection: 'column-reverse' }}>
-        {list.map((x, i) => <StyledMessage
-          key={i}
-          position="right"
-          type="text"
-          text={x.content}
-          date={moment(x.createdAt).toDate()}
-          status={x.status || 'sent'} // waiting, sent, received, read
-          notch={false}
-        />)}
-        {/* <ChatInputContainer>
-          <Form onFinish={sendMessage} form={form}>
-            <Form.Item name="content" style={{ marginBottom: 4 }}>
-              <Input.TextArea autoSize={{ minRows: 3, maxRows: 20 }} maxLength={2000} placeholder="Type here ..." allowClear disabled={loading} />
-            </Form.Item>
-            <Button type="primary" ghost block icon={<SendOutlined />} htmlType="submit" disabled={loading} >Send</Button>
-          </Form>
-        </ChatInputContainer> */}
-      </Space>
-    </StyledDrawer>
+    <GlobalContext.Consumer>
+      {
+        context => {
+          const myUserId = context.user.id;
+          return <StyledDrawer
+            title="Communication"
+            
+            placement="right"
+            closable={true}
+            visible={visible}
+            onClose={() => onClose()}
+            width={800}
+            bodyStyle={{ padding: '0 10px', verticalAlign: 'bottom' }}
+            footer={readonly ? null : <Form onFinish={sendMessage} form={form}>
+              <Form.Item name="content" style={{ marginBottom: 4 }}>
+                <Input.TextArea autoSize={{ minRows: 3, maxRows: 20 }} maxLength={2000} placeholder="Type here ..." allowClear disabled={loading} />
+              </Form.Item>
+              <Button type="primary" ghost block icon={<SendOutlined />} htmlType="submit" disabled={loading} >Send</Button>
+            </Form>}
+          >
+            <Space direction="vertical" style={{ width: '100%', padding: '10px 0', flexDirection: 'column-reverse' }}>
+              {list.map((x, i) => {
+                const MessageComponent = x.sender === myUserId ? SentMessage : ReceivedMessage;
+                return <MessageComponent
+                  key={i}
+                  type="text"
+                  text={x.content}
+                  date={moment(x.createdAt).toDate()}
+                  status={x.status || 'sent'} // waiting, sent, received, read
+                  notch={false}
+                />
+              })}
+              {/* <ChatInputContainer>
+              <Form onFinish={sendMessage} form={form}>
+                <Form.Item name="content" style={{ marginBottom: 4 }}>
+                  <Input.TextArea autoSize={{ minRows: 3, maxRows: 20 }} maxLength={2000} placeholder="Type here ..." allowClear disabled={loading} />
+                </Form.Item>
+                <Button type="primary" ghost block icon={<SendOutlined />} htmlType="submit" disabled={loading} >Send</Button>
+              </Form>
+            </ChatInputContainer> */}
+            </Space>
+          </StyledDrawer>
+        }
+      }
+    </GlobalContext.Consumer>
+
   );
 };
 

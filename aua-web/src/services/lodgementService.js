@@ -32,10 +32,6 @@ export async function assignLodgement(lodgementId, agentId) {
   return httpPost(`lodgement/${lodgementId}/assign`, { agentId });
 }
 
-export async function logLodgement(lodgementId, event, extra) {
-  return httpPost(`lodgement/${lodgementId}/log/${event}`, extra || undefined);
-}
-
 export async function listLodgementMessages(lodgementId, from, size = 20) {
   return httpGet(`lodgement/${lodgementId}/message`, { from, size });
 }

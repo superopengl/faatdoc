@@ -1,37 +1,46 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import styled from 'styled-components';
-import { Tabs, Typography, Layout, Button, Modal, Divider } from 'antd';
-import PosterAdminGrid from 'components/grids/PosterAdminGrid';
-import GalleryAdminGrid from 'components/grids/GalleryAdminGrid';
-import BusinessAdminGrid from 'components/grids/BusinessAdminGrid';
-import EventAdminGrid from 'components/grids/EventAdminGrid';
-import { LargePlusButton } from 'components/LargePlusButton';
-import HomeHeader from 'components/HomeHeader';
-import { handleDownloadCsv } from 'services/memberService';
-import { saveAs } from 'file-saver';
+import { withRouter } from 'react-router-dom';
+import { Input, Button, Form, Layout, Drawer, Table, Card, Space, Typography } from 'antd';
+import { FileUploader } from 'components/FileUploader';
 import * as moment from 'moment';
-import windowSize from 'react-window-size';
-import Text from 'antd/lib/typography/Text';
-import {
-  ExclamationCircleOutlined, PlusOutlined
-} from '@ant-design/icons';
-import { Link, withRouter } from 'react-router-dom';
-import { List } from 'antd';
-import { Space } from 'antd';
-import LodgementForm from './MyLodgementForm';
-import LodgementCard from './MyLodgementCard';
-import { listLodgement, saveLodgement } from 'services/lodgementService';
-import { random } from 'lodash';
+import { GlobalContext } from 'contexts/GlobalContext';
+import { Menu, Dropdown, message, Tooltip } from 'antd';
+import { UpOutlined, DownOutlined, DeleteOutlined, QuestionOutlined } from '@ant-design/icons';
+import { Divider } from 'antd';
+import { listLodgement, deleteLodgement } from 'services/lodgementService';
+import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
+import { getDisplayNameFromVarName } from 'util/getDisplayNameFromVarName';
+import { Tag } from 'antd';
+import { Progress } from 'antd';
+import { Steps, Popover } from 'antd';
+import { LodgementProgressBar } from 'components/LodgementProgressBar';
+import HomeHeader from 'components/HomeHeader';
+import MyLodgementForm from './MyLodgementForm';
 import { listJobTemplate } from 'services/jobTemplateService';
 import { listPortofolio } from 'services/portofolioService';
-import ReviewSignPage from './ReviewSignPage';
-import { TabPaneProps } from 'antd/lib/tabs';
 
-const { Title, Paragraph } = Typography;
-const { TabPane } = Tabs;
+const { Text, Title, Paragraph } = Typography;
 
+const StyledFormItem = styled(Form.Item)`
+  // padding: 2rem;
+  // margin: 1rem 0;
+  // border: 1px solid #eeeeee;
+  // border-radius: 8px;
+  // background-color: #ffffff;
+`
+const StyledCard = styled(Card)`
+box-shadow: 0px 2px 8px #888888;
+
+`
 const ContainerStyled = styled.div`
-  margin: 6rem 0.5rem 2rem 0.5rem;
+margin: 4rem auto 2rem auto;
+  padding: 2rem 0.5rem;
+// text-align: center;
+max-width: 600px;
+width: 100%;
 `;
 
 const StyledTitleRow = styled.div`
@@ -46,173 +55,66 @@ const LayoutStyled = styled(Layout)`
   background-color: #ffffff;
 `;
 
-
-const MyLodgementPage = (props) => {
+const MyLodgementCard = (props) => {
+  const id = props.match.params.id;
+  const isNew = id === 'new';
 
   const [loading, setLoading] = React.useState(true);
-  const [editModalVisible, setEditModalVisible] = React.useState(false);
-  const [signModalVisible, setSignModalVisible] = React.useState(false);
-  const [lodgementList, setLodgementList] = React.useState([]);
   const [jobTemplateList, setJobTemplateList] = React.useState([]);
   const [portofolioList, setPortofolioList] = React.useState([]);
-  const [currentLodgement, setCurrentLodgement] = React.useState();
 
-
-  const loadList = async () => {
+  const loadData = async () => {
     setLoading(true);
-    const list = await listLodgement();
     const jobTemplateList = await listJobTemplate() || [];
     const portofolioList = await listPortofolio() || [];
 
-    setLodgementList(list);
     setJobTemplateList(jobTemplateList);
     setPortofolioList(portofolioList);
     setLoading(false);
   }
 
+  const onOk = () => {
+    props.history.push('/lodgement');
+  }
+  const onCancel = () => {
+    props.history.goBack();
+  }
+
 
   React.useEffect(() => {
-    loadList();
+    loadData();
   }, [])
 
+  const { value } = props;
 
-  const openModalToCreate = () => {
-    if (!portofolioList.length) {
-      Modal.confirm({
-        title: 'No portofolio',
-        content: 'Please create portofolio before creating lodgement. Go to create protofolio now?',
-        okText: 'Yes, go to create portofolio',
-        onOk: () => props.history.push('/portofolio')
-      });
-      return;
-    }
-    setCurrentLodgement();
-    setEditModalVisible(true);
-  }
+  const { name, status, createdAt } = value || {};
 
-  const openLodgement = lodgement => {
-    setCurrentLodgement(lodgement);
-    if (lodgement.status === 'to_sign') {
-      setSignModalVisible(true);
-    } else {
-      setEditModalVisible(true);
-    }
-  }
 
-  const handleModalExit = async () => {
-    setEditModalVisible(false);
-    setSignModalVisible(false);
-    await loadList();
-  }
 
-  const handleConfirmAndCancel = () => {
-    if (currentLodgement?.status === 'done') {
-      setEditModalVisible(false);
-    } else {
-      Modal.confirm({
-        title: 'Exit editing without saving?',
-        icon: <ExclamationCircleOutlined />,
-        okText: 'Continue editing',
-        cancelText : `Exit without save`,
-        cancelButtonProps: {
-          danger: true,
-          ghost: true
-        },
-        onCancel: () => handleModalExit(),
-        maskClosable: true,
-        // cancelText: 'No, continue changing'
-      });
-    }
-  }
-
-  return (
+  return (<>
     <LayoutStyled>
-      <HomeHeader></HomeHeader>
+      <HomeHeader />
       <ContainerStyled>
-        <Space size="large" direction="vertical" style={{ width: '100%' }}>
-          <StyledTitleRow>
-            <Title level={2} style={{ margin: 'auto' }}>Lodgement</Title>
-          </StyledTitleRow>
-          <Button type="primary" ghost icon={<PlusOutlined/>} onClick={() => openModalToCreate()}>Create New Lodgement</Button>
-          <Divider>Ongoing Lodgments</Divider>
-          <List
-            grid={{
-              gutter: 24,
-              xs: 1,
-              sm: 1,
-              md: 1,
-              lg: 2,
-              xl: 2,
-              xxl: 3,
-            }}
-            dataSource={lodgementList.filter(x => x.status !== 'done')}
-            renderItem={item => (
-              <List.Item key={item.id}>
-                <LodgementCard onClick={() => openLodgement(item)} onDelete={() => loadList()} value={item} />
-              </List.Item>
-            )}
-          />
-          <Divider>Finished Lodgments</Divider>
-          <List
-            grid={{
-              gutter: 24,
-              xs: 1,
-              sm: 1,
-              md: 1,
-              lg: 2,
-              xl: 2,
-              xxl: 3,
-            }}
-            dataSource={lodgementList.filter(x => x.status === 'done')}
-            renderItem={item => (
-              <List.Item key={item.id}>
-                <LodgementCard onClick={() => openLodgement(item)} value={item} />
-              </List.Item>
-            )}
-          />
-        </Space>
+        <Title level={2} style={{ margin: 'auto' }}>{isNew ? 'New Lodgement' : 'Edit Lodgement'}</Title>
 
-      </ContainerStyled>
-      {editModalVisible && <Modal
-        visible={editModalVisible}
-        onOk={() => handleModalExit()}
-        onCancel={() => handleConfirmAndCancel()}
-        footer={null}
-        title="Create/Edit Lodgement"
-        width="90vw"
-        style={{ maxWidth: 700 }}
-      >
-        <LodgementForm
-          onChange={() => handleModalExit()}
-          onCancel={() => handleModalExit()}
+        <MyLodgementForm
+          onChange={() => onOk()}
+          onCancel={() => onCancel()}
           jobTemplateList={jobTemplateList}
           portofolioList={portofolioList}
-          id={currentLodgement?.id}
-        />
-      </Modal>}
-      {signModalVisible && <Modal
-        title={currentLodgement?.name || 'New Lodgement'}
-        visible={signModalVisible}
-        onCancel={() => setSignModalVisible(false)}
-        onOk={() => setSignModalVisible(false)}
-        footer={null}
-        width={700}
-      >
-        <Tabs>
-          <Tabs.TabPane tab="Review and Sign" key="sign">
-            <ReviewSignPage id={currentLodgement?.id} onFinish={() => handleModalExit()} onCancel={() => setSignModalVisible(false)}/>
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Lodgement" key="view">
-            <LodgementForm id={currentLodgement?.id} onFinish={() => handleModalExit()} onCancel={() => setSignModalVisible(false)}/>
-          </Tabs.TabPane>
-        </Tabs>
-      </Modal>}
-    </LayoutStyled >
+          id={isNew ? null : id} />
+      </ContainerStyled>
+    </LayoutStyled>
+  </>
   );
 };
 
-MyLodgementPage.propTypes = {};
+MyLodgementCard.propTypes = {
+  // id: PropTypes.string.isRequired
+};
 
-MyLodgementPage.defaultProps = {};
+MyLodgementCard.defaultProps = {
+  // id: 'new'
+};
 
-export default withRouter(MyLodgementPage);
+export default withRouter(MyLodgementCard);

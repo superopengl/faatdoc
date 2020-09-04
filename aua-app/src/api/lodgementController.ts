@@ -23,7 +23,6 @@ import e = require('express');
 import { normalizeFieldNameToVar } from '../utils/normalizeFieldNameToVar';
 import { LodgementLog } from '../entity/LodgementLog';
 import { Message } from '../entity/Message';
-import { MessageType } from '../enums/MessageType';
 import { AnalysisSchemeLanguage } from 'aws-sdk/clients/cloudsearch';
 import { guessDisplayNameFromFields } from '../utils/guessDisplayNameFromFields';
 
@@ -124,7 +123,7 @@ export const saveLodgement = handlerWrapper(async (req, res) => {
     lodgement.portofolioId = portofolioId;
   }
 
-  lodgement.displayName = guessDisplayNameFromFields(fields);
+  lodgement.forWhom = guessDisplayNameFromFields(fields);
   lodgement.fields = fields;
   lodgement.status = status;
   lodgement.lastUpdatedAt = getUtcNow();
@@ -176,7 +175,7 @@ export const searchLodgement = handlerWrapper(async (req, res) => {
     .select([
       `x.id as id`,
       `x.name as name`,
-      `x."displayName" as "displayName"`,
+      `x."forWhom" as "forWhom"`,
       `u.email as email`,
       `x."createdAt" as "createdAt"`,
       `j.name as "jobTemplateName"`,
@@ -186,7 +185,7 @@ export const searchLodgement = handlerWrapper(async (req, res) => {
       `x."signedAt" as "signedAt"`,
     ]);
   if (text) {
-    query = query.where('x.name ILIKE :text OR x."displayName" ILIKE :text OR j.name ILIKE :text', { text: `%${text}%` });
+    query = query.where('x.name ILIKE :text OR x."forWhom" ILIKE :text OR j.name ILIKE :text', { text: `%${text}%` });
   }
   const total = await query.getCount();
   const list = await query
@@ -213,7 +212,7 @@ export const listLodgement = handlerWrapper(async (req, res) => {
     .select([
       `x.id as id`,
       `x.name as name`,
-      `x."displayName" as "displayName"`,
+      `x."forWhom" as "forWhom"`,
       `x."createdAt" as "createdAt"`,
       `x.agentId as "agentId"`,
       `x.status as status`,
@@ -287,25 +286,8 @@ export const completeLodgement = handlerWrapper(async (req, res) => {
   res.json();
 });
 
-export const logLodgmentEvent = handlerWrapper(async (req, res) => {
-  assertRole(req, 'client');
-  const { id, event } = req.params;
-  const repo = getRepository(Lodgement);
-  const lodgement = await repo.findOne(id);
-  assert(lodgement, 404);
-
-  const lodgementLog = new LodgementLog();
-  lodgementLog.lodgementId = id;
-  lodgementLog.event = event;
-  lodgementLog.extra = req.body;
-
-  await getRepository(LodgementLog).save(lodgementLog);
-
-  res.json();
-});
-
 export const newLodgmentMessage = handlerWrapper(async (req, res) => {
-  assertRole(req, 'admin', 'agent');
+  assertRole(req, 'admin', 'agent', 'client');
   const { id } = req.params;
   const { content } = req.body;
 
@@ -314,9 +296,9 @@ export const newLodgmentMessage = handlerWrapper(async (req, res) => {
 
   const message = new Message();
   message.lodgementId = id;
-  message.type = MessageType.OUTBOUND;
+  message.sender = req.user.id;
   message.clientUserId = lodgement.userId;
-  message.agentUserId = req.user.id;
+  message.agentUserId = lodgement.agentId;
   message.content = content;
 
   const repo = getRepository(Message);
@@ -331,12 +313,12 @@ export const listLodgementMessage = handlerWrapper(async (req, res) => {
   const { from, size } = req.query;
 
   let query = getRepository(Message).createQueryBuilder()
-    .where({ lodgementId: id });
+    .where(`"lodgementId" = :id`, { id });
   if (req.user.role === 'client') {
-    query = query.where({ clientUserId: req.user.id });
+    query = query.where(`"clientUserId" = :userId`, { userId: req.user.id });
   }
   if (from) {
-    query = query.where(`"createdAt" >= :from`, { from: moment(from).toDate() })
+    query = query.where(`"createdAt" >= :from`, { from: moment(from).toDate() });
   }
 
   query = query.orderBy('"createdAt"', 'DESC')

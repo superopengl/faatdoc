@@ -7,7 +7,7 @@ import { FileUploader } from '../../components/FileUploader';
 import * as moment from 'moment';
 import { GlobalContext } from 'contexts/GlobalContext';
 import { Menu, Dropdown, message, Tooltip } from 'antd';
-import { UpOutlined, DownOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { UpOutlined, DownOutlined, DeleteOutlined, PlusOutlined, DoubleRightOutlined } from '@ant-design/icons';
 import { Divider } from 'antd';
 import { BuiltInFieldDef } from "components/FieldDef";
 import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
@@ -48,7 +48,7 @@ export const LodgementGenerator = props => {
         </Radio.Group>
       </Form.Item>
       <Form.Item>
-        <Button block type="primary" htmlType="submit">Next</Button>
+        <Button block type="primary" htmlType="submit" icon={<DoubleRightOutlined/>}>Next</Button>
       </Form.Item>
     </Form>
   );

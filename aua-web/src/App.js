@@ -20,7 +20,7 @@ import PrivacyPolicyPage from 'pages/PrivacyPolicyPage';
 import GalleryPage from 'pages/GalleryPage';
 import OtherPage from 'pages/OtherPage';
 import ClientsPage from 'pages/ClientsPage';
-import MyLodgementPage from 'pages/MyLodgement/MyLodgementPage';
+import MyLodgementListPage from 'pages/MyLodgement/MyLodgementListPage';
 import JobAdminPage from 'pages/JobTemplate/JobAdminPage';
 import PortofolioPage from 'pages/Portofolio/PortofolioPage';
 import AdminLodgementListPage from 'pages/AdminLodgement/AdminLodgementListPage';
@@ -28,6 +28,7 @@ import ProceedLodgementPage from 'pages/AdminLodgement/ProceedLodgementPage';
 import { getAuthUser } from 'services/authService';
 import { Spin } from 'antd';
 import {RoleRoute} from 'components/RoleRoute';
+import MyLodgementPage from 'pages/MyLodgement/MyLodgementPage';
 
 
 class App extends React.Component {
@@ -81,7 +82,8 @@ class App extends React.Component {
             <RoleRoute visible={isAdmin} loading={loading} path="/job_template" exact component={JobAdminPage} />
             <RoleRoute visible={isAdmin} loading={loading} path="/clients" exact component={ClientsPage} />
             <RoleRoute visible={isAdmin} loading={loading} path="/tasks" exact component={ClientsPage} />
-            <RoleRoute visible={isAdmin || isAgent || isClient} loading={loading} path="/lodgement" exact component={isClient ? MyLodgementPage : AdminLodgementListPage} />
+            <RoleRoute visible={isClient} loading={loading} path="/lodgement/:id" exact component={MyLodgementPage} />
+            <RoleRoute visible={isAdmin || isAgent || isClient} loading={loading} path="/lodgement" exact component={isClient ? MyLodgementListPage : AdminLodgementListPage} />
             <RoleRoute visible={isAdmin || isAgent} loading={loading} path="/lodgement/proceed/:id" exact component={ProceedLodgementPage} />
             <RoleRoute visible={!isGuest} loading={loading} path="/change_password" exact component={ChangePasswordPage} />
             <RoleRoute loading={loading} path="/terms_and_conditions" exact component={TermAndConditionPage} />
