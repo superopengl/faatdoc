@@ -102,7 +102,7 @@ const MyLodgementForm = (props) => {
   }
 
   const handleCancel = () => {
-    form.resetFields();
+    // form.resetFields();
     props.onCancel();
   }
 
@@ -161,8 +161,10 @@ const MyLodgementForm = (props) => {
 
       {lodgement && <>
       <PageHeader
+        style={{padding: '0'}}
         extra={[
-          <Button key="message" onClick={() => setShowsMessage(true)}>Communication</Button>
+          isNew || ['draft', 'archive'].includes(lodgement.status) ? null : <Button key="message" onClick={() => setShowsMessage(true)}>Communication</Button>,
+          lodgement?.status === 'draft' ? <Button key="delete" type="primary" danger disabled={disabled} onClick={handleDelete}>Delete</Button> : null
         ]}
       />
       <Form form={form} layout="vertical"
@@ -190,7 +192,7 @@ const MyLodgementForm = (props) => {
                         type === 'date' ? <DateInput picker="date" disabled={disabled} placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD" /> :
                           type === 'upload' ? <FileUploader disabled={disabled} /> :
                             type === 'select' ? <Radio.Group disabled={disabled} buttonStyle="solid">
-                              {field.options.map((x, i) => <Radio key={i} style={{ display: 'block', height: '2rem' }} value={x.value}>{x.label}</Radio>)}
+                              {field.options?.map((x, i) => <Radio key={i} style={{ display: 'block', height: '2rem' }} value={x.value}>{x.label}</Radio>)}
                             </Radio.Group> :
                               null}
             </Form.Item>
@@ -204,9 +206,6 @@ const MyLodgementForm = (props) => {
             <Button block type="link" onClick={() => handleCancel()}>Cancel</Button>
           </Space>
         </Form.Item>
-        {(id && lodgement?.status === 'draft') && <Form.Item>
-          <Button block type="primary" danger disabled={disabled} onClick={handleDelete}>Delete</Button>
-        </Form.Item>}
       </Form>
       </>}
     </Space>

@@ -21,7 +21,6 @@ import { Portofolio } from '../entity/Portofolio';
 import { LodgementStatus } from '../enums/LodgementStatus';
 import e = require('express');
 import { normalizeFieldNameToVar } from '../utils/normalizeFieldNameToVar';
-import { LodgementLog } from '../entity/LodgementLog';
 import { Message } from '../entity/Message';
 import { AnalysisSchemeLanguage } from 'aws-sdk/clients/cloudsearch';
 import { guessDisplayNameFromFields } from '../utils/guessDisplayNameFromFields';
@@ -214,6 +213,7 @@ export const listLodgement = handlerWrapper(async (req, res) => {
       `x.name as name`,
       `x."forWhom" as "forWhom"`,
       `x."createdAt" as "createdAt"`,
+      `x."lastUpdatedAt" as "lastUpdatedAt"`,
       `x.agentId as "agentId"`,
       `x.status as status`,
     ]);

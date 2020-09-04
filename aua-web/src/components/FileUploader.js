@@ -50,7 +50,7 @@ const StyledFileIcon = styled.div`
   display: inline-block;
 `;
 
-const { Text } = Typography;
+const { Text, Paragraph } = Typography;
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -139,7 +139,7 @@ export const FileUploader = (props) => {
         iconRender={getFileIcon}
         showUploadList={true}
       >
-        {disabled ? <p>File upload is disabled</p>
+        {disabled ? <Text type="secondary">File upload is disabled</Text>
         : <>
           <p className="ant-upload-drag-icon">
             <InboxOutlined />

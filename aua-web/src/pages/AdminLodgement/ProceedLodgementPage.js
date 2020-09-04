@@ -123,6 +123,7 @@ const ProceedLodgementPage = (props) => {
         await deleteLodgement(lodgement.id);
         goToListPage();
       },
+      maskClosable: true,
       okButtonProps: {
         danger: true
       }
@@ -133,6 +134,7 @@ const ProceedLodgementPage = (props) => {
     Modal.confirm({
       title: 'Complete this lodgement',
       okText: 'Yes, Complete it',
+      maskClosable: true,
       onOk: async () => {
         await completeLodgement(lodgement.id);
         goToListPage();
@@ -145,6 +147,7 @@ const ProceedLodgementPage = (props) => {
     if (!signFiles?.value?.length) {
       Modal.error({
         title: 'Cannot request sign',
+        maskClosable: true,
         content: `No files to require sign. Please upload files to the 'Require Sign' field before request sign.`
       });
       return;
@@ -224,8 +227,8 @@ const ProceedLodgementPage = (props) => {
                 // rules: [{ required }]
               }
               return (
-                <Form.Item key={i} {...formItemProps}>
-                  <FileUploader disabled={inputDisabled} />
+                <Form.Item key={i} {...formItemProps} > 
+                  <FileUploader disabled={inputDisabled} disabled={inputDisabled || (name === 'requireSign' && requiresSignDisabled)}/>
                 </Form.Item>
               );
             })}

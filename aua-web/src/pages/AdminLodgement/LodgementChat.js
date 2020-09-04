@@ -160,6 +160,7 @@ const LodgementChat = (props) => {
             </Form>}
           >
             <Space direction="vertical" style={{ width: '100%', padding: '10px 0', flexDirection: 'column-reverse' }}>
+              {/* {!list.length && <Text type="secondary">No communication yet</Text>} */}
               {list.map((x, i) => {
                 const MessageComponent = x.sender === myUserId ? SentMessage : ReceivedMessage;
                 return <MessageComponent

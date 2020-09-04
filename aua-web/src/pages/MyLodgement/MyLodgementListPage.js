@@ -25,13 +25,17 @@ import { random } from 'lodash';
 import { listJobTemplate } from 'services/jobTemplateService';
 import { listPortofolio } from 'services/portofolioService';
 import ReviewSignPage from './ReviewSignPage';
-import { TabPaneProps } from 'antd/lib/tabs';
+import { LodgementProgressBar } from 'components/LodgementProgressBar';
+import { TimeAgo } from 'components/TimeAgo';
 
 const { Title, Paragraph } = Typography;
 const { TabPane } = Tabs;
 
 const ContainerStyled = styled.div`
-  margin: 6rem 0.5rem 2rem 0.5rem;
+  margin: 6rem auto 2rem auto;
+  padding: 0 0.5rem;
+  width: 100%;
+  max-width: 700px;
 `;
 
 const StyledTitleRow = styled.div`
@@ -126,6 +130,27 @@ const MyLodgementListPage = (props) => {
     }
   }
 
+  const RenderListFilteredByStatus = (statuses = []) => {
+    const data = lodgementList.filter(x => statuses.includes(x.status));
+
+    return <List
+      itemLayout="horizontal"
+      dataSource={data}
+      size="large"
+      renderItem={item => (
+        <List.Item key={item.id}
+          onClick={() => editLodgement(item)}
+          extra={[<LodgementProgressBar key="1" status={item.status} width={60} />]}
+        >
+          <List.Item.Meta
+            title={item.name}
+            description={<TimeAgo value={item.lastUpdatedAt} surfix="Last Updated" />}
+          />
+        </List.Item>
+      )}
+    />
+  }
+
   return (
     <LayoutStyled>
       <HomeHeader></HomeHeader>
@@ -134,43 +159,21 @@ const MyLodgementListPage = (props) => {
           <StyledTitleRow>
             <Title level={2} style={{ margin: 'auto' }}>Lodgement</Title>
           </StyledTitleRow>
+
           <Button type="primary" ghost icon={<PlusOutlined />} onClick={() => createNewLodgement()}>Create New Lodgement</Button>
-          <Divider>Ongoing Lodgments</Divider>
-          <List
-            grid={{
-              gutter: 24,
-              xs: 1,
-              sm: 1,
-              md: 1,
-              lg: 2,
-              xl: 2,
-              xxl: 3,
-            }}
-            dataSource={lodgementList.filter(x => x.status !== 'done')}
-            renderItem={item => (
-              <List.Item key={item.id}>
-                <LodgementCard onClick={() => editLodgement(item)} onDelete={() => loadList()} value={item} />
-              </List.Item>
-            )}
-          />
-          <Divider>Finished Lodgments</Divider>
-          <List
-            grid={{
-              gutter: 24,
-              xs: 1,
-              sm: 1,
-              md: 1,
-              lg: 2,
-              xl: 2,
-              xxl: 3,
-            }}
-            dataSource={lodgementList.filter(x => x.status === 'done')}
-            renderItem={item => (
-              <List.Item key={item.id}>
-                <LodgementCard onClick={() => editLodgement(item)} value={item} />
-              </List.Item>
-            )}
-          />
+          <Tabs defaultActiveKey="ongoing" type="card">
+            <TabPane tab="Ongoing" key="ongoing">
+              {RenderListFilteredByStatus(['submitted', 'to_sign', 'signed'])}
+
+            </TabPane>
+            <TabPane tab="Draft" key="draft">
+              {RenderListFilteredByStatus(['draft'])}
+            </TabPane>
+            <TabPane tab="Completed" key="done">
+              {RenderListFilteredByStatus(['done'])}
+
+            </TabPane>
+          </Tabs>
         </Space>
 
       </ContainerStyled>
