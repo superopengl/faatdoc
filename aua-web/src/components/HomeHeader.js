@@ -73,11 +73,13 @@ class HomeHeaderRaw extends React.Component {
   }
 
   render() {
+    const history = this.props.history;
+
     return (
       <GlobalContext.Consumer>
         {
           context => {
-            const { role } = context;
+            const { role, setUser } = context;
             const isAdmin = role === 'admin';
             const isClient = role === 'client';
             const isAgent = role === 'agent';
@@ -90,7 +92,10 @@ class HomeHeaderRaw extends React.Component {
                 // content: 'Some descriptions',
                 async onOk() {
                   await logout();
+                  setUser(null);
+                  history.push('/');
                 },
+                maskClosable: true,
                 okText: 'Yes, log me out!',
                 onCancel() {
                 },
