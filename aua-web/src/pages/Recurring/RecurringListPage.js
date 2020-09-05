@@ -13,9 +13,9 @@ import * as moment from 'moment';
 import windowSize from 'react-window-size';
 import Text from 'antd/lib/typography/Text';
 import {
-  DeleteOutlined, EditOutlined, SearchOutlined, PlusOutlined
+  DeleteOutlined, EditOutlined, CaretRightFilled, PlusOutlined
 } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { List } from 'antd';
 import { Space } from 'antd';
 
@@ -29,11 +29,15 @@ import { listAgents } from 'services/userService';
 import Highlighter from "react-highlight-words";
 import ReviewSignPage from 'pages/MyLodgement/ReviewSignPage';
 import { TimeAgo } from 'components/TimeAgo';
-import {reactLocalStorage} from 'reactjs-localstorage';
-import { listRecurring } from 'services/recurringService';
+import { reactLocalStorage } from 'reactjs-localstorage';
+import { listRecurring, deleteRecurring, runRecurring } from 'services/recurringService';
 import RecurringForm from './RecurringForm';
+import { PortofolioAvatar } from 'components/PortofolioAvatar';
+import { notify } from 'util/notify';
+import cronstrue from 'cronstrue';
+import * as cronParser from 'cron-parser';
 
-const { Title, Paragraph } = Typography;
+const { Title, Paragraph, Link: TextLink } = Typography;
 const { TabPane } = Tabs;
 
 const ContainerStyled = styled.div`
@@ -72,16 +76,6 @@ const RecurringListPage = (props) => {
 
   const columnDef = [
     {
-      title: 'For Whom',
-      dataIndex: 'forWhom',
-      render: (text, record) => text
-    },
-    {
-      title: 'Client',
-      dataIndex: 'email',
-      render: (text, record) => text
-    },
-    {
       title: 'Job',
       dataIndex: 'jobTemplateName',
       render: (text, record) => text,
@@ -91,14 +85,21 @@ const RecurringListPage = (props) => {
       title: 'Portfolio',
       dataIndex: 'portofolioName',
       onFilter: (value, record) => record.agentId === value,
-      render: (text, record) => text
+      render: (text, record) => <>
+        <PortofolioAvatar value={text} size={40} /> {text} <Text type="secondary"><small>{record.email}</small></Text></>
+    },
+    {
+      title: 'Lodgement Name',
+      dataIndex: 'nameTemplate',
+      render: (text, record) => text,
+      ellipsis: false
     },
     {
       title: 'Recurring',
       dataIndex: 'cron',
-      sorter: (a, b) => moment(a.createdAt).toDate() - moment(b.createdAt).toDate(),
       render: (text, record) => {
-        return <TimeAgo value={text} />;
+        return cronstrue.toString(text, { use24HourTimeFormat: false, verbose: true });
+        // return <TimeAgo value={text} />;
       }
     },
     {
@@ -111,7 +112,8 @@ const RecurringListPage = (props) => {
     {
       title: 'Next Run At',
       render: (text, record) => {
-        return <Space size="small"><TimeAgo value={text} extra={<Button shape="circle" icon={<SearchOutlined />} onClick={() => handleShowSignDetail(record.id)} />}/></Space>;
+        const interval = cronParser.parseExpression(record.cron);
+        return <TimeAgo value={interval.next().toString()} />;
       }
     },
     {
@@ -119,9 +121,10 @@ const RecurringListPage = (props) => {
       // fixed: 'right',
       // width: 200,
       render: (text, record) => (
-        <Space size="middle">
-          <Link to={`/recurring/${record.id}`}><Button shape="circle" icon={<EditOutlined />} /></Link>
-          <Button shape="circle" danger icon={<DeleteOutlined />} />
+        <Space size="small">
+          <Button shape="circle" icon={<EditOutlined />} onClick={e => handleEditRecurring(e, record)} />
+          <Button shape="circle" icon={<CaretRightFilled />} onClick={e => handleRunRecurring(e, record)} />
+          <Button shape="circle" danger icon={<DeleteOutlined />} onClick={e => handleDelete(e, record)} />
         </Space>
       ),
     },
@@ -134,16 +137,6 @@ const RecurringListPage = (props) => {
     setLoading(false);
   }
 
-  const handleShowSignDetail = async (lodgementId) => {
-    Modal.info({
-      title: 'Client Review And Sign Details',
-      content: <ReviewSignPage id={lodgementId} readonly={true} />,
-      width: 700,
-      icon: null,
-      maskClosable: true,
-    });
-  }
-
   React.useEffect(() => {
     loadList();
   }, []);
@@ -151,6 +144,45 @@ const RecurringListPage = (props) => {
   const handleCreateNew = async () => {
     setCurrentId();
     setFormVisible(true);
+  }
+
+  const handleEditRecurring = async (e, record) => {
+    e.stopPropagation();
+    setCurrentId(record.id);
+    setFormVisible(true);
+  }
+
+  const handleDelete = async (e, item) => {
+    e.stopPropagation();
+    const { id, jobTemplateName, portofolioName, email } = item;
+    Modal.confirm({
+      title: <>To delete Recurring <strong>{jobTemplateName}</strong> for <strong>{portofolioName}</strong>?</>,
+      onOk: async () => {
+        await deleteRecurring(id);
+        loadList();
+      },
+      maskClosable: true,
+      okButtonProps: {
+        danger: true
+      },
+      okText: 'Yes, delete it!'
+    });
+  }
+
+  const handleRunRecurring = async (e, item) => {
+    e.stopPropagation();
+    const { id } = item;
+    const lodgement = await runRecurring(id);
+    notify.success(
+      'Successfully run the recurring',
+      <Text>The lodgement <TextLink strong onClick={() => props.history.push(`/lodgement/${lodgement.id}/proceed`)}>{lodgement.name}</TextLink> was created</Text>,
+      15
+    );
+  }
+
+  const handleEditOnOk = async () => {
+    await loadList();
+    setFormVisible(false);
   }
 
   return (
@@ -161,7 +193,7 @@ const RecurringListPage = (props) => {
           <StyledTitleRow>
             <Title level={2} style={{ margin: 'auto' }}>Recurring Job Management</Title>
           </StyledTitleRow>
-            <Button type="primary" ghost icon={<PlusOutlined />} onClick={() => handleCreateNew()}>New Recurring Job</Button>
+          <Button type="primary" ghost icon={<PlusOutlined />} onClick={() => handleCreateNew()}>New Recurring Job</Button>
 
           <Table columns={columnDef}
             dataSource={list}
@@ -172,14 +204,15 @@ const RecurringListPage = (props) => {
             // onChange={handleTableChange}
             onRow={(record, index) => ({
               onDoubleClick: e => {
-                props.history.push(`/lodgement/proceed/${record.id}`);
+                setCurrentId(record.id);
+                setFormVisible(true);
               }
             })}
           />
         </Space>
 
       </ContainerStyled>
-      <RecurringForm id={currentId} visible={formVisible} onClose={() => setFormVisible(false)}/>
+      <RecurringForm id={currentId} visible={formVisible} onClose={() => setFormVisible(false)} onOk={() => handleEditOnOk()} />
     </LayoutStyled >
   );
 };
@@ -188,4 +221,4 @@ RecurringListPage.propTypes = {};
 
 RecurringListPage.defaultProps = {};
 
-export default RecurringListPage;
+export default withRouter(RecurringListPage);

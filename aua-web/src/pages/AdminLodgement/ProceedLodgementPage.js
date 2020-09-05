@@ -210,7 +210,7 @@ const ProceedLodgementPage = (props) => {
                         type === 'paragraph' ? <Input.TextArea disabled={inputDisabled} /> :
                           type === 'date' ? <DateInput picker="date" disabled={inputDisabled} placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD" /> :
                             type === 'select' ? <Radio.Group disabled={inputDisabled} buttonStyle="solid">
-                              {field.options.map((x, i) => <Radio key={i} style={{ display: 'block', height: '2rem' }} value={x.value}>{x.label}</Radio>)}
+                              {field.options?.map((x, i) => <Radio key={i} style={{ display: 'block', height: '2rem' }} value={x.value}>{x.label}</Radio>)}
                             </Radio.Group> :
                               null}
                 </Form.Item>

@@ -15,6 +15,7 @@ import { getForgotPasswordHtmlEmail, getForgotPasswordTextEmail, getSignUpHtmlEm
 import * as moment from 'moment';
 import { logError } from '../utils/logger';
 import { getUtcNow } from '../utils/getUtcNow';
+import { generateLodgementByJobTemplateAndPortofolio } from '../utils/generateLodgementByJobTemplateAndPortofolio';
 import { json } from 'body-parser';
 import { JobTemplate } from '../entity/JobTemplate';
 import { Portofolio } from '../entity/Portofolio';
@@ -26,51 +27,15 @@ import { AnalysisSchemeLanguage } from 'aws-sdk/clients/cloudsearch';
 import { guessDisplayNameFromFields } from '../utils/guessDisplayNameFromFields';
 
 
-function prefillFieldsWithProtofolio(jobTemplateFields, portofolioFields) {
-  if (!portofolioFields) return jobTemplateFields;
-
-  const map = new Map(portofolioFields.map(({ name, value }) => [name, value]));
-  const fields = jobTemplateFields.map(jf => (
-    {
-      ...jf,
-      value: map.get(jf.name)
-    }
-  ));
-
-  return fields;
-}
-
-
 export const generateLodgement = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
   const { jobTemplateId, portofolioId, name } = req.body;
-  assert(jobTemplateId, 400, 'jobTemplateId is not specified');
 
-  const jobTemplateRepo = getRepository(JobTemplate);
-  const jobTemplate = await jobTemplateRepo.findOne(jobTemplateId);
-  assert(jobTemplate, 404, 'jobTemplate is not found');
-
-  let portofolio: Portofolio = null;
-  if (portofolioId) {
-    const portofolioRepo = getRepository(Portofolio);
-    portofolio = await portofolioRepo.findOne(portofolioId);
-    assert(portofolio, 404, 'portofolio is not found');
-  }
-
-  const lodgement = new Lodgement();
-
-  const { user: { id: userId } } = req;
-  const fields = prefillFieldsWithProtofolio(jobTemplate.fields, portofolio?.fields);
-
-  lodgement.name = `New ${jobTemplate.name} for ${portofolio.name}`;
-  lodgement.userId = userId;
-  lodgement.jobTemplateId = jobTemplateId;
-  lodgement.portofolioId = portofolioId;
-  lodgement.fields = fields;
-  lodgement.lastUpdatedAt = getUtcNow();
-  lodgement.status = LodgementStatus.DRAFT;
-
-  // This API create an empty lodgment for clients. No need to save to database.
+  const lodgement = await generateLodgementByJobTemplateAndPortofolio(
+    jobTemplateId,
+    portofolioId,
+    (j, p) => `New ${j.name} for ${p.name}`
+  );
 
   res.json(lodgement);
 });

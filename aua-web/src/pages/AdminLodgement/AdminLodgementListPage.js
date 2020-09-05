@@ -150,7 +150,7 @@ const AdminLodgementListPage = (props) => {
       // width: 200,
       render: (text, record) => (
         <Space size="middle">
-          <Link to={`/lodgement/proceed/${record.id}`}><Button shape="circle" icon={<EditOutlined />}></Button></Link>
+          <Link to={`/lodgement/${record.id}/proceed`}><Button shape="circle" icon={<EditOutlined />}></Button></Link>
         </Space>
       ),
     },
@@ -271,7 +271,7 @@ const AdminLodgementListPage = (props) => {
             onChange={handleTableChange}
             onRow={(record, index) => ({
               onDoubleClick: e => {
-                props.history.push(`/lodgement/proceed/${record.id}`);
+                props.history.push(`/lodgement/${record.id}/proceed`);
               }
             })}
           ></Table>

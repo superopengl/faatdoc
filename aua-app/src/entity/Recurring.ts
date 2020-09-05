@@ -8,6 +8,9 @@ export class Recurring {
   @Column({ default: () => `timezone('UTC', now())` })
   createdAt?: Date;
 
+  @Column()
+  nameTemplate: string;
+
   @Column('uuid')
   jobTemplateId: string;
 

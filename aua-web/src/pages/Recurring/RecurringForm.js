@@ -22,8 +22,9 @@ import { InputYear } from 'components/InputYear';
 import { DateInput } from 'components/DateInput';
 import 'react-chat-elements/dist/main.css';
 import { Button as ChatButton, Input as ChatInput, ChatItem, MessageBox } from 'react-chat-elements'
-import { getRecurring } from 'services/recurringService';
+import { getRecurring, saveRecurring } from 'services/recurringService';
 import { PortofolioAvatar } from 'components/PortofolioAvatar';
+import { CronInput } from 'components/CronInput';
 
 const { Text, Paragraph, Title } = Typography;
 const ContainerStyled = styled.div`
@@ -105,6 +106,14 @@ const StyledReceivedMessageBox = styled(MessageBox)`
 }
 `;
 
+const StyledPortofolioSelect = styled(Select)`
+  .ant-select-selector {
+    height: 50px !important;
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+  }
+`;
+
 const SentMessage = (props) => <StyledSentMessageBox {...props} position="right" />
 
 const ReceivedMessage = (props) => <StyledReceivedMessageBox {...props} position="left" />
@@ -116,7 +125,7 @@ const RecurringForm = (props) => {
   const isNew = !id;
   const [loading, setLoading] = React.useState(true);
   const [form] = Form.useForm();
-  const [recurring, setRecurring] = React.useState([]);
+  const [recurring, setRecurring] = React.useState({});
   const [jobTemplateList, setJobTemplateList] = React.useState([]);
   const [portofolioList, setPortofolioList] = React.useState([]);
 
@@ -133,27 +142,34 @@ const RecurringForm = (props) => {
     setLoading(false);
   }
 
-  const saveRecurring = async (values) => {
-    const { jobTemplateId, portofolioId, cron } = values;
+  const handleSaveRecurring = async (values) => {
+    const { jobTemplateId, portofolioId, nameTemplate, cron } = values;
     const recurring = {
       jobTemplateId,
       portofolioId,
+      nameTemplate,
       cron,
     }
 
     await saveRecurring(recurring);
-    props.onClose();
+    props.onOk();
   }
 
   React.useEffect(() => {
     loadRecurring();
-  }, []);
+  }, [id]);
 
 
   const onClose = () => {
     props.onClose();
   }
 
+  const initialValues = recurring ? {
+    jobTemplateId: recurring.jobTemplateId,
+    portofolioId: recurring.portofolioId,
+    nameTemplate: recurring.nameTemplate,
+    cron: recurring.cron
+  } : null;
 
   return (
     <StyledDrawer
@@ -162,11 +178,12 @@ const RecurringForm = (props) => {
       closable={true}
       visible={visible}
       onClose={() => onClose()}
-      width={400}
+      destroyOnClose={true}
+      width={800}
       // bodyStyle={{ padding: '0 10px' }}
       footer={null}
     >
-      <Form layout="vertical" onFinish={saveRecurring} form={form}>
+      <Form layout="vertical" onFinish={handleSaveRecurring} form={form} initialValues={initialValues}>
         <Form.Item label="Job Template" name="jobTemplateId" rules={[{ required: true, message: ' ' }]}>
           <Select allowClear loading={loading}>
             {jobTemplateList.map((x, i) => (<Select.Option key={i} value={x.id}>
@@ -175,14 +192,20 @@ const RecurringForm = (props) => {
           </Select>
         </Form.Item>
         <Form.Item label="Client Portofolio" name="portofolioId" rules={[{ required: true, message: ' ' }]}>
-          <Select allowClear loading={loading}>
+          <StyledPortofolioSelect allowClear loading={loading}>
             {portofolioList.map((x, i) => (<Select.Option key={i} value={x.id}>
-              <PortofolioAvatar value={x.name} size={40}/> {x.name} <Text type="secondary"><small>{x.email}</small></Text>
+              <PortofolioAvatar value={x.name} size={40}/> {x.name} <Text type="secondary"><small> - {x.email}</small></Text>
             </Select.Option>))}
-          </Select>
+          </StyledPortofolioSelect>
+        </Form.Item>
+        <Form.Item label="Lodgement Name Template" 
+        extra={<>The information is being validated... The supported date time formats are <Text code>DD MMM YYYY</Text></>}
+        name="nameTemplate" rules={[{ required: true, message: ' ', max: 100, whitespace: true }]}>
+          <Input maxLength={100}/>
         </Form.Item>
         <Form.Item label="Period" name="cron" rules={[{ required: true, message: ' ' }]}>
-          <Input autoSize={{ minRows: 3, maxRows: 20 }} maxLength={20} placeholder="Type here ..." allowClear disabled={loading} />
+          {/* <Input autoSize={{ minRows: 3, maxRows: 20 }} maxLength={20} placeholder="Type here ..." allowClear disabled={loading} /> */}
+          <CronInput/>
         </Form.Item>
         <Form.Item>
           <Button type="primary" block htmlType="submit" disabled={loading} >Save</Button>
@@ -193,7 +216,7 @@ const RecurringForm = (props) => {
 };
 
 RecurringForm.propTypes = {
-  id: PropTypes.string.isRequired,
+  id: PropTypes.string,
   visible: PropTypes.bool.isRequired,
 };
 

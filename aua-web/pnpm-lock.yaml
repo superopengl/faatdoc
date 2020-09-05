@@ -7,6 +7,8 @@ dependencies:
   antd: 4.6.2_react-dom@16.13.1+react@16.13.1
   axios: 0.19.2
   craco-less: 1.17.0_5d443e742fa91091789af07143985304
+  cron-parser: 2.16.3
+  cronstrue: 1.100.0
   file-saver: 2.0.2
   google-map-react: 2.0.8_react-dom@16.13.1+react@16.13.1
   google-maps-react: 2.0.6_react-dom@16.13.1+react@16.13.1
@@ -20,6 +22,7 @@ dependencies:
   react: 16.13.1
   react-beautiful-dnd: 13.0.0_react-dom@16.13.1+react@16.13.1
   react-chat-elements: 10.10.2_eb0d650be231ffd0ace4a30b38162117
+  react-cron-generator: 1.2.6_react-dom@16.13.1+react@16.13.1
   react-dom: 16.13.1_react@16.13.1
   react-file-icon: 1.0.0_react-dom@16.13.1+react@16.13.1
   react-google-maps: 9.4.5_react-dom@16.13.1+react@16.13.1
@@ -3840,6 +3843,23 @@ packages:
     dev: false
     resolution:
       integrity: sha512-MJG9liiZ+ogc4TzUwuvbER1JRdgvUFSB5+VR/g5h82fGaIRWMWddtKBHi7/sVhfjQZ6SehlyhvQYrcYkaUIpLg==
+  /cron-parser/2.16.3:
+    dependencies:
+      is-nan: 1.3.0
+      moment-timezone: 0.5.31
+    dev: false
+    engines:
+      node: '>=0.8'
+    resolution:
+      integrity: sha512-XNJBD1QLFeAMUkZtZQuncAAOgJFWNhBdIbwgD22hZxrcWOImBFMKgPC66GzaXpyoJs7UvYLLgPH/8BRk/7gbZg==
+  /cronstrue/1.100.0:
+    dev: false
+    resolution:
+      integrity: sha512-Hz+xjjmq2QgCQhnPxIVM02dwhOt5GwUywjKa17je9JWX4z2E0uecObXCFap8bmJE87JL9mToW/cGw5O06JgigQ==
+  /cronstrue/1.92.0:
+    dev: false
+    resolution:
+      integrity: sha512-AKptYmOJVXlxkzmHH6HTYJyuOr6t8FHHl4GJ+19yVLN7fMXRyNg3g67CzqdVYSWxaR2A4iOqvfxM/dsuyJpH9A==
   /cross-env/7.0.2:
     dependencies:
       cross-spawn: 7.0.3
@@ -6624,6 +6644,14 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-wZ8x1js7Ia0kecP/CHM/3ABkAmujX7WPvQk6uu3Fly/Mk44pySulQpnHG46OMjHGXApINnV4QhY3SWnECO2z5g==
+  /is-nan/1.3.0:
+    dependencies:
+      define-properties: 1.1.3
+    dev: false
+    engines:
+      node: '>= 0.4'
+    resolution:
+      integrity: sha512-z7bbREymOqt2CCaZVly8aC4ML3Xhfi0ekuOnjO2L8vKdl+CttdVoGZQhd4adMFAsxQ5VeRVwORs4tU8RH+HFtQ==
   /is-npm/4.0.0:
     dev: true
     engines:
@@ -8197,6 +8225,12 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-NKmAlESf6jMGym1++R0Ra7wvhV+wFW63FaSOFPwRahvea0gMUcGUhVeAg/0BC0wiv9ih5NYPB1Wn1UEI1/L+xQ==
+  /moment-timezone/0.5.31:
+    dependencies:
+      moment: 2.27.0
+    dev: false
+    resolution:
+      integrity: sha512-+GgHNg8xRhMXfEbv81iDtrVeTcWt0kWmTEY1XQK14dICTXnWJnT0dxdlPspwqF3keKMVPXwayEsk1DI0AA/jdA==
   /moment/2.27.0:
     dev: false
     resolution:
@@ -10651,6 +10685,17 @@ packages:
       react-dom: '*'
     resolution:
       integrity: sha512-zAdOuL7rOOaGHgjUp0lgdQktWvFUshsjdEaDBqHO/nUIsuEE8cXc3SW/2qM1fqOgO57iMYC3ng48vmzjDYspaQ==
+  /react-cron-generator/1.2.6_react-dom@16.13.1+react@16.13.1:
+    dependencies:
+      cronstrue: 1.92.0
+      react: 16.13.1
+      react-dom: 16.13.1_react@16.13.1
+    dev: false
+    peerDependencies:
+      react: ^16.8.6
+      react-dom: ^16.8.6
+    resolution:
+      integrity: sha512-WqbBOCGwpXjPiW1CdAcWm8oUIIykuxJGAPV4gYBjgi8IpMaJUqQCbAiXFMS46o5D4EnU4F/LSIOLGMwFWoPkSw==
   /react-dev-utils/10.2.1:
     dependencies:
       '@babel/code-frame': 7.8.3
@@ -13657,6 +13702,8 @@ specifiers:
   axios: ^0.19.2
   babel-plugin-import: ^1.13.0
   craco-less: ^1.16.0
+  cron-parser: ^2.16.3
+  cronstrue: ^1.100.0
   cross-env: ^7.0.2
   file-saver: ^2.0.2
   google-map-react: ^2.0.8
@@ -13673,6 +13720,7 @@ specifiers:
   react: ^16.13.1
   react-beautiful-dnd: ^13.0.0
   react-chat-elements: ^10.10.2
+  react-cron-generator: ^1.2.6
   react-dom: ^16.13.1
   react-file-icon: ^1.0.0
   react-google-maps: ^9.4.5

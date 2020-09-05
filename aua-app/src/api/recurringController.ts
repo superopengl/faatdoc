@@ -20,13 +20,17 @@ import { JobTemplate } from '../entity/JobTemplate';
 import { json } from 'body-parser';
 import { normalizeFieldNameToVar } from '../utils/normalizeFieldNameToVar';
 import { Recurring } from '../entity/Recurring';
+import { generateLodgementByJobTemplateAndPortofolio } from '../utils/generateLodgementByJobTemplateAndPortofolio';
+import { Lodgement } from '../entity/Lodgement';
+import { LodgementStatus } from '../enums/LodgementStatus';
 
 export const saveRecurring = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin');
-  const { id, portofolioId, jobTemplateId, cron } = req.body;
+  const { id, nameTemplate, portofolioId, jobTemplateId, cron } = req.body;
 
   const recurring = new Recurring();
   recurring.id = id || uuidv4();
+  recurring.nameTemplate = nameTemplate;
   recurring.portofolioId = portofolioId;
   recurring.jobTemplateId = jobTemplateId;
   recurring.cron = cron;
@@ -48,14 +52,15 @@ export const listRecurring = handlerWrapper(async (req, res) => {
     .innerJoin(q => q.from(User, 'u'), 'u', 'u.id = p."userId"')
     .orderBy('x.lastUpdatedAt', 'DESC')
     .select([
-      'x.id',
-      'u.email',
+      'x.id as id',
+      'x."nameTemplate" as "nameTemplate"',
+      'u.email as email',
       'j.name as "jobTemplateName"',
       'p.name as "portofolioName"',
-      'x.cron',
+      'x.cron as cron',
       'x."lastUpdatedAt" as "lastUpdatedAt"'
     ])
-    .getMany();
+    .execute();
 
   res.json(list);
 });
@@ -77,4 +82,27 @@ export const deleteRecurring = handlerWrapper(async (req, res) => {
   await repo.delete({ id });
 
   res.json();
+});
+
+export const runRecurring = handlerWrapper(async (req, res) => {
+  assertRole(req, 'admin');
+  const { id } = req.params;
+  const recurring = await getRepository(Recurring).findOne({ id });
+  assert(recurring, 404);
+
+  const { jobTemplateId, portofolioId, nameTemplate } = recurring;
+
+  const lodgement = await generateLodgementByJobTemplateAndPortofolio(
+    jobTemplateId,
+    portofolioId,
+    (j, p) => `Test`
+  );
+
+  const lodgementId = uuidv4();
+  lodgement.id = lodgementId;
+  lodgement.status = LodgementStatus.SUBMITTED;
+
+  await getRepository(Lodgement).save(lodgement);
+
+  res.json(lodgement);
 });

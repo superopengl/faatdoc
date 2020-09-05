@@ -12,6 +12,10 @@ export async function deleteRecurring(id) {
   return httpDelete(`recurring/${id}`);
 }
 
+export async function runRecurring(id) {
+  return httpPost(`recurring/${id}/run`);
+}
+
 export async function listRecurring() {
   return httpGet('recurring');
 }

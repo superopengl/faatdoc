@@ -12,16 +12,16 @@ function request(level, title, content, duration) {
 }
 
 export const notify = {
-  error(title, content?) {
+  error(title, content = null) {
     request('error', title, content, 6);
   },
-  success(title, content?) {
-    request('success', title, content, 4);
+  success(title, content = null, duration = 4) {
+    request('success', title, content, duration);
   },
-  info(title, content?) {
+  info(title, content = null) {
     request('info', title, content, 5);
   },
-  warn(title, content?) {
+  warn(title, content = null) {
     request('warn', title, content, 5);
   }
 }
