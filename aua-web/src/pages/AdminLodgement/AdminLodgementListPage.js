@@ -13,13 +13,13 @@ import * as moment from 'moment';
 import windowSize from 'react-window-size';
 import Text from 'antd/lib/typography/Text';
 import {
-  ExclamationCircleOutlined, EditOutlined, SearchOutlined
+  DeleteOutlined, EditOutlined, SearchOutlined
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { List } from 'antd';
 import { Space } from 'antd';
 
-import { listLodgement, searchLodgement, assignLodgement } from 'services/lodgementService';
+import { listLodgement, searchLodgement, assignLodgement, deleteLodgement } from 'services/lodgementService';
 import { random } from 'lodash';
 import { listJobTemplate } from 'services/jobTemplateService';
 import { listPortofolio } from 'services/portofolioService';
@@ -29,7 +29,7 @@ import { listAgents } from 'services/userService';
 import Highlighter from "react-highlight-words";
 import ReviewSignPage from 'pages/MyLodgement/ReviewSignPage';
 import { TimeAgo } from 'components/TimeAgo';
-import {reactLocalStorage} from 'reactjs-localstorage';
+import { reactLocalStorage } from 'reactjs-localstorage';
 
 const { Title, Paragraph } = Typography;
 const { TabPane } = Tabs;
@@ -141,7 +141,7 @@ const AdminLodgementListPage = (props) => {
       dataIndex: 'signedAt',
       sorter: (a, b) => moment(a.createdAt).toDate() - moment(b.createdAt).toDate(),
       render: (text, record) => {
-        return <Space size="small"><TimeAgo value={text} extra={<Button shape="circle" icon={<SearchOutlined />} onClick={() => handleShowSignDetail(record.id)} />}/></Space>;
+        return <Space size="small"><TimeAgo value={text} extra={<Button shape="circle" icon={<SearchOutlined />} onClick={() => handleShowSignDetail(record.id)} />} /></Space>;
       }
     },
     {
@@ -149,8 +149,9 @@ const AdminLodgementListPage = (props) => {
       // fixed: 'right',
       // width: 200,
       render: (text, record) => (
-        <Space size="middle">
+        <Space size="small">
           <Link to={`/lodgement/${record.id}/proceed`}><Button shape="circle" icon={<EditOutlined />}></Button></Link>
+          <Button shape="circle" danger onClick={e => handleDelete(e, record)} icon={<DeleteOutlined />}></Button>
         </Space>
       ),
     },
@@ -190,6 +191,23 @@ const AdminLodgementListPage = (props) => {
     const agentList = await listAgents();
     setAgentList(agentList);
     setLoading(false);
+  }
+
+  const handleDelete = async (e, item) => {
+    e.stopPropagation();
+    const { id, name, portofolioName, email } = item;
+    Modal.confirm({
+      title: <>Archive lodgement <Text strong>{name}</Text></>,
+      okText: 'Yes, Archive it',
+      onOk: async () => {
+        await deleteLodgement(id);
+        await loadList();
+      },
+      maskClosable: true,
+      okButtonProps: {
+        danger: true
+      }
+    });
   }
 
   const handleSearch = async (value) => {
@@ -246,7 +264,7 @@ const AdminLodgementListPage = (props) => {
             />
 
             <Button onClick={() => clearAllFilters()}>Create All Filters</Button>
-          <Select
+            <Select
               mode="multiple"
               allowClear
               style={{ width: '520px' }}

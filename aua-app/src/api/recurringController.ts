@@ -1,28 +1,15 @@
 
-import { getRepository, getManager, getConnection } from 'typeorm';
+import { getRepository } from 'typeorm';
 import { User } from '../entity/User';
 import { assert, assertRole } from '../utils/assert';
-import { validatePasswordStrength } from '../utils/validatePasswordStrength';
 import * as _ from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
-import { UserStatus } from '../enums/UserStatus';
-import { computeUserSecret } from '../utils/computeUserSecret';
 import { Portofolio } from '../entity/Portofolio';
 import { handlerWrapper } from '../utils/asyncHandler';
-import { createProfileEntity } from '../utils/createProfileEntity';
-import { sendEmail } from '../services/emailService';
-import { getForgotPasswordHtmlEmail, getForgotPasswordTextEmail, getSignUpHtmlEmail, getSignUpTextEmail } from '../utils/emailTemplates';
-import * as moment from 'moment';
-import { logError } from '../utils/logger';
 import { getUtcNow } from '../utils/getUtcNow';
-import { Role } from '../enums/Role';
 import { JobTemplate } from '../entity/JobTemplate';
-import { json } from 'body-parser';
-import { normalizeFieldNameToVar } from '../utils/normalizeFieldNameToVar';
 import { Recurring } from '../entity/Recurring';
-import { generateLodgementByJobTemplateAndPortofolio } from '../utils/generateLodgementByJobTemplateAndPortofolio';
-import { Lodgement } from '../entity/Lodgement';
-import { LodgementStatus } from '../enums/LodgementStatus';
+import { executeRecurring, restartCronService } from '../services/cronService';
 
 export const saveRecurring = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin');
@@ -38,6 +25,9 @@ export const saveRecurring = handlerWrapper(async (req, res) => {
 
   const repo = getRepository(Recurring);
   await repo.save(recurring);
+
+  // Restart cron service if any recurring changes
+  restartCronService(false);
 
   res.json();
 });
@@ -87,22 +77,8 @@ export const deleteRecurring = handlerWrapper(async (req, res) => {
 export const runRecurring = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin');
   const { id } = req.params;
-  const recurring = await getRepository(Recurring).findOne({ id });
-  assert(recurring, 404);
 
-  const { jobTemplateId, portofolioId, nameTemplate } = recurring;
-
-  const lodgement = await generateLodgementByJobTemplateAndPortofolio(
-    jobTemplateId,
-    portofolioId,
-    (j, p) => `Test`
-  );
-
-  const lodgementId = uuidv4();
-  lodgement.id = lodgementId;
-  lodgement.status = LodgementStatus.SUBMITTED;
-
-  await getRepository(Lodgement).save(lodgement);
+  const lodgement = await executeRecurring(id);
 
   res.json(lodgement);
 });

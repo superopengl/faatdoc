@@ -3,6 +3,7 @@ import * as http from 'http';
 import * as path from 'path';
 import { connectDatabase } from './db';
 import * as dotenv from 'dotenv';
+import { restartCronService } from './services/cronService';
 
 function validateEnvVars() {
   const requiredEnvVars = [
@@ -43,6 +44,7 @@ async function launchApp() {
   await connectDatabase();
 
   const app = createAppInstance();
+  restartCronService(true);
 
   const httpPort = +process.env.AUA_HTTP_PORT || 80;
   http.createServer(app).listen(httpPort);

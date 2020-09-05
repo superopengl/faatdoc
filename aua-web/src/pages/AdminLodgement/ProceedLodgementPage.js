@@ -115,21 +115,6 @@ const ProceedLodgementPage = (props) => {
     return values;
   }
 
-  const handleArchiveLodgement = () => {
-    Modal.confirm({
-      title: 'Archive this lodgement',
-      okText: 'Yes, Archive it',
-      onOk: async () => {
-        await deleteLodgement(lodgement.id);
-        goToListPage();
-      },
-      maskClosable: true,
-      okButtonProps: {
-        danger: true
-      }
-    })
-  }
-
   const handleCompleteLodgement = () => {
     Modal.confirm({
       title: 'Complete this lodgement',
@@ -184,7 +169,6 @@ const ProceedLodgementPage = (props) => {
           title={lodgement.name}
           subTitle={<LodgementProgressBar status={lodgement.status} width={80} />}
           extra={[
-            <Button key="1" type="primary" danger disabled={archiveDisabled} onClick={() => handleArchiveLodgement()}>Archive</Button>,
             <Button key="2" type="primary" ghost disabled={completeDisabled} onClick={() => handleCompleteLodgement()}>Complete</Button>,
             <Button key="3" type="primary" ghost disabled={requiresSignDisabled} onClick={() => handleRequestSign()}>Request Sign</Button>,
             <Button key="4" type="primary" ghost disabled={communicateDisabled} onClick={() => handleMessage()}>Communication</Button>,

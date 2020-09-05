@@ -14,13 +14,16 @@ export class SysLog {
     @Column({ default: 'error' })
     level?: string;
 
-    @Column({type: 'json', nullable: true})
+    @Column({ nullable: true })
+    message?: string;
+
+    @Column({ type: 'json', nullable: true })
     req: any;
 
-    @Column({type: 'json', nullable: true})
+    @Column({ type: 'json', nullable: true })
     res: any;
 
-    @Column({type: 'json', nullable: true})
+    @Column({ type: 'json', nullable: true })
     data: any;
 }
 
