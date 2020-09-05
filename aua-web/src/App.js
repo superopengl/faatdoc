@@ -29,6 +29,7 @@ import { getAuthUser } from 'services/authService';
 import { Spin } from 'antd';
 import {RoleRoute} from 'components/RoleRoute';
 import MyLodgementPage from 'pages/MyLodgement/MyLodgementPage';
+import RecurringListPage from 'pages/Recurring/RecurringListPage';
 
 
 class App extends React.Component {
@@ -80,6 +81,7 @@ class App extends React.Component {
             <RoleRoute loading={loading} path="/reset_password" exact component={ResetPasswordPage} />
             <RoleRoute visible={isAdmin} loading={loading} path="/admin" exact component={AdminPage} />
             <RoleRoute visible={isAdmin} loading={loading} path="/job_template" exact component={JobAdminPage} />
+            <RoleRoute visible={isAdmin} loading={loading} path="/recurring" exact component={RecurringListPage} />
             <RoleRoute visible={isAdmin} loading={loading} path="/clients" exact component={ClientsPage} />
             <RoleRoute visible={isAdmin} loading={loading} path="/tasks" exact component={ClientsPage} />
             <RoleRoute visible={isClient} loading={loading} path="/lodgement/:id" exact component={MyLodgementPage} />

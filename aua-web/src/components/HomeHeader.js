@@ -121,6 +121,7 @@ class HomeHeaderRaw extends React.Component {
                       {isAdmin && <Menu.Item key="clients"><Link to="/clients">Users</Link></Menu.Item>}
                       {/* {isAdmin && <Menu.Item key="admin"><Link to="/admin">Admin</Link></Menu.Item>} */}
                       {isAdmin && <Menu.Item key="job_template"><Link to="/job_template">Job Template</Link></Menu.Item>}
+                      {isAdmin && <Menu.Item key="recurring"><Link to="/recurring">Recurring</Link></Menu.Item>}
                       {!isGuest && <Menu.Item key="message"><Link to="/message">Messages</Link></Menu.Item>}
                       {!isGuest && <Menu.Item key="changePassword"><Link to="/change_password">Change Password</Link></Menu.Item>}
             {!isGuest && <Menu.Item key="logout" onClick={handleLogout}>{isAdmin ? 'Admin ' : isAgent ? 'Agent ' : null}Log Out</Menu.Item>}
@@ -143,10 +144,11 @@ class HomeHeaderRaw extends React.Component {
                     <Menu mode="inline" style={{ border: 0 }} openKeys={['gallery']}>
                       {isGuest && <Menu.Item key="login"><LoginOutlined /> <Link to="/login">Log In / Sign Up</Link></Menu.Item>}
                       {/* {isAdmin && <Menu.Item key="admin"><SettingOutlined /> <Link to="/admin">Admin</Link></Menu.Item>} */}
-                      {isAdmin && <Menu.Item key="job_template"><SettingOutlined /> <Link to="/job_template">Job Template</Link></Menu.Item>}
-                      {isAdmin && <Menu.Item key="clients"><SettingOutlined /> <Link to="/clients">Users</Link></Menu.Item>}
                       {!isGuest && <Menu.Item key="lodgement"><SnippetsOutlined /> <Link to="/lodgement">Lodgements</Link></Menu.Item>}
                       {isClient && <Menu.Item key="portofolio"><IdcardOutlined /> <Link to="/portofolio">Portofolios</Link></Menu.Item>}
+                      {isAdmin && <Menu.Item key="job_template"><SettingOutlined /> <Link to="/job_template">Job Template</Link></Menu.Item>}
+                      {isAdmin && <Menu.Item key="recurring"><SettingOutlined /> <Link to="/recurring">Recurring</Link></Menu.Item>}
+                      {isAdmin && <Menu.Item key="clients"><SettingOutlined /> <Link to="/clients">Users</Link></Menu.Item>}
                       {!isGuest && <Menu.Item key="messages"><MailOutlined /> <Link to="/message">Messages</Link></Menu.Item>}
                       {!isGuest && <Menu.Item key="changePassword"><SecurityScanOutlined /> <Link to="/change_password">Change Password</Link></Menu.Item>}
                       {isGuest && <Menu.Item key="home"><HomeOutlined /> <HashLink to="/#home" onClick={this.onClose}>Home</HashLink></Menu.Item>}

@@ -1,28 +1,24 @@
 import { Column, PrimaryColumn, Entity, Index } from 'typeorm';
 
 @Entity()
-export class JobTemplate {
+export class Recurring {
   @PrimaryColumn('uuid')
   id: string;
-
-
-  @Column()
-  @Index({unique: true})
-  name: string;
-
 
   @Column({ default: () => `timezone('UTC', now())` })
   createdAt?: Date;
 
+  @Column('uuid')
+  jobTemplateId: string;
+
+  @Column('uuid')
+  portofolioId: string;
+
+  @Column()
+  cron: string;
 
   @Column()
   lastUpdatedAt: Date;
-
-  @Column()
-  requiresSign: boolean;
-
-  @Column({ type: 'json' })
-  fields: any;
 }
 
 

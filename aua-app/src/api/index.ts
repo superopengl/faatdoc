@@ -4,3 +4,4 @@ export * from './userController';
 export * from './portofolioController';
 export * from './jobTemplateController';
 export * from './lodgementController';
+export * from './recurringController';

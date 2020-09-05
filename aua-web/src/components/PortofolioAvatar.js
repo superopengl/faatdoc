@@ -18,12 +18,13 @@ export const PortofolioAvatar = props => {
   const { value, size, style, ...other } = props;
   const {backgroundColor, color} = toMaterialStyle(value, 800);
   const name = getLabel(value);
+  const fontSize = 28 * size / 64;
   return <Avatar
     size={size}
     {...other}
     style={{...style, backgroundColor}}
   >
-    <Text style={{fontSize: '1.5rem', color}}>{name}</Text>
+    <Text style={{fontSize, color}}>{name}</Text>
   </Avatar>
 }
 

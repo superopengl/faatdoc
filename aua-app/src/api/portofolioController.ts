@@ -40,18 +40,41 @@ export const savePortofolio = handlerWrapper(async (req, res) => {
   res.json(null);
 });
 
-export const listPortofolio = handlerWrapper(async (req, res) => {
-  assertRole(req, 'client');
-
+async function listMyPortofolio(userId) {
   const list = await getRepository(Portofolio)
     .createQueryBuilder('x')
-    .where({userId: req.user.id})
+    .where({ userId })
     .orderBy('x.name', 'ASC')
     .select(['x.id', 'x.name', 'x.lastUpdatedAt'])
     .getMany();
+  return list;
+}
+
+async function listAdminPortofolio() {
+  const list = await getManager()
+    .createQueryBuilder()
+    .from(Portofolio, 'x')
+    .innerJoin(q => q.from(User, 'u').where(`u.role = 'client'`), 'u', 'u.id = x."userId"')
+    .orderBy('x.name', 'ASC')
+    .select([
+      'x.id as id',
+      'x.name as name',
+      'u.email as email'
+    ])
+    .execute();
+  return list;
+}
+
+export const listPortofolio = handlerWrapper(async (req, res) => {
+  assertRole(req, 'client', 'admin');
+  const { id, role } = req.user;
+  const list = role === 'client' ? await listMyPortofolio(id) :
+    role === 'admin' ? await listAdminPortofolio() :
+      [];
 
   res.json(list);
 });
+
 
 export const getPortofolio = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
