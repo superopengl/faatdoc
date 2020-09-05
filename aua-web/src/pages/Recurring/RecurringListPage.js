@@ -191,9 +191,9 @@ const RecurringListPage = (props) => {
       <ContainerStyled>
         <Space size="large" direction="vertical" style={{ width: '100%' }}>
           <StyledTitleRow>
-            <Title level={2} style={{ margin: 'auto' }}>Recurring Job Management</Title>
+            <Title level={2} style={{ margin: 'auto' }}>Recurring Management</Title>
           </StyledTitleRow>
-          <Button type="primary" ghost icon={<PlusOutlined />} onClick={() => handleCreateNew()}>New Recurring Job</Button>
+          <Button type="primary" ghost icon={<PlusOutlined />} onClick={() => handleCreateNew()}>New Recurring</Button>
 
           <Table columns={columnDef}
             dataSource={list}

@@ -35,7 +35,7 @@ const ContainerStyled = styled.div`
   margin: 6rem auto 2rem auto;
   padding: 0 0.5rem;
   width: 100%;
-  max-width: 700px;
+  max-width: 600px;
 `;
 
 const StyledTitleRow = styled.div`
@@ -194,7 +194,7 @@ const MyLodgementListPage = (props) => {
       <ContainerStyled>
         <Space size="large" direction="vertical" style={{ width: '100%' }}>
           <StyledTitleRow>
-            <Title level={2} style={{ margin: 'auto' }}>My Lodgements</Title>
+            <Title level={2} style={{ margin: 'auto' }}>Lodgements</Title>
           </StyledTitleRow>
           <Row style={{ flexDirection: 'row-reverse' }}>
 

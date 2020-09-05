@@ -31,7 +31,7 @@ const ContainerStyled = styled.div`
 margin: 6rem auto 2rem auto;
 padding: 0 0.5rem;
 width: 100%;
-max-width: 700px;
+max-width: 600px;
 `;
 
 const StyledTitleRow = styled.div`
@@ -104,7 +104,7 @@ const PortofolioPage = (props) => {
       <ContainerStyled>
         <Space size="small" direction="vertical" style={{ width: '100%' }}>
           <StyledTitleRow>
-            <Title level={2} style={{ margin: 'auto' }}>My Portofolios</Title>
+            <Title level={2} style={{ margin: 'auto' }}>Portofolios</Title>
           </StyledTitleRow>
           <Paragraph>Portofolios are predefined information that can be used to automatically fill in your lodgement application. You can save the information like name, phone, address, TFN, and etc. for future usage.</Paragraph>
           <Row style={{flexDirection: 'row-reverse'}}>

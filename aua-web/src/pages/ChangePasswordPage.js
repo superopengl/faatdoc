@@ -11,7 +11,7 @@ const ContainerStyled = styled.div`
   margin: 4rem auto 2rem auto;
   padding: 2rem 0.5rem;
   text-align: center;
-  max-width: 400px;
+  max-width: 300px;
   width: 100%;
 `;
 

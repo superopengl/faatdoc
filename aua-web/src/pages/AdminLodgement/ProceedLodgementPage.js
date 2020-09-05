@@ -25,9 +25,9 @@ import { LodgementProgressBar } from 'components/LodgementProgressBar';
 
 const { Text, Paragraph, Title } = Typography;
 const ContainerStyled = styled.div`
-  margin-top: 5rem;
+  margin: 5rem auto 0 auto;
   padding: 1rem;
-  // max-width: 700px;
+  max-width: 900px;
   width: 100%;
   display: flex;
 `;
@@ -218,7 +218,6 @@ const ProceedLodgementPage = (props) => {
             })}
           </Col>
           <Col span={12}>
-
             {lodgement.fields.filter(f => f.type === 'upload').map((field, i) => {
               const { name, description, type, required } = field;
               const formItemProps = {
