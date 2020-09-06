@@ -46,6 +46,7 @@ export const listRecurring = handlerWrapper(async (req, res) => {
       'x."nameTemplate" as "nameTemplate"',
       'u.email as email',
       'j.name as "jobTemplateName"',
+      `j.id as "jobTemplateId"`,
       'p.name as "portofolioName"',
       'x.cron as cron',
       'x."lastUpdatedAt" as "lastUpdatedAt"'

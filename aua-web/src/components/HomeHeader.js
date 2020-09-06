@@ -113,7 +113,7 @@ const HomeHeaderRaw = props => {
                     {isGuest && <Menu.Item key="login"><Link to="/login">Log In / Sign Up</Link></Menu.Item>}
                     {!isGuest && <Menu.Item key="lodgement"><Link to="/lodgement">Lodgement</Link></Menu.Item>}
                     {isClient && <Menu.Item key="portofolio"><Link to="/portofolio">Portofolio</Link></Menu.Item>}
-                    {isAdmin && <Menu.Item key="clients"><Link to="/clients">Users</Link></Menu.Item>}
+                    {/* {isAdmin && <Menu.Item key="clients"><Link to="/clients">Users</Link></Menu.Item>} */}
                     {/* {isAdmin && <Menu.Item key="admin"><Link to="/admin">Admin</Link></Menu.Item>} */}
                     {isAdmin && <Menu.Item key="job_template"><Link to="/job_template">Job Template</Link></Menu.Item>}
                     {isAdmin && <Menu.Item key="recurring"><Link to="/recurring">Recurring</Link></Menu.Item>}
@@ -146,7 +146,7 @@ const HomeHeaderRaw = props => {
                     {isClient && <Menu.Item key="portofolio"><IdcardOutlined /> <Link to="/portofolio">Portofolio</Link></Menu.Item>}
                     {isAdmin && <Menu.Item key="job_template"><SettingOutlined /> <Link to="/job_template">Job Template</Link></Menu.Item>}
                     {isAdmin && <Menu.Item key="recurring"><SettingOutlined /> <Link to="/recurring">Recurring</Link></Menu.Item>}
-                    {isAdmin && <Menu.Item key="clients"><SettingOutlined /> <Link to="/clients">Users</Link></Menu.Item>}
+                    {/* {isAdmin && <Menu.Item key="clients"><SettingOutlined /> <Link to="/clients">Users</Link></Menu.Item>} */}
                     {!isGuest && <Menu.Item key="notification"><MailOutlined /> <Link to="/notification">Notification <Badge count={notificationNumber} showZero={false} /></Link></Menu.Item>}
                     {!isGuest && <Menu.Item key="changePassword"><SecurityScanOutlined /> <Link to="/change_password">Change Password</Link></Menu.Item>}
                     {isGuest && <Menu.Item key="home"><HomeOutlined /> <HashLink to="/#home" onClick={onClose}>Home</HashLink></Menu.Item>}

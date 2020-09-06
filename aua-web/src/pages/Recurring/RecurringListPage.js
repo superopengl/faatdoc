@@ -76,9 +76,9 @@ const RecurringListPage = (props) => {
 
   const columnDef = [
     {
-      title: 'Job',
+      title: 'Job Template',
       dataIndex: 'jobTemplateName',
-      render: (text, record) => text,
+      render: (text, record) => <Link to={`/job_template/${record.jobTemplateId}`}>{text}</Link>,
       ellipsis: false
     },
     {
