@@ -6,3 +6,4 @@ export * from './jobTemplateController';
 export * from './lodgementController';
 export * from './recurringController';
 export * from './notificationController';
+export * from './contactController';

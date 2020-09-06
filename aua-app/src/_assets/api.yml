@@ -11,6 +11,14 @@ definitions:
   PingResponse:
     type: "object"
 paths:
+  /contact:
+    post:
+      operationId: saveContact
+      # security:
+      #   - authLoggedInUser: []
+      responses:
+        200:
+          description: OK
   /file/download/{id}:
     get:
       operationId: downloadFile

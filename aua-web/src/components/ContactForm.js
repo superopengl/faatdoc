@@ -2,6 +2,8 @@ import React from 'react';
 import { Form, Input, Button, message } from "antd";
 import styled from 'styled-components';
 import GoogleMapReact from 'google-map-react';
+import { saveContact } from 'services/contactService';
+import { notify } from 'util/notify';
 
 const Container = styled.div`
 margin-left: auto;
@@ -54,34 +56,15 @@ class ContactForm extends React.Component {
       return;
     }
 
-    const {
-      REACT_APP_EMAILJS_TEMPLATEID,
-      REACT_APP_EMAILJS_USERID
-    } = process.env;
-
     // console.log(process.env);
     try {
       this.setState({ sending: true });
-      // await emailjs.send(
-      //   'gmail_service',
-      //   REACT_APP_EMAILJS_TEMPLATEID,
-      //   {
-      //     guest_name: values.name,
-      //     guest_reply: values.reply,
-      //     guest_message: values.message,
-      //   },
-      //   REACT_APP_EMAILJS_USERID
-      // );
-      message.success({
-        content: 'Successfully sent out the message. We will reply shortly',
-        key: 'contact.message.done'
-      });
+
+      await saveContact(values);
+      notify.success('Successfully sent out the message. We will reply shortly');
       this.reset();
     } catch (e) {
-      message.error({
-        content: 'Failed to send out message',
-        key: 'contact.message.error'
-      });
+      notify.error('Failed to send out message');
       // console.error(e);
     } finally {
       this.setState({ sending: false }, () => this.props.onDone());
@@ -109,7 +92,7 @@ class ContactForm extends React.Component {
           <Form.Item name="company" rules={[{ required: false, whitespace: true, max: 100 }]}>
             <Input placeholder="Company" allowClear={true} maxLength={100} disabled={sending} />
           </Form.Item>
-          <Form.Item name="reply" rules={[{ required: true, message: 'Email or phone is required', whitespace: true, max: 100 }]}>
+          <Form.Item name="contact" rules={[{ required: true, message: 'Email or phone is required', whitespace: true, max: 100 }]}>
             <Input placeholder="Email or phone" allowClear={true} maxLength={100} disabled={sending} />
           </Form.Item>
           <Form.Item name="message" rules={[{ required: true, message: 'Message content is required', whitespace: true, max: 1000 }]}>
