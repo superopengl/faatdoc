@@ -10,6 +10,7 @@ import { login } from 'services/authService';
 import { getProfile } from 'services/userService';
 import { HashLink } from 'react-router-hash-link';
 import windowSize from 'react-window-size';
+import { refreshNotificationUnreadCount, setNotificationCount } from 'services/notificationService';
 
 
 const ContainerStyled = styled.div`
@@ -74,6 +75,8 @@ class LogInPage extends React.Component {
 
                 const user = await login(values.name, values.password);
                 setUser(user);
+
+                await refreshNotificationUnreadCount();
 
                 this.props.history.push('/lodgement');
               } catch {

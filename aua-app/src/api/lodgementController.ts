@@ -22,7 +22,7 @@ import { Portofolio } from '../entity/Portofolio';
 import { LodgementStatus } from '../enums/LodgementStatus';
 import e = require('express');
 import { normalizeFieldNameToVar } from '../utils/normalizeFieldNameToVar';
-import { Message } from '../entity/Message';
+import { Notification } from '../entity/Notification';
 import { AnalysisSchemeLanguage } from 'aws-sdk/clients/cloudsearch';
 import { guessDisplayNameFromFields } from '../utils/guessDisplayNameFromFields';
 
@@ -259,14 +259,14 @@ export const newLodgmentMessage = handlerWrapper(async (req, res) => {
   const lodgement = await getRepository(Lodgement).findOne(id);
   assert(lodgement, 404);
 
-  const message = new Message();
+  const message = new Notification();
   message.lodgementId = id;
   message.sender = req.user.id;
   message.clientUserId = lodgement.userId;
   message.agentUserId = lodgement.agentId;
   message.content = content;
 
-  const repo = getRepository(Message);
+  const repo = getRepository(Notification);
   await repo.save(message);
 
   res.json();
@@ -277,7 +277,7 @@ export const listLodgementMessage = handlerWrapper(async (req, res) => {
   const { id } = req.params;
   const { from, size } = req.query;
 
-  let query = getRepository(Message).createQueryBuilder()
+  let query = getRepository(Notification).createQueryBuilder()
     .where(`"lodgementId" = :id`, { id });
   if (req.user.role === 'client') {
     query = query.where(`"clientUserId" = :userId`, { userId: req.user.id });

@@ -197,7 +197,6 @@ const MyLodgementListPage = (props) => {
             <Title level={2} style={{ margin: 'auto' }}>Lodgements</Title>
           </StyledTitleRow>
           <Row style={{ flexDirection: 'row-reverse' }}>
-
             <Button type="primary"
               size="large" ghost icon={<PlusOutlined />} onClick={() => createNewLodgement()}>New Lodgement</Button>
           </Row>
@@ -205,14 +204,12 @@ const MyLodgementListPage = (props) => {
           <Tabs defaultActiveKey="ongoing" type="card">
             <TabPane tab="In Progress" key="ongoing">
               {RenderListFilteredByStatus(['submitted', 'to_sign', 'signed'])}
-
             </TabPane>
             <TabPane tab="Draft" key="draft">
               {RenderListFilteredByStatus(['draft'])}
             </TabPane>
             <TabPane tab="Completed" key="done">
               {RenderListFilteredByStatus(['done'])}
-
             </TabPane>
           </Tabs>
         </Space>

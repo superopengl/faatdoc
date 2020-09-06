@@ -30,6 +30,7 @@ import { Spin } from 'antd';
 import {RoleRoute} from 'components/RoleRoute';
 import MyLodgementPage from 'pages/MyLodgement/MyLodgementPage';
 import RecurringListPage from 'pages/Recurring/RecurringListPage';
+import NotificationPage from 'pages/Notification/NotificationPage';
 
 
 class App extends React.Component {
@@ -83,7 +84,7 @@ class App extends React.Component {
             <RoleRoute visible={isAdmin} loading={loading} path="/job_template" exact component={JobAdminPage} />
             <RoleRoute visible={isAdmin} loading={loading} path="/recurring" exact component={RecurringListPage} />
             <RoleRoute visible={isAdmin} loading={loading} path="/clients" exact component={ClientsPage} />
-            <RoleRoute visible={isAdmin} loading={loading} path="/tasks" exact component={ClientsPage} />
+            <RoleRoute visible={!isGuest} loading={loading} path="/notification" exact component={NotificationPage} />
             <RoleRoute visible={isClient} loading={loading} path="/lodgement/:id" exact component={MyLodgementPage} />
             <RoleRoute visible={isAdmin || isAgent || isClient} loading={loading} path="/lodgement" exact component={isClient ? MyLodgementListPage : AdminLodgementListPage} />
             <RoleRoute visible={isAdmin || isAgent} loading={loading} path="/lodgement/:id/proceed" exact component={ProceedLodgementPage} />

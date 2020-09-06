@@ -27,51 +27,6 @@ import { PortofolioAvatar } from 'components/PortofolioAvatar';
 import { CronInput } from 'components/CronInput';
 
 const { Text, Paragraph, Title } = Typography;
-const ContainerStyled = styled.div`
-  margin: 5rem auto 2rem auto;
-  padding: 1rem;
-  // max-width: 700px;
-  width: 100%;
-`;
-
-const Container = styled(Space)`
-// padding-top: 2rem;
-width: 100%;
-height: 100%;
-// position: relative;
-// display: flex;
-// flex-direction: column-reverse;
-`
-const ChatInputContainer = styled.div`
-// position: absolute;
-bottom: 0;
-right: 0;
-left: 0;
-width: 100%;
-// background-color: white;
-// border: 1px solid rgb(217, 217, 217);
-// border-radius: 4px;
-// padding: 4px;
-`;
-
-const MessageListContainer = styled.div`
-
-// padding: 1rem;
-overflow-x: hidden;
-overflow-y: auto;
-background-color: #143e86;
-border: 1px solid #eeeeee;
-
-.rce-mbox {
-  margin-right: 5px;
-}
-`;
-
-const MessageListInner = styled.div`
-display: flex;
-flex-direction: column-reverse;
-// height: 100%;
-`;
 
 const StyledDrawer = styled(Drawer)`
 
@@ -179,7 +134,7 @@ const RecurringForm = (props) => {
       visible={visible}
       onClose={() => onClose()}
       destroyOnClose={true}
-      width={800}
+      width={400}
       // bodyStyle={{ padding: '0 10px' }}
       footer={null}
     >

@@ -99,7 +99,7 @@ const LodgementChat = (props) => {
         context => {
           const myUserId = context.user.id;
           return <StyledDrawer
-            title="Communication"
+            title="Notify"
             
             placement="right"
             closable={true}

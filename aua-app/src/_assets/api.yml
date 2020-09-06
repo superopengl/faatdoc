@@ -429,3 +429,31 @@ paths:
       responses:
         200:
           description: OK
+  /notification:
+    get:
+      operationId: listNotification
+      # security:
+      #   - authClient: []
+      responses:
+        200:
+          description: OK
+  /notification/count/unread:
+    get:
+      operationId: getNotificationUnreadCount
+      responses:
+        200:
+          description: OK
+  /notification/:id:
+    get:
+      operationId: getNotification
+      # security:
+      #   - authClient: []
+      parameters:
+        - name: id
+          in: path
+          type: string
+          format: uuid
+          required: true
+      responses:
+        200:
+          description: OK

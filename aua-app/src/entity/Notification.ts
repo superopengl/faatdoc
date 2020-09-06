@@ -1,11 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, Index } from 'typeorm';
 
 @Entity()
-export class Message {
+export class Notification {
   @PrimaryGeneratedColumn('uuid')
   id?: string;
 
   @Column({ default: () => `timezone('UTC', now())` })
+  @Index()
   createdAt?: Date;
 
   @Column('uuid')
@@ -15,9 +16,10 @@ export class Message {
   sender: string;
 
   @Column('uuid')
+  @Index()
   clientUserId: string;
 
-  @Column('uuid')
+  @Column('uuid', {nullable: true})
   agentUserId: string;
 
   @Column()

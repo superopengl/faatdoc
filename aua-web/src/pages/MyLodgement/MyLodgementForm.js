@@ -160,7 +160,7 @@ const MyLodgementForm = (props) => {
         title={lodgement.name}
         style={{padding: '0'}}
         extra={[
-          isNew || ['draft', 'archive'].includes(lodgement.status) ? null : <Button key="message" onClick={() => setShowsMessage(true)}>Communication</Button>,
+          // isNew || ['draft', 'archive'].includes(lodgement.status) ? null : <Button key="message" onClick={() => setShowsMessage(true)}>Communication</Button>,
           // lodgement?.status === 'draft' ? <Button key="delete" danger disabled={disabled} onClick={handleDelete}>Delete</Button> : null,
           (canEdit && lodgement.status === 'draft') ? <Button key="save" ghost type="primary" disabled={disabled} onClick={() => saveDraft()}>Save As Draft</Button> : null,
           canEdit ? <Button key="submit" type="primary" htmlType="submit" disabled={disabled}>Submit Now</Button> : null,

@@ -171,7 +171,7 @@ const ProceedLodgementPage = (props) => {
           extra={[
             <Button key="2" type="primary" ghost disabled={completeDisabled} onClick={() => handleCompleteLodgement()}>Complete</Button>,
             <Button key="3" type="primary" ghost disabled={requiresSignDisabled} onClick={() => handleRequestSign()}>Request Sign</Button>,
-            <Button key="4" type="primary" ghost disabled={communicateDisabled} onClick={() => handleMessage()}>Communication</Button>,
+            <Button key="4" type="primary" ghost disabled={communicateDisabled} onClick={() => handleMessage()}>Notify</Button>,
             <Button key="5" type="primary" htmlType="submit" disabled={saveDisabled}>Save</Button>,
           ]}
         >
@@ -222,17 +222,6 @@ const ProceedLodgementPage = (props) => {
       }
       {/* <Divider type="vertical" style={{ height: "100%" }} /> */}
     </ContainerStyled>
-    {/* {lodgement && <Modal
-      title="Communication"
-      visible={showsMessage}
-      onCancel={() => setShowsMessage(false)}
-      onOk={() => setShowsMessage(false)}
-      footer={null}
-      width={700}
-      bodyStyle={{ maxHeight: '90vh' }}
-    >
-      <LodgementChat lodgementId={lodgement.id} />
-    </Modal>} */}
 
     {lodgement && <LodgementChat visible={showsMessage} onClose={() => setShowsMessage(false)} lodgementId={lodgement?.id} readonly={communicationReadonly} />}
 

@@ -14,112 +14,6 @@ import cronstrue from 'cronstrue';
 
 const { Title, Text } = Typography;
 
-const { TabPane } = Tabs;
-
-const StyledCron = styled.div`
-.cron_builder_bordering {
-  border: 1px solid #d9d9d9;
-  // border-top: none; 
-  text-align: center;
-  padding: 10px;
-  background: #fff;
-  margin-top: 4px;
-}
-.cron_builder_bordering input, .cron_builder_bordering select {
-  width: 100px;
-  margin-right: 10px;
-  margin-left: 10px;
-  border: 1px solid #d9d9d9;
-  border-radius: 4px;
-  outline: none;
-  padding-left: 5px;
-  cursor: pointer;
-}
-
-.df {
-  display: flex;
-}
-.cron-builder-bg {
-  // background-color: #086090;
-  color: white;
-  text-align: center;
-  margin-bottom: 4px;
-  padding: 8px 0px;
-}
-.cron_builder_bordering select {
-  background-color: white;
-  width: 75px;
-  cursor: pointer;
-  padding: 4px 0px;
-  border-radius: 4px;
-}
-.cron_builder_bordering select option:hover {
-  background-color: #086090;
-}
-
-.tab-pane, .container-fluid {
-  text-align: left;
-
-}
-.well {
-  padding: 0.5rem;
-  text-align: left;
-}
-.well-small input {
-  width: auto !important;
-}
-.cron_builder_bordering  input[type='radio'] {
-  margin-top: 0px;
-  vertical-align: middle;
-}
-.cron_builder {
-  border: 1px solid #d9d9d9;
-  border: none;
-  border-radius: 2px;
-  padding: 0;
-  background-color: white;
-  width: 100%;
-}
-.text_align_left {
-  text-align: left;
-}
-
-
-ul.nav {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.nav.nav-tabs {
-  padding-left: 0;
-}
-
-.nav li {
-  cursor: pointer;
-  display: inline;
-  border: solid;
-  border-width: 1px;
-  border-color: #d9d9d9;
-  margin: 0 5px 0 0;
-  padding: 0.5rem 1rem;
-  background-color: rgb(250, 250, 250);
-
-  a {
-    color: rgba(0, 0, 0, 0.85);
-  }
-
-  &.active {
-    background-color: white;
-    border-width: 1px 1px 0 1px;
-
-    a {
-      color: #143e86;
-    }
-  }
-}
-`;
-
 const radioStyle = {
   display: 'block',
   height: '40px',
@@ -210,14 +104,6 @@ export const CronInput = props => {
       onChange={handleTimeChange}
     />
     {expression && <Text>{expression}</Text>}
-    {/* <StyledCron><Cron
-      onChange={onChange}
-      value={value}
-      showResultText={true}
-      showResultCron={true}
-      options={{ headers: [HEADER.MONTHLY, HEADER.WEEKLY] }}
-    />
-    </StyledCron> */}
   </Space>);
 }
 
