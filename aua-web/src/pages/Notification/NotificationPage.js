@@ -115,12 +115,12 @@ const NotificationPage = (props) => {
                 onClick={e => handleRead(e, item)}
                 key={item.id}
                 actions={[
-                  <TimeAgo value={item.createdAt} />
+                  <TimeAgo value={item.createdAt} strong={!item.readAt} />
                 ]}
               >
                 <List.Item.Meta
                   // avatar={<PortofolioAvatar style={{marginTop: 6}} value={item.name} />}
-                  title={<Paragraph ellipsis={{rows: 1, expandable: false}} style={{fontWeight:item.readAt ? 300: 600 }}>{item.content}</Paragraph>}
+                  title={<Paragraph ellipsis={{rows: 1, expandable: false}} style={{fontWeight:item.readAt ? 300: 800 }}>{item.content}</Paragraph>}
                   // description={}
                 />
                 {/* <PortofolioCard onClick={() => openModalToEdit(item.id)} onDelete={() => loadList()} id={item.id} name={item.name} /> */}

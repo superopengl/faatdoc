@@ -42,11 +42,12 @@ const StyledDrawer = styled(Drawer)`
 
 const StyledSentMessageBox = styled(MessageBox)`
 .rce-mbox {
-  background-color: #143e86;
-  color: rgba(255,255,255,0.9);
+  margin-right: 5px;
+  background-color: #f0f0f0;
+  // color: rgba(255,255,255,0.9);
 
   .rce-mbox-time {
-    color: rgba(255,255,255,0.7);
+    // color: rgba(255,255,255,0.7);
   }
 }
 `;
@@ -99,8 +100,7 @@ const LodgementChat = (props) => {
         context => {
           const myUserId = context.user.id;
           return <StyledDrawer
-            title="Notify"
-            
+            title="Lodgement Notification"
             placement="right"
             closable={true}
             visible={visible}
@@ -130,14 +130,6 @@ const LodgementChat = (props) => {
                   notch={false}
                 />
               })}
-              {/* <ChatInputContainer>
-              <Form onFinish={sendMessage} form={form}>
-                <Form.Item name="content" style={{ marginBottom: 4 }}>
-                  <Input.TextArea autoSize={{ minRows: 3, maxRows: 20 }} maxLength={2000} placeholder="Type here ..." allowClear disabled={loading} />
-                </Form.Item>
-                <Button type="primary" ghost block icon={<SendOutlined />} htmlType="submit" disabled={loading} >Send</Button>
-              </Form>
-            </ChatInputContainer> */}
             </Space>
           </StyledDrawer>
         }

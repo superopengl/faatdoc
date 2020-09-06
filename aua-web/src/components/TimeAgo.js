@@ -20,7 +20,7 @@ font-size: 0.8rem;
 `
 
 export const TimeAgo = props => {
-  const { surfix, value, defaultContent, direction, extra } = props;
+  const { surfix, value, defaultContent, direction, strong, extra } = props;
   if (!value) {
     return defaultContent || null;
   }
@@ -29,8 +29,8 @@ export const TimeAgo = props => {
   const display = direction === 'horizontal' ? 'inline-block' : 'block';
   return <StyledSpace size="small" direction="horizontal">
     <Space direction={direction} size="small">
-      <Text>{realSurfix}<ReactTimeAgo date={m.toDate()} /></Text>
-      <Text type="secondary"><small>{m.format('DD MMM YYYY HH:ss')}</small></Text>
+      <Text strong={strong}>{realSurfix}<ReactTimeAgo date={m.toDate()} /></Text>
+      <Text strong={strong} type="secondary"><small>{m.format('DD MMM YYYY HH:ss')}</small></Text>
     </Space>
     {extra}
   </StyledSpace>
@@ -42,9 +42,11 @@ TimeAgo.propTypes = {
   defaultContent: PropTypes.string,
   direction: PropTypes.string,
   extra: PropTypes.any,
+  strong: PropTypes.bool
 };
 
 TimeAgo.defaultProps = {
   direction: 'vertical',
-  extra: null
+  extra: null,
+  strong: false
 };
