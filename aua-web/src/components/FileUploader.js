@@ -11,7 +11,6 @@ import * as _ from 'lodash';
 import styled from 'styled-components';
 import { InboxOutlined } from '@ant-design/icons';
 import { searchFile } from 'services/fileService';
-import { getFileUrl } from 'util/getFileUrl';
 import * as moment from 'moment';
 import { FileIcon } from './FileIcon';
 
@@ -93,7 +92,7 @@ export const FileUploader = (props) => {
         uid: x.id,
         name: x.fileName,
         status: 'done',
-        url: getFileUrl(x.id),
+        url: x.location,
       }));
       setFileList(fileList);
     }

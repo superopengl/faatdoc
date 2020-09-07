@@ -1,11 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Tabs, Typography, Layout, Button, Modal, Divider, List, Space, Row } from 'antd';
-import PosterAdminGrid from 'components/grids/PosterAdminGrid';
-import GalleryAdminGrid from 'components/grids/GalleryAdminGrid';
-import BusinessAdminGrid from 'components/grids/BusinessAdminGrid';
-import EventAdminGrid from 'components/grids/EventAdminGrid';
-import { LargePlusButton } from 'components/LargePlusButton';
 import HomeHeader from 'components/HomeHeader';
 import { PortofolioAvatar } from 'components/PortofolioAvatar';
 import { handleDownloadCsv } from 'services/memberService';
@@ -89,7 +84,7 @@ const NotificationPage = (props) => {
       content: <>
       <Space style={{width: '100%', justifyContent: 'space-between'}}><TimeAgo value={createdAt} surfix="Sent at"/><TimeAgo value={readAt} surfix="Read at"/></Space>
       <Divider/>
-      <Paragraph>{content}</Paragraph>
+      <Paragraph style={{whiteSpace: 'pre-line'}}>{content}</Paragraph>
       </>
     })
     await loadList();

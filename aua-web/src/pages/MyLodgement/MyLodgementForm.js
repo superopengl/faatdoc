@@ -99,11 +99,9 @@ const MyLodgementForm = (props) => {
     // debugger;
     setLoading(true);
     try {
-      await saveLodgement({ ...lodgement, status: 'submitted' });
+      await saveLodgement({...lodgement, ...values, status: 'submitted' });
       // form.resetFields();
       await props.onChange();
-    } catch (e) {
-      notify.error('Failed to save lodgement', e.message);
     } finally {
       setLoading(false);
     }
@@ -117,7 +115,7 @@ const MyLodgementForm = (props) => {
 
   const handleSelectedTemplate = async (values) => {
     setLoading(true);
-    const {jobTemplateId, portofolioId} = values;
+    const { jobTemplateId, portofolioId } = values;
     const lodgement = await generateLodgement(jobTemplateId, portofolioId);
     setLodgement(lodgement);
     setLoading(false);
@@ -155,49 +153,49 @@ const MyLodgementForm = (props) => {
       {showsGenerator && <LodgementGenerator onChange={handleSelectedTemplate} jobTemplateList={jobTemplateList} portofolioList={portofolioList} />}
 
       {lodgement && <>
-      <StyledPageHeader
-        onBack={() => handleCancel()}
-        title={lodgement.name}
-        style={{padding: '0'}}
-        extra={[
-          // isNew || ['draft', 'archive'].includes(lodgement.status) ? null : <Button key="message" onClick={() => setShowsMessage(true)}>Communication</Button>,
-          // lodgement?.status === 'draft' ? <Button key="delete" danger disabled={disabled} onClick={handleDelete}>Delete</Button> : null,
-          (canEdit && lodgement.status === 'draft') ? <Button key="save" ghost type="primary" disabled={disabled} onClick={() => saveDraft()}>Save As Draft</Button> : null,
-          canEdit ? <Button key="submit" type="primary" htmlType="submit" disabled={disabled}>Submit Now</Button> : null,
-        ]}
-      />
-      <Form form={form} layout="vertical"
-        onValuesChange={handleValuesChange}
-        onFinish={handleSubmit}
-        style={{ textAlign: 'left' }} initialValues={getFormInitialValues()}>
-        <Form.Item label="Name" name="name" rules={[{ required: true }]}>
-          <Input disabled={disabled} />
-        </Form.Item>
+        <Form form={form} layout="vertical"
+          onValuesChange={handleValuesChange}
+          onFinish={handleSubmit}
+          style={{ textAlign: 'left' }} initialValues={getFormInitialValues()}>
+          <StyledPageHeader
+            onBack={() => handleCancel()}
+            title={lodgement.name}
+            style={{ padding: '0' }}
+            extra={[
+              // isNew || ['draft', 'archive'].includes(lodgement.status) ? null : <Button key="message" onClick={() => setShowsMessage(true)}>Communication</Button>,
+              // lodgement?.status === 'draft' ? <Button key="delete" danger disabled={disabled} onClick={handleDelete}>Delete</Button> : null,
+              (canEdit && lodgement.status === 'draft') ? <Button key="save" ghost type="primary" disabled={disabled} onClick={() => saveDraft()}>Save As Draft</Button> : null,
+              canEdit ? <Button key="submit" type="primary" htmlType="submit" disabled={disabled}>Submit Now</Button> : null,
+            ]}
+          />
+          <Form.Item label="Name" name="name" rules={[{ required: true }]}>
+            <Input disabled={disabled} />
+          </Form.Item>
 
-        {lodgement.fields.filter(field => !field.officialOnly).map((field, i) => {
-          const { name, description, type, required } = field;
-          const formItemProps = {
-            label: <>{getDisplayNameFromVarName(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
-            name,
-            rules: [{ required }]
-          }
-          return (
-            <Form.Item key={i} {...formItemProps}>
-              {type === 'text' ? <Input disabled={disabled} /> :
-                type === 'year' ? <DateInput picker="year" placeholder="YYYY" disabled={disabled} /> :
-                  type === 'monthRange' ? <RangePickerInput picker="month" disabled={disabled} /> :
-                    type === 'number' ? <Input disabled={disabled} type="number" pattern="[0-9.]*" /> :
-                      type === 'paragraph' ? <Input.TextArea disabled={disabled} /> :
-                        type === 'date' ? <DateInput picker="date" disabled={disabled} placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD" /> :
-                          type === 'upload' ? <FileUploader disabled={disabled} /> :
-                            type === 'select' ? <Radio.Group disabled={disabled} buttonStyle="solid">
-                              {field.options?.map((x, i) => <Radio key={i} style={{ display: 'block', height: '2rem' }} value={x.value}>{x.label}</Radio>)}
-                            </Radio.Group> :
-                              null}
-            </Form.Item>
-          );
-        })}
-      </Form>
+          {lodgement.fields.filter(field => !field.officialOnly).map((field, i) => {
+            const { name, description, type, required } = field;
+            const formItemProps = {
+              label: <>{getDisplayNameFromVarName(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
+              name,
+              rules: [{ required }]
+            }
+            return (
+              <Form.Item key={i} {...formItemProps}>
+                {type === 'text' ? <Input disabled={disabled} /> :
+                  type === 'year' ? <DateInput picker="year" placeholder="YYYY" disabled={disabled} /> :
+                    type === 'monthRange' ? <RangePickerInput picker="month" disabled={disabled} /> :
+                      type === 'number' ? <Input disabled={disabled} type="number" pattern="[0-9.]*" /> :
+                        type === 'paragraph' ? <Input.TextArea disabled={disabled} /> :
+                          type === 'date' ? <DateInput picker="date" disabled={disabled} placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD" /> :
+                            type === 'upload' ? <FileUploader disabled={disabled} /> :
+                              type === 'select' ? <Radio.Group disabled={disabled} buttonStyle="solid">
+                                {field.options?.map((x, i) => <Radio key={i} style={{ display: 'block', height: '2rem' }} value={x.value}>{x.label}</Radio>)}
+                              </Radio.Group> :
+                                null}
+              </Form.Item>
+            );
+          })}
+        </Form>
       </>}
     </Space>
     {lodgement && <LodgementChat visible={showsMessage} onClose={() => setShowsMessage(false)} lodgementId={lodgement?.id} readonly={communicationReadonly} />}

@@ -5,7 +5,6 @@ import 'antd/dist/antd.less';
 import 'react-image-lightbox/style.css';
 import { Route, BrowserRouter, Switch, Redirect } from 'react-router-dom';
 import HomePage from 'pages/HomePage';
-import AdminPage from 'pages/AdminPage';
 import LogInPage from 'pages/LogInPage';
 import ResetPasswordPage from 'pages/ResetPasswordPage';
 import MembershipPage from 'pages/MembershipPage';
@@ -17,9 +16,6 @@ import SignUpPage from 'pages/SignUpPage';
 import TermAndConditionPage from 'pages/TermAndConditionPage';
 import Error404 from 'pages/Error404';
 import PrivacyPolicyPage from 'pages/PrivacyPolicyPage';
-import GalleryPage from 'pages/GalleryPage';
-import OtherPage from 'pages/OtherPage';
-import ClientsPage from 'pages/ClientsPage';
 import MyLodgementListPage from 'pages/MyLodgement/MyLodgementListPage';
 import JobAdminPage from 'pages/JobTemplate/JobAdminPage';
 import PortofolioPage from 'pages/Portofolio/PortofolioPage';
@@ -76,14 +72,13 @@ class App extends React.Component {
           <Switch>
             <RoleRoute loading={loading} path="/" exact component={HomePage} />
             <RoleRoute visible={isGuest} loading={loading} path="/login" exact component={LogInPage} />
-            <RoleRoute visible={isAdmin || isGuest} loading={loading} path="/signup" component={SignUpPage} />
-            <RoleRoute loading={loading} path="/forgot_password" exact component={ForgotPasswordPage} />
+            <RoleRoute visible={isGuest} loading={loading} path="/signup" component={SignUpPage} />
+            <RoleRoute visible={isGuest} loading={loading} path="/forgot_password" exact component={ForgotPasswordPage} />
             <RoleRoute visible={isClient} loading={loading} path="/portofolio" component={PortofolioPage} />
             <RoleRoute loading={loading} path="/reset_password" exact component={ResetPasswordPage} />
-            <RoleRoute visible={isAdmin} loading={loading} path="/admin" exact component={AdminPage} />
             <RoleRoute visible={isAdmin} loading={loading} path="/job_template" exact component={JobAdminPage} />
             <RoleRoute visible={isAdmin} loading={loading} path="/recurring" exact component={RecurringListPage} />
-            <RoleRoute visible={isAdmin} loading={loading} path="/clients" exact component={ClientsPage} />
+            {/* <RoleRoute visible={isAdmin} loading={loading} path="/clients" exact component={ClientsPage} /> */}
             <RoleRoute visible={!isGuest} loading={loading} path="/notification" exact component={NotificationPage} />
             <RoleRoute visible={isClient} loading={loading} path="/lodgement/:id" exact component={MyLodgementPage} />
             <RoleRoute visible={isAdmin || isAgent || isClient} loading={loading} path="/lodgement" exact component={isClient ? MyLodgementListPage : AdminLodgementListPage} />

@@ -1,11 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Tabs, Typography, Layout, Button, Select, Table, Input, Modal } from 'antd';
-import PosterAdminGrid from 'components/grids/PosterAdminGrid';
-import GalleryAdminGrid from 'components/grids/GalleryAdminGrid';
-import BusinessAdminGrid from 'components/grids/BusinessAdminGrid';
-import EventAdminGrid from 'components/grids/EventAdminGrid';
-import { LargePlusButton } from 'components/LargePlusButton';
 import HomeHeader from 'components/HomeHeader';
 import { handleDownloadCsv } from 'services/memberService';
 import { saveAs } from 'file-saver';
@@ -193,7 +188,10 @@ const RecurringListPage = (props) => {
           <StyledTitleRow>
             <Title level={2} style={{ margin: 'auto' }}>Recurring Management</Title>
           </StyledTitleRow>
+          <Space style={{width: '100%', justifyContent: 'flex-end'}}>
+
           <Button type="primary" ghost icon={<PlusOutlined />} onClick={() => handleCreateNew()}>New Recurring</Button>
+          </Space>
 
           <Table columns={columnDef}
             dataSource={list}

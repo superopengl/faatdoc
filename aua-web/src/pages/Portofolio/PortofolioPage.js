@@ -1,11 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Tabs, Typography, Layout, Button, Modal, Divider, List, Space, Row } from 'antd';
-import PosterAdminGrid from 'components/grids/PosterAdminGrid';
-import GalleryAdminGrid from 'components/grids/GalleryAdminGrid';
-import BusinessAdminGrid from 'components/grids/BusinessAdminGrid';
-import EventAdminGrid from 'components/grids/EventAdminGrid';
-import { LargePlusButton } from 'components/LargePlusButton';
 import HomeHeader from 'components/HomeHeader';
 import { PortofolioAvatar } from 'components/PortofolioAvatar';
 import { handleDownloadCsv } from 'services/memberService';
@@ -108,7 +103,7 @@ const PortofolioPage = (props) => {
           </StyledTitleRow>
           <Paragraph>Portofolios are predefined information that can be used to automatically fill in your lodgement application. You can save the information like name, phone, address, TFN, and etc. for future usage.</Paragraph>
           <Row style={{flexDirection: 'row-reverse'}}>
-            <Button type="primary" size="large" ghost icon={<PlusOutlined />} onClick={() => openModalToCreate()}>New Portofolio</Button>
+            <Button type="primary"ghost icon={<PlusOutlined />} onClick={() => openModalToCreate()}>New Portofolio</Button>
           </Row>
           <List
             itemLayout="horizontal"

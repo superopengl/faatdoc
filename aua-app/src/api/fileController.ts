@@ -11,44 +11,50 @@ import * as fs from 'fs';
 import { uuidToRelativePath } from '../utils/uuidToRelativePath';
 import { assertRole } from '../utils';
 import { getUtcNow } from '../utils/getUtcNow';
+import { Lodgement } from '../entity/Lodgement';
 
-function getDirByFileId(uuid) {
-  const localPath = process.env.AUA_FILE_STORAGE_PATH;
-  assert(localPath, 500, `AUA_FILE_STORAGE_PATH is not configured`);
-  const env = process.env.NODE_ENV;
-  const subDir = uuidToRelativePath(uuid);
-  const relative = `${env}/${subDir}`;
-  const full = path.resolve(localPath, relative);
-
-  return {
-    full,
-    relative
-  };
+function getS3Service() {
+  awsConfig();
+  return new aws.S3();
 }
 
-function getFilePathByFileId(uuid, name) {
-  const { full, relative } = getDirByFileId(uuid);
-  return {
-    full: path.resolve(full, name),
-    relative: `${relative}/${name}`
+// Upload your image to S3
+async function uploadToS3(id, name, data): Promise<string> {
+  const bucketName = process.env.AUA_S3_BUCKET;
+  const prefix = process.env.AUA_IMAGE_PREFIX;
+
+  assert(prefix && id, 404, `image path cannot be composed '${bucketName}/${prefix}/${id}/${name}'`);
+
+  const s3 = getS3Service();
+
+  const opt = {
+    Bucket: bucketName,
+    Key: `${prefix}/${id}`,
+    Body: data
   };
+  const resp = await s3.upload(opt).promise();
+
+  // return the S3's path to the image
+  return resp.Location;
 }
+
 
 export const downloadFile = handlerWrapper(async (req, res) => {
+  assertRole(req, 'admin', 'client', 'agent');
   const { id } = req.params;
+  const { user: {id: userId, role} } = req;
+
   const repo = getRepository(File);
   const file = await repo.findOne(id);
   assert(file, 404);
 
-  if (req.user?.role === 'client') {
+  if (role === 'client') {
     // Only record the read by client
     file.lastReadAt = getUtcNow();
     await repo.save(file);
   }
 
-  const fullPath = path.resolve(process.env.AUA_FILE_STORAGE_PATH, file.location);
-
-  res.download(fullPath);
+  res.redirect(file.location);
 });
 
 export const getFile = handlerWrapper(async (req, res) => {
@@ -72,22 +78,19 @@ export const searchFileList = handlerWrapper(async (req, res) => {
 export const uploadFile = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client', 'agent');
   const { id } = req.params;
-  const { requiresSign } = req.query;
   assert(id, 404, 'Image ID not specified');
   const { file } = (req as any).files;
   assert(file, 404, 'No file uploaded');
   const { name, data, mimetype, md5 } = file;
-  const { full, relative } = getFilePathByFileId(id, name);
 
-  await fse.outputFile(full, data);
+  const location = await uploadToS3(id, name, data);
 
   const entity: File = {
     id,
     fileName: name,
     mime: mimetype,
-    location: relative,
+    location,
     md5,
-    requiresSign: Boolean(requiresSign)
   };
 
   const repo = getRepository(File);

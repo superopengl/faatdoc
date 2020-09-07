@@ -1,10 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Tabs, Typography, Layout, Button, Modal, Row } from 'antd';
-import PosterAdminGrid from 'components/grids/PosterAdminGrid';
-import GalleryAdminGrid from 'components/grids/GalleryAdminGrid';
-import BusinessAdminGrid from 'components/grids/BusinessAdminGrid';
-import EventAdminGrid from 'components/grids/EventAdminGrid';
 import { LargePlusButton } from 'components/LargePlusButton';
 import HomeHeader from 'components/HomeHeader';
 import { handleDownloadCsv } from 'services/memberService';
@@ -13,7 +9,7 @@ import * as moment from 'moment';
 import windowSize from 'react-window-size';
 import Text from 'antd/lib/typography/Text';
 import {
-  ExclamationCircleOutlined, PlusOutlined
+  ExclamationCircleOutlined, PlusOutlined, SyncOutlined
 } from '@ant-design/icons';
 import { Link, withRouter } from 'react-router-dom';
 import { List } from 'antd';
@@ -110,26 +106,6 @@ const MyLodgementListPage = (props) => {
     await loadList();
   }
 
-  const handleConfirmAndCancel = () => {
-    if (currentLodgement?.status === 'done') {
-      setEditModalVisible(false);
-    } else {
-      Modal.confirm({
-        title: 'Exit editing without saving?',
-        icon: <ExclamationCircleOutlined />,
-        okText: 'Continue editing',
-        cancelText: `Exit without save`,
-        cancelButtonProps: {
-          danger: true,
-          ghost: true
-        },
-        onCancel: () => handleModalExit(),
-        maskClosable: true,
-        // cancelText: 'No, continue changing'
-      });
-    }
-  }
-
   const getActionLabel = status => {
     return {
       draft: 'edit',
@@ -176,7 +152,7 @@ const MyLodgementListPage = (props) => {
           ]}
           actions={[
             <Button type="link" key="action" onClick={() => actionOnLodgement(item)}>{getActionLabel(item.status)}</Button>,
-          item.status === 'draft' ? <Button type="link" key="delete" danger onClick={e => handleDelete(e, item)}>delete</Button> : null,
+            item.status === 'draft' ? <Button type="link" key="delete" danger onClick={e => handleDelete(e, item)}>delete</Button> : null,
           ]}
         >
           <List.Item.Meta
@@ -196,10 +172,10 @@ const MyLodgementListPage = (props) => {
           <StyledTitleRow>
             <Title level={2} style={{ margin: 'auto' }}>Lodgements</Title>
           </StyledTitleRow>
-          <Row style={{ flexDirection: 'row-reverse' }}>
-            <Button type="primary"
-              size="large" ghost icon={<PlusOutlined />} onClick={() => createNewLodgement()}>New Lodgement</Button>
-          </Row>
+          <Space style={{ width: '100%', justifyContent: 'flex-end' }} >
+            <Button onClick={() => loadList()} icon={<SyncOutlined />}></Button>
+            <Button type="primary" icon={<PlusOutlined />} onClick={() => createNewLodgement()}>New Lodgement</Button>
+          </Space>
 
           <Tabs defaultActiveKey="ongoing" type="card">
             <TabPane tab="In Progress" key="ongoing">

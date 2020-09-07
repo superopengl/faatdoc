@@ -24,7 +24,4 @@ export class File {
 
   @Column({ nullable: true })
   lastReadAt?: Date;
-
-  @Column({ default: false })
-  requiresSign: boolean;
 }

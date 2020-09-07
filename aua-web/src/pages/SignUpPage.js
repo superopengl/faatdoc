@@ -5,7 +5,6 @@ import { Typography, Button, Modal, Divider, Form, Radio, Input, Checkbox } from
 import { Logo } from 'components/Logo';
 import * as queryString from 'query-string';
 import { signUp } from 'services/authService';
-import ProfileForm from 'components/forms/ProfileForm';
 import * as _ from 'lodash';
 import { GlobalContext } from 'contexts/GlobalContext';
 const { Title, Text } = Typography;

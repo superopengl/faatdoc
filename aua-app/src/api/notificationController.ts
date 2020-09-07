@@ -45,10 +45,12 @@ export const listNotification = handlerWrapper(async (req, res) => {
 export const getNotification = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent', 'client');
   const { id } = req.params;
+  const { user: { id: userId, role } } = req;
   const repo = getRepository(Notification);
   const query: any = { id };
-  if (req.user.role === 'client') {
-    query.clientUserId = req.user.id;
+  const isClient = role === 'client';
+  if (isClient) {
+    query.clientUserId = userId;
   }
 
   const result = await repo.createQueryBuilder('x')
@@ -68,7 +70,9 @@ export const getNotification = handlerWrapper(async (req, res) => {
   const item = result[0];
   assert(item, 404);
 
-  await repo.update(query, { readAt: getUtcNow() });
+  if (isClient) {
+    await repo.update(query, { readAt: getUtcNow() });
+  }
 
   res.json(item);
 });

@@ -1,10 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Tabs, Typography, Layout, Button, Select, Table, Input, Modal } from 'antd';
-import PosterAdminGrid from 'components/grids/PosterAdminGrid';
-import GalleryAdminGrid from 'components/grids/GalleryAdminGrid';
-import BusinessAdminGrid from 'components/grids/BusinessAdminGrid';
-import EventAdminGrid from 'components/grids/EventAdminGrid';
 import { LargePlusButton } from 'components/LargePlusButton';
 import HomeHeader from 'components/HomeHeader';
 import { handleDownloadCsv } from 'services/memberService';
@@ -13,7 +9,7 @@ import * as moment from 'moment';
 import windowSize from 'react-window-size';
 import Text from 'antd/lib/typography/Text';
 import {
-  DeleteOutlined, EditOutlined, SearchOutlined
+  DeleteOutlined, EditOutlined, SearchOutlined, SyncOutlined
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { List } from 'antd';
@@ -252,7 +248,7 @@ const AdminLodgementListPage = (props) => {
             <Title level={2} style={{ margin: 'auto' }}>Lodgement Management</Title>
           </StyledTitleRow>
           <Paragraph>Lodgements are predefined information that can be automatically filled into your lodgement. You can save the information like name, phone, address, TFN, and etc. for future usage.</Paragraph>
-          <Space>
+          <Space style={{width: '100%', justifyContent: 'flex-end'}}>
             <Input.Search
               placeholder="input search text"
               enterButton={<><SearchOutlined /> Search</>}
@@ -263,7 +259,7 @@ const AdminLodgementListPage = (props) => {
               allowClear
             />
 
-            <Button onClick={() => clearAllFilters()}>Create All Filters</Button>
+            <Button onClick={() => loadList()} icon={<SyncOutlined/>}></Button>
             <Select
               mode="multiple"
               allowClear
@@ -279,6 +275,7 @@ const AdminLodgementListPage = (props) => {
               <Select.Option value='done'>Done</Select.Option>
               <Select.Option value='archive'>Archive</Select.Option>
             </Select>
+            <Button onClick={() => clearAllFilters()}>Create All Filters</Button>
           </Space>
           <Table columns={columnDef}
             dataSource={lodgementList}

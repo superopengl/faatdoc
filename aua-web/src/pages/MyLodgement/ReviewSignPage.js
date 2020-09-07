@@ -3,10 +3,6 @@ import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
 import { Tabs, Typography, Layout, Button, Row, Modal, Divider, Checkbox } from 'antd';
-import PosterAdminGrid from 'components/grids/PosterAdminGrid';
-import GalleryAdminGrid from 'components/grids/GalleryAdminGrid';
-import BusinessAdminGrid from 'components/grids/BusinessAdminGrid';
-import EventAdminGrid from 'components/grids/EventAdminGrid';
 import { LargePlusButton } from 'components/LargePlusButton';
 import HomeHeader from 'components/HomeHeader';
 import { handleDownloadCsv } from 'services/memberService';
@@ -28,10 +24,9 @@ import { listPortofolio } from 'services/portofolioService';
 import { deleteLodgement, generateLodgement, getLodgement, saveLodgement, signLodgement } from 'services/lodgementService';
 import { searchFile, downloadFile } from 'services/fileService';
 import { FileIcon } from 'components/FileIcon';
-import { getFileUrl } from 'util/getFileUrl';
 import { TimeAgo } from 'components/TimeAgo';
 
-const { Title, Paragraph } = Typography;
+const { Title, Paragraph, Link: TextLink } = Typography;
 const { TabPane } = Tabs;
 
 const ContainerStyled = styled.div`
@@ -124,7 +119,6 @@ const ReviewSignPage = (props) => {
         itemLayout="horizontal"
         dataSource={files}
         renderItem={item => (<StyledListItem
-          onClick={() => handleViewFile(item)}
           key={item.id}
           actions={[
             <Button type="link">View</Button>
@@ -132,7 +126,7 @@ const ReviewSignPage = (props) => {
         >
           <List.Item.Meta
             avatar={<FileIcon name={item.fileName} />}
-            title={<Text strong={!item.lastReadAt}>{item.fileName}</Text>}
+            title={<TextLink strong={!item.lastReadAt} href={`/lodgement/download/${item.id}`} target="_blank">{item.fileName}</TextLink>}
             description={<TimeAgo direction="horizontal" value={item.lastReadAt} surfix="Last view:" defaultContent={<Text strong>Unread</Text>} />}
           />
         </StyledListItem>)}
