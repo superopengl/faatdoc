@@ -107,10 +107,13 @@ export const signup = handlerWrapper(async (req, res) => {
   const url = process.env.AUA_DOMAIN_NAME;
   // Non-blocking sending email
   sendEmail({
-    subject: 'Welcome to AU Accounting Office',
+    templateName: 'welcome',
     to: email,
-    htmlBody: getSignUpHtmlEmail(name, url),
-    textBody: getSignUpTextEmail(name, url),
+    vars: {
+      email,
+      name,
+      url
+    },
     shouldBcc: true
   }).catch(err => logError(err, req, res, 'error at sending out email'));
 
@@ -142,10 +145,13 @@ export const forgotPassword = handlerWrapper(async (req, res) => {
 
   const url = `${process.env.AUA_DOMAIN_NAME}/reset_password/${resetPasswordToken}/`;
   await sendEmail({
-    subject: 'Forgot Password',
     to: email,
-    htmlBody: getForgotPasswordHtmlEmail(name, url),
-    textBody: getForgotPasswordTextEmail(name, url),
+    templateName: 'resetPassword',
+    vars: {
+      email,
+      name,
+      url
+    },
     shouldBcc: false
   });
 
