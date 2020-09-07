@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Tabs, Typography, Layout, Button, Modal, Row } from 'antd';
+import { Tabs, Typography, Layout, Button, Modal, Steps } from 'antd';
 import { LargePlusButton } from 'components/LargePlusButton';
 import HomeHeader from 'components/HomeHeader';
 import { handleDownloadCsv } from 'services/memberService';
@@ -9,7 +9,7 @@ import * as moment from 'moment';
 import windowSize from 'react-window-size';
 import Text from 'antd/lib/typography/Text';
 import {
-  ExclamationCircleOutlined, PlusOutlined, SyncOutlined
+  SendOutlined, PlusOutlined, SyncOutlined, EditOutlined, FormOutlined, CheckCircleOutlined, SmileOutlined
 } from '@ant-design/icons';
 import { Link, withRouter } from 'react-router-dom';
 import { List } from 'antd';
@@ -172,12 +172,18 @@ const MyLodgementListPage = (props) => {
           <StyledTitleRow>
             <Title level={2} style={{ margin: 'auto' }}>Lodgements</Title>
           </StyledTitleRow>
+          {/* <Steps current={0} size="small">
+            <Steps.Step status="submitted" title="submitted" icon={<SendOutlined />} />
+            <Steps.Step status="to_sign" title="to sign" icon={<EditOutlined />} />
+            <Steps.Step status="signed" title="signed" icon={<FormOutlined />} />
+            <Steps.Step status="done" title="complete" icon={<CheckCircleOutlined />} />
+          </Steps> */}
           <Space style={{ width: '100%', justifyContent: 'flex-end' }} >
-            <Button onClick={() => loadList()} icon={<SyncOutlined />}></Button>
+            {/* <Button type="link" onClick={() => loadList()} icon={<SyncOutlined />}></Button> */}
             <Button type="primary" icon={<PlusOutlined />} onClick={() => createNewLodgement()}>New Lodgement</Button>
           </Space>
 
-          <Tabs defaultActiveKey="ongoing" type="card">
+          <Tabs defaultActiveKey="ongoing" type="card" tabBarExtraContent={{right:  <Button type="link" onClick={() => loadList()} icon={<SyncOutlined />}></Button>}}>
             <TabPane tab="In Progress" key="ongoing">
               {RenderListFilteredByStatus(['submitted', 'to_sign', 'signed'])}
             </TabPane>

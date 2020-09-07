@@ -153,8 +153,10 @@ const RecurringListPage = (props) => {
     Modal.confirm({
       title: <>To delete Recurring <strong>{jobTemplateName}</strong> for <strong>{portofolioName}</strong>?</>,
       onOk: async () => {
+        setLoading(true);
         await deleteRecurring(id);
-        loadList();
+        await loadList();
+        setLoading(false);
       },
       maskClosable: true,
       okButtonProps: {
@@ -188,9 +190,8 @@ const RecurringListPage = (props) => {
           <StyledTitleRow>
             <Title level={2} style={{ margin: 'auto' }}>Recurring Management</Title>
           </StyledTitleRow>
-          <Space style={{width: '100%', justifyContent: 'flex-end'}}>
-
-          <Button type="primary" ghost icon={<PlusOutlined />} onClick={() => handleCreateNew()}>New Recurring</Button>
+          <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
+            <Button type="primary" ghost icon={<PlusOutlined />} onClick={() => handleCreateNew()}>New Recurring</Button>
           </Space>
 
           <Table columns={columnDef}
@@ -198,6 +199,7 @@ const RecurringListPage = (props) => {
             // scroll={{x: 1000}}
             rowKey="id"
             loading={loading}
+            pagination={false}
             // pagination={queryInfo}
             // onChange={handleTableChange}
             onRow={(record, index) => ({

@@ -16,6 +16,7 @@ function getLabel(name) {
 
 export const PortofolioAvatar = props => {
   const { value, size, style, ...other } = props;
+  if(!value) return null;
   const {backgroundColor, color} = toMaterialStyle(value, 800);
   const name = getLabel(value);
   const fontSize = 28 * size / 64;

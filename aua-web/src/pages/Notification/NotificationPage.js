@@ -16,6 +16,7 @@ import { random } from 'lodash';
 import { TimeAgo } from 'components/TimeAgo';
 import { listNotification, getNotification, setNotificationCount } from 'services/notificationService';
 import { Alert } from 'antd';
+import { GlobalContext } from 'contexts/GlobalContext';
 
 const { Title, Paragraph, Link } = Typography;
 const { TabPane } = Tabs;
@@ -46,6 +47,13 @@ const NotificationPage = (props) => {
   const [list, setList] = React.useState([]);
   const [currentId, setCurrentId] = React.useState();
   const [loading, setLoading] = React.useState(true);
+  const context = React.useContext(GlobalContext);
+
+  const { role, setUser, user } = context;
+  const isAdmin = role === 'admin';
+  const isClient = role === 'client';
+  const isAgent = role === 'agent';
+  const isGuest = role === 'guest';
 
   const loadList = async () => {
     setLoading(true);
@@ -67,24 +75,24 @@ const NotificationPage = (props) => {
 
   const handleGoToLodgement = (e, lodgementId) => {
     e.stopPropagation();
-    props.history.push(`/lodgement/${lodgementId}`);
+    const url = isClient ? `/lodgement/${lodgementId}` : `/lodgement/${lodgementId}/proceed`;
+    props.history.push(url);
     Modal.destroyAll();
   }
-  
-  
+
   const readNotificationDetail = async (notificationId) => {
     const item = await getNotification(notificationId);
-    const {id, content, createdAt, readAt, lodgementId, name, forWhom} = item;
+    const { id, content, createdAt, readAt, lodgementId, name, forWhom } = item;
     Modal.destroyAll();
     Modal.info({
-      icon: <MailOutlined />,
-      title: <>About lodgement <Link onClick={e => handleGoToLodgement(e, lodgementId)}>{name} for {forWhom}</Link></>,
+      icon: null,
+      title: <><PortofolioAvatar value={forWhom} size={32} /> About lodgement <Link onClick={e => handleGoToLodgement(e, lodgementId)}>{name} for {forWhom}</Link></>,
       width: 600,
       maskClosable: true,
       content: <>
-      <Space style={{width: '100%', justifyContent: 'space-between'}}><TimeAgo value={createdAt} surfix="Sent at"/><TimeAgo value={readAt} surfix="Read at"/></Space>
-      <Divider/>
-      <Paragraph style={{whiteSpace: 'pre-line'}}>{content}</Paragraph>
+        <Space style={{ width: '100%', justifyContent: 'space-between' }}><TimeAgo value={createdAt} surfix="Sent at" /><TimeAgo value={readAt} surfix="Read at" /></Space>
+        <Divider />
+        <Paragraph style={{ whiteSpace: 'pre-line' }}>{content}</Paragraph>
       </>
     })
     await loadList();
@@ -96,9 +104,10 @@ const NotificationPage = (props) => {
       <ContainerStyled>
         <Space size="small" direction="vertical" style={{ width: '100%' }}>
           <StyledTitleRow>
-            <Title level={2} style={{ margin: 'auto' }}>Notification</Title>
+            <Title level={2} style={{ margin: 'auto' }}>{isClient ? 'Notification' : 'Sent Out Notification'}</Title>
           </StyledTitleRow>
-          <Paragraph type="secondary">Notifications are the comments and adviced actions by your agent against your specific lodgement. All the notifications here are associated with certain lodgements. Please use the contact methods on the homepage for any inquiry that is not relavant to lodgement.</Paragraph>
+          {isClient && <Paragraph type="secondary">Notifications are the comments and adviced actions by your agent against your specific lodgement. All the notifications here are associated with certain lodgements. Please use the contact methods on the homepage for any inquiry that is not relavant to lodgement.</Paragraph>}
+          {!isClient && <Paragraph type="secondary">These sent out notifications are the comments and adviced actions ... You can see if the notification has been read by the clients.</Paragraph>}
           <List
             itemLayout="horizontal"
             dataSource={list}
@@ -112,13 +121,21 @@ const NotificationPage = (props) => {
                 actions={[
                   <TimeAgo value={item.createdAt} strong={!item.readAt} />
                 ]}
-              >
-                <List.Item.Meta
-                  // avatar={<PortofolioAvatar style={{marginTop: 6}} value={item.name} />}
-                  title={<Paragraph ellipsis={{rows: 1, expandable: false}} style={{fontWeight:item.readAt ? 300: 800 }}>{item.content}</Paragraph>}
-                  // description={}
-                />
-                {/* <PortofolioCard onClick={() => openModalToEdit(item.id)} onDelete={() => loadList()} id={item.id} name={item.name} /> */}
+                >
+                <Paragraph ellipsis={{ rows: 1, expandable: false }} style={{ fontWeight: item.readAt ? 300 : 800 }}>
+                  {item.content}
+                  {/* {!isClient && <div style={{marginTop: '0.5rem', fontWeight: 'normal'}}>
+                <PortofolioAvatar value={item.forWhom} size={32} /> <Link onClick={e => handleGoToLodgement(e, item.lodgementId)}>{item.name}</Link>
+                  </div>} */}
+                  </Paragraph>
+                {/* <br/>
+                <PortofolioAvatar value={item.forWhom} size={32} /> */}
+                {/* <Space direction="vertical" style={{ display: 'block' }}>
+
+                  {!isClient && <div>
+                    
+                  </div>}
+                </Space> */}
               </List.Item>
             )}
           />

@@ -10,6 +10,7 @@ export class Notification {
   createdAt?: Date;
 
   @Column('uuid')
+  @Index()
   lodgementId: string;
 
   @Column('uuid')
@@ -17,9 +18,11 @@ export class Notification {
 
   @Column('uuid')
   @Index()
+  @Index()
   clientUserId: string;
 
   @Column('uuid', {nullable: true})
+  @Index()
   agentUserId: string;
 
   @Column()

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
-import { Input, Button, Form, Select, DatePicker, Checkbox, Table, Space, Typography, AutoComplete, Modal } from 'antd';
+import { Input, Button, Form, Select, Drawer, Checkbox, Table, Space, Typography, AutoComplete, Modal } from 'antd';
 import { FileUploader } from '../../components/FileUploader';
 import * as moment from 'moment';
 import { GlobalContext } from 'contexts/GlobalContext';
@@ -17,6 +17,21 @@ import { notify } from 'util/notify';
 import { getVarNameFromDisplayName } from 'util/getVarNameFromDisplayName';
 
 const { Text } = Typography;
+
+const StyledDrawer = styled(Drawer)`
+
+.ant-drawer-content-wrapper {
+  max-width: 90vw;
+}
+
+.rce-mbox {
+  padding-bottom: 2rem;
+
+  .rce-mbox-time {
+    bottom: -1.5rem;
+  }
+}
+`;
 
 const StyledFormItem = styled(Form.Item)`
   // padding: 2rem;
@@ -35,16 +50,23 @@ const EMPTY_ROW = {
 
 const JobTemplateForm = (props) => {
 
-  const { id } = props;
+  const { id, visible } = props;
 
   const [entity, setEntity] = React.useState();
   const [name, setName] = React.useState('');
-  const [requiresSign, setRequiresSign] = React.useState(true);
   const [fields, setFields] = React.useState([]);
-  const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = React.useState(false);
+
+  const isNew = !id;
 
   const loadEntity = async () => {
-    if (!id) return;
+    if (!id) {
+      setEntity(undefined);
+      setName('');
+      setFields([]);
+      return;
+    }
+    setLoading(true);
     const entity = await getJobTemplate(id);
     setEntity(entity);
     setName(entity.name);
@@ -54,7 +76,7 @@ const JobTemplateForm = (props) => {
 
   React.useEffect(() => {
     loadEntity();
-  }, [])
+  }, [id])
 
 
   const addNewRow = () => {
@@ -97,7 +119,6 @@ const JobTemplateForm = (props) => {
     const newEntity = {
       ...entity,
       name,
-      requiresSign,
       fields: fields.filter(f => validField(f)).map(f => ({ name: getVarNameFromDisplayName(f.name), ...f })),
     }
     await saveJobTemplate(newEntity);
@@ -106,10 +127,14 @@ const JobTemplateForm = (props) => {
     notify.success(<>Successfully saved job template <strong>{name}</strong></>)
   }
 
-  const nameOptions = BuiltInFieldName.map(x => ({ 
-    value: x, 
+  const nameOptions = BuiltInFieldName.map(x => ({
+    value: x,
     // label: getDisplayNameFromVarName(x) 
   }));
+
+  const handleClose = () => {
+    props.onClose();
+  }
 
   const columns = [
     {
@@ -159,51 +184,65 @@ const JobTemplateForm = (props) => {
       title: 'Action',
       key: 'id',
       render: (text, record, index) => (
-        <Space size="middle">
+        <Space size="small">
           <Button type="link" icon={<UpOutlined />} onClick={() => moveUp(index)} />
           <Button type="link" icon={<DownOutlined />} onClick={() => moveDown(index)} />
-          <Button type="link" icon={<DeleteOutlined />} onClick={() => deleteRow(index)} />
+          <Button type="link" danger icon={<DeleteOutlined />} onClick={() => deleteRow(index)} />
         </Space>
       ),
     },
   ];
 
 
-  return (<>
-    <Space direction="vertical" size="large" style={{ width: '100%' }}>
-      <Space direction="vertical" size="small" style={{ width: '100%' }}>
-        <Text>Name</Text>
-        <Input placeholder="Job Template Name" value={name} onChange={e => setName(e.target.value)} />
-        <Checkbox checked={requiresSign} onChange={e => setRequiresSign(e.target.checked)}>Client signature is required</Checkbox>
+  return (
+    <StyledDrawer
+      title={isNew ? 'New Recurring' : 'Edit Recurring'}
+      placement="right"
+      closable={true}
+      visible={visible}
+      onClose={() => handleClose()}
+      destroyOnClose={true}
+      width={900}
+      // bodyStyle={{ padding: '0 10px' }}
+      footer={null}
+    >
+      <Space direction="vertical" size="large" style={{ width: '100%' }}>
+          <Text strong>Job Template Name</Text>
+          <Input placeholder="Job Template Name" value={name} onChange={e => setName(e.target.value)} />
+          {/* <Checkbox checked={requiresSign} onChange={e => setRequiresSign(e.target.checked)}>Client signature is required</Checkbox> */}
+          <Text strong>Field Definitions</Text>
+          <Table
+            style={{ width: '100%' }}
+            size="small"
+            columns={columns}
+            dataSource={fields}
+            loading={loading}
+            pagination={false}
+            rowKey={record => record.name}
+            footer={null}
+          />
+        {/* <Divider/> */}
+        <Space style={{ width: '100%', justifyContent: 'space-between' }}>
+          <Button icon={<PlusOutlined />} onClick={addNewRow}>Add New Field</Button>
+
+          <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
+            <Button onClick={() => handleClose()}>Cancel</Button>
+            <Button type="primary" onClick={() => handleSave()}>Save</Button>
+          </Space>
+        </Space>
       </Space>
-      <Space direction="vertical" size="small" style={{ width: '100%' }}>
-        <Text>Field Definitions</Text>
-        <Table
-          style={{ width: '100%' }}
-          size="small"
-          columns={columns}
-          dataSource={fields}
-          pagination={false}
-          rowKey={record => record.name}
-          footer={() => <>
-            <Button icon={<PlusOutlined />} onClick={addNewRow}>Add New Field</Button>
-          </>}
-        />
-      </Space>
-      {/* <Divider/> */}
-      <Space direction="vertical" size="small" style={{ width: '100%' }}>
-        <Button block type="primary" onClick={() => handleSave()}>Save</Button>
-        <Button block type="link" onClick={() => loadEntity()}>Reset and Cancel All Changes</Button>
-      </Space>
-    </Space>
-  </>
+    </StyledDrawer>
   );
 };
 
 JobTemplateForm.propTypes = {
-  id: PropTypes.string.isRequired
+  id: PropTypes.string.isRequired,
+  visible: PropTypes.bool.isRequired,
 };
 
-JobTemplateForm.defaultProps = {};
+JobTemplateForm.defaultProps = {
+  visible: false,
+
+};
 
 export default withRouter(JobTemplateForm);

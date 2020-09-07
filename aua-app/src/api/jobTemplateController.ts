@@ -44,8 +44,8 @@ export const listJobTemplates = handlerWrapper(async (req, res) => {
   const list = await getRepository(JobTemplate)
     .createQueryBuilder('x')
     .orderBy('x.createdAt', 'ASC')
-    .select(['x.id', 'x.name', 'x."requiresSign"'])
-    .getMany();
+    .select(['id', 'name', `"createdAt"`, '"lastUpdatedAt"'])
+    .execute();
 
   res.json(list);
 });

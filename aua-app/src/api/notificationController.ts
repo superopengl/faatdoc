@@ -12,24 +12,10 @@ import { Notification } from '../entity/Notification';
 import { restartCronService } from '../services/cronService';
 import { Lodgement } from '../entity/Lodgement';
 
-export const listNotification = handlerWrapper(async (req, res) => {
-  assertRole(req, 'admin', 'agent', 'client');
-  const role = req.user.role;
-  const filter: any = {};
-  switch (role) {
-    case 'client':
-      filter.clientUserId = req.user.id;
-      break;
-    case 'agent':
-      filter.agentUserId = req.user.id;
-      break;
-    default:
-      break;
-  }
-
+async function listNotificationForClient(clientId) {
   const list = await getRepository(Notification)
     .createQueryBuilder('x')
-    .where(filter)
+    .where({ clientUserId: clientId })
     .orderBy('"createdAt"', 'DESC')
     .select([
       'id',
@@ -38,6 +24,63 @@ export const listNotification = handlerWrapper(async (req, res) => {
       '"readAt"'
     ])
     .execute();
+  return list;
+}
+
+async function listNotificationForAgent(agentId) {
+  const list = await getRepository(Notification)
+    .createQueryBuilder('x')
+    .where({ agentUserId: agentId })
+    .innerJoin(q => q.from(Lodgement, 'l').select('*'), 'l', `l.id = x."lodgementId"`)
+    .orderBy('"createdAt"', 'DESC')
+    .select([
+      'x.id as id',
+      'x."createdAt" as "createdAt"',
+      'l.id as "lodgementId"',
+      'l."forWhom" as "forWhom"',
+      'l.name as name',
+      'content',
+      '"readAt"'
+    ])
+    .execute();
+  return list;
+}
+
+async function listNotificationForAdmin() {
+  const list = await getRepository(Notification)
+    .createQueryBuilder('x')
+    .innerJoin(q => q.from(Lodgement, 'l').select('*'), 'l', `l.id = x."lodgementId"`)
+    .orderBy('"createdAt"', 'DESC')
+    .select([
+      'x.id as id',
+      'x."createdAt" as "createdAt"',
+      'l.id as "lodgementId"',
+      'l."forWhom" as "forWhom"',
+      'l.name as name',
+      'content',
+      '"readAt"'
+    ])
+    .execute();
+  return list;
+}
+
+export const listNotification = handlerWrapper(async (req, res) => {
+  assertRole(req, 'admin', 'agent', 'client');
+  const { user: { id, role } } = req;
+  let list: Promise<any>;
+  switch (role) {
+    case 'client':
+      list = await listNotificationForClient(id);
+      break;
+    case 'agent':
+      list = await listNotificationForAgent(id);
+      break;
+    case 'admin':
+      list = await listNotificationForAdmin();
+      break;
+    default:
+      assert(false, 500, `Unsupported role ${role}`);
+  }
 
   res.json(list);
 });
