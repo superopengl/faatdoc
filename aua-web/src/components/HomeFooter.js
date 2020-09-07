@@ -36,7 +36,7 @@ const HomeFooter = () => (
     <section id="about">
       <Row>
         <Col span={24}>
-          <p>©{new Date().getFullYear()} AUAO Accounting Office PTY LTD. All right reserved.</p>
+          <p>©{new Date().getFullYear()} AU Accounting Office PTY LTD. All right reserved.</p>
           <p style={{display: 'none'}}>Version ${gitVersion}</p>
           <p><a href="/terms_and_conditions" target="_blank">Terms & Conditions</a> | <a href="/privacy_policy" target="_blank">Privacy Policy</a> </p>
           <a href="https://www.techseeding.com.au" target="_blank" rel="noopener noreferrer">

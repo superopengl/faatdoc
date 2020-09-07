@@ -3,12 +3,19 @@ import { awsConfig } from '../utils/awsConfig';
 import { assert } from '../utils/assert';
 import * as templates from './emailTemplates';
 import * as _ from 'lodash';
+import * as sanitizeHtml from 'sanitize-html';
 
 export class EmailRequest {
   to: string;
   vars: object;
   templateName: string;
-  shouldBcc = false;
+  shouldBcc?: boolean = false;
+}
+
+function sanitizeVars(vars) {
+  const sanitized = {};
+  Object.entries(vars).forEach(([k, v]) => sanitized[k] = _.isString(v) ? sanitizeHtml(v) : v);
+  return sanitized;
 }
 
 export async function sendEmail(req: EmailRequest) {
@@ -16,7 +23,7 @@ export async function sendEmail(req: EmailRequest) {
   const template = templates[req.templateName];
   assert(template, 404, `Email template '${req.templateName}' is not found`);
 
-  const body = template.body(req.vars);
+  const body = template.body(sanitizeVars(req.vars));
   awsConfig();
 
   const ses = new aws.SES({ apiVersion: '2010-12-01' });
@@ -48,6 +55,6 @@ export async function sendEmail(req: EmailRequest) {
   };
 
   // TODO: Turn on email sending
-  // const sesRequest = ses.sendEmail(params).promise();
-  // await sesRequest;
+  const sesRequest = Promise.resolve(9) || ses.sendEmail(params).promise();
+  await sesRequest;
 }
