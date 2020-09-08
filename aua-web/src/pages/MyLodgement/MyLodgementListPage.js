@@ -61,9 +61,10 @@ const MyLodgementListPage = (props) => {
 
   const loadList = async () => {
     setLoading(true);
+    const portofolioList = await listPortofolio() || [];
+
     const list = await listLodgement();
     const jobTemplateList = await listJobTemplate() || [];
-    const portofolioList = await listPortofolio() || [];
 
     setLodgementList(list);
     setJobTemplateList(jobTemplateList);

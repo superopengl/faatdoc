@@ -16,7 +16,7 @@ import { listJobTemplate } from 'services/jobTemplateService';
 import { deleteLodgement, generateLodgement, getLodgement, saveLodgement } from 'services/lodgementService';
 import { listPortofolio } from 'services/portofolioService';
 import { LodgementGenerator } from './LodgementGenerator';
-import { getDisplayNameFromVarName } from 'util/getDisplayNameFromVarName';
+import { varNameToLabelName } from 'util/varNameToLabelName';
 import { InputYear } from 'components/InputYear';
 import { DateInput } from 'components/DateInput';
 import { RangePickerInput } from 'components/RangePickerInput';
@@ -175,7 +175,7 @@ const MyLodgementForm = (props) => {
           {lodgement.fields.filter(field => !field.officialOnly).map((field, i) => {
             const { name, description, type, required } = field;
             const formItemProps = {
-              label: <>{getDisplayNameFromVarName(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
+              label: <>{varNameToLabelName(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
               name,
               rules: [{ required }]
             }

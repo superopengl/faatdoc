@@ -12,7 +12,7 @@ import { UpOutlined, DownOutlined, DeleteOutlined, PlusOutlined } from '@ant-des
 import { Divider } from 'antd';
 import { BuiltInFieldDef } from "components/FieldDef";
 import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
-import { getDisplayNameFromVarName } from 'util/getDisplayNameFromVarName';
+import { varNameToLabelName } from 'util/varNameToLabelName';
 import { getPortofolio } from 'services/portofolioService';
 import { DateInput } from 'components/DateInput';
 
@@ -44,44 +44,56 @@ const PortofolioForm = (props) => {
 
   const isNew = !id;
   const [loading, setLoading] = React.useState(true);
-  const [name, setName] = React.useState('New Portofolio');
-  const [fields, setFields] = React.useState([]);
+  // const [name, setName] = React.useState('New Portofolio');
+  // const [fields, setFields] = React.useState([]);
   const [form] = Form.useForm();
+  const [portofolio, setPortofolio] = React.useState();
+  const [initialValues, setInitialValues] = React.useState();
+  const type = portofolio?.type || defaultType;
+
 
   const loadEntity = async () => {
     if (!isNew) {
       const entity = await getPortofolio(id);
-      setName(entity.name);
-      setFields(entity.fields);
+      setPortofolio(entity);
+
+      const initialValues = getFormInitialValues(entity);
+      setInitialValues(initialValues);
     }
     setLoading(false);
   }
 
   React.useEffect(() => {
     loadEntity()
-  }, []);
+  }, [id]);
+
+  const getFormInitialValues = (portofolio) => {
+    if (!portofolio) return undefined;
+    const name = portofolio.name || '';
+    const fields = portofolio.fields || [];
+    const formInitValues = {
+      id,
+      name,
+    };
+    for (const f of fields) {
+      formInitValues[f.name] = f.value;
+    }
+
+
+    return formInitValues;
+  }
 
   const handleSubmit = async values => {
-    const portofolio = {
+    const payload = {
       id,
-      type: defaultType,
+      type,
       fields: Object.entries(values).map(([name, value]) => ({ name, value }))
     }
 
     setLoading(true);
     form.resetFields();
-    await props.onOk(portofolio);
+    await props.onOk(payload);
     setLoading(false);
-  }
-
-
-  const formInitValues = {
-    id,
-    name,
-  };
-
-  for (const f of fields) {
-    formInitValues[f.name] = f.value;
   }
 
   const handleCancel = () => {
@@ -89,22 +101,24 @@ const PortofolioForm = (props) => {
     props.onCancel();
   }
 
-  console.log('value', formInitValues);
+  const fieldDefs = BuiltInFieldDef.filter(x => x.portofolioType.includes(type));
 
-  const fieldDefs = BuiltInFieldDef.filter(x => x.portofolioType.includes(defaultType));
+  console.log('value', initialValues);
 
   return (<>
     <Space direction="vertical" size="large" style={{ width: '100%' }}>
-      <Form form={form} layout="vertical" onFinish={handleSubmit} style={{ textAlign: 'left' }} initialValues={formInitValues}>
+      {loading && 'loading...'}
+      {!loading && <Form form={form} layout="vertical" onFinish={handleSubmit} style={{ textAlign: 'left' }} initialValues={initialValues}>
         {fieldDefs.map((fieldDef, i) => {
           const { name, description, rules, inputType, inputProps } = fieldDef;
           const formItemProps = {
-            label: <>{getDisplayNameFromVarName(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
+            key: i,
+            label: <>{varNameToLabelName(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
             name,
             rules
           }
           return (
-            <Form.Item key={i} {...formItemProps}>
+            <Form.Item {...formItemProps}>
               {inputType === 'text' ? <Input {...inputProps} disabled={loading} /> :
                 inputType === 'paragraphy' ? <Input.TextArea {...inputProps} disabled={loading} /> :
                   inputType === 'date' ? <DateInput placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD" {...inputProps} /> :
@@ -127,7 +141,7 @@ const PortofolioForm = (props) => {
         <Form.Item>
           <Button block size="large" type="link" onClick={() => handleCancel()}>Cancel</Button>
         </Form.Item>
-      </Form>
+      </Form>}
     </Space>
   </>
   );

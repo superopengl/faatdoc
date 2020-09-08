@@ -1,5 +1,5 @@
 
-export function getDisplayNameFromVarName(camelCase) {
+export function varNameToLabelName(camelCase) {
   try {
     const bigCase = camelCase?.toUpperCase();
     for(const b of ['TFN', 'ABN', 'ACN']) {
@@ -13,5 +13,4 @@ export function getDisplayNameFromVarName(camelCase) {
     debugger;
   }
 }
-
 

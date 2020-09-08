@@ -12,7 +12,7 @@ import { UpOutlined, DownOutlined, DeleteOutlined, QuestionOutlined } from '@ant
 import { Divider } from 'antd';
 import { listLodgement, deleteLodgement } from 'services/lodgementService';
 import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
-import { getDisplayNameFromVarName } from 'util/getDisplayNameFromVarName';
+import { varNameToLabelName } from 'util/varNameToLabelName';
 import { Tag } from 'antd';
 import { Progress } from 'antd';
 import { Steps, Popover } from 'antd';

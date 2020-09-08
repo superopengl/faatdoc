@@ -12,7 +12,7 @@ import { UpOutlined, DownOutlined, DeleteOutlined, QuestionOutlined } from '@ant
 import { Divider } from 'antd';
 import { listPortofolios, deletePortofolio } from 'services/portofolioService';
 import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
-import { getDisplayNameFromVarName } from 'util/getDisplayNameFromVarName';
+import { varNameToLabelName } from 'util/varNameToLabelName';
 
 const { Text, Title, Paragraph } = Typography;
 
@@ -41,7 +41,7 @@ const columns = [
   {
     title: 'Name',
     dataIndex: 'name',
-    render: (text) => getDisplayNameFromVarName(text)
+    render: (text) => varNameToLabelName(text)
   },
   {
     title: 'Value',

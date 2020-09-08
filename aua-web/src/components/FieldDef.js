@@ -1,4 +1,6 @@
 import * as moment from 'moment';
+import { varNameToLabelName } from 'util/varNameToLabelName';
+import { labelNameToVarName } from 'util/labelNameToVarName';
 const thisYear = new Date().getFullYear();
 
 export const BuiltInFieldDef = [
@@ -204,6 +206,15 @@ export const BuiltInFieldDef = [
   }
 ];
 
-export const BuiltInFieldType = Array.from(new Set(BuiltInFieldDef.map(x => x.inputType)));
+export const BuiltInFieldType = Array.from(new Set(BuiltInFieldDef.map(x => x.inputType))).filter(x => x !== 'select');
 
-export const BuiltInFieldName = BuiltInFieldDef.map(x => x.name);
+export const BuiltInFieldLabelNames = BuiltInFieldDef.map(x => varNameToLabelName(x.name));
+
+export const getBuiltInFieldByVarName = (varName) => {
+  return BuiltInFieldDef.find(x => x.name === varName);
+}
+
+export const getBuiltInFieldByLabelName = (labelName) => {
+  const varName = labelNameToVarName(labelName);
+  return getBuiltInFieldByVarName(varName);
+}

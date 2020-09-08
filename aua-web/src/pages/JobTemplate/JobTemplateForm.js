@@ -9,37 +9,14 @@ import { GlobalContext } from 'contexts/GlobalContext';
 import { Menu, Dropdown, message, Tooltip } from 'antd';
 import { UpOutlined, DownOutlined, DeleteOutlined, PlusOutlined, CloseOutlined } from '@ant-design/icons';
 import { Divider } from 'antd';
-import { BuiltInFieldName, BuiltInFieldType } from 'components/FieldDef';
+import { BuiltInFieldLabelNames, BuiltInFieldType, getBuiltInFieldByLabelName } from 'components/FieldDef';
 import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
-import { getDisplayNameFromVarName } from 'util/getDisplayNameFromVarName';
+import { varNameToLabelName } from 'util/varNameToLabelName';
 import { listJobTemplate, deleteJobTemplate, saveJobTemplate, getJobTemplate } from 'services/jobTemplateService';
 import { notify } from 'util/notify';
-import { getVarNameFromDisplayName } from 'util/getVarNameFromDisplayName';
+import { labelNameToVarName } from 'util/labelNameToVarName';
 
 const { Text } = Typography;
-
-const StyledDrawer = styled(Drawer)`
-
-.ant-drawer-content-wrapper {
-  max-width: 90vw;
-}
-
-.rce-mbox {
-  padding-bottom: 2rem;
-
-  .rce-mbox-time {
-    bottom: -1.5rem;
-  }
-}
-`;
-
-const StyledFormItem = styled(Form.Item)`
-  // padding: 2rem;
-  // margin: 1rem 0;
-  // border: 1px solid #eeeeee;
-  // border-radius: 8px;
-  // background-color: #ffffff;
-`
 
 const EMPTY_ROW = {
   name: '',
@@ -50,7 +27,7 @@ const EMPTY_ROW = {
 
 const JobTemplateForm = (props) => {
 
-  const { id, visible } = props;
+  const { id } = props;
 
   const [entity, setEntity] = React.useState();
   const [name, setName] = React.useState('');
@@ -76,8 +53,7 @@ const JobTemplateForm = (props) => {
 
   React.useEffect(() => {
     loadEntity();
-  }, [id])
-
+  }, [])
 
   const addNewRow = () => {
     fields.push({ ...EMPTY_ROW });
@@ -119,7 +95,7 @@ const JobTemplateForm = (props) => {
     const newEntity = {
       ...entity,
       name,
-      fields: fields.filter(f => validField(f)).map(f => ({ name: getVarNameFromDisplayName(f.name), ...f })),
+      fields: fields.filter(f => validField(f)).map(f => ({ name: labelNameToVarName(f.name), ...f })),
     }
     await saveJobTemplate(newEntity);
     await loadEntity();
@@ -127,9 +103,9 @@ const JobTemplateForm = (props) => {
     notify.success(<>Successfully saved job template <strong>{name}</strong></>)
   }
 
-  const nameOptions = BuiltInFieldName.map(x => ({
-    value: x,
-    // label: getDisplayNameFromVarName(x) 
+  const nameOptions = BuiltInFieldLabelNames.map(x => ({
+    // value: x,
+    value: x
   }));
 
   const handleClose = () => {
@@ -139,13 +115,11 @@ const JobTemplateForm = (props) => {
   const columns = [
     {
       title: 'No',
-      key: 'no',
       render: (text, records, index) => <>{index + 1}</>
     },
     {
       title: 'Name',
       dataIndex: 'name',
-      key: 'name',
       render: (text, records, index) => {
         return <AutoComplete
           placeholder="Name"
@@ -161,28 +135,28 @@ const JobTemplateForm = (props) => {
       }
     },
     {
+      title: 'Type',
+      dataIndex: 'type',
+      render: (value, records, index) => {
+        const fieldName = records.name;
+        const builtInField = getBuiltInFieldByLabelName(fieldName);
+        return !fieldName ? null : builtInField ? <Text disabled>{varNameToLabelName(builtInField.inputType)}</Text> : <Select value={value} style={{ width: '200px' }} onChange={(v) => changeValue(index, 'type', v)}>
+          {BuiltInFieldType.map((f, i) => <Select.Option key={i} value={f}>{varNameToLabelName(f)}</Select.Option>)}
+        </Select>
+      }
+    },
+    {
       title: 'Required ?',
       dataIndex: 'required',
-      key: 'id',
       render: (value, records, index) => <Checkbox checked={value} onChange={(e) => changeValue(index, 'required', e.target.checked)} />
     },
     {
       title: 'Official Only ?',
       dataIndex: 'officialOnly',
-      key: 'id',
       render: (value, records, index) => <Checkbox checked={value} onChange={(e) => changeValue(index, 'officialOnly', e.target.checked)} />
     },
     {
-      title: 'Type',
-      dataIndex: 'type',
-      key: 'id',
-      render: (value, records, index) => <Select value={value} style={{ width: '100%' }} onChange={(v) => changeValue(index, 'type', v)}>
-        {BuiltInFieldType.map((f, i) => <Select.Option key={i} value={f}>{f}</Select.Option>)}
-      </Select>
-    },
-    {
       title: 'Action',
-      key: 'id',
       render: (text, record, index) => (
         <Space size="small">
           <Button type="link" icon={<UpOutlined />} onClick={() => moveUp(index)} />
@@ -195,54 +169,38 @@ const JobTemplateForm = (props) => {
 
 
   return (
-    <StyledDrawer
-      title={isNew ? 'New Recurring' : 'Edit Recurring'}
-      placement="right"
-      closable={true}
-      visible={visible}
-      onClose={() => handleClose()}
-      destroyOnClose={true}
-      width={900}
-      // bodyStyle={{ padding: '0 10px' }}
-      footer={null}
-    >
       <Space direction="vertical" size="large" style={{ width: '100%' }}>
-          <Text strong>Job Template Name</Text>
-          <Input placeholder="Job Template Name" value={name} onChange={e => setName(e.target.value)} />
-          {/* <Checkbox checked={requiresSign} onChange={e => setRequiresSign(e.target.checked)}>Client signature is required</Checkbox> */}
-          <Text strong>Field Definitions</Text>
-          <Table
-            style={{ width: '100%' }}
-            size="small"
-            columns={columns}
-            dataSource={fields}
-            loading={loading}
-            pagination={false}
-            rowKey={record => record.name}
-            footer={null}
-          />
+        <Text strong>Job Template Name</Text>
+        <Input placeholder="Job Template Name" value={name} onChange={e => setName(e.target.value)} />
+        {/* <Checkbox checked={requiresSign} onChange={e => setRequiresSign(e.target.checked)}>Client signature is required</Checkbox> */}
+        <Text strong>Field Definitions</Text>
+        <Table
+          style={{ width: '100%' }}
+          size="small"
+          columns={columns}
+          dataSource={fields}
+          loading={loading}
+          pagination={false}
+          rowKey={record => record.name}
+          footer={null}
+        />
         {/* <Divider/> */}
         <Space style={{ width: '100%', justifyContent: 'space-between' }}>
           <Button icon={<PlusOutlined />} onClick={addNewRow}>Add New Field</Button>
-
           <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
             <Button onClick={() => handleClose()}>Cancel</Button>
             <Button type="primary" onClick={() => handleSave()}>Save</Button>
           </Space>
         </Space>
       </Space>
-    </StyledDrawer>
   );
 };
 
 JobTemplateForm.propTypes = {
-  id: PropTypes.string.isRequired,
-  visible: PropTypes.bool.isRequired,
+  id: PropTypes.string,
 };
 
 JobTemplateForm.defaultProps = {
-  visible: false,
-
 };
 
 export default withRouter(JobTemplateForm);

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Tabs, Typography, Layout, Button, Row, Card, Col, Modal, Table } from 'antd';
+import { Tabs, Typography, Layout, Button, Drawer, Card, Col, Modal, Table } from 'antd';
 import HomeHeader from 'components/HomeHeader';
 import JobTemplateForm from 'pages/JobTemplate/JobTemplateForm';
 import JobTemplateCard from 'pages/JobTemplate/JobTemplateCard';
@@ -29,15 +29,20 @@ const ContainerStyled = styled.div`
   // height: calc(100vh + 64px);
 `;
 
-const StyledTabs = styled(Tabs)`
-height: 100%;
- .ant-tabs-tab, .ant-tabs-nav-add {
-  justify-content: space-between;
-  height: 4rem;
- }
+const StyledDrawer = styled(Drawer)`
 
+.ant-drawer-content-wrapper {
+  max-width: 90vw;
+}
+
+.rce-mbox {
+  padding-bottom: 2rem;
+
+  .rce-mbox-time {
+    bottom: -1.5rem;
+  }
+}
 `;
-
 const StyledTitleRow = styled.div`
  display: flex;
  justify-content: space-between;
@@ -67,12 +72,12 @@ export const JobAdminPage = (props) => {
     {
       title: 'Created At',
       dataIndex: 'createdAt',
-      render: (text, records, index) => <TimeAgo value={text}/>
+      render: (text, records, index) => <TimeAgo value={text} />
     },
     {
       title: 'Updated At',
       dataIndex: 'lastUpdatedAt',
-      render: (text, records, index) => <TimeAgo value={text}/>
+      render: (text, records, index) => <TimeAgo value={text} />
     },
     {
       title: 'Action',
@@ -168,41 +173,37 @@ export const JobAdminPage = (props) => {
         <StyledTitleRow>
           <Title level={2} style={{ margin: 'auto' }}>Job Template Management</Title>
         </StyledTitleRow>
-        <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
-          <Button type="primary" ghost icon={<PlusOutlined />} onClick={() => handleCreateNew()}>New Job Template</Button>
-        </Space>
-        <Table columns={columnDef}
-          dataSource={list}
-          rowKey="id"
-          loading={loading}
-          pagination={false}
-          // onChange={handleTableChange}
-          onRow={(record, index) => ({
-            onDoubleClick: e => {
-              setCurrentId(record.id);
-              setDrawerVisible(true);
-            }
-          })}
-        />
-        <JobTemplateForm id={currentId} visible={drawerVisible} onClose={() => handleDrawerClose()}></JobTemplateForm>
-        {/* <Button type="primary" onClick={() => handleCreateNew()} icon={<PlusOutlined />}>Create New Job Template</Button> */}
-        {/* <StyledTabs
-          // size="large"
-          tabPosition="left"
-          activeKey={currentActiveTab}
-          // onTabClick={handleTabClick}
-          onChange={handleTabChange}
-          onEdit={handleEdit}
-          type="editable-card"
-        >
-          {list.map((item, i) => <Tabs.TabPane key={i} tab={<>{item.name}{item.id ? null : ' *'}</>}>
-            <JobTemplateForm
-              id={item.id}
-              onOk={() => refreshList()}
-            />
-          </Tabs.TabPane>)}
-        </StyledTabs> */}
+        <Space direction="vertical" style={{ width: '100%' }}>
 
+          <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
+            <Button type="primary" ghost icon={<PlusOutlined />} onClick={() => handleCreateNew()}>New Job Template</Button>
+          </Space>
+          <Table columns={columnDef}
+            dataSource={list}
+            rowKey="id"
+            loading={loading}
+            pagination={false}
+            // onChange={handleTableChange}
+            onRow={(record, index) => ({
+              onDoubleClick: e => {
+                setCurrentId(record.id);
+                setDrawerVisible(true);
+              }
+            })}
+          />
+        </Space>
+        <StyledDrawer
+          title={!currentId ? 'New Recurring' : 'Edit Recurring'}
+          placement="right"
+          closable={true}
+          visible={drawerVisible}
+          onClose={() => handleDrawerClose()}
+          destroyOnClose={true}
+          width={900}
+          footer={null}
+        >
+          <JobTemplateForm id={currentId} onClose={() => handleDrawerClose()}></JobTemplateForm>
+        </StyledDrawer>
       </ContainerStyled>
     </LayoutStyled >
   );
