@@ -40,10 +40,9 @@ const EMPTY_ROW = {
 
 
 const PortofolioForm = (props) => {
-  const { id } = props;
+  const { id, defaultType } = props;
 
   const isNew = !id;
-  const [type, setType] = React.useState();
   const [loading, setLoading] = React.useState(true);
   const [name, setName] = React.useState('New Portofolio');
   const [fields, setFields] = React.useState([]);
@@ -54,7 +53,6 @@ const PortofolioForm = (props) => {
       const entity = await getPortofolio(id);
       setName(entity.name);
       setFields(entity.fields);
-      setType(entity.type);
     }
     setLoading(false);
   }
@@ -66,7 +64,7 @@ const PortofolioForm = (props) => {
   const handleSubmit = async values => {
     const portofolio = {
       id,
-      type,
+      type: defaultType,
       fields: Object.entries(values).map(([name, value]) => ({ name, value }))
     }
 
@@ -93,23 +91,11 @@ const PortofolioForm = (props) => {
 
   console.log('value', formInitValues);
 
-  const fieldDefs = BuiltInFieldDef.filter(x => x.portofolioType.includes(type));
+  const fieldDefs = BuiltInFieldDef.filter(x => x.portofolioType.includes(defaultType));
 
   return (<>
     <Space direction="vertical" size="large" style={{ width: '100%' }}>
-      {!type && <>
-        <Text>Please choose a portofolio type</Text>
-        <StyledTypeButton block ghost type="primary" onClick={() => setType('individual')}>
-          <Title>Individual</Title>
-          <Paragraph type="secondary">Input given name, surname, date of birth, etc.</Paragraph>
-        </StyledTypeButton>
-        <StyledTypeButton block ghost type="primary" onClick={() => setType('business')}>
-          <Title>Business</Title>
-          <Paragraph type="secondary">Input company name, ACN, ABN, etc.</Paragraph>
-        </StyledTypeButton>
-
-      </>}
-      {type && <Form form={form} layout="vertical" onFinish={handleSubmit} style={{ textAlign: 'left' }} initialValues={formInitValues}>
+      <Form form={form} layout="vertical" onFinish={handleSubmit} style={{ textAlign: 'left' }} initialValues={formInitValues}>
         {fieldDefs.map((fieldDef, i) => {
           const { name, description, rules, inputType, inputProps } = fieldDef;
           const formItemProps = {
@@ -141,7 +127,7 @@ const PortofolioForm = (props) => {
         <Form.Item>
           <Button block size="large" type="link" onClick={() => handleCancel()}>Cancel</Button>
         </Form.Item>
-      </Form>}
+      </Form>
     </Space>
   </>
   );
@@ -149,7 +135,7 @@ const PortofolioForm = (props) => {
 
 PortofolioForm.propTypes = {
   id: PropTypes.string,
-
+  defaultType: PropTypes.string,
 };
 
 PortofolioForm.defaultProps = {};

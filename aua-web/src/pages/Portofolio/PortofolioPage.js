@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Tabs, Typography, Layout, Button, Modal, Divider, List, Space, Row } from 'antd';
+import { Tabs, Typography, Layout, Button, Modal, Col, List, Space, Row, Radio } from 'antd';
 import HomeHeader from 'components/HomeHeader';
 import { PortofolioAvatar } from 'components/PortofolioAvatar';
 import { handleDownloadCsv } from 'services/memberService';
@@ -9,7 +9,7 @@ import * as moment from 'moment';
 import windowSize from 'react-window-size';
 import Text from 'antd/lib/typography/Text';
 import {
-  IdcardOutlined, PlusOutlined
+  UserOutlined, PlusOutlined, TeamOutlined
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import PortofolioForm from './PortofolioForm';
@@ -45,10 +45,12 @@ const LayoutStyled = styled(Layout)`
 
 const PortofolioPage = (props) => {
 
-  const [modalVisible, setModalVisible] = React.useState(false);
+  const [formVisible, setFormVisible] = React.useState(false);
   const [list, setList] = React.useState([]);
   const [currentId, setCurrentId] = React.useState();
   const [loading, setLoading] = React.useState(true);
+  const [newPortofolioType, setNewPortofolioType] = React.useState();
+  const [newModalVisible, setNewModalVisible] = React.useState(false);
 
   const loadList = async () => {
     setLoading(true);
@@ -64,17 +66,12 @@ const PortofolioPage = (props) => {
   const saveJob = async item => {
     await savePortofolio(item);
     await loadList();
-    setModalVisible(false);
-  }
-
-  const openModalToCreate = () => {
-    setCurrentId();
-    setModalVisible(true);
+    setFormVisible(false);
   }
 
   const openModalToEdit = id => {
     setCurrentId(id);
-    setModalVisible(true);
+    setFormVisible(true);
   }
 
   const handleDelete = (e, item) => {
@@ -94,6 +91,13 @@ const PortofolioPage = (props) => {
     });
   }
 
+  const handleCreateNew = (type) => {
+    setNewModalVisible(false);
+    setNewPortofolioType(type);
+    setCurrentId();
+    setFormVisible(true);
+  }
+
   return (
     <LayoutStyled>
       <HomeHeader></HomeHeader>
@@ -104,7 +108,7 @@ const PortofolioPage = (props) => {
           </StyledTitleRow>
           <Paragraph>Portofolios are predefined information that can be used to automatically fill in your lodgement application. You can save the information like name, phone, address, TFN, and etc. for future usage.</Paragraph>
           <Row style={{flexDirection: 'row-reverse'}}>
-            <Button type="primary"ghost icon={<PlusOutlined />} onClick={() => openModalToCreate()}>New Portofolio</Button>
+            <Button type="primary"ghost icon={<PlusOutlined />} onClick={() => setNewModalVisible(true)}>New Portofolio</Button>
           </Row>
           <List
             itemLayout="horizontal"
@@ -132,10 +136,11 @@ const PortofolioPage = (props) => {
         </Space>
 
       </ContainerStyled>
-      {modalVisible && <Modal
-        visible={modalVisible}
-        onOk={() => setModalVisible(false)}
-        onCancel={() => setModalVisible(false)}
+      <Modal
+        visible={formVisible}
+        onOk={() => setFormVisible(false)}
+        onCancel={() => setFormVisible(false)}
+        destroyOnClose={true}
         footer={null}
         title="Create/Edit Portofolio"
         width="90vw"
@@ -143,10 +148,33 @@ const PortofolioPage = (props) => {
       >
         <PortofolioForm
           onOk={item => saveJob(item)}
-          onCancel={() => setModalVisible(false)}
+          onCancel={() => setFormVisible(false)}
           id={currentId}
+          defaultType={newPortofolioType}
         />
-      </Modal>}
+      </Modal>
+      <Modal
+        title="Please choose portofolio type"
+        visible={newModalVisible}
+        destroyOnClose={true}
+        onOk={() => setNewModalVisible(false)}
+        onCancel={() => setNewModalVisible(false)}
+        footer={null}
+        width="90vw"
+        style={{ maxWidth: 700 }}
+      >
+        <Row gutter={20} style={{textAlign: 'center'}}>
+          <Col span={12}>
+            <Button size="large" type="primary" ghost block onClick={() => handleCreateNew('individual')} icon={<UserOutlined />}>Individual</Button>
+            <Paragraph style={{marginTop: '1rem'}}>For individual information like given name, surname, date of birth, etc.</Paragraph>
+          </Col>
+          {/* <Divider type="vertical" style={{height: '100%'}}/> */}
+          <Col span={12}>
+            <Button size="large" type="primary" ghost block onClick={() => handleCreateNew('business')} icon={<TeamOutlined />}>Business</Button>
+            <Paragraph style={{marginTop: '1rem'}}>For organisation or compnay information like company name, ACN, ABN, etc.</Paragraph>
+          </Col>
+        </Row>
+      </Modal>
     </LayoutStyled >
   );
 };
