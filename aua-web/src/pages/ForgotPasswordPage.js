@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link, withRouter } from 'react-router-dom';
-import { Typography, Input, Button, Form, Divider } from 'antd';
+import { Typography, Input, Button, Form, Layout } from 'antd';
 import { Logo } from 'components/Logo';
 import { forgotPassword } from 'services/authService';
 import { notify } from 'util/notify';
@@ -10,6 +10,13 @@ const ContainerStyled = styled.div`
   padding: 2rem 0.5rem;
   text-align: center;
   max-width: 400px;
+  width: 100%;
+`;
+
+const LayoutStyled = styled(Layout)`
+  margin: 0 auto 0 auto;
+  background-color: #ffffff;
+  height: 100%;
 `;
 
 const LogoContainer = styled.div`
@@ -56,7 +63,7 @@ class ResetPasswordPage extends React.Component {
   render() {
     const { sending } = this.state;
 
-    return (
+    return <LayoutStyled>
       <ContainerStyled>
         <LogoContainer><Logo /></LogoContainer>
         <Title level={2}>Forgot Password</Title>
@@ -64,18 +71,18 @@ class ResetPasswordPage extends React.Component {
           <Form.Item label="Registration email" name="email" rules={[{ required: true, whitespace: true, max: 100, type: 'email', message: 'Please input valid email address' }]}>
             <Input placeholder="abc@xyz.com" type="email" allowClear={true} maxLength="100" disabled={sending} autoFocus={true} />
           </Form.Item>
-          <Form.Item style={{marginTop: '2rem'}}>
+          <Form.Item style={{ marginTop: '2rem' }}>
             <Button block type="primary" htmlType="submit" disabled={sending}>Send reset link to email</Button>
+          </Form.Item>
+          <Form.Item >
             <Button block type="link" onClick={() => this.goBack()}>Cancel</Button>
           </Form.Item>
           <Form.Item>
-        <Link to="/"><Button block type="link">Go to home page</Button></Link>
-
+            <Link to="/"><Button block type="link">Go to home page</Button></Link>
           </Form.Item>
         </Form>
       </ContainerStyled>
-
-    );
+    </LayoutStyled>;
   }
 }
 

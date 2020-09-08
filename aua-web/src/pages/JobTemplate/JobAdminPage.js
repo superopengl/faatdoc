@@ -48,7 +48,8 @@ const StyledTitleRow = styled.div`
 const LayoutStyled = styled(Layout)`
   margin: 0 auto 0 auto;
   background-color: #ffffff;
-  height: calc(100vh - 64px);
+  // height: calc(100vh - 64px);
+  height: 100%;
 `;
 
 const NEW_JOB_TEMPLATE = {

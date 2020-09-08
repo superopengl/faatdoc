@@ -8,7 +8,7 @@ import { notify } from 'util/notify';
 const Container = styled.div`
 margin-left: auto;
 margin-right: auto;
-max-width: 500px;
+max-width: 400px;
 text-align: left;
 
 p {

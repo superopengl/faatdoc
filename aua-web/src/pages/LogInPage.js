@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link, withRouter } from 'react-router-dom';
-import { Typography, Input, Button, Form, Row, Col, Divider } from 'antd';
+import { Typography, Input, Button, Form, Row, Col, Layout } from 'antd';
 import { GoogleOutlined } from '@ant-design/icons';
 import { Logo } from 'components/Logo';
 import isEmail from 'validator/es/lib/isEmail';
@@ -12,12 +12,19 @@ import { HashLink } from 'react-router-hash-link';
 import windowSize from 'react-window-size';
 import { refreshNotificationUnreadCount, setNotificationCount } from 'services/notificationService';
 
+const LayoutStyled = styled(Layout)`
+  margin: 0 auto 0 auto;
+  background-color: #ffffff;
+  height: 100%;
+`;
 
 const ContainerStyled = styled.div`
   margin: 2rem auto;
   padding: 2rem 1rem;
   text-align: center;
   max-width: 400px;
+  background-color: #ffffff;
+  height: 100%;
 `;
 
 const LogoContainer = styled.div`
@@ -85,34 +92,36 @@ class LogInPage extends React.Component {
             }
 
             return (
-              <ContainerStyled>
-                <LogoContainer><Logo /></LogoContainer>
-                <Form layout="vertical" onFinish={handleSubmit} style={{ textAlign: 'left' }}>
-                  <Form.Item label="Email" name="name"
-                    rules={[{ required: true, validator: this.validateName, whitespace: true, max: 100, message: 'Please input valid email address' }]}
-                  >
-                    <Input placeholder="abc@xyz.com" type="email" autoComplete="email" allowClear={true} maxLength="100" disabled={sending} autoFocus={true} />
-                  </Form.Item>
-                  <Form.Item label="Password" name="password" autoComplete="current-password" rules={[{ required: true, message: 'Please input password' }]}>
-                    <Input.Password placeholder="Password" autoComplete="current-password" maxLength="50" disabled={sending} />
-                  </Form.Item>
-                  <Form.Item>
-                    <Button block type="primary" htmlType="submit" disabled={sending}>Log In</Button>
-                  </Form.Item>
-                  <Form.Item>
-                    <Button ghost block type="primary" icon={<GoogleOutlined />}>Log In with Google</Button>
-                  </Form.Item>
-                  <Form.Item>
-                    <Link to="/signup"><Button ghost block type="primary">Sign Up</Button></Link>
-                  </Form.Item>
-                  <Form.Item>
-                    <Link to="/forgot_password">
-                      <Button block type="link">Forgot password? Click here to reset</Button>
-                    </Link>
-                    <Link to="/"><Button block type="link">Go to home page</Button></Link>
-                  </Form.Item>
-                </Form>
-              </ContainerStyled>
+              <LayoutStyled>
+                <ContainerStyled>
+                  <LogoContainer><Logo /></LogoContainer>
+                  <Form layout="vertical" onFinish={handleSubmit} style={{ textAlign: 'left' }}>
+                    <Form.Item label="Email" name="name"
+                      rules={[{ required: true, validator: this.validateName, whitespace: true, max: 100, message: 'Please input valid email address' }]}
+                    >
+                      <Input placeholder="abc@xyz.com" type="email" autoComplete="email" allowClear={true} maxLength="100" disabled={sending} autoFocus={true} />
+                    </Form.Item>
+                    <Form.Item label="Password" name="password" autoComplete="current-password" rules={[{ required: true, message: 'Please input password' }]}>
+                      <Input.Password placeholder="Password" autoComplete="current-password" maxLength="50" disabled={sending} />
+                    </Form.Item>
+                    <Form.Item>
+                      <Button block type="primary" htmlType="submit" disabled={sending}>Log In</Button>
+                    </Form.Item>
+                    <Form.Item>
+                      <Button ghost block type="primary" icon={<GoogleOutlined />}>Log In with Google</Button>
+                    </Form.Item>
+                    <Form.Item>
+                      <Link to="/signup"><Button ghost block type="primary">Sign Up</Button></Link>
+                    </Form.Item>
+                    <Form.Item>
+                      <Link to="/forgot_password">
+                        <Button block type="link">Forgot password? Click here to reset</Button>
+                      </Link>
+                      <Link to="/"><Button block type="link">Go to home page</Button></Link>
+                    </Form.Item>
+                  </Form>
+                </ContainerStyled>
+              </LayoutStyled>
             );
           }
         }

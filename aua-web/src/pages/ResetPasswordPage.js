@@ -1,11 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link, withRouter } from 'react-router-dom';
-import { Typography, Input, Button, Form, Divider } from 'antd';
+import { Typography, Input, Button, Form, Divider, Layout } from 'antd';
 import { Logo } from 'components/Logo';
 import * as queryString from 'query-string';
 import { resetPassword } from 'services/authService';
 import { notify } from 'util/notify';
+
+const LayoutStyled = styled(Layout)`
+  margin: 0 auto 0 auto;
+  background-color: #ffffff;
+  height: 100%;
+`;
 
 const ContainerStyled = styled.div`
   margin: 2rem auto;
@@ -67,7 +73,7 @@ class ResetPasswordPage extends React.Component {
   render() {
     const { sending } = this.state;
 
-    return (
+    return <LayoutStyled>
       <ContainerStyled>
         <LogoContainer><Logo /></LogoContainer>
         <Title level={2}>Reset Password</Title>
@@ -87,7 +93,7 @@ class ResetPasswordPage extends React.Component {
         <Link to="/"><Button block size="large" type="link">Go to home page</Button></Link>
       </ContainerStyled>
 
-    );
+      </LayoutStyled>;
   }
 }
 
