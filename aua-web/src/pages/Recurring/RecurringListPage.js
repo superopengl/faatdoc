@@ -202,10 +202,11 @@ const RecurringListPage = (props) => {
     <LayoutStyled>
       <HomeHeader></HomeHeader>
       <ContainerStyled>
-        <Space size="large" direction="vertical" style={{ width: '100%' }}>
-          <StyledTitleRow>
-            <Title level={2} style={{ margin: 'auto' }}>Recurring Management</Title>
-          </StyledTitleRow>
+        <Space direction="vertical" style={{ width: '100%' }}>
+        <StyledTitleRow>
+          <Title level={2} style={{ margin: 'auto' }}>Recurring Management</Title>
+        </StyledTitleRow>
+
           <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
             <Button type="primary" ghost icon={<PlusOutlined />} onClick={() => handleCreateNew()}>New Recurring</Button>
           </Space>
@@ -229,17 +230,17 @@ const RecurringListPage = (props) => {
 
       </ContainerStyled>
       <StyledDrawer
-      title={currentId ? 'Edit Recurring' : 'New Recurring'}
-      placement="right"
-      closable={true}
-      visible={formVisible}
-      onClose={() => setFormVisible(false)}
-      destroyOnClose={true}
-      width={500}
-      // bodyStyle={{ padding: '0 10px' }}
-      footer={null}
-    >
-      <RecurringForm id={currentId} onOk={() => handleEditOnOk()} />
+        title={currentId ? 'Edit Recurring' : 'New Recurring'}
+        placement="right"
+        closable={true}
+        visible={formVisible}
+        onClose={() => setFormVisible(false)}
+        destroyOnClose={true}
+        width={500}
+        // bodyStyle={{ padding: '0 10px' }}
+        footer={null}
+      >
+        <RecurringForm id={currentId} onOk={() => handleEditOnOk()} />
       </StyledDrawer>
     </LayoutStyled >
 

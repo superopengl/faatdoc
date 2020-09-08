@@ -244,11 +244,10 @@ const AdminLodgementListPage = (props) => {
     <LayoutStyled>
       <HomeHeader></HomeHeader>
       <ContainerStyled>
-        <Space size="large" direction="vertical" style={{ width: '100%' }}>
+        <Space direction="vertical" style={{ width: '100%' }}>
           <StyledTitleRow>
             <Title level={2} style={{ margin: 'auto' }}>Lodgement Management</Title>
           </StyledTitleRow>
-          <Paragraph>Lodgements are predefined information that can be automatically filled into your lodgement. You can save the information like name, phone, address, TFN, and etc. for future usage.</Paragraph>
           <Space style={{width: '100%', justifyContent: 'flex-end'}}>
             <Input.Search
               placeholder="input search text"

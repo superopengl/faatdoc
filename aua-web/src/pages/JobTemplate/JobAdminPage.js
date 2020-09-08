@@ -170,11 +170,10 @@ export const JobAdminPage = (props) => {
     <LayoutStyled>
       <HomeHeader></HomeHeader>
       <ContainerStyled>
+        <Space direction="vertical" style={{ width: '100%' }}>
         <StyledTitleRow>
           <Title level={2} style={{ margin: 'auto' }}>Job Template Management</Title>
         </StyledTitleRow>
-        <Space direction="vertical" style={{ width: '100%' }}>
-
           <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
             <Button type="primary" ghost icon={<PlusOutlined />} onClick={() => handleCreateNew()}>New Job Template</Button>
           </Space>
