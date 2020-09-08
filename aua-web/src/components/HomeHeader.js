@@ -119,7 +119,7 @@ const HomeHeaderRaw = props => {
             {isAdmin && <Menu.Item key="job_template"><Link to="/job_template">Job Template</Link></Menu.Item>}
             {isAdmin && <Menu.Item key="recurring"><Link to="/recurring">Recurring</Link></Menu.Item>}
             {!isGuest && <Menu.Item key="notification"><Link to="/notification"><Badge count={notificationNumber} showZero={false} offset={[10, 0]}>Notification</Badge></Link></Menu.Item>}
-            {!isGuest && <Menu.SubMenu key="user" title={<Avatar size={40} icon={<UserOutlined style={{ fontSize: 20 }} />} style={{ backgroundColor: '#143e86' }} />}>
+            {!isGuest && <Menu.SubMenu key="user" title={<Avatar size={40} icon={<UserOutlined style={{ fontSize: 20 }} />} style={{ backgroundColor: isAdmin ? '#000000' : '#143e86' }} />}>
               <Menu.Item key="changePassword"><Link to="/change_password">Change Password</Link></Menu.Item>
               <Menu.Item key="logout" onClick={handleLogout}>Log Out</Menu.Item>
             </Menu.SubMenu>}

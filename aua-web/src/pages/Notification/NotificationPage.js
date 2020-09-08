@@ -119,6 +119,9 @@ const NotificationPage = (props) => {
                 onClick={e => handleRead(e, item)}
                 key={item.id}
                 actions={[
+                  // !isClient ? <Paragraph>
+                  //   To {item.forWhom} for {item.name} 
+                  // </Paragraph> : null,
                   <TimeAgo value={item.createdAt} strong={!item.readAt} />
                 ]}
                 >
@@ -128,6 +131,7 @@ const NotificationPage = (props) => {
                 <PortofolioAvatar value={item.forWhom} size={32} /> <Link onClick={e => handleGoToLodgement(e, item.lodgementId)}>{item.name}</Link>
                   </div>} */}
                   </Paragraph>
+                  
                 {/* <br/>
                 <PortofolioAvatar value={item.forWhom} size={32} /> */}
                 {/* <Space direction="vertical" style={{ display: 'block' }}>
