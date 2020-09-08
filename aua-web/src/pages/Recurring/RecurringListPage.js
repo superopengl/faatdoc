@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Tabs, Typography, Layout, Button, Select, Table, Input, Modal } from 'antd';
+import { Tabs, Typography, Layout, Button, Drawer, Table, Input, Modal } from 'antd';
 import HomeHeader from 'components/HomeHeader';
 import { handleDownloadCsv } from 'services/memberService';
 import { saveAs } from 'file-saver';
@@ -61,6 +61,21 @@ const DEFAULT_QUERY_INFO = {
   orderField: 'lastUpdatedAt',
   orderDirection: 'DESC'
 };
+
+const StyledDrawer = styled(Drawer)`
+
+.ant-drawer-content-wrapper {
+  max-width: 90vw;
+}
+
+.rce-mbox {
+  padding-bottom: 2rem;
+
+  .rce-mbox-time {
+    bottom: -1.5rem;
+  }
+}
+`;
 
 const RecurringListPage = (props) => {
 
@@ -213,8 +228,21 @@ const RecurringListPage = (props) => {
         </Space>
 
       </ContainerStyled>
-      <RecurringForm id={currentId} visible={formVisible} onClose={() => setFormVisible(false)} onOk={() => handleEditOnOk()} />
+      <StyledDrawer
+      title={currentId ? 'Edit Recurring' : 'New Recurring'}
+      placement="right"
+      closable={true}
+      visible={formVisible}
+      onClose={() => setFormVisible(false)}
+      destroyOnClose={true}
+      width={500}
+      // bodyStyle={{ padding: '0 10px' }}
+      footer={null}
+    >
+      <RecurringForm id={currentId} onOk={() => handleEditOnOk()} />
+      </StyledDrawer>
     </LayoutStyled >
+
   );
 };
 

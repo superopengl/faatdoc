@@ -9,6 +9,8 @@ import { LodgementStatus } from '../enums/LodgementStatus';
 import { Lodgement } from '../entity/Lodgement';
 import errorToJSON from 'error-to-json';
 import * as cronParser from 'cron-parser';
+import * as moment from 'moment';
+import { getUtcNow } from '../utils/getUtcNow';
 
 const startImmidiatly = true;
 const tz = 'Australia/Sydney';
@@ -36,6 +38,17 @@ function logging(log: SysLog) {
   getRepository(SysLog).save(log).catch(() => { });
 }
 
+function trySetLodgementDueDateField(lodgement, dueDay) {
+  if (!dueDay) return;
+  const dueDateField = lodgement.fields.find(x => x.name === 'dueDate');
+  if (!dueDateField) return;
+  dueDateField.value = moment().add(dueDay, 'day').toDate();
+}
+
+function generateLodgementNameFromTemplate(nameTemplate) {
+  return nameTemplate;
+}
+
 export async function executeRecurring(recurringId) {
   assert(recurringId, 400);
   const recurring = await getRepository(Recurring).findOne({ id: recurringId });
@@ -49,8 +62,11 @@ export async function executeRecurring(recurringId) {
   );
 
   const lodgementId = uuidv4();
+  lodgement.name = generateLodgementNameFromTemplate(nameTemplate);
   lodgement.id = lodgementId;
   lodgement.status = LodgementStatus.SUBMITTED;
+
+  trySetLodgementDueDateField(lodgement, recurring.dueDay);
 
   await getRepository(Lodgement).save(lodgement);
 

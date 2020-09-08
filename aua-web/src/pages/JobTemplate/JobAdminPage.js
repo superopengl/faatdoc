@@ -202,7 +202,7 @@ export const JobAdminPage = (props) => {
           width={900}
           footer={null}
         >
-          <JobTemplateForm id={currentId} onClose={() => handleDrawerClose()}></JobTemplateForm>
+          <JobTemplateForm id={currentId} onClose={() => handleDrawerClose()} onOk={() => {handleDrawerClose(); loadList()}}></JobTemplateForm>
         </StyledDrawer>
       </ContainerStyled>
     </LayoutStyled >

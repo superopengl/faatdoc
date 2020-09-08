@@ -24,18 +24,17 @@ export const saveJobTemplate = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin');
   const jobTemplate = new JobTemplate();
 
-  const { id, name, fields, requiresSign } = req.body;
+  const { id, name, fields } = req.body;
   assert(name, 400, 'name is empty');
   jobTemplate.id = id || uuidv4();
   jobTemplate.name = name;
   jobTemplate.fields = fields;
-  jobTemplate.requiresSign = requiresSign;
   jobTemplate.lastUpdatedAt = getUtcNow();
 
   const repo = getRepository(JobTemplate);
   await repo.save(jobTemplate);
 
-  res.json(null);
+  res.json();
 });
 
 export const listJobTemplates = handlerWrapper(async (req, res) => {
@@ -66,5 +65,5 @@ export const deleteJobTemplate = handlerWrapper(async (req, res) => {
   const repo = getRepository(JobTemplate);
   await repo.delete({ id });
 
-  res.json(null);
+  res.json();
 });

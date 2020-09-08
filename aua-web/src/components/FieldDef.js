@@ -95,6 +95,20 @@ export const BuiltInFieldDef = [
     portofolioType: ['individual'],
   },
   {
+    name: 'dueDate',
+    inputType: 'date',
+    rules: [{
+      required: true,
+      validator: async (rule, value) => {
+        if (!value) return;
+        if (moment(value).isBefore()) {
+          throw new Error();
+        }
+      },
+      message: 'Invalid date or not a furture date'
+    }],
+  },
+  {
     name: 'gender',
     inputType: 'select',
     rules: [{ required: false, message: 'Please choose a gender' }],

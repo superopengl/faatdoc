@@ -37,13 +37,13 @@ export const savePortofolio = handlerWrapper(async (req, res) => {
   const repo = getRepository(Portofolio);
   await repo.save(portofolio);
 
-  res.json(null);
+  res.json();
 });
 
 async function listMyPortofolio(userId) {
   const list = await getRepository(Portofolio)
     .createQueryBuilder('x')
-    .where({ userId })
+    .where({ userId, deleted: false })
     .orderBy('x.name', 'ASC')
     .select(['x.id', 'x.name', 'x.lastUpdatedAt'])
     .getMany();
@@ -54,6 +54,7 @@ async function listAdminPortofolio() {
   const list = await getManager()
     .createQueryBuilder()
     .from(Portofolio, 'x')
+    .where({ deleted: false })
     .innerJoin(q => q.from(User, 'u').where(`u.role = 'client'`), 'u', 'u.id = x."userId"')
     .orderBy('x.name', 'ASC')
     .select([
@@ -80,7 +81,7 @@ export const getPortofolio = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
   const { id } = req.params;
   const repo = getRepository(Portofolio);
-  const portofolio = await repo.findOne(id);
+  const portofolio = await repo.findOne({ id, deleted: true });
   assert(portofolio, 404);
 
   res.json(portofolio);
@@ -90,7 +91,7 @@ export const deletePortofolio = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
   const { id } = req.params;
   const repo = getRepository(Portofolio);
-  await repo.delete({ id });
+  await repo.update({ id }, { deleted: true });
 
-  res.json(null);
+  res.json();
 });

@@ -9,7 +9,7 @@ import { GlobalContext } from 'contexts/GlobalContext';
 import { Menu, Dropdown, message, Tooltip } from 'antd';
 import { UpOutlined, DownOutlined, DeleteOutlined, PlusOutlined, CloseOutlined } from '@ant-design/icons';
 import { Divider } from 'antd';
-import { BuiltInFieldLabelNames, BuiltInFieldType, getBuiltInFieldByLabelName } from 'components/FieldDef';
+import { BuiltInFieldLabelNames, BuiltInFieldType, getBuiltInFieldByLabelName, getBuiltInFieldByVarName } from 'components/FieldDef';
 import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
 import { varNameToLabelName } from 'util/varNameToLabelName';
 import { listJobTemplate, deleteJobTemplate, saveJobTemplate, getJobTemplate } from 'services/jobTemplateService';
@@ -95,7 +95,16 @@ const JobTemplateForm = (props) => {
     const newEntity = {
       ...entity,
       name,
-      fields: fields.filter(f => validField(f)).map(f => ({ name: labelNameToVarName(f.name), ...f })),
+      fields: fields.filter(f => validField(f)).map(f => {
+        const varName = labelNameToVarName(f.name);
+        const builtInField = getBuiltInFieldByVarName(varName);
+        const type = builtInField?.inputType || f.type;
+        return { 
+          ...f, 
+          name: varName,
+          type
+         };
+      }),
     }
     await saveJobTemplate(newEntity);
     await loadEntity();
@@ -169,30 +178,29 @@ const JobTemplateForm = (props) => {
 
 
   return (
-      <Space direction="vertical" size="large" style={{ width: '100%' }}>
-        <Text strong>Job Template Name</Text>
-        <Input placeholder="Job Template Name" value={name} onChange={e => setName(e.target.value)} />
-        {/* <Checkbox checked={requiresSign} onChange={e => setRequiresSign(e.target.checked)}>Client signature is required</Checkbox> */}
-        <Text strong>Field Definitions</Text>
-        <Table
-          style={{ width: '100%' }}
-          size="small"
-          columns={columns}
-          dataSource={fields}
-          loading={loading}
-          pagination={false}
-          rowKey={record => record.name}
-          footer={null}
-        />
-        {/* <Divider/> */}
-        <Space style={{ width: '100%', justifyContent: 'space-between' }}>
-          <Button icon={<PlusOutlined />} onClick={addNewRow}>Add New Field</Button>
-          <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
-            <Button onClick={() => handleClose()}>Cancel</Button>
-            <Button type="primary" onClick={() => handleSave()}>Save</Button>
-          </Space>
+    <Space direction="vertical" size="large" style={{ width: '100%' }}>
+      <Text strong>Job Template Name</Text>
+      <Input placeholder="Job Template Name" value={name} onChange={e => setName(e.target.value)} />
+      <Text strong>Field Definitions</Text>
+      <Table
+        style={{ width: '100%' }}
+        size="small"
+        columns={columns}
+        dataSource={fields}
+        loading={loading}
+        pagination={false}
+        rowKey={record => record.name}
+        footer={null}
+      />
+      {/* <Divider/> */}
+      <Space style={{ width: '100%', justifyContent: 'space-between' }}>
+        <Button icon={<PlusOutlined />} onClick={addNewRow}>Add New Field</Button>
+        <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
+          <Button onClick={() => handleClose()}>Cancel</Button>
+          <Button type="primary" onClick={() => handleSave()}>Save</Button>
         </Space>
       </Space>
+    </Space>
   );
 };
 

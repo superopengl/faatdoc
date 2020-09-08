@@ -14,11 +14,13 @@ import cronstrue from 'cronstrue';
 
 const { Title, Text } = Typography;
 
-const radioStyle = {
-  display: 'block',
-  height: '40px',
-  lineHeight: '30px',
-};
+const StyledSpace = styled(Space)`
+border: 1px solid rgba(217,217,217);
+border-radius: 2px;
+padding: 11px;
+width: 100%;
+`;
+
 
 /**
 *    *    *    *    *    *
@@ -32,79 +34,125 @@ const radioStyle = {
 └───────────────────────── second (0 - 59, optional)
  */
 export const CronInput = props => {
-  const { value, onChange, ...other } = props;
-  const [dayOfMonth, setDayOfMonth] = React.useState(1);
-  const [dayOfWeek, setDayOfWeek] = React.useState('*');
-  const [everyXMonth, setEveryXMonth] = React.useState(1);
-  const [hour, setHour] = React.useState(0);
-  const [minute, setMinute] = React.useState(0);
+  const { value, onChange } = props;
+  const matches = /.+ (.+) (.+) (.*) \*\/(.+) (.+)/.exec(value || '0 0 0 1 */1 *');
+  const defaultMinute = matches[1];
+  const defaultHour = matches[2];
+  const defaultDayOfMonth = matches[3];
+  const defaultEveryXMonth = matches[4];
+  const dafaultDayOfWeek = matches[5];
+  const defaultPeriod = dafaultDayOfWeek === '*' ? 'monthly' : 'weekly';
+
+  const [dayOfMonth, setDayOfMonth] = React.useState(defaultDayOfMonth);
+  const [dayOfWeek, setDayOfWeek] = React.useState(dafaultDayOfWeek);
+  const [everyXMonth, setEveryXMonth] = React.useState(defaultEveryXMonth);
+  const [hour, setHour] = React.useState(defaultHour);
+  const [minute, setMinute] = React.useState(defaultMinute);
   const [expression, setExpression] = React.useState('');
 
   React.useEffect(() => {
     const cron = `0 ${minute} ${hour} ${dayOfMonth} */${everyXMonth} ${dayOfWeek}`;
     const expression = cronstrue.toString(cron, { use24HourTimeFormat: false, verbose: true });
-    props.onChange(cron);
     setExpression(expression);
+    // onChange(cron);
   }, [minute, hour, dayOfMonth, everyXMonth, dayOfWeek])
 
-  const handleEveryXMonthChange = value => {
-    setEveryXMonth(value);
-    setDayOfWeek('*');
+  const handleValueChange = (m, h, dom, exm, dw) => {
+    const cron = `0 ${m || minute} ${h || hour} ${dom || dayOfMonth} */${exm || everyXMonth} ${dw || dayOfWeek}`;
+    if (m) setMinute(`${m}`);
+    if (h) setHour(`${h}`);
+    if (dom) setDayOfMonth(`${dom}`);
+    if (exm) setEveryXMonth(`${exm}`);
+    if (dw) setDayOfWeek(`${dw}`);
+    const expression = cronstrue.toString(cron, { use24HourTimeFormat: false, verbose: true });
+    setExpression(expression);
+    // console.log('expression', expression);
+    onChange(cron);
   }
+
+  const handleEveryXMonthChange = value => {
+    // setEveryXMonth(value);
+    // setDayOfWeek('*');
+    handleValueChange(null, null, null, value, '*');
+  }
+
   const handleDayOfMonthChange = value => {
-    setDayOfMonth(value);
-    setDayOfWeek('*');
+    // setDayOfMonth(value);
+    // setDayOfWeek('*');
+    handleValueChange(null, null, value, null, '*');
   }
 
   const handleDayOfWeekChange = value => {
-    setDayOfWeek(value);
-    setDayOfMonth('*');
+    // setDayOfWeek(value);
+    // setDayOfMonth('*');
+    handleValueChange(null, null, '*', null, value);
   }
 
   const handleTimeChange = value => {
-    if(!value) return;
-    setHour(value.format('H'));
-    setMinute(value.format('m'));
+    if (!value) return;
+    // setHour(value.format('H'));
+    // setMinute(value.format('m'));
+    handleValueChange(value.format('m'), value.format('H'), null, null, null);
   }
 
-  return (<Space direction="vertical" size="small">
-    <Radio.Group
-    // onChange={handleMonthlyOptionChange} 
-    // value={value}
-    defaultValue="monthly"
-    >
-      <Radio style={radioStyle} value='monthly'>
-        Day <Select style={{ width: 60 }} onChange={handleDayOfMonthChange} defaultValue={dayOfMonth}>
-          {new Array(31).fill(null).map((x, i) => <Select.Option key={i} value={i + 1}>{i + 1}</Select.Option>)}
-        </Select> of every <Select style={{ width: 60 }} onChange={handleEveryXMonthChange} defaultValue={everyXMonth}>
-          <Select.Option value={1}>1</Select.Option>
-          <Select.Option value={2}>2</Select.Option>
-          <Select.Option value={3}>3</Select.Option>
-          <Select.Option value={6}>6</Select.Option>
+  const handleChangePeriod = period => {
+    switch (period) {
+      case 'weekly':
+        // setDayOfWeek(0);
+        // setDayOfMonth('*')
+        handleValueChange(null, null, '*', '1', '0');
+        break;
+      case 'monthly':
+        // setDayOfWeek('*');
+        // setDayOfMonth(1)
+        handleValueChange(null, null, '1', null, '*');
+        break;
+      default:
+        throw new Error(`Unsupported period ${period}`);
+    }
+  }
+
+
+  return (<StyledSpace direction="vertical" size="middle">
+    {expression && <Text code>{expression}</Text>}
+
+    <Tabs type="card" defaultActiveKey={defaultPeriod} onChange={handleChangePeriod}>
+      <Tabs.TabPane tab="Monthly" key="monthly">
+        Day <Select style={{ width: 60 }}
+          onChange={handleDayOfMonthChange}
+          value={dayOfMonth}
+        >
+          {new Array(31).fill(null).map((x, i) => <Select.Option key={i} value={`${i + 1}`}>{i + 1}</Select.Option>)}
+        </Select> of every <Select style={{ width: 60 }} onChange={handleEveryXMonthChange} value={everyXMonth}>
+          <Select.Option value="1">1</Select.Option>
+          <Select.Option value="2">2</Select.Option>
+          <Select.Option value="3">3</Select.Option>
+          <Select.Option value="6">6</Select.Option>
         </Select> month(s)
-        </Radio>
-      <Radio style={radioStyle} value='weekly'>
-        <Select style={{ width: 120 }} onChange={handleDayOfWeekChange} defaultValue={dayOfWeek}>
-          <Select.Option value="*"></Select.Option>
-          <Select.Option value={0}>Sunday</Select.Option>
-          <Select.Option value={1}>Monday</Select.Option>
-          <Select.Option value={2}>Tuesday</Select.Option>
-          <Select.Option value={3}>Wendesday</Select.Option>
-          <Select.Option value={4}>Thursday</Select.Option>
-          <Select.Option value={5}>Friday</Select.Option>
-          <Select.Option value={6}>Saturday</Select.Option>
+      </Tabs.TabPane>
+      <Tabs.TabPane tab="Weekly" key="weekly">
+        <Select style={{ width: 120 }}
+          onChange={handleDayOfWeekChange}
+          value={dayOfWeek}
+        >
+          <Select.Option value="0">Sunday</Select.Option>
+          <Select.Option value="1">Monday</Select.Option>
+          <Select.Option value="2">Tuesday</Select.Option>
+          <Select.Option value="3">Wendesday</Select.Option>
+          <Select.Option value="4">Thursday</Select.Option>
+          <Select.Option value="5">Friday</Select.Option>
+          <Select.Option value="6">Saturday</Select.Option>
         </Select> of every week
-        </Radio>
-    </Radio.Group>
-    <TimePicker
+      </Tabs.TabPane>
+    </Tabs>
+    <div>At <TimePicker
       defaultValue={moment(`${hour}:${minute}`, 'H:m')}
       format="hh:mm A"
       minuteStep={5}
       use12Hours={true}
       onChange={handleTimeChange}
-    />
-    {expression && <Text>{expression}</Text>}
-  </Space>);
+    /></div>
+  </StyledSpace>);
 }
 
 CronInput.propTypes = {

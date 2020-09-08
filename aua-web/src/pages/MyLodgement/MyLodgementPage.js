@@ -39,7 +39,7 @@ const ContainerStyled = styled.div`
 margin: 4rem auto 2rem auto;
   padding: 2rem 0.5rem;
 // text-align: center;
-max-width: 600px;
+max-width: 500px;
 width: 100%;
 `;
 

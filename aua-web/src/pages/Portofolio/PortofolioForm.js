@@ -103,7 +103,7 @@ const PortofolioForm = (props) => {
 
   const fieldDefs = BuiltInFieldDef.filter(x => x.portofolioType.includes(type));
 
-  console.log('value', initialValues);
+  // console.log('value', initialValues);
 
   return (<>
     <Space direction="vertical" size="large" style={{ width: '100%' }}>

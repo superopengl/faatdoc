@@ -25,6 +25,7 @@ import { normalizeFieldNameToVar } from '../utils/normalizeFieldNameToVar';
 import { Notification } from '../entity/Notification';
 import { AnalysisSchemeLanguage } from 'aws-sdk/clients/cloudsearch';
 import { guessDisplayNameFromFields } from '../utils/guessDisplayNameFromFields';
+import template from '../services/emailTemplates/welcome';
 
 
 export const generateLodgement = handlerWrapper(async (req, res) => {
@@ -95,7 +96,7 @@ export const saveLodgement = handlerWrapper(async (req, res) => {
   const repo = getRepository(Lodgement);
   await repo.save(lodgement);
 
-  res.json(null);
+  res.json();
 });
 
 interface ISearchLodgementQuery {
@@ -251,28 +252,42 @@ export const completeLodgement = handlerWrapper(async (req, res) => {
   res.json();
 });
 
-export const newLodgmentMessage = handlerWrapper(async (req, res) => {
-  assertRole(req, 'admin', 'agent', 'client');
+async function sendLodgementMessage(lodgement, senderId, content) {
+  const user = await getRepository(User).findOne(lodgement.userId);
+  assert(user, 404);
+
+  const message = new Notification();
+  message.sender = senderId;
+  message.lodgementId = lodgement.id;
+  message.clientUserId = lodgement.userId;
+  message.agentUserId = lodgement.agentId;
+  message.content = content;
+
+  await getRepository(Notification).save(message);
+
+  sendEmail({
+    to: user.email,
+    vars: {
+      name: lodgement.name
+    },
+    templateName: 'lodgementNotification'
+  }).catch(() => {});
+}
+
+export const notifyLodgement = handlerWrapper(async (req, res) => {
+  assertRole(req, 'admin', 'agent');
   const { id } = req.params;
   const { content } = req.body;
 
   const lodgement = await getRepository(Lodgement).findOne(id);
   assert(lodgement, 404);
 
-  const message = new Notification();
-  message.lodgementId = id;
-  message.sender = req.user.id;
-  message.clientUserId = lodgement.userId;
-  message.agentUserId = lodgement.agentId;
-  message.content = content;
-
-  const repo = getRepository(Notification);
-  await repo.save(message);
+  await sendLodgementMessage(lodgement, req.user.id, content);
 
   res.json();
 });
 
-export const listLodgementMessage = handlerWrapper(async (req, res) => {
+export const listLodgementNotifies = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent', 'client');
   const { id } = req.params;
   const { from, size } = req.query;
@@ -293,3 +308,22 @@ export const listLodgementMessage = handlerWrapper(async (req, res) => {
 
   res.json(list);
 });
+
+
+
+// export const requireSignLodgement = handlerWrapper(async (req, res) => {
+//   assertRole(req, 'admin', 'agent');
+//   const { id } = req.params;
+
+//   const repo = getRepository(Lodgement);
+//   const lodgement = await repo.findOne(id);
+//   assert(lodgement, 404);
+//   assert(lodgement.status === 'submitted', 400, `Cannot require sign for this lodgement`);
+
+//   lodgement.status = LodgementStatus.TO_SIGN;
+//   await repo.save(lodgement);
+
+//   await notifyLodgement(lodgement, req.user.id, 'The lodgement is waiting for your signature.');
+
+//   res.json();
+// });

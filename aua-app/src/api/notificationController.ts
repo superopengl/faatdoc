@@ -15,7 +15,7 @@ import { Lodgement } from '../entity/Lodgement';
 async function listNotificationForClient(clientId) {
   const list = await getRepository(Notification)
     .createQueryBuilder('x')
-    .where({ clientUserId: clientId })
+    .where({ clientUserId: clientId, deleted: false })
     .orderBy('"createdAt"', 'DESC')
     .select([
       'id',
@@ -30,7 +30,7 @@ async function listNotificationForClient(clientId) {
 async function listNotificationForAgent(agentId) {
   const list = await getRepository(Notification)
     .createQueryBuilder('x')
-    .where({ agentUserId: agentId })
+    .where({ agentUserId: agentId, deleted: false })
     .innerJoin(q => q.from(Lodgement, 'l').select('*'), 'l', `l.id = x."lodgementId"`)
     .orderBy('"createdAt"', 'DESC')
     .select([
@@ -49,6 +49,7 @@ async function listNotificationForAgent(agentId) {
 async function listNotificationForAdmin() {
   const list = await getRepository(Notification)
     .createQueryBuilder('x')
+    .where({deleted: false})
     .innerJoin(q => q.from(Lodgement, 'l').select('*'), 'l', `l.id = x."lodgementId"`)
     .orderBy('"createdAt"', 'DESC')
     .select([
@@ -90,7 +91,7 @@ export const getNotification = handlerWrapper(async (req, res) => {
   const { id } = req.params;
   const { user: { id: userId, role } } = req;
   const repo = getRepository(Notification);
-  const query: any = { id };
+  const query: any = { id, deleted: false };
   const isClient = role === 'client';
   if (isClient) {
     query.clientUserId = userId;
@@ -124,6 +125,7 @@ export const getNotificationUnreadCount = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent', 'client');
   const repo = getRepository(Notification);
   const query: any = {
+    deleted: false,
     readAt: IsNull()
   };
   if (req.user.role === 'client') {
@@ -133,4 +135,15 @@ export const getNotificationUnreadCount = handlerWrapper(async (req, res) => {
   const count = await repo.count(query);
 
   res.json(count);
+});
+
+export const deleteNotification = handlerWrapper(async (req, res) => {
+  assertRole(req, 'client');
+  const { id } = req.params;
+  const { user: { id: userId } } = req;
+  const repo = getRepository(Notification);
+
+  await repo.update({id, clientUserId: userId}, {deleted: true});
+
+  res.json();
 });

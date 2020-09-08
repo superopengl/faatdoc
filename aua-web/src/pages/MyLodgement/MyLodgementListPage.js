@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Tabs, Typography, Layout, Button, Modal, Steps } from 'antd';
+import { Tabs, Typography, Layout, Button, Modal, Alert } from 'antd';
 import { LargePlusButton } from 'components/LargePlusButton';
 import HomeHeader from 'components/HomeHeader';
 import { handleDownloadCsv } from 'services/memberService';
@@ -23,9 +23,11 @@ import { listPortofolio } from 'services/portofolioService';
 import ReviewSignPage from './ReviewSignPage';
 import { LodgementProgressBar } from 'components/LodgementProgressBar';
 import { TimeAgo } from 'components/TimeAgo';
+import { Badge } from 'antd';
 
 const { Title, Paragraph } = Typography;
 const { TabPane } = Tabs;
+
 
 const ContainerStyled = styled.div`
   margin: 6rem auto 2rem auto;
@@ -45,13 +47,18 @@ const LayoutStyled = styled(Layout)`
   margin: 0 auto 0 auto;
   background-color: #ffffff;
   height: 100%;
+
+  .lodgement-count .ant-badge-count {
+    background-color: #143e86;
+    color: #eeeeee;
+    // box-shadow: 0 0 0 1px #143e86 inset;
+  }
 `;
 
 
 const MyLodgementListPage = (props) => {
 
   const [loading, setLoading] = React.useState(true);
-  const [editModalVisible, setEditModalVisible] = React.useState(false);
   const [signModalVisible, setSignModalVisible] = React.useState(false);
   const [lodgementList, setLodgementList] = React.useState([]);
   const [jobTemplateList, setJobTemplateList] = React.useState([]);
@@ -95,8 +102,8 @@ const MyLodgementListPage = (props) => {
   }
 
   const actionOnLodgement = lodgement => {
-    // setCurrentLodgement(lodgement);
-    if (lodgement.status === 'to_sign') {
+    setCurrentLodgement(lodgement);
+    if (['to_sign', 'signed', 'done'].includes(lodgement.status)) {
       setSignModalVisible(true);
     } else {
       goToLodgement(lodgement.id);
@@ -186,27 +193,30 @@ const MyLodgementListPage = (props) => {
           </Space>
 
           <Tabs defaultActiveKey="ongoing" type="card" tabBarExtraContent={{right:  <Button type="link" onClick={() => loadList()} icon={<SyncOutlined />}></Button>}}>
-            <TabPane tab="In Progress" key="ongoing">
+            <TabPane tab={<>In Progress <Badge count={lodgementList.filter(x => ['to_sign'].includes(x.status)).length} showZero={false}/></>} key="ongoing">
               {RenderListFilteredByStatus(['submitted', 'to_sign', 'signed'])}
             </TabPane>
-            <TabPane tab="Draft" key="draft">
+            <TabPane tab={"Draft"} key="draft">
               {RenderListFilteredByStatus(['draft'])}
             </TabPane>
-            <TabPane tab="Completed" key="done">
+            <TabPane tab={"Completed"} key="done">
               {RenderListFilteredByStatus(['done'])}
             </TabPane>
           </Tabs>
         </Space>
 
       </ContainerStyled>
-      {signModalVisible && <Modal
+      <Modal
         title={currentLodgement?.name || 'New Lodgement'}
         visible={signModalVisible}
+        destroyOnClose={true}
         onCancel={() => setSignModalVisible(false)}
         onOk={() => setSignModalVisible(false)}
         footer={null}
         width={700}
       >
+        {currentLodgement?.status === 'signed' ? <Alert message="The lodgement has been signed." description="Please wait for the lodgement to be completed by us." type="success" showIcon/> : null}
+        {currentLodgement?.status === 'to_sign' ? <Alert message="The lodgement requires signature." description="All above documents have been viewed and the lodgement is ready to e-sign." type="warning" showIcon/> : null}
         <Tabs>
           <Tabs.TabPane tab="Review and Sign" key="sign">
             <ReviewSignPage id={currentLodgement?.id} onFinish={() => handleModalExit()} onCancel={() => setSignModalVisible(false)} />
@@ -215,7 +225,7 @@ const MyLodgementListPage = (props) => {
             <LodgementForm id={currentLodgement?.id} onFinish={() => handleModalExit()} onCancel={() => setSignModalVisible(false)} />
           </Tabs.TabPane>
         </Tabs>
-      </Modal>}
+      </Modal>
     </LayoutStyled >
   );
 };

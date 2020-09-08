@@ -15,13 +15,14 @@ import { Divider } from 'antd';
 import { BuiltInFieldDef } from "components/FieldDef";
 import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
 import { listJobTemplate } from 'services/jobTemplateService';
-import { deleteLodgement, generateLodgement, getLodgement, saveLodgement, completeLodgement, sendLodgementMessage } from 'services/lodgementService';
+import { deleteLodgement, generateLodgement, getLodgement, saveLodgement, completeLodgement, notifyLodgement } from 'services/lodgementService';
 import { listPortofolio } from 'services/portofolioService';
 import { varNameToLabelName } from 'util/varNameToLabelName';
 import { InputYear } from 'components/InputYear';
 import { DateInput } from 'components/DateInput';
 import LodgementChat from './LodgementChat';
 import { LodgementProgressBar } from 'components/LodgementProgressBar';
+import { RangePickerInput } from 'components/RangePickerInput';
 
 const { Text, Paragraph, Title } = Typography;
 const ContainerStyled = styled.div`
@@ -59,7 +60,7 @@ const ProceedLodgementPage = (props) => {
   const [lodgement, setLodgement] = React.useState();
   const [jobTemplateId, setJobTemplateId] = React.useState();
   const [portofolioId, setPortofolioId] = React.useState();
-  const [showsMessage, setShowsMessage] = React.useState(false);
+  const [showsNotify, setShowsNotify] = React.useState(false);
 
 
   const loadEntity = async () => {
@@ -145,13 +146,13 @@ const ProceedLodgementPage = (props) => {
     lodgement.status = 'to_sign';
     setLoading(true);
     await saveLodgement(lodgement);
-    await sendLodgementMessage(lodgement.id, `Please sign the documents for lodgement '${lodgement.name}'`);
+    await notifyLodgement(lodgement.id, `The lodgement is waiting for your signature. Please view the documents and sign if OK.`);
     loadEntity();
     setLoading(false);
   }
 
   const handleMessage = () => {
-    setShowsMessage(true);
+    setShowsNotify(true);
   }
 
   const inputDisabled = loading || ['draft', 'archive', 'done'].includes(lodgement.status);
@@ -195,13 +196,14 @@ const ProceedLodgementPage = (props) => {
                 <Form.Item key={i} {...formItemProps}>
                   {type === 'text' ? <Input disabled={inputDisabled} /> :
                     type === 'year' ? <DateInput picker="year" placeholder="YYYY" disabled={inputDisabled} /> :
-                      type === 'number' ? <Input disabled={inputDisabled} type="number" /> :
-                        type === 'paragraph' ? <Input.TextArea disabled={inputDisabled} /> :
-                          type === 'date' ? <DateInput picker="date" disabled={inputDisabled} placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD" /> :
-                            type === 'select' ? <Radio.Group disabled={inputDisabled} buttonStyle="solid">
-                              {field.options?.map((x, i) => <Radio key={i} style={{ display: 'block', height: '2rem' }} value={x.value}>{x.label}</Radio>)}
-                            </Radio.Group> :
-                              null}
+                      type === 'monthRange' ? <RangePickerInput picker="month" disabled={inputDisabled} /> :
+                        type === 'number' ? <Input disabled={inputDisabled} type="number" /> :
+                          type === 'paragraph' ? <Input.TextArea disabled={inputDisabled} /> :
+                            type === 'date' ? <DateInput picker="date" disabled={inputDisabled} placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD" /> :
+                              type === 'select' ? <Radio.Group disabled={inputDisabled} buttonStyle="solid">
+                                {field.options?.map((x, i) => <Radio key={i} style={{ display: 'block', height: '2rem' }} value={x.value}>{x.label}</Radio>)}
+                              </Radio.Group> :
+                                null}
                 </Form.Item>
               );
             })}
@@ -215,8 +217,8 @@ const ProceedLodgementPage = (props) => {
                 // rules: [{ required }]
               }
               return (
-                <Form.Item key={i} {...formItemProps} > 
-                  <FileUploader disabled={inputDisabled} disabled={inputDisabled || (name === 'requireSign' && requiresSignDisabled)}/>
+                <Form.Item key={i} {...formItemProps} >
+                  <FileUploader disabled={inputDisabled} disabled={inputDisabled} />
                 </Form.Item>
               );
             })}
@@ -228,7 +230,7 @@ const ProceedLodgementPage = (props) => {
       {/* <Divider type="vertical" style={{ height: "100%" }} /> */}
     </ContainerStyled>
 
-    {lodgement && <LodgementChat visible={showsMessage} onClose={() => setShowsMessage(false)} lodgementId={lodgement?.id} readonly={communicationReadonly} />}
+    {(lodgement && showsNotify) && <LodgementChat visible={showsNotify} onClose={() => setShowsNotify(false)} lodgementId={lodgement?.id} readonly={communicationReadonly} />}
 
   </LayoutStyled >
 

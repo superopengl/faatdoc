@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
-import { Tabs, Typography, Layout, Button, Row, Modal, Divider, Checkbox } from 'antd';
+import { Tabs, Typography, Layout, Button, Row, Modal, Divider, Alert } from 'antd';
 import { LargePlusButton } from 'components/LargePlusButton';
 import HomeHeader from 'components/HomeHeader';
 import { handleDownloadCsv } from 'services/memberService';
@@ -25,32 +25,10 @@ import { deleteLodgement, generateLodgement, getLodgement, saveLodgement, signLo
 import { searchFile, downloadFile } from 'services/fileService';
 import { FileIcon } from 'components/FileIcon';
 import { TimeAgo } from 'components/TimeAgo';
+import { getFileUrl } from 'util/getFileUrl';
 
 const { Title, Paragraph, Link: TextLink } = Typography;
 const { TabPane } = Tabs;
-
-const ContainerStyled = styled.div`
-  margin: 6rem 0.5rem 2rem 0.5rem;
-`;
-
-const StyledTitleRow = styled.div`
- display: flex;
- justify-content: space-between;
- align-items: center;
- width: 100%;
-`
-
-const LayoutStyled = styled(Layout)`
-  margin: 0 auto 0 auto;
-  background-color: #ffffff;
-  height: 100%;
-`;
-
-const StyledFileIcon = styled.div`
-  width: 40px;
-  height: 50px;
-  display: inline-block;
-`;
 
 const StyledListItem = styled(List.Item)`
   cursor: pointer;
@@ -112,7 +90,8 @@ const ReviewSignPage = (props) => {
   }
   const { status, name } = lodgement || {};
 
-  const canSign = files.every(f => !!f.lastReadAt);
+  const isSigned = status === 'signed';
+  const canSign = status === 'to_sign' && files.every(f => !!f.lastReadAt) && !isSigned;
 
   return (
     <Space size="large" direction="vertical" style={{ width: '100%' }}>
@@ -127,14 +106,13 @@ const ReviewSignPage = (props) => {
         >
           <List.Item.Meta
             avatar={<FileIcon name={item.fileName} />}
-            title={<TextLink strong={!item.lastReadAt} href={`/lodgement/download/${item.id}`} target="_blank">{item.fileName}</TextLink>}
+            title={<TextLink strong={!item.lastReadAt} href={getFileUrl(item.id)} target="_blank" onClick={() => loadEntity()}>{item.fileName}</TextLink>}
             description={<TimeAgo direction="horizontal" value={item.lastReadAt} surfix="Last view:" defaultContent={<Text strong>Unread</Text>} />}
           />
         </StyledListItem>)}
       />
       {!readonly && <Space direction="vertical" style={{ width: '100%' }} size="middle">
-        {canSign ? <Text>All above documents have been viewed and the lodgement is ready to e-sign.</Text> : <Text type="warning">Please view all above documents before sign.</Text>}
-        <Button type="primary" block onClick={() => handleSign()} disabled={!canSign}>e-Sign</Button>
+        {canSign && <Button type="primary" block onClick={() => handleSign()} disabled={!canSign}>e-Sign</Button>}
         <Button block type="link" onClick={() => handleCancel()}>Cancel</Button>
       </Space>}
 

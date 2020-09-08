@@ -20,6 +20,9 @@ export class Recurring {
   @Column()
   cron: string;
 
+  @Column({nullable: true})
+  dueDay: number;
+
   @Column()
   lastUpdatedAt: Date;
 }

@@ -21,6 +21,9 @@ export class Portofolio {
   @Column()
   name: string;
 
+  @Column({default: false})
+  deleted: boolean;
+
   @Column({type: 'json'})
   fields: any;
 }

@@ -36,9 +36,6 @@ export class Lodgement {
   @Column({nullable: true})
   signedAt?: Date;
 
-  @Column({default: false})
-  requiresSign: boolean;
-
   @Column({type: 'json'})
   fields: any;
 }

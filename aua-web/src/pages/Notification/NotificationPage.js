@@ -9,12 +9,12 @@ import * as moment from 'moment';
 import windowSize from 'react-window-size';
 import Text from 'antd/lib/typography/Text';
 import {
-  MailOutlined, PlusOutlined
+  SyncOutlined, DeleteOutlined
 } from '@ant-design/icons';
 import { listPortofolio, savePortofolio, deletePortofolio } from 'services/portofolioService';
 import { random } from 'lodash';
 import { TimeAgo } from 'components/TimeAgo';
-import { listNotification, getNotification, setNotificationCount } from 'services/notificationService';
+import { listNotification, getNotification, setNotificationCount, deleteNotification } from 'services/notificationService';
 import { Alert } from 'antd';
 import { GlobalContext } from 'contexts/GlobalContext';
 
@@ -39,6 +39,11 @@ const LayoutStyled = styled(Layout)`
   margin: 0 auto 0 auto;
   background-color: #ffffff;
   height: 100%;
+
+  .ant-list-item {
+    padding-left: 0;
+    padding-right: 0;
+  }
 `;
 
 
@@ -72,6 +77,24 @@ const NotificationPage = (props) => {
   const handleRead = async (e, item) => {
     e.stopPropagation();
     await readNotificationDetail(item.id)
+  }
+
+  const handleDelete = async (e, item) => {
+    e.stopPropagation();
+    Modal.confirm({
+      title: <>To delete this notification?</>,
+      onOk: async () => {
+        setLoading(true);
+        await deleteNotification(item.id);
+        await loadList();
+        setLoading(false);
+      },
+      maskClosable: true,
+      okButtonProps: {
+        danger: true
+      },
+      okText: 'Yes, delete it!'
+    });
   }
 
   const handleGoToLodgement = (e, lodgementId) => {
@@ -109,6 +132,10 @@ const NotificationPage = (props) => {
           </StyledTitleRow>
           {isClient && <Paragraph type="secondary">Notifications are the comments and adviced actions by your agent against your specific lodgement. All the notifications here are associated with certain lodgements. Please use the contact methods on the homepage for any inquiry that is not relavant to lodgement.</Paragraph>}
           {!isClient && <Paragraph type="secondary">These sent out notifications are the comments and adviced actions ... You can see if the notification has been read by the clients.</Paragraph>}
+          <Space style={{width: '100%', justifyContent: 'flex-end'}}>
+            
+            <Button onClick={() => loadList()} icon={<SyncOutlined/>}>Refresh</Button>
+            </Space>
           <List
             itemLayout="horizontal"
             dataSource={list}
@@ -123,16 +150,17 @@ const NotificationPage = (props) => {
                   // !isClient ? <Paragraph>
                   //   To {item.forWhom} for {item.name} 
                   // </Paragraph> : null,
-                  <TimeAgo value={item.createdAt} strong={!item.readAt} />
+                  <TimeAgo value={item.createdAt} strong={!item.readAt} />,
+                  isClient ? <Button shape="circle" danger icon={<DeleteOutlined />} onClick={e => handleDelete(e, item)} /> : null
                 ]}
-                >
+              >
                 <Paragraph ellipsis={{ rows: 1, expandable: false }} style={{ fontWeight: item.readAt ? 300 : 800 }}>
                   {item.content}
                   {/* {!isClient && <div style={{marginTop: '0.5rem', fontWeight: 'normal'}}>
                 <PortofolioAvatar value={item.forWhom} size={32} /> <Link onClick={e => handleGoToLodgement(e, item.lodgementId)}>{item.name}</Link>
                   </div>} */}
-                  </Paragraph>
-                  
+                </Paragraph>
+
                 {/* <br/>
                 <PortofolioAvatar value={item.forWhom} size={32} /> */}
                 {/* <Space direction="vertical" style={{ display: 'block' }}>

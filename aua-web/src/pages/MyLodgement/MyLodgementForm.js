@@ -159,7 +159,7 @@ const MyLodgementForm = (props) => {
           style={{ textAlign: 'left' }} initialValues={getFormInitialValues()}>
           <StyledPageHeader
             onBack={() => handleCancel()}
-            title={lodgement.name}
+            title={isNew ? 'New Lodgement' : lodgement.name}
             style={{ padding: '0' }}
             extra={[
               // isNew || ['draft', 'archive'].includes(lodgement.status) ? null : <Button key="message" onClick={() => setShowsMessage(true)}>Communication</Button>,

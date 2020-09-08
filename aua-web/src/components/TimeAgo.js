@@ -30,7 +30,7 @@ export const TimeAgo = props => {
   return <StyledSpace size="small" direction="horizontal">
     <Space direction={direction} size="small">
       <Text strong={strong}>{realSurfix}<ReactTimeAgo date={m.toDate()} /></Text>
-      <Text strong={strong} type="secondary"><small>{m.format('DD MMM YYYY HH:ss')}</small></Text>
+      <Text strong={strong} type="secondary"><small>{m.format('DD MMM YYYY HH:mm')}</small></Text>
     </Space>
     {extra}
   </StyledSpace>

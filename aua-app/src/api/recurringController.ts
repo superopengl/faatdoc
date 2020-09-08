@@ -13,7 +13,7 @@ import { executeRecurring, restartCronService } from '../services/cronService';
 
 export const saveRecurring = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin');
-  const { id, nameTemplate, portofolioId, jobTemplateId, cron } = req.body;
+  const { id, nameTemplate, portofolioId, jobTemplateId, cron, dueDay } = req.body;
 
   const recurring = new Recurring();
   recurring.id = id || uuidv4();
@@ -21,6 +21,7 @@ export const saveRecurring = handlerWrapper(async (req, res) => {
   recurring.portofolioId = portofolioId;
   recurring.jobTemplateId = jobTemplateId;
   recurring.cron = cron;
+  recurring.dueDay = dueDay;
   recurring.lastUpdatedAt = getUtcNow();
 
   const repo = getRepository(Recurring);
@@ -44,6 +45,7 @@ export const listRecurring = handlerWrapper(async (req, res) => {
     .select([
       'x.id as id',
       'x."nameTemplate" as "nameTemplate"',
+      'x."dueDay" as "dueDay"',
       'u.email as email',
       'j.name as "jobTemplateName"',
       `j.id as "jobTemplateId"`,

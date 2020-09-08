@@ -339,10 +339,10 @@ paths:
           required: true
       responses:
         200:
-          description: OK
-  /lodgement/{id}/message:
+          description: OK      
+  /lodgement/{id}/notify:
     get:
-      operationId: listLodgementMessage
+      operationId: listLodgementNotifies
       # security:
       #   - authClient: []
       parameters:
@@ -355,7 +355,7 @@ paths:
         200:
           description: OK
     post:
-      operationId: newLodgmentMessage
+      operationId: notifyLodgement
       # security:
       #   - authClient: []
       parameters:
@@ -465,3 +465,16 @@ paths:
       responses:
         200:
           description: OK
+    delete:
+      operationId: deleteNotification
+      # security:
+      #   - authClient: []
+      parameters:
+        - name: id
+          in: path
+          type: string
+          format: uuid
+          required: true
+      responses:
+        200:
+          description: OK          

@@ -32,14 +32,14 @@ export async function assignLodgement(lodgementId, agentId) {
   return httpPost(`lodgement/${lodgementId}/assign`, { agentId });
 }
 
-export async function listLodgementMessages(lodgementId, from, size = 20) {
-  return httpGet(`lodgement/${lodgementId}/message`, { from, size });
+export async function listLodgementNotifies(lodgementId, from, size = 20) {
+  return httpGet(`lodgement/${lodgementId}/notify`, { from, size });
 }
 
-export async function sendLodgementMessage(lodgementId, msg) {
+export async function notifyLodgement(lodgementId, msg) {
   const content = msg?.trim();
   if (!content) return;
-  return httpPost(`lodgement/${lodgementId}/message`, { content });
+  return httpPost(`lodgement/${lodgementId}/notify`, { content });
 }
 
 export async function completeLodgement(lodgementId) {
