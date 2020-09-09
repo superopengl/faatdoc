@@ -7,7 +7,7 @@ echo -e "${ORANGE}AUA${NC}"
 
 alias ahome='cd /Users/jshao/github/aua'
 
-export AWS_PROFILE=txd
+export AWS_PROFILE=aua
 
 ssh-add -K ~/.ssh/superopengl_id_rsa
 
