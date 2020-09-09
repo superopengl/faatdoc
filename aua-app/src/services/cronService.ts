@@ -58,10 +58,6 @@ function trySetLodgementDueDateField(lodgement, dueDay) {
   dueDateField.value = moment().add(dueDay, 'day').toDate();
 }
 
-function generateLodgementNameFromTemplate(nameTemplate) {
-  return nameTemplate;
-}
-
 export async function executeRecurring(recurringId) {
   assert(recurringId, 400);
   const recurring = await getRepository(Recurring).findOne({ id: recurringId });
@@ -71,11 +67,10 @@ export async function executeRecurring(recurringId) {
   const lodgement = await generateLodgementByJobTemplateAndPortofolio(
     jobTemplateId,
     portofolioId,
-    (j, p) => `Test`
+    (j, p) => nameTemplate.replace('{{createdDate}}', moment().format('DD MMM YYYY'))
   );
 
   const lodgementId = uuidv4();
-  lodgement.name = generateLodgementNameFromTemplate(nameTemplate);
   lodgement.id = lodgementId;
   lodgement.status = LodgementStatus.SUBMITTED;
 

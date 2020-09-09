@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
-import { Input, Button, Form, PageHeader, Drawer, Layout, Modal, Descriptions, Typography, Radio, Row, Col } from 'antd';
+import { Input, Button, Form, PageHeader, Space, Layout, Modal, Descriptions, Typography, Radio, Row, Col } from 'antd';
 import { FileUploader } from 'components/FileUploader';
 import HomeHeader from 'components/HomeHeader';
 
@@ -189,16 +189,16 @@ const ProceedLodgementPage = (props) => {
         <PageHeader
           onBack={() => handleCancel()}
           title={lodgement.name}
-          subTitle={<LodgementProgressBar status={lodgement.status} width={80} />}
-          extra={[
-            <Button key="1" type="primary" danger disabled={archiveDisabled} onClick={() => handleArchive()}>Archive</Button>,
-            <Button key="2" type="primary" ghost disabled={completeDisabled} onClick={() => handleCompleteLodgement()}>Complete</Button>,
-            <Button key="3" type="primary" ghost disabled={requiresSignDisabled} onClick={() => handleRequestSign()}>Request Sign</Button>,
-            <Button key="4" type="primary" ghost disabled={communicateDisabled} onClick={() => handleMessage()}>Notify</Button>,
-            <Button key="5" type="primary" htmlType="submit" disabled={saveDisabled}>Save</Button>,
-          ]}
+          subTitle={<LodgementProgressBar status={lodgement.status} width={60} />}
         >
         </PageHeader>
+        <Space style={{width: '100%', justifyContent: 'flex-end'}}>
+          <Button key="1" type="primary" danger disabled={archiveDisabled} onClick={() => handleArchive()}>Archive</Button>
+          <Button key="2" type="primary" ghost disabled={completeDisabled} onClick={() => handleCompleteLodgement()}>Complete</Button>
+          <Button key="3" type="primary" ghost disabled={requiresSignDisabled} onClick={() => handleRequestSign()}>Request Sign</Button>
+          <Button key="4" type="primary" ghost disabled={communicateDisabled} onClick={() => handleMessage()}>Notify</Button>
+          <Button key="5" type="primary" htmlType="submit" disabled={saveDisabled}>Save</Button>
+        </Space>
         <Divider />
         <Row gutter={32}>
           <Col span={12}>

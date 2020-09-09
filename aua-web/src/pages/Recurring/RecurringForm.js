@@ -103,7 +103,7 @@ const RecurringForm = (props) => {
           </StyledPortofolioSelect>
         </Form.Item>
         <Form.Item label="Lodgement Name Template" 
-        help={<>The information is being validated... The supported date time formats are <Text code>DD MMM YYYY</Text></>}
+        help={<>The information is being validated... The supported variables are <Text code>{'{{createdDate}}'}</Text></>}
         name="nameTemplate" 
         rules={[{ required: true, message: ' ', max: 100, whitespace: true }]}>
           <Input maxLength={100}/>

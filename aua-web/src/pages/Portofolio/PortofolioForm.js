@@ -101,7 +101,7 @@ const PortofolioForm = (props) => {
     props.onCancel();
   }
 
-  const fieldDefs = BuiltInFieldDef.filter(x => x.portofolioType.includes(type));
+  const fieldDefs = BuiltInFieldDef.filter(x => x.portofolioType?.includes(type));
 
   // console.log('value', initialValues);
 

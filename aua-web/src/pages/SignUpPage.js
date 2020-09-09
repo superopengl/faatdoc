@@ -62,7 +62,7 @@ const SignUpPage = (props) => {
         icon: null,
         content: <>
           <p>
-            Congratulations and thank you very much for signing up AUA Allied. Your registration email is <strong>{user?.email}</strong>.
+            Congratulations and thank you very much for signing up AU Accouting Office. Your registration email as well as the login user is <strong>{user?.email}</strong>.
           </p>
           <p>
             You can login with either the registration email anytime.

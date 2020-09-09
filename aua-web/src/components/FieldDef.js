@@ -107,6 +107,7 @@ export const BuiltInFieldDef = [
       },
       message: 'Invalid date or not a furture date'
     }],
+    portofolioType: [],
   },
   {
     name: 'gender',

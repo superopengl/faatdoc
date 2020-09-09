@@ -46,6 +46,7 @@ const StyledPageHeader = styled(PageHeader)`
 //   width: 100%;
 //   display: flex;
 // }
+margin-bottom: 2rem;
 `;
 
 const MyLodgementForm = (props) => {
