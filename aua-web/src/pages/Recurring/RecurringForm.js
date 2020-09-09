@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
-import { Input, Button, Form, Select, DatePicker, Layout, Drawer, Space, Typography, Radio, Row, Col } from 'antd';
+import { Input, Button, Form, Select, DatePicker, Layout, Drawer, Space, Typography, InputNumber, Row, Col } from 'antd';
 import { FileUploader } from 'components/FileUploader';
 import HomeHeader from 'components/HomeHeader';
 
@@ -87,6 +87,7 @@ const RecurringForm = (props) => {
 
   return <>
      {!loading && <Form layout="vertical" onFinish={handleSaveRecurring} form={form} initialValues={initialValues}>
+       <Space direction="vertical" size="middle">
         <Form.Item label="Job Template" name="jobTemplateId" rules={[{ required: true, message: ' ' }]}>
           <Select allowClear>
             {jobTemplateList.map((x, i) => (<Select.Option key={i} value={x.id}>
@@ -102,26 +103,35 @@ const RecurringForm = (props) => {
           </StyledPortofolioSelect>
         </Form.Item>
         <Form.Item label="Lodgement Name Template" 
-        extra={<>The information is being validated... The supported date time formats are <Text code>DD MMM YYYY</Text></>}
+        help={<>The information is being validated... The supported date time formats are <Text code>DD MMM YYYY</Text></>}
         name="nameTemplate" 
         rules={[{ required: true, message: ' ', max: 100, whitespace: true }]}>
           <Input maxLength={100}/>
         </Form.Item>
-        <Form.Item label="Creation Period" name="cron" rules={[{ required: true, message: ' ' }]}>
+        <Form.Item 
+        label="Creation Period" name="cron" rules={[{ required: true, message: ' ' }]}
+        // help={`Preview: ${cornPreview}`}
+        >
           {/* <Input autoSize={{ minRows: 3, maxRows: 20 }} maxLength={20} placeholder="Type here ..." allowClear disabled={loading} /> */}
           <CronInput/>
         </Form.Item>
-        <Form.Item label="Due Day (X days after the creation date of the task)" name="dueDay" rules={[{ required: false, message: ' ' }]}>
+        <Form.Item 
+        label="Due Day (+N days after the recurring executes)" name="dueDay" rules={[{ required: false, message: ' ', type: 'number', min: 1, max: 31 }]}
+        help="This will automatically fill the 'Due Date' field if it's defined on the job template when the recurring creates one."
+        >
           {/* <Input autoSize={{ minRows: 3, maxRows: 20 }} maxLength={20} placeholder="Type here ..." allowClear disabled={loading} /> */}
+          {/* <Text type="secondary"><small>This will automatically fill the 'Due Date' field if it's defined on the job template when the recurring creates one.</small></Text> */}
           <Select>
-
-          {new Array(31).fill(null).map((x, i) => <Select.Option key={i} value={`${i + 1}`}>{i + 1}</Select.Option>)}
+            <Select.Option value={null}> </Select.Option>
+            {new Array(31).fill(null).map((x, i) => <Select.Option key={i} value={i + 1}>{i + 1}</Select.Option>)}
           </Select>
+          {/* <InputNumber min={1} max={31} /> */}
 
         </Form.Item>
         <Form.Item>
           <Button type="primary" block htmlType="submit" disabled={loading} >Save</Button>
         </Form.Item>
+        </Space>
       </Form>}
   </>;
 };

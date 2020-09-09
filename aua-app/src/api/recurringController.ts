@@ -38,9 +38,9 @@ export const listRecurring = handlerWrapper(async (req, res) => {
 
   const list = await getRepository(Recurring)
     .createQueryBuilder('x')
-    .innerJoin(q => q.from(JobTemplate, 'j'), 'j', 'j.id = x."jobTemplateId"')
-    .innerJoin(q => q.from(Portofolio, 'p'), 'p', 'p.id = x."portofolioId"')
-    .innerJoin(q => q.from(User, 'u'), 'u', 'u.id = p."userId"')
+    .leftJoin(q => q.from(JobTemplate, 'j'), 'j', 'j.id = x."jobTemplateId"')
+    .leftJoin(q => q.from(Portofolio, 'p'), 'p', 'p.id = x."portofolioId"')
+    .leftJoin(q => q.from(User, 'u'), 'u', 'u.id = p."userId"')
     .orderBy('x.lastUpdatedAt', 'DESC')
     .select([
       'x.id as id',

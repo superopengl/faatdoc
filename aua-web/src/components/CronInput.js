@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 import styled from 'styled-components';
 import { FileIcon as ReactFileIcon, defaultStyles } from 'react-file-icon';
 import toMaterialStyle from 'material-color-hash';
-import { Tabs, Typography, Radio, Button, Modal, Input, TimePicker, Space, Select } from 'antd';
+import { Tabs, Typography, Radio, Button, Modal, Checkbox, TimePicker, Space, Select } from 'antd';
 import Cron, { HEADER } from 'react-cron-generator';
 import * as moment from 'moment';
 import * as cronParser from 'cron-parser';
@@ -35,7 +35,7 @@ width: 100%;
  */
 export const CronInput = props => {
   const { value, onChange } = props;
-  const matches = /.+ (.+) (.+) (.*) \*\/(.+) (.+)/.exec(value || '0 0 0 1 */1 *');
+  const matches = /.+ (.+) (.+) (.*) \*\/(.+) (.+)/.exec(value || '0 0 0 L */1 *');
   const defaultMinute = matches[1];
   const defaultHour = matches[2];
   const defaultDayOfMonth = matches[3];
@@ -112,23 +112,30 @@ export const CronInput = props => {
     }
   }
 
+  const handleLastDayOfMonth = (e) => {
+    const checked = e.target.checked;
+    if(checked) {
 
-  return (<StyledSpace direction="vertical" size="middle">
-    {expression && <Text code>{expression}</Text>}
+    }
+  }
+
+
+  return (<><StyledSpace direction="vertical" size="middle">
 
     <Tabs type="card" defaultActiveKey={defaultPeriod} onChange={handleChangePeriod}>
       <Tabs.TabPane tab="Monthly" key="monthly">
-        Day <Select style={{ width: 60 }}
+        <div>Day <Select style={{ width: 100 }}
           onChange={handleDayOfMonthChange}
           value={dayOfMonth}
         >
           {new Array(31).fill(null).map((x, i) => <Select.Option key={i} value={`${i + 1}`}>{i + 1}</Select.Option>)}
+          <Select.Option value="L">Last day</Select.Option>
         </Select> of every <Select style={{ width: 60 }} onChange={handleEveryXMonthChange} value={everyXMonth}>
-          <Select.Option value="1">1</Select.Option>
-          <Select.Option value="2">2</Select.Option>
-          <Select.Option value="3">3</Select.Option>
-          <Select.Option value="6">6</Select.Option>
-        </Select> month(s)
+            <Select.Option value="1">1</Select.Option>
+            <Select.Option value="2">2</Select.Option>
+            <Select.Option value="3">3</Select.Option>
+            <Select.Option value="6">6</Select.Option>
+          </Select> month(s)</div>
       </Tabs.TabPane>
       <Tabs.TabPane tab="Weekly" key="weekly">
         <Select style={{ width: 120 }}
@@ -152,7 +159,9 @@ export const CronInput = props => {
       use12Hours={true}
       onChange={handleTimeChange}
     /></div>
-  </StyledSpace>);
+  </StyledSpace>
+    <Text type="secondary">Preview: {expression || null}</Text>
+  </>)
 }
 
 CronInput.propTypes = {

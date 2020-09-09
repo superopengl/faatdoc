@@ -1,4 +1,4 @@
-import { getRepository } from 'typeorm';
+import { getRepository, Not, Equal } from 'typeorm';
 import { Recurring } from '../entity/Recurring';
 import { CronJob } from 'cron';
 import { SysLog } from '../entity/SysLog';
@@ -11,6 +11,11 @@ import errorToJSON from 'error-to-json';
 import * as cronParser from 'cron-parser';
 import * as moment from 'moment';
 import { getUtcNow } from '../utils/getUtcNow';
+import { CronLock } from '../entity/CronLock';
+import { JobTemplate } from '../entity/JobTemplate';
+import { Portofolio } from '../entity/Portofolio';
+import { User } from '../entity/User';
+import * as os from 'os';
 
 const startImmidiatly = true;
 const tz = 'Australia/Sydney';
@@ -25,8 +30,16 @@ function stopRunningJobs() {
 
 async function startRecurrings() {
   console.log('Restarting cron service');
-  const repo = getRepository(Recurring);
-  const list = await repo.find({});
+
+  const list = await getRepository(Recurring)
+    .createQueryBuilder('x')
+    .innerJoin(q => q.from(JobTemplate, 'j'), 'j', 'j.id = x."jobTemplateId"')
+    .innerJoin(q => q.from(Portofolio, 'p'), 'p', 'p.id = x."portofolioId"')
+    .innerJoin(q => q.from(User, 'u'), 'u', 'u.id = p."userId"')
+    .select([
+      'x.*',
+    ])
+    .execute();
 
   stopRunningJobs();
   const jobs = list.map(r => startSingleRecurring(r));
@@ -73,10 +86,34 @@ export async function executeRecurring(recurringId) {
   return lodgement;
 }
 
+function createCronJob(cron, onRunFn) {
+  let cronPattern = cron;
+  let onExecuteCallback = onRunFn;
+  if (/L/.test(cron)) {
+    cronPattern = cron.replace('L', '28-31');
+    onExecuteCallback = async () => {
+      const now = moment();
+      const today = now.format('D');
+      const lastDayOfMonth = now.endOf('month').format('D');
+      if (today === lastDayOfMonth) {
+        await onRunFn();
+      }
+    };
+  }
+
+  return new CronJob(
+    cronPattern,
+    onExecuteCallback,
+    null,
+    startImmidiatly,
+    tz
+  );
+}
+
 
 function startSingleRecurring(recurring: Recurring): CronJob {
   const { id, cron, jobTemplateId, portofolioId } = recurring;
-  const job = new CronJob(
+  const job = createCronJob(
     cron,
     async () => {
       const lodgement = await executeRecurring(id);
@@ -92,32 +129,50 @@ function startSingleRecurring(recurring: Recurring): CronJob {
       };
 
       logging(log);
-    },
-    null,
-    startImmidiatly,
-    tz
+    }
   );
 
   const log = new SysLog();
   log.level = 'info';
   log.message = 'Recurring complete';
-  const interval = cronParser.parseExpression(cron, { tz });
-  const nextRunAt = interval.next().toString();
   log.data = {
     recurringId: id,
-    cron,
-    nextRunAt
+    cron
   };
-  console.log(`Cron started ${id} '${cron}'. Next run at '${nextRunAt}`);
+  console.log(`Cron started recuring ${id} '${cron}'`);
   logging(log);
 }
 
-export function restartCronService(throws = false) {
-  if (throws) {
-    return startRecurrings();
+async function raceSingletonLock(): Promise<boolean> {
+  const gitHash = process.env.AUA_GIT_HASH;
+  if (!gitHash) {
+    throw new Error(`Env var 'AUA_GIT_HASH' is not specified`);
   }
+  if (process.env.NODE_ENV === 'dev') {
+    return true;
+  }
+  const result = await getRepository(CronLock).update(
+    { gitHash: Not(Equal(gitHash)) },
+    {
+      gitHash,
+      lockedAt: getUtcNow(),
+      by: os.hostname()
+    }
+  );
 
+  return result.affected === 1;
+}
+
+export async function restartCronService(throws = false) {
   try {
+    const shouldStart = await raceSingletonLock();
+    if (!shouldStart) {
+      return;
+    }
+
+    if (throws) {
+      return startRecurrings();
+    }
     startRecurrings();
   } catch (e) {
     const log = new SysLog();

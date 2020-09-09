@@ -85,22 +85,47 @@ const RecurringListPage = (props) => {
   const [currentId, setCurrentId] = React.useState();
   const [agentList, setAgentList] = React.useState([]);
 
+  const isRecurringDeprecated = item => !item.email || !item.jobTemplateId || !item.portofolioName;
+
+  const getNextRunDateString = cron => {
+    try {
+      const interval = cronParser.parseExpression(cron);
+      return interval.next().toString();
+    } catch (e) {
+      if (/L/.test(cron)) {
+        // The last day of month
+        const now = moment();
+        const lastDayOfMonth = now.endOf('month').format('D');
+        const interval = cronParser.parseExpression(cron.replace('L', lastDayOfMonth));
+        let dateString = interval.next().toString(); // The run time in current month
+
+        if(moment(dateString).isBefore(now)) {
+          // If the time has passed by on the last day of the current month,
+          // return the time in the next month.
+          dateString = interval.next().toString();
+        }
+        return dateString;
+      }
+      throw e;
+    }
+  }
   const columnDef = [
     {
       title: 'Job Template',
       dataIndex: 'jobTemplateName',
-      render: (text, record) => <Link to={`/job_template/${record.jobTemplateId}`}>{text}</Link>,
+      render: (text, record) => record.jobTemplateName ? <Link to={`/job_template/${record.jobTemplateId}`}>{text}</Link> : <Text type="danger">deleted job template</Text>,
       ellipsis: false
     },
     {
       title: 'Portfolio',
       dataIndex: 'portofolioName',
       onFilter: (value, record) => record.agentId === value,
-      render: (text, record) => <>
-        <PortofolioAvatar value={text} size={40} /> {text} <Text type="secondary"><small>{record.email}</small></Text></>
+      render: (text, record) => record.portofolioName ? <>
+        <PortofolioAvatar value={text} size={40} /> {text} <Text type="secondary"><small>{record.email}</small></Text>
+      </> : <Text type="danger">deleted portofolio</Text>
     },
     {
-      title: 'Lodgement Name',
+      title: 'Name Template',
       dataIndex: 'nameTemplate',
       render: (text, record) => text,
       ellipsis: false
@@ -123,21 +148,23 @@ const RecurringListPage = (props) => {
     {
       title: 'Next Run At',
       render: (text, record) => {
-        const interval = cronParser.parseExpression(record.cron);
-        return <TimeAgo value={interval.next().toString()} />;
+        return <TimeAgo value={getNextRunDateString(record.cron)} />;
       }
     },
     {
       title: 'Action',
       // fixed: 'right',
       // width: 200,
-      render: (text, record) => (
-        <Space size="small">
-          <Button shape="circle" icon={<EditOutlined />} onClick={e => handleEditRecurring(e, record)} />
-          <Button shape="circle" icon={<CaretRightFilled />} onClick={e => handleRunRecurring(e, record)} />
-          <Button shape="circle" danger icon={<DeleteOutlined />} onClick={e => handleDelete(e, record)} />
-        </Space>
-      ),
+      render: (text, record) => {
+        const deprecated = isRecurringDeprecated(record);
+        return (
+          <Space size="small" style={{ width: '100%', justifyContent: 'flex-end' }}>
+            {!deprecated && <Button shape="circle" icon={<EditOutlined />} onClick={e => handleEditRecurring(e, record)} />}
+            {!deprecated && <Button shape="circle" icon={<CaretRightFilled />} onClick={e => handleRunRecurring(e, record)} />}
+            <Button shape="circle" danger icon={<DeleteOutlined />} onClick={e => handleDelete(e, record)} />
+          </Space>
+        )
+      },
     },
   ];
 
@@ -203,9 +230,9 @@ const RecurringListPage = (props) => {
       <HomeHeader></HomeHeader>
       <ContainerStyled>
         <Space direction="vertical" style={{ width: '100%' }}>
-        <StyledTitleRow>
-          <Title level={2} style={{ margin: 'auto' }}>Recurring Management</Title>
-        </StyledTitleRow>
+          <StyledTitleRow>
+            <Title level={2} style={{ margin: 'auto' }}>Recurring Management</Title>
+          </StyledTitleRow>
 
           <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
             <Button type="primary" ghost icon={<PlusOutlined />} onClick={() => handleCreateNew()}>New Recurring</Button>

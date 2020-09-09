@@ -18,9 +18,10 @@ RUN pnpm install
 ARG NODE_ENV
 ARG REACT_APP_AUA_GIT_HASH
 ENV TZ=utc
+ENV AUA_GIT_HASH=REACT_APP_AUA_GIT_HASH
 ENV GENERATE_SOURCEMAP=false
 ENV REACT_APP_AUA_API_ENDPOINT=/api/v1
-ENV REACT_APP_AUA_S3_URL=https://ubcallied-website-upload-images.s3-ap-southeast-2.amazonaws.com/$NODE_ENV
+ENV REACT_APP_AUA_S3_URL=https://aua-upload-files-test.s3-ap-southeast-2.amazonaws.com/$NODE_ENV
 
 # Build app
 COPY ./aua-app /usr/portal/app
