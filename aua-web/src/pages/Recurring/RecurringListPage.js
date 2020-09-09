@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Tabs, Typography, Layout, Button, Drawer, Table, Input, Modal } from 'antd';
+import { Tabs, Typography, Layout, Button, Drawer, Table, Tooltip, Modal } from 'antd';
 import HomeHeader from 'components/HomeHeader';
 import { handleDownloadCsv } from 'services/memberService';
 import { saveAs } from 'file-saver';
@@ -121,7 +121,7 @@ const RecurringListPage = (props) => {
       dataIndex: 'portofolioName',
       onFilter: (value, record) => record.agentId === value,
       render: (text, record) => record.portofolioName ? <>
-        <PortofolioAvatar value={text} size={40} /> {text} <Text type="secondary"><small>{record.email}</small></Text>
+        <PortofolioAvatar value={text} size={40} /> {text} <Text type="secondary"><small>{record.email || <Text type="danger">deleted user</Text>}</small></Text>
       </> : <Text type="danger">deleted portofolio</Text>
     },
     {
@@ -159,9 +159,9 @@ const RecurringListPage = (props) => {
         const deprecated = isRecurringDeprecated(record);
         return (
           <Space size="small" style={{ width: '100%', justifyContent: 'flex-end' }}>
-            {!deprecated && <Button shape="circle" icon={<EditOutlined />} onClick={e => handleEditRecurring(e, record)} />}
-            {!deprecated && <Button shape="circle" icon={<CaretRightFilled />} onClick={e => handleRunRecurring(e, record)} />}
-            <Button shape="circle" danger icon={<DeleteOutlined />} onClick={e => handleDelete(e, record)} />
+            {!deprecated && <Tooltip placement="bottom" title="Edit recurring"><Button shape="circle" icon={<EditOutlined />} onClick={e => handleEditRecurring(e, record)} /></Tooltip>}
+            {!deprecated && <Tooltip placement="bottom" title="Run immediately"><Button shape="circle" icon={<CaretRightFilled />} onClick={e => handleRunRecurring(e, record)} /></Tooltip>}
+            <Tooltip placement="bottom" title="Delete recurring"><Button shape="circle" danger icon={<DeleteOutlined />} onClick={e => handleDelete(e, record)} /></Tooltip>
           </Space>
         )
       },

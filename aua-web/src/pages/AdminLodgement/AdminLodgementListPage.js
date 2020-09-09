@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Tabs, Typography, Layout, Button, Select, Table, Input, Modal } from 'antd';
+import { Tabs, Typography, Layout, Button, Select, Table, Input, Modal, Tooltip } from 'antd';
 import { LargePlusButton } from 'components/LargePlusButton';
 import HomeHeader from 'components/HomeHeader';
 import { handleDownloadCsv } from 'services/memberService';
@@ -147,8 +147,12 @@ const AdminLodgementListPage = (props) => {
       // width: 200,
       render: (text, record) => (
         <Space size="small">
-          <Link to={`/lodgement/${record.id}/proceed`}><Button shape="circle" icon={<EditOutlined />}></Button></Link>
-          <Button shape="circle" danger onClick={e => handleDelete(e, record)} icon={<DeleteOutlined />}></Button>
+          <Tooltip placement="bottom" title="Proceed lodgement">
+            <Link to={`/lodgement/${record.id}/proceed`}><Button shape="circle" icon={<EditOutlined />}></Button></Link>
+          </Tooltip>
+          <Tooltip placement="bottom" title="Delete lodgement">
+            <Button shape="circle" danger onClick={e => handleDelete(e, record)} icon={<DeleteOutlined />}></Button>
+          </Tooltip>
         </Space>
       ),
     },
@@ -194,7 +198,7 @@ const AdminLodgementListPage = (props) => {
     e.stopPropagation();
     const { id, name, portofolioName, email } = item;
     Modal.confirm({
-      title: <>Archive lodgement <Text strong>{name}</Text></>,
+      title: <>Archive lodgement <Text strong>{name}</Text>?</>,
       okText: 'Yes, Archive it',
       onOk: async () => {
         await deleteLodgement(id);
@@ -248,7 +252,7 @@ const AdminLodgementListPage = (props) => {
           <StyledTitleRow>
             <Title level={2} style={{ margin: 'auto' }}>Lodgement Management</Title>
           </StyledTitleRow>
-          <Space style={{width: '100%', justifyContent: 'flex-end'}}>
+          <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
             <Input.Search
               placeholder="input search text"
               enterButton={<><SearchOutlined /> Search</>}
@@ -259,7 +263,7 @@ const AdminLodgementListPage = (props) => {
               allowClear
             />
 
-            <Button onClick={() => loadList()} icon={<SyncOutlined/>}></Button>
+            <Button onClick={() => loadList()} icon={<SyncOutlined />}></Button>
             <Select
               mode="multiple"
               allowClear

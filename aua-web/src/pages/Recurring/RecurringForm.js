@@ -117,7 +117,7 @@ const RecurringForm = (props) => {
         </Form.Item>
         <Form.Item 
         label="Due Day (+N days after the recurring executes)" name="dueDay" rules={[{ required: false, message: ' ', type: 'number', min: 1, max: 31 }]}
-        help="This will automatically fill the 'Due Date' field if it's defined on the job template when the recurring creates one."
+        help="When the recurring executes, this value will be used to automatically populate the 'Due Date' field (if defined) on the job template."
         >
           {/* <Input autoSize={{ minRows: 3, maxRows: 20 }} maxLength={20} placeholder="Type here ..." allowClear disabled={loading} /> */}
           {/* <Text type="secondary"><small>This will automatically fill the 'Due Date' field if it's defined on the job template when the recurring creates one.</small></Text> */}

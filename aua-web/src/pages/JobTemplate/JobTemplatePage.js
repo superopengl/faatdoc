@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Tabs, Typography, Layout, Button, Drawer, Card, Col, Modal, Table } from 'antd';
+import { Tabs, Typography, Layout, Button, Drawer, Tooltip, Col, Modal, Table } from 'antd';
 import HomeHeader from 'components/HomeHeader';
 import JobTemplateForm from 'pages/JobTemplate/JobTemplateForm';
 import JobTemplateCard from 'pages/JobTemplate/JobTemplateCard';
@@ -62,7 +62,7 @@ const NEW_JOB_TEMPLATE = {
 }
 
 
-export const JobAdminPage = (props) => {
+export const JobTemplatePage = (props) => {
   const columnDef = [
     {
       title: 'Name',
@@ -83,8 +83,13 @@ export const JobAdminPage = (props) => {
       title: 'Action',
       render: (text, record, index) => (
         <Space size="small">
+          <Tooltip placement="bottom" title="Edit job template">
+
           <Button shape="circle" icon={<EditOutlined />} onClick={e => handleEdit(e, record)} />
+          </Tooltip>
+          <Tooltip placement="bottom" title="Delete job template">
           <Button shape="circle" danger icon={<DeleteOutlined />} onClick={e => handleDelete(e, record)} />
+          </Tooltip>
         </Space>
       ),
     },
@@ -92,7 +97,6 @@ export const JobAdminPage = (props) => {
 
 
   const [list, setList] = React.useState([]);
-  const [currentActiveTab, setCurrentActiveTab] = React.useState();
   const [loading, setLoading] = React.useState(true);
   const [drawerVisible, setDrawerVisible] = React.useState(false);
   const [currentId, setCurrentId] = React.useState();
@@ -143,25 +147,6 @@ export const JobAdminPage = (props) => {
     setDrawerVisible(false);
   }
 
-  const handleTabChange = activeKey => {
-    const item = list[currentActiveTab];
-    if (item && !item.id) {
-      Modal.error({
-        title: 'There is a unsaved job template. Please save or delete it before other operations.'
-      });
-      return;
-    }
-    setCurrentTab(activeKey);
-  }
-
-  const refreshList = async () => {
-    await loadList();
-  }
-
-  const setCurrentTab = (key) => {
-    setCurrentActiveTab(`${key}`)
-  }
-
   const hasUnsavedNewTemplate = () => {
     return list.some(item => !item.id);
   }
@@ -208,8 +193,8 @@ export const JobAdminPage = (props) => {
   );
 };
 
-JobAdminPage.propTypes = {};
+JobTemplatePage.propTypes = {};
 
-JobAdminPage.defaultProps = {};
+JobTemplatePage.defaultProps = {};
 
-export default JobAdminPage;
+export default JobTemplatePage;

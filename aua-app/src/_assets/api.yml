@@ -137,28 +137,45 @@ paths:
           description: OK
   /user:
     get:
-      operationId: listClients
+      operationId: listAllUsers
       # security:
       #   - authAdminOrAgent: []
       responses:
         200:
           description: OK
+  /user/:id:
+    delete:
+      operationId: deleteUser
+      # security:
+      #   - authAdminOrAgent: []
+      parameters:
+        - name: id
+          in: path
+          type: string
+          format: uuid
+          required: true
+      responses:
+        200:
+          description: OK          
+  /user/:id/set_password:
+    post:
+      operationId: setUserPassword
+      # security:
+      #   - authAdminOrAgent: []
+      parameters:
+        - name: id
+          in: path
+          type: string
+          format: uuid
+          required: true
+      responses:
+        200:
+          description: OK                    
   /user/agent:
     get:
       operationId: listAgents
       # security:
       #   - authAdminOrAgent: []
-      responses:
-        200:
-          description: OK
-  /user/profile:
-    post:
-      operationId: updateProfile
-      responses:
-        200:
-          description: OK
-    get:
-      operationId: getProfile
       responses:
         200:
           description: OK

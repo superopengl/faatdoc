@@ -105,7 +105,7 @@ export const CronInput = props => {
       case 'monthly':
         // setDayOfWeek('*');
         // setDayOfMonth(1)
-        handleValueChange(null, null, '1', null, '*');
+        handleValueChange(null, null, 'L', null, '*');
         break;
       default:
         throw new Error(`Unsupported period ${period}`);

@@ -12,7 +12,7 @@ import {
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { Table, Tag, Space } from 'antd';
-import { listClients } from 'services/userService';
+import { listAllUsers } from 'services/userService';
 
 const { Title } = Typography;
 const { TabPane } = Tabs;
@@ -126,7 +126,7 @@ class ClientsPage extends React.Component {
   }
 
   loadData = async () => {
-    const data = await listClients();
+    const data = await listAllUsers();
     this.setState({ data });
   };
 

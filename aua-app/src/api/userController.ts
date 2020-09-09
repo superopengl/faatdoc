@@ -1,5 +1,5 @@
 
-import { getRepository, getManager, getConnection } from 'typeorm';
+import { getRepository, getManager, getConnection, Not } from 'typeorm';
 import { User } from '../entity/User';
 import { assert, assertRole } from '../utils/assert';
 import { validatePasswordStrength } from '../utils/validatePasswordStrength';
@@ -27,23 +27,6 @@ export const getProfile = handlerWrapper(async (req, res) => {
 });
 
 
-export const updateProfile = handlerWrapper(async (req, res) => {
-  assertRole(req, 'client');
-  const { id, role } = (req as any).user as User;
-  const payload = req.body;
-
-  const userId = id;
-
-  const profile = createProfileEntity(userId, payload);
-
-  await getManager().transaction(async manager => {
-    // await manager.getRepository(ProfileImage).delete({ userId });
-    await manager.save([profile]);
-  });
-
-  res.json();
-});
-
 export const changePassword = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
   const { password, newPassword } = req.body;
@@ -60,22 +43,13 @@ export const changePassword = handlerWrapper(async (req, res) => {
   res.json();
 });
 
-export const listClients = handlerWrapper(async (req, res) => {
-  assertRole(req, 'admin', 'agent');
+export const listAllUsers = handlerWrapper(async (req, res) => {
+  assertRole(req, 'admin');
 
-  const list = await getConnection()
-    .createQueryBuilder()
-    .from(User, 'u')
-    .where(`u.status != :status`, {status: UserStatus.Disabled})
-    .where(`u.role = :role`, {role: 'client'})
-    .leftJoin(q => q.from(Portofolio, 'p').select('*'), 'p', 'u.id = p."userId"')
-    .leftJoin(l => l.from(Lodgement, 'l').select('*'), 'l', 'p.id = l."portofolioId"')
-    .select([
-      `u.id AS id`,
-      `u.email AS email`,
-      `u."lastLoggedInAt" AT TIME ZONE 'UTC' AT TIME ZONE 'Australia/Sydney' AS "lastLoggedInAt"`,
-    ])
-    .execute();
+  const list = await getRepository(User).find({
+    where: { status: Not(UserStatus.Disabled) },
+    order: { role: 'ASC', email: 'ASC' }
+  });
 
   res.json(list);
 });
@@ -97,4 +71,27 @@ export const listAgents = handlerWrapper(async (req, res) => {
     .execute();
 
   res.json(clients);
+});
+
+export const deleteUser = handlerWrapper(async (req, res) => {
+  assertRole(req, 'admin');
+  const { id } = req.params;
+
+  await getRepository(User).delete({ id, email: Not('admin@auao.com.au') });
+
+  res.json();
+});
+
+export const setUserPassword = handlerWrapper(async (req, res) => {
+  assertRole(req, 'admin');
+  const { id } = req.params;
+  const { password } = req.body;
+  assert(password, 404, 'Invalid password');
+
+  const repo = getRepository(User);
+  const newSalt = uuidv4();
+  const newSecret = computeUserSecret(password, newSalt);
+  await repo.update(id, { secret: newSecret, salt: newSalt });
+
+  res.json();
 });
