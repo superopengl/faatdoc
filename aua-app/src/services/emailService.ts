@@ -54,7 +54,6 @@ export async function sendEmail(req: EmailRequest) {
     ReplyToAddresses: ['AU Accounting Office <accountant@auao.com.au>'],
   };
 
-  // TODO: Turn on email sending
-  const sesRequest = Promise.resolve(9) || ses.sendEmail(params).promise();
+  const sesRequest = ses.sendEmail(params).promise();
   await sesRequest;
 }

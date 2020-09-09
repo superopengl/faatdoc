@@ -139,9 +139,9 @@ function startSingleRecurring(recurring: Recurring): CronJob {
 }
 
 async function raceSingletonLock(): Promise<boolean> {
-  const gitHash = process.env.AUA_GIT_HASH;
+  const gitHash = process.env.GIT_HASH;
   if (!gitHash) {
-    throw new Error(`Env var 'AUA_GIT_HASH' is not specified`);
+    throw new Error(`Env var 'GIT_HASH' is not specified`);
   }
   if (process.env.NODE_ENV === 'dev') {
     return true;

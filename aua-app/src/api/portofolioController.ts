@@ -24,7 +24,7 @@ export const savePortofolio = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
   const portofolio = new Portofolio();
 
-  const { user: { id: userId } } = req;
+  const { user: { id: userId } } = req as any;
 
   const { id, fields, type } = req.body;
   portofolio.id = id || uuidv4();
@@ -68,7 +68,7 @@ async function listAdminPortofolio() {
 
 export const listPortofolio = handlerWrapper(async (req, res) => {
   assertRole(req, 'client', 'admin');
-  const { id, role } = req.user;
+  const { user: {id, role }} = req as any;
   const list = role === 'client' ? await listMyPortofolio(id) :
     role === 'admin' ? await listAdminPortofolio() :
       [];

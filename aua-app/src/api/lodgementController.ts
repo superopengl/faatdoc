@@ -66,7 +66,7 @@ function validateLodgementStatusChange(oldStatus, newStatus) {
 export const saveLodgement = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
 
-  const { user: { id: userId } } = req;
+  const { user: { id: userId } } = req as any;
 
   const { id, name, jobTemplateId, portofolioId, fields, status } = req.body;
   assert(name, 400, 'name is empty');
@@ -171,7 +171,7 @@ export const listLodgement = handlerWrapper(async (req, res) => {
     .where(
       'x.userId = :userId AND x.status != :status',
       {
-        userId: req.user.id,
+        userId: (req as any).user.id,
         status: LodgementStatus.ARCHIVE
       })
     .select([
@@ -282,7 +282,7 @@ export const notifyLodgement = handlerWrapper(async (req, res) => {
   const lodgement = await getRepository(Lodgement).findOne(id);
   assert(lodgement, 404);
 
-  await sendLodgementMessage(lodgement, req.user.id, content);
+  await sendLodgementMessage(lodgement, (req as any).user.id, content);
 
   res.json();
 });
@@ -291,18 +291,19 @@ export const listLodgementNotifies = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent', 'client');
   const { id } = req.params;
   const { from, size } = req.query;
+  const {user: {role, id: userId}} = req as any;
 
   let query = getRepository(Notification).createQueryBuilder()
     .where(`"lodgementId" = :id`, { id });
-  if (req.user.role === 'client') {
-    query = query.where(`"clientUserId" = :userId`, { userId: req.user.id });
+  if (role === 'client') {
+    query = query.where(`"clientUserId" = :userId`, { userId });
   }
   if (from) {
-    query = query.where(`"createdAt" >= :from`, { from: moment(from).toDate() });
+    query = query.where(`"createdAt" >= :from`, { from: moment(`${from}`).toDate() });
   }
 
   query = query.orderBy('"createdAt"', 'DESC')
-    .limit(size || 20);
+    .limit(+size || 20);
 
   const list = await query.getMany();
 

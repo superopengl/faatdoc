@@ -6,7 +6,7 @@ import styled from 'styled-components';
 const { Footer } = Layout;
 // const gitInfo = GitInfo();
 // const gitVersion = gitInfo.commit.shortHash;
-const gitVersion = process.env.REACT_APP_AUA_GIT_HASH;
+const gitVersion = process.env.REACT_APP_GIT_HASH;
 
 const FooterStyled = styled(Footer)`
 width: 100%;

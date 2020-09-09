@@ -48,10 +48,10 @@
     "validator": "^13.1.1"
   },
   "scripts": {
-    "start": "cross-env PORT=6001 REACT_APP_AUA_GIT_HASH=$(git rev-parse --short HEAD) craco start",
+    "start": "cross-env PORT=6001 REACT_APP_GIT_HASH=$(git rev-parse --short HEAD) craco start",
     "build": "npm run clean && cross-env CLIENT_ENV=development GENERATE_SOURCEMAP=true craco build",
     "build:prod": "npm run clean && npm run compile",
-    "compile": "cross-env CLIENT_ENV=production GENERATE_SOURCEMAP=false REACT_APP_AUA_GIT_HASH=$(git rev-parse --short HEAD) craco build",
+    "compile": "cross-env CLIENT_ENV=production GENERATE_SOURCEMAP=false REACT_APP_GIT_HASH=$(git rev-parse --short HEAD) craco build",
     "compile:prod": "cross-env CLIENT_ENV=production GENERATE_SOURCEMAP=false craco build",
     "clean": "rm -rf build",
     "test": "craco test",

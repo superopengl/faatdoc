@@ -67,7 +67,7 @@ async function listNotificationForAdmin() {
 
 export const listNotification = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent', 'client');
-  const { user: { id, role } } = req;
+  const { user: { id, role } } = req as any;
   let list: Promise<any>;
   switch (role) {
     case 'client':
@@ -89,7 +89,7 @@ export const listNotification = handlerWrapper(async (req, res) => {
 export const getNotification = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent', 'client');
   const { id } = req.params;
-  const { user: { id: userId, role } } = req;
+  const { user: { id: userId, role } } = req as any;
   const repo = getRepository(Notification);
   const query: any = { id, deleted: false };
   const isClient = role === 'client';
@@ -124,12 +124,13 @@ export const getNotification = handlerWrapper(async (req, res) => {
 export const getNotificationUnreadCount = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent', 'client');
   const repo = getRepository(Notification);
+  const {user: {role, id}} = req as any;
   const query: any = {
     deleted: false,
     readAt: IsNull()
   };
-  if (req.user.role === 'client') {
-    query.clientUserId = req.user.id;
+  if (role === 'client') {
+    query.clientUserId = id;
   }
 
   const count = await repo.count(query);
@@ -140,7 +141,7 @@ export const getNotificationUnreadCount = handlerWrapper(async (req, res) => {
 export const deleteNotification = handlerWrapper(async (req, res) => {
   assertRole(req, 'client');
   const { id } = req.params;
-  const { user: { id: userId } } = req;
+  const { user: { id: userId } } = req as any;
   const repo = getRepository(Notification);
 
   await repo.update({id, clientUserId: userId}, {deleted: true});

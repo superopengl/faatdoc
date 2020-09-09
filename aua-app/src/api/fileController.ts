@@ -21,7 +21,7 @@ function getS3Service() {
 // Upload your image to S3
 async function uploadToS3(id, name, data): Promise<string> {
   const bucketName = process.env.AUA_S3_BUCKET;
-  const prefix = process.env.AUA_IMAGE_PREFIX;
+  const prefix = process.env.AUA_FILE_PREFIX;
 
   assert(prefix && id, 404, `image path cannot be composed '${bucketName}/${prefix}/${id}/${name}'`);
 
@@ -42,7 +42,7 @@ async function uploadToS3(id, name, data): Promise<string> {
 export const downloadFile = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client', 'agent');
   const { id } = req.params;
-  const { user: {id: userId, role} } = req;
+  const { user: {id: userId, role} } = req as any;
 
   const repo = getRepository(File);
   const file = await repo.findOne(id);
