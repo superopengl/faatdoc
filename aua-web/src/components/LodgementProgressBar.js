@@ -1,10 +1,9 @@
 import React from 'react';
-import { Steps, Popover, Typography } from 'antd';
+import { Typography } from 'antd';
 import { Progress } from 'antd';
 import PropTypes from 'prop-types';
 import { Tag } from 'antd';
 
-const { Step } = Steps;
 const {Text} = Typography;
 
 const percentage = {

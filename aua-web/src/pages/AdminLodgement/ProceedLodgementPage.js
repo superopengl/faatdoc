@@ -3,28 +3,19 @@ import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
-import { Input, Button, Form, PageHeader, Space, Layout, Modal, Descriptions, Typography, Radio, Row, Col } from 'antd';
+import { Input, Button, Form, PageHeader, Space, Layout, Modal, Typography, Radio, Row, Col } from 'antd';
 import { FileUploader } from 'components/FileUploader';
 import HomeHeader from 'components/HomeHeader';
 
-import * as moment from 'moment';
-import { GlobalContext } from 'contexts/GlobalContext';
-import { Menu, Dropdown, message, Tooltip } from 'antd';
-import { UpOutlined, DownOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { Divider } from 'antd';
-import { BuiltInFieldDef } from "components/FieldDef";
-import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
-import { listJobTemplate } from 'services/jobTemplateService';
-import { deleteLodgement, generateLodgement, getLodgement, saveLodgement, completeLodgement, notifyLodgement } from 'services/lodgementService';
-import { listPortofolio } from 'services/portofolioService';
+import { deleteLodgement, getLodgement, saveLodgement, completeLodgement, notifyLodgement } from 'services/lodgementService';
 import { varNameToLabelName } from 'util/varNameToLabelName';
-import { InputYear } from 'components/InputYear';
 import { DateInput } from 'components/DateInput';
 import LodgementChat from './LodgementChat';
 import { LodgementProgressBar } from 'components/LodgementProgressBar';
 import { RangePickerInput } from 'components/RangePickerInput';
 
-const { Text, Paragraph, Title } = Typography;
+const { Text } = Typography;
 const ContainerStyled = styled.div`
   margin: 5rem auto 0 auto;
   padding: 1rem;
@@ -33,12 +24,6 @@ const ContainerStyled = styled.div`
   display: flex;
 `;
 
-const StyledTitleRow = styled.div`
- display: flex;
- justify-content: space-between;
- align-items: center;
- width: 100%;
-`
 
 const LayoutStyled = styled(Layout)`
   margin: 0 auto 0 auto;
@@ -58,8 +43,6 @@ const ProceedLodgementPage = (props) => {
   const [form] = Form.useForm();
 
   const [lodgement, setLodgement] = React.useState();
-  const [jobTemplateId, setJobTemplateId] = React.useState();
-  const [portofolioId, setPortofolioId] = React.useState();
   const [showsNotify, setShowsNotify] = React.useState(false);
 
 
@@ -91,7 +74,7 @@ const ProceedLodgementPage = (props) => {
     setLodgement({ ...lodgment });
   }
 
-  const handleSubmit = async values => {
+  const handleSubmit = async () => {
 
     // debugger;
     setLoading(true);
@@ -203,7 +186,7 @@ const ProceedLodgementPage = (props) => {
         <Row gutter={32}>
           <Col span={12}>
             {lodgement.fields.filter(f => f.type !== 'upload').map((field, i) => {
-              const { name, description, type, required } = field;
+              const { name, description, type } = field;
               const formItemProps = {
                 label: <>{varNameToLabelName(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
                 name,
@@ -227,7 +210,7 @@ const ProceedLodgementPage = (props) => {
           </Col>
           <Col span={12}>
             {lodgement.fields.filter(f => f.type === 'upload').map((field, i) => {
-              const { name, description, type, required } = field;
+              const { name, description } = field;
               const formItemProps = {
                 label: <>{varNameToLabelName(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
                 name,
@@ -235,7 +218,7 @@ const ProceedLodgementPage = (props) => {
               }
               return (
                 <Form.Item key={i} {...formItemProps} >
-                  <FileUploader disabled={inputDisabled} disabled={inputDisabled} />
+                  <FileUploader disabled={inputDisabled} />
                 </Form.Item>
               );
             })}

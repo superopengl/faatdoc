@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import 'antd/dist/antd.less';
 import 'react-image-lightbox/style.css';
 import { Route } from 'react-router-dom';
-import * as _ from 'lodash';
 import OtherPage from 'pages/OtherPage';
 
 export const RoleRoute = props => {

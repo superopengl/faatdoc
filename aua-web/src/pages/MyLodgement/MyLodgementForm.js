@@ -3,49 +3,19 @@ import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
-import { Input, Button, Form, Drawer, DatePicker, Checkbox, Modal, Space, Typography, Radio } from 'antd';
+import { Input, Button, Form, Space, Typography, Radio } from 'antd';
 import { FileUploader } from '../../components/FileUploader';
-import * as moment from 'moment';
-import { GlobalContext } from 'contexts/GlobalContext';
-import { Menu, Dropdown, message, Tooltip } from 'antd';
-import { UpOutlined, DownOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-import { Divider } from 'antd';
-import { BuiltInFieldDef } from "components/FieldDef";
-import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
-import { listJobTemplate } from 'services/jobTemplateService';
-import { deleteLodgement, generateLodgement, getLodgement, saveLodgement } from 'services/lodgementService';
-import { listPortofolio } from 'services/portofolioService';
+import { generateLodgement, getLodgement, saveLodgement } from 'services/lodgementService';
 import { LodgementGenerator } from './LodgementGenerator';
 import { varNameToLabelName } from 'util/varNameToLabelName';
-import { InputYear } from 'components/InputYear';
 import { DateInput } from 'components/DateInput';
 import { RangePickerInput } from 'components/RangePickerInput';
-import { notify } from 'util/notify';
 import { PageHeader } from 'antd';
 import LodgementChat from 'pages/AdminLodgement/LodgementChat';
-import * as _ from 'lodash';
 
-const { Text, Paragraph, Title } = Typography;
-const { RangePicker } = DatePicker;
-
-const StyledTypeButton = styled(Button)`
-  height: 100%;
-
-  h1, div {
-    margin: 0;
-  }
-
-  div {
-    white-space: break-spaces; 
-  }
-`;
+const { Text } = Typography;
 
 const StyledPageHeader = styled(PageHeader)`
-// .ant-page-header-heading-extra {
-//   justify-content: flex-end;
-//   width: 100%;
-//   display: flex;
-// }
 margin-bottom: 2rem;
 `;
 
@@ -96,7 +66,7 @@ const MyLodgementForm = (props) => {
     setLodgement({ ...lodgment });
   }
 
-  const handleSubmit = async values => {
+  const handleSubmit = async (values) => {
     // debugger;
     setLoading(true);
     try {
@@ -138,7 +108,7 @@ const MyLodgementForm = (props) => {
   const checkIfCanEdit = (lodgement) => {
     if (loading) return false;
     if (!lodgement) return false;
-    const { status, id } = lodgement;
+    const { status } = lodgement;
     return ['draft', 'submitted'].includes(status);
   }
 

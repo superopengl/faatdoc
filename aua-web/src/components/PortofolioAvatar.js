@@ -1,13 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import * as _ from 'lodash';
-import styled from 'styled-components';
-import { FileIcon as ReactFileIcon, defaultStyles } from 'react-file-icon';
 import toMaterialStyle from 'material-color-hash';
-import { Tabs, Typography, Layout, Button, Modal, Divider, List, Space, Avatar } from 'antd';
+import { Typography, Avatar } from 'antd';
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 function getLabel(name) {
   const initials = name.split(/ +/g).map(w => w.charAt(0).toUpperCase());

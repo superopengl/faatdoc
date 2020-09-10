@@ -1,34 +1,15 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-
-import styled from 'styled-components';
-import { Tabs, Typography, Layout, Button, Row, Modal, Divider, Alert } from 'antd';
-import { LargePlusButton } from 'components/LargePlusButton';
-import HomeHeader from 'components/HomeHeader';
-import { handleDownloadCsv } from 'services/memberService';
-import { saveAs } from 'file-saver';
-import * as moment from 'moment';
-import windowSize from 'react-window-size';
+import { Button, List, Space, Typography } from 'antd';
 import Text from 'antd/lib/typography/Text';
-import {
-  ExclamationCircleOutlined, PlusOutlined
-} from '@ant-design/icons';
-import { Link, withRouter } from 'react-router-dom';
-import { List } from 'antd';
-import { Space } from 'antd';
-import LodgementForm from './MyLodgementForm';
-import LodgementCard from './MyLodgementCard';
-import { random } from 'lodash';
-import { listJobTemplate } from 'services/jobTemplateService';
-import { listPortofolio } from 'services/portofolioService';
-import { deleteLodgement, generateLodgement, getLodgement, saveLodgement, signLodgement } from 'services/lodgementService';
-import { searchFile, downloadFile } from 'services/fileService';
 import { FileIcon } from 'components/FileIcon';
 import { TimeAgo } from 'components/TimeAgo';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { searchFile } from 'services/fileService';
+import { getLodgement, signLodgement } from 'services/lodgementService';
+import styled from 'styled-components';
 import { getFileUrl } from 'util/getFileUrl';
 
-const { Title, Paragraph, Link: TextLink } = Typography;
-const { TabPane } = Tabs;
+const { Link: TextLink } = Typography;
 
 const StyledListItem = styled(List.Item)`
   cursor: pointer;
@@ -42,7 +23,7 @@ const StyledListItem = styled(List.Item)`
 const ReviewSignPage = (props) => {
   const { id, readonly } = props;
 
-  const [loading, setLoading] = React.useState(true);
+  const [, setLoading] = React.useState(true);
   const [lodgement, setLodgement] = React.useState({});
   const [files, setFiles] = React.useState([]);
 
@@ -79,16 +60,7 @@ const ReviewSignPage = (props) => {
     props.onCancel();
   }
 
-  const handleViewFile = async (item) => {
-    const {id, fileName} = item;
-    const data = await downloadFile(id);
-    // console.log(data);
-    const blob = new Blob([data], { type: 'text/csv,charset=utf-8' });
-    saveAs(blob, fileName);
-
-    await loadEntity();
-  }
-  const { status, name } = lodgement || {};
+  const { status } = lodgement || {};
 
   const isSigned = status === 'signed';
   const canSign = status === 'to_sign' && files.every(f => !!f.lastReadAt) && !isSigned;

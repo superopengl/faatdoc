@@ -1,18 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
-import { Input, Button, Form, Select, Drawer, Checkbox, Table, Space, Typography, AutoComplete, Modal } from 'antd';
-import { FileUploader } from '../../components/FileUploader';
-import * as moment from 'moment';
-import { GlobalContext } from 'contexts/GlobalContext';
-import { Menu, Dropdown, message, Tooltip } from 'antd';
-import { UpOutlined, DownOutlined, DeleteOutlined, PlusOutlined, CloseOutlined } from '@ant-design/icons';
-import { Divider } from 'antd';
+import { Input, Button, Select, Checkbox, Table, Space, Typography, AutoComplete } from 'antd';
+import { UpOutlined, DownOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { BuiltInFieldLabelNames, BuiltInFieldType, getBuiltInFieldByLabelName, getBuiltInFieldByVarName } from 'components/FieldDef';
-import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
 import { varNameToLabelName } from 'util/varNameToLabelName';
-import { listJobTemplate, deleteJobTemplate, saveJobTemplate, getJobTemplate } from 'services/jobTemplateService';
+import { saveJobTemplate, getJobTemplate } from 'services/jobTemplateService';
 import { notify } from 'util/notify';
 import { labelNameToVarName } from 'util/labelNameToVarName';
 
@@ -33,8 +26,6 @@ const JobTemplateForm = (props) => {
   const [name, setName] = React.useState('');
   const [fields, setFields] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
-
-  const isNew = !id;
 
   const loadEntity = async () => {
     if (!id) {

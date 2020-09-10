@@ -1,29 +1,16 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-
-import styled from 'styled-components';
-import { withRouter } from 'react-router-dom';
-import { Input, Button, Form, Select, DatePicker, Layout, Drawer, Space, Typography, Radio, Row, Col } from 'antd';
-import { FileUploader } from 'components/FileUploader';
-import HomeHeader from 'components/HomeHeader';
-
-import * as moment from 'moment';
+import { SendOutlined } from '@ant-design/icons';
+import { Button, Divider, Drawer, Form, Input, Space, Typography } from 'antd';
 import { GlobalContext } from 'contexts/GlobalContext';
-import { Menu, Dropdown, message, Tooltip } from 'antd';
-import { UpOutlined, DownOutlined, DeleteOutlined, SendOutlined } from '@ant-design/icons';
-import { Divider } from 'antd';
-import { BuiltInFieldDef } from "components/FieldDef";
-import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
-import { listJobTemplate } from 'services/jobTemplateService';
-import { deleteLodgement, generateLodgement, notifyLodgement, listLodgementNotifies } from 'services/lodgementService';
-import { listPortofolio } from 'services/portofolioService';
-import { varNameToLabelName } from 'util/varNameToLabelName';
-import { InputYear } from 'components/InputYear';
-import { DateInput } from 'components/DateInput';
+import * as moment from 'moment';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { MessageBox } from 'react-chat-elements';
 import 'react-chat-elements/dist/main.css';
-import { Button as ChatButton, Input as ChatInput, ChatItem, MessageBox } from 'react-chat-elements'
+import { withRouter } from 'react-router-dom';
+import { listLodgementNotifies, notifyLodgement } from 'services/lodgementService';
+import styled from 'styled-components';
 
-const { Text, Paragraph, Title } = Typography;
+const { Text } = Typography;
 
 const StyledDrawer = styled(Drawer)`
 

@@ -1,5 +1,3 @@
-import * as _ from 'lodash';
-
 export function labelNameToVarName(pascalCase) {
   for (const b of ['TFN', 'ABN', 'ACN']) {
     if (b === pascalCase) {

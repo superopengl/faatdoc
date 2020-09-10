@@ -1,18 +1,16 @@
-import React from 'react';
-
-import styled from 'styled-components';
-
 // import 'App.css';
-import { Layout, Modal, Button, Affix } from 'antd';
-import HomeHeader from 'components/HomeHeader';
-import HomeFooter from 'components/HomeFooter';
-import HomeCarouselArea from 'components/homeAreas/HomeCarouselArea';
-import HomeTeamArea from 'components/homeAreas/HomeTeamArea';
-import HomeServiceArea from 'components/homeAreas/HomeServiceArea';
-import HomeContactArea from 'components/homeAreas/HomeContactArea';
-import { HashAnchorPlaceholder } from 'components/HashAnchorPlaceholder';
-import { AiOutlineWechat, AiOutlineMessage } from "react-icons/ai";
+import { Affix, Button, Layout, Modal } from 'antd';
 import ContactForm from 'components/ContactForm';
+import { HashAnchorPlaceholder } from 'components/HashAnchorPlaceholder';
+import HomeCarouselArea from 'components/homeAreas/HomeCarouselArea';
+import HomeContactArea from 'components/homeAreas/HomeContactArea';
+import HomeServiceArea from 'components/homeAreas/HomeServiceArea';
+import HomeTeamArea from 'components/homeAreas/HomeTeamArea';
+import HomeFooter from 'components/HomeFooter';
+import HomeHeader from 'components/HomeHeader';
+import React from 'react';
+import { AiOutlineMessage } from "react-icons/ai";
+import styled from 'styled-components';
 
 const { Content } = Layout;
 

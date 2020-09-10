@@ -1,7 +1,6 @@
 import * as moment from 'moment';
 import { varNameToLabelName } from 'util/varNameToLabelName';
 import { labelNameToVarName } from 'util/labelNameToVarName';
-const thisYear = new Date().getFullYear();
 
 export const BuiltInFieldDef = [
   {

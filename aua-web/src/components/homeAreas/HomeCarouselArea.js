@@ -1,11 +1,9 @@
 import React from 'react';
-import { Carousel, Row, Col } from 'antd';
 import styled from 'styled-components';
-import { List, Typography } from 'antd';
-import { listPoster } from 'services/posterService';
+import { Typography } from 'antd';
 import windowSize from 'react-window-size';
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 
 const ContainerStyled = styled.div`

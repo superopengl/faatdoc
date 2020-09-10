@@ -1,13 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link, withRouter } from 'react-router-dom';
-import { Typography, Button, Modal, Divider, Form, Radio, Input, Checkbox, Layout } from 'antd';
+import { Typography, Button, Modal, Divider, Form, Input, Checkbox, Layout } from 'antd';
 import { Logo } from 'components/Logo';
-import * as queryString from 'query-string';
 import { signUp } from 'services/authService';
-import * as _ from 'lodash';
 import { GlobalContext } from 'contexts/GlobalContext';
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 const PageContainer = styled.div`
   width: 100%;
@@ -49,7 +47,7 @@ const SignUpPage = (props) => {
     }
 
     try {
-      const { history, location } = props;
+      const { history } = props;
       setSending(true);
 
       // Sanitize pictures to imageIds
@@ -97,7 +95,6 @@ const SignUpPage = (props) => {
   return (
     <GlobalContext.Consumer>{
       context => {
-        const { role } = context;
 
         return <LayoutStyled>
           <PageContainer>

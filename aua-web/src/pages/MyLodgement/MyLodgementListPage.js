@@ -1,31 +1,19 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Tabs, Typography, Layout, Button, Modal, Alert, Divider } from 'antd';
-import { LargePlusButton } from 'components/LargePlusButton';
-import HomeHeader from 'components/HomeHeader';
-import { handleDownloadCsv } from 'services/memberService';
-import { saveAs } from 'file-saver';
-import * as moment from 'moment';
-import windowSize from 'react-window-size';
+import { PlusOutlined, SyncOutlined } from '@ant-design/icons';
+import { Alert, Badge, Button, Divider, Layout, List, Modal, Space, Tabs, Typography } from 'antd';
 import Text from 'antd/lib/typography/Text';
-import {
-  DeleteOutlined, PlusOutlined, SyncOutlined, EditOutlined, FormOutlined, CheckCircleOutlined, SmileOutlined
-} from '@ant-design/icons';
-import { Link, withRouter } from 'react-router-dom';
-import { List } from 'antd';
-import { Space } from 'antd';
-import LodgementForm from './MyLodgementForm';
-import LodgementCard from './MyLodgementCard';
-import { listLodgement, deleteLodgement } from 'services/lodgementService';
-import { random } from 'lodash';
-import { listJobTemplate } from 'services/jobTemplateService';
-import { listPortofolio } from 'services/portofolioService';
-import ReviewSignPage from './ReviewSignPage';
+import HomeHeader from 'components/HomeHeader';
 import { LodgementProgressBar } from 'components/LodgementProgressBar';
 import { TimeAgo } from 'components/TimeAgo';
-import { Badge } from 'antd';
+import React from 'react';
+import { withRouter } from 'react-router-dom';
+import { listJobTemplate } from 'services/jobTemplateService';
+import { deleteLodgement, listLodgement } from 'services/lodgementService';
+import { listPortofolio } from 'services/portofolioService';
+import styled from 'styled-components';
+import LodgementForm from './MyLodgementForm';
+import ReviewSignPage from './ReviewSignPage';
 
-const { Title, Paragraph } = Typography;
+const { Title } = Typography;
 const { TabPane } = Tabs;
 
 
@@ -61,7 +49,7 @@ const MyLodgementListPage = (props) => {
   const [loading, setLoading] = React.useState(true);
   const [signModalVisible, setSignModalVisible] = React.useState(false);
   const [lodgementList, setLodgementList] = React.useState([]);
-  const [jobTemplateList, setJobTemplateList] = React.useState([]);
+  const [, setJobTemplateList] = React.useState([]);
   const [portofolioList, setPortofolioList] = React.useState([]);
   const [currentLodgement, setCurrentLodgement] = React.useState();
 

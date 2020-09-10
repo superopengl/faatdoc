@@ -1,18 +1,10 @@
-import React from 'react';
-import HomeRowArea from "./HomeRowArea";
-import styled from 'styled-components';
-import { MailOutlined, PhoneOutlined, HomeOutlined } from '@ant-design/icons';
-import { HashAnchorPlaceholder } from 'components/HashAnchorPlaceholder';
+import { HomeOutlined, MailOutlined, PhoneOutlined } from '@ant-design/icons';
 import { Typography } from 'antd';
-import ContactForm from 'components/ContactForm';
-import GoogleMapReact from 'google-map-react';
+import { HashAnchorPlaceholder } from 'components/HashAnchorPlaceholder';
+import React from 'react';
+import styled from 'styled-components';
+import HomeRowArea from "./HomeRowArea";
 
-const Marker = styled.div`
-color: black;
-
-`;
-
-const AnyReactComponent = ({ text }) => <Marker >{text}</Marker>;
 const { Title } = Typography;
 
 const InfoCard = styled.div`
@@ -28,12 +20,6 @@ a {
 }
 `;
 
-const MapContainer = styled.div`
-margin: auto;
-width: 100%;
-max-width: 600px;
-height: 300px;
-`;
 
 class HomeContactArea extends React.Component {
   render() {
@@ -52,21 +38,6 @@ class HomeContactArea extends React.Component {
         color: '#f0f0f0',
       }
     }
-
-    const position = {
-      address: 'Unit 101, 11 Spring St., Chatswood, NSW 2067',
-      lat: -33.796497,
-      lng: 151.185049
-    };
-
-    const renderMarkers = (map, maps) => {
-      const marker = new maps.Marker({
-        position,
-        map,
-        title: 'AU Accounting Office'
-      });
-      return marker;
-    };
 
     return (
       <HomeRowArea {...props}>

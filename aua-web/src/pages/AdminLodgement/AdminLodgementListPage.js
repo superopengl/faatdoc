@@ -1,34 +1,20 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Tabs, Typography, Layout, Button, Select, Table, Input, Modal, Tooltip } from 'antd';
-import { LargePlusButton } from 'components/LargePlusButton';
-import HomeHeader from 'components/HomeHeader';
-import { handleDownloadCsv } from 'services/memberService';
-import { saveAs } from 'file-saver';
-import * as moment from 'moment';
-import windowSize from 'react-window-size';
+import { DeleteOutlined, EditOutlined, SearchOutlined, SyncOutlined } from '@ant-design/icons';
+import { Button, Input, Layout, Modal, Select, Space, Table, Tooltip, Typography } from 'antd';
 import Text from 'antd/lib/typography/Text';
-import {
-  DeleteOutlined, EditOutlined, SearchOutlined, SyncOutlined
-} from '@ant-design/icons';
-import { Link } from 'react-router-dom';
-import { List } from 'antd';
-import { Space } from 'antd';
-
-import { listLodgement, searchLodgement, assignLodgement, deleteLodgement } from 'services/lodgementService';
-import { random } from 'lodash';
-import { listJobTemplate } from 'services/jobTemplateService';
-import { listPortofolio } from 'services/portofolioService';
+import HomeHeader from 'components/HomeHeader';
 import { LodgementProgressBar } from 'components/LodgementProgressBar';
-import { AutoComplete } from 'antd';
-import { listAgents } from 'services/userService';
-import Highlighter from "react-highlight-words";
-import ReviewSignPage from 'pages/MyLodgement/ReviewSignPage';
 import { TimeAgo } from 'components/TimeAgo';
+import * as moment from 'moment';
+import ReviewSignPage from 'pages/MyLodgement/ReviewSignPage';
+import React from 'react';
+import Highlighter from "react-highlight-words";
+import { Link } from 'react-router-dom';
 import { reactLocalStorage } from 'reactjs-localstorage';
+import { assignLodgement, deleteLodgement, searchLodgement } from 'services/lodgementService';
+import { listAgents } from 'services/userService';
+import styled from 'styled-components';
 
-const { Title, Paragraph } = Typography;
-const { TabPane } = Tabs;
+const { Title } = Typography;
 
 const ContainerStyled = styled.div`
   margin: 6rem 0.5rem 2rem 0.5rem;
@@ -60,9 +46,7 @@ const DEFAULT_QUERY_INFO = {
 const AdminLodgementListPage = (props) => {
 
   const [loading, setLoading] = React.useState(true);
-  const [modalVisible, setModalVisible] = React.useState(false);
   const [lodgementList, setLodgementList] = React.useState([]);
-  const [currentId, setCurrentId] = React.useState();
   const [agentList, setAgentList] = React.useState([]);
 
   const [queryInfo, setQueryInfoRaw] = React.useState(reactLocalStorage.getObject('query', DEFAULT_QUERY_INFO, true))
@@ -78,35 +62,35 @@ const AdminLodgementListPage = (props) => {
       dataIndex: 'name',
       // filteredValue: filteredInfo.name || null,
       onFilter: (value, record) => record.name.includes(value),
-      render: (text, record) => <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text || ''} />,
+      render: (text) => <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text || ''} />,
       ellipsis: false,
     },
     {
       title: 'For Whom',
       dataIndex: 'forWhom',
-      render: (text, record) => <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text || ''} />
+      render: (text) => <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text || ''} />
     },
     {
       title: 'Client',
       dataIndex: 'email',
-      render: (text, record) => text
+      render: (text) => text
     },
     {
       title: 'Created At',
       dataIndex: 'createdAt',
       sorter: (a, b) => moment(a.createdAt).toDate() - moment(b.createdAt).toDate(),
-      render: (text, record) => <TimeAgo value={text} />
+      render: (text) => <TimeAgo value={text} />
     },
     {
       title: 'Job',
       dataIndex: 'jobTemplateName',
-      render: (text, record) => <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text || ''} />,
+      render: (text) => <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text || ''} />,
       ellipsis: false
     },
     {
       title: 'Status',
       dataIndex: 'status',
-      render: (text, record) => <LodgementProgressBar width={60} status={text}></LodgementProgressBar>,
+      render: (text) => <LodgementProgressBar width={60} status={text}></LodgementProgressBar>,
       ellipsis: false
     },
     {
@@ -129,7 +113,7 @@ const AdminLodgementListPage = (props) => {
       title: 'Last Update At',
       dataIndex: 'lastUpdatedAt',
       sorter: (a, b) => moment(a.createdAt).toDate() - moment(b.createdAt).toDate(),
-      render: (text, record) => {
+      render: (text) => {
         return <TimeAgo value={text} />;
       }
     },
@@ -196,7 +180,7 @@ const AdminLodgementListPage = (props) => {
 
   const handleDelete = async (e, item) => {
     e.stopPropagation();
-    const { id, name, portofolioName, email } = item;
+    const { id, name } = item;
     Modal.confirm({
       title: <>Archive lodgement <Text strong>{name}</Text>?</>,
       okText: 'Yes, Archive it',
@@ -288,8 +272,8 @@ const AdminLodgementListPage = (props) => {
             loading={loading}
             pagination={queryInfo}
             onChange={handleTableChange}
-            onRow={(record, index) => ({
-              onDoubleClick: e => {
+            onRow={(record) => ({
+              onDoubleClick: () => {
                 props.history.push(`/lodgement/${record.id}/proceed`);
               }
             })}

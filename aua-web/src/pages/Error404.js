@@ -1,13 +1,6 @@
 import React from 'react';
-import styled from 'styled-components';
-import { Link, withRouter } from 'react-router-dom';
-import { Typography, Result, Button } from 'antd';
-import { HomeOutlined, CloseCircleOutlined } from '@ant-design/icons';
-const ContainerStyled = styled.div`
-  margin: 2rem;
-  text-align: center;
-`;
-const { Title } = Typography;
+import { withRouter } from 'react-router-dom';
+import { Result, Button } from 'antd';
 const Error404 = props => {
   const handleGoBack = () => {
     props.history.goBack();

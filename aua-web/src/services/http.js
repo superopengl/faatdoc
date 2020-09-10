@@ -1,8 +1,6 @@
 import * as axios from 'axios';
 import * as _ from 'lodash';
-import { logout } from './authService';
 import { notify } from 'util/notify';
-import { WindowsFilled } from '@ant-design/icons';
 
 axios.defaults.withCredentials = true;
 

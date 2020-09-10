@@ -1,26 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Tabs, Typography, Layout, Button, Modal, Col, List, Space, Row, Divider } from 'antd';
+import { Typography, Layout, Button, Modal, List, Space, Row, Divider } from 'antd';
 import HomeHeader from 'components/HomeHeader';
 import { PortofolioAvatar } from 'components/PortofolioAvatar';
-import { handleDownloadCsv } from 'services/memberService';
-import { saveAs } from 'file-saver';
-import * as moment from 'moment';
-import windowSize from 'react-window-size';
 import Text from 'antd/lib/typography/Text';
 import {
-  UserOutlined, PlusOutlined, TeamOutlined, DeleteOutlined, EditOutlined
-} from '@ant-design/icons';
-import { Link } from 'react-router-dom';
+  UserOutlined, PlusOutlined, TeamOutlined} from '@ant-design/icons';
 import PortofolioForm from './PortofolioForm';
 import { listPortofolio, savePortofolio, deletePortofolio } from 'services/portofolioService';
-import { random } from 'lodash';
 import { TimeAgo } from 'components/TimeAgo';
-import * as toMaterialStyle from 'material-color-hash';
 import { Card } from 'antd';
 
 const { Title, Paragraph } = Typography;
-const { TabPane } = Tabs;
 
 const ContainerStyled = styled.div`
 margin: 6rem auto 2rem auto;
@@ -53,7 +44,7 @@ color: #143e86 !important;
 `
 
 
-const PortofolioPage = (props) => {
+const PortofolioPage = () => {
 
   const [formVisible, setFormVisible] = React.useState(false);
   const [list, setList] = React.useState([]);
@@ -129,7 +120,6 @@ const PortofolioPage = (props) => {
                 key={item.id}
                 onClick={() => openModalToEdit(item.id)}
                 // title={item.name}
-                key={item.id}
               // actions={[
               //   <Button key="edit" type="link" disabled={loading} icon={<EditOutlined />}></Button>,
               // <Button key="delete" type="link" danger disabled={loading} onClick={e => handleDelete(e, item)} icon={<DeleteOutlined />}></Button>

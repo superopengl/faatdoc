@@ -1,16 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link, withRouter } from 'react-router-dom';
-import { Typography, Input, Button, Form, Row, Col, Layout } from 'antd';
+import { Typography, Input, Button, Form, Layout } from 'antd';
 import { GoogleOutlined } from '@ant-design/icons';
 import { Logo } from 'components/Logo';
 import isEmail from 'validator/es/lib/isEmail';
 import { GlobalContext } from '../contexts/GlobalContext';
 import { login } from 'services/authService';
-import { getProfile } from 'services/userService';
-import { HashLink } from 'react-router-hash-link';
 import windowSize from 'react-window-size';
-import { refreshNotificationUnreadCount, setNotificationCount } from 'services/notificationService';
+import { refreshNotificationUnreadCount } from 'services/notificationService';
 
 const LayoutStyled = styled(Layout)`
 margin: 0 auto 0 auto;
@@ -56,21 +54,11 @@ class LogInPage extends React.Component {
   render() {
     const { sending } = this.state;
 
-    const span = {
-      xs: 24,
-      sm: 12,
-      md: 12,
-      lg: 12,
-      xl: 12,
-      xxl: 12,
-    }
     return (
       <GlobalContext.Consumer>
         {
           context => {
             const { setUser, setNotifyCount } = context;
-            const { windowHeight } = this.props;
-            const shouldShowSignUpLink = windowHeight < 800;
 
             const handleSubmit = async values => {
               if (this.state.sending) {

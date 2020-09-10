@@ -1,5 +1,4 @@
-import { httpGet, httpPost, httpDelete } from './http';
-import { reactLocalStorage } from 'reactjs-localstorage';
+import { httpGet, httpDelete } from './http';
 
 export async function getNotification(id) {
   return httpGet(`notification/${id}`);

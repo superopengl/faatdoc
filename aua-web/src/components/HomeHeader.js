@@ -1,23 +1,21 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Layout, Menu, Drawer, Button, Modal, Typography } from 'antd';
-import MediaQuery from 'react-responsive'
 import {
-  MenuOutlined, HomeOutlined, MailOutlined, CalendarOutlined, SkinOutlined, ToolOutlined,
-  BellOutlined, NotificationOutlined,
-  IdcardOutlined, UserOutlined, LogoutOutlined, SecurityScanOutlined,
-  LoginOutlined, TeamOutlined, SnippetsOutlined, UserAddOutlined
+  BellOutlined, CalendarOutlined, HomeOutlined,
+  IdcardOutlined,
+  LoginOutlined, LogoutOutlined, MenuOutlined,
+  NotificationOutlined,
+  SecurityScanOutlined, SkinOutlined,
+  SnippetsOutlined, TeamOutlined, ToolOutlined,
+  UserAddOutlined, UserOutlined
 } from '@ant-design/icons';
+import { Avatar, Badge, Button, Drawer, Layout, Menu, Modal } from 'antd';
+import React from 'react';
+import MediaQuery from 'react-responsive';
 import { Link, withRouter } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
-import { Logo } from './Logo';
-import { GlobalContext } from '../contexts/GlobalContext'
 import { logout } from 'services/authService';
-import { PortofolioAvatar } from './PortofolioAvatar';
-import { Avatar } from 'antd';
-import { Badge } from 'antd';
+import styled from 'styled-components';
+import { GlobalContext } from '../contexts/GlobalContext';
 
-const { Title, Text } = Typography;
 const { Header } = Layout;
 const HeaderStyled = styled(Header)`
 position: fixed;
@@ -55,7 +53,7 @@ const HomeHeaderRaw = props => {
   const [visible, setVisible] = React.useState(false);
   const context = React.useContext(GlobalContext);
 
-  const { role, setUser, user, notifyCount } = context;
+  const { role, setUser, notifyCount } = context;
   const isAdmin = role === 'admin';
   const isClient = role === 'client';
   const isAgent = role === 'agent';
@@ -145,7 +143,7 @@ const HomeHeaderRaw = props => {
             {isAdmin && <Menu.Item key="recurring"><CalendarOutlined /> <Link to="/recurring">Recurring</Link></Menu.Item>}
             {/* {isAdmin && <Menu.Item key="clients"><SettingOutlined /> <Link to="/clients">Users</Link></Menu.Item>} */}
             {isAdmin && <Menu.Item key="user"><TeamOutlined /> <Link to="/user">User</Link></Menu.Item>}
-            {!isGuest && <Menu.Item key="notification"><NotificationOutlined/> <Link to="/notification">Notification <Badge count={notifyCount} showZero={false} /></Link></Menu.Item>}
+            {!isGuest && <Menu.Item key="notification"><NotificationOutlined /> <Link to="/notification">Notification <Badge count={notifyCount} showZero={false} /></Link></Menu.Item>}
             {isAdmin && <Menu.Item key="impersonate"><SkinOutlined /> <Link to="/impersonate">Impersonate</Link></Menu.Item>}
             {!isGuest && <Menu.Item key="changePassword"><SecurityScanOutlined /> <Link to="/change_password">Change Password</Link></Menu.Item>}
             {isGuest && <Menu.Item key="home"><HomeOutlined /> <HashLink to="/#home" onClick={onClose}>Home</HashLink></Menu.Item>}

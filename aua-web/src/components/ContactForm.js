@@ -1,7 +1,6 @@
 import React from 'react';
-import { Form, Input, Button, message } from "antd";
+import { Form, Input, Button } from "antd";
 import styled from 'styled-components';
-import GoogleMapReact from 'google-map-react';
 import { saveContact } from 'services/contactService';
 import { notify } from 'util/notify';
 

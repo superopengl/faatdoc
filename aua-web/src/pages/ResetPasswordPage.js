@@ -4,9 +4,8 @@ import { Link, withRouter } from 'react-router-dom';
 import { Typography, Input, Button, Form, Divider, Layout } from 'antd';
 import { Logo } from 'components/Logo';
 import * as queryString from 'query-string';
-import { resetPassword, login } from 'services/authService';
+import { resetPassword } from 'services/authService';
 import { notify } from 'util/notify';
-import Modal from 'antd/lib/modal/Modal';
 
 const LayoutStyled = styled(Layout)`
   margin: 0 auto 0 auto;

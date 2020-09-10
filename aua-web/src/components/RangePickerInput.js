@@ -1,8 +1,6 @@
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { Layout, Typography, Input, Button, DatePicker } from 'antd';
+import { DatePicker } from 'antd';
 import * as moment from 'moment';
 
 const { RangePicker } = DatePicker;

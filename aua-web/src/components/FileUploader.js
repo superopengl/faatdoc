@@ -1,17 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import { Upload, Modal, Button, Typography } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import UploadList from 'antd/es/upload/UploadList';
-import en_US from 'antd/es/locale-provider/en_US';
+import { Upload, Typography } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
 import * as _ from 'lodash';
 import styled from 'styled-components';
 import { InboxOutlined } from '@ant-design/icons';
 import { searchFile } from 'services/fileService';
-import * as moment from 'moment';
 import { FileIcon } from './FileIcon';
 
 const { Dragger } = Upload;
@@ -43,44 +37,11 @@ const Container = styled.div`
 }
 `
 
-const StyledFileIcon = styled.div`
-  width: 40px;
-  height: 50px;
-  display: inline-block;
-`;
 
-const { Text, Paragraph } = Typography;
+const { Text } = Typography;
 
-function getBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
-  });
-}
 
 export const FileUploader = (props) => {
-
-
-
-  // debugger;
-  // state = {
-  //   previewVisible: false,
-  //   previewImage: '',
-  //   previewTitle: '',
-  //   uploadFileId: uuidv4(),
-  //   fileList: (value || []).map(img => ({
-  //     uid: img.id,
-  //     name: img.fileName,
-  //     status: 'done',
-  //     url: img.location
-  //   })),
-  // };
-
-  const [previewVisible, setPreviewVisible] = React.useState(false);
-  const [previewImage, setPreviewImage] = React.useState('');
-  const [previewTitle, setPreviewTitle] = React.useState('');
   const [uploadFileId, setUploadFileId] = React.useState(uuidv4());
   const [fileList, setFileList] = React.useState([]);
 
@@ -136,7 +97,7 @@ export const FileUploader = (props) => {
         // iconRender={() => <UploadOutlined />}
         disabled={disabled || fileList.length >= maxSize}
         iconRender={getFileIcon}
-        showUploadList={true}
+        // showUploadList={true}
       >
         {disabled ? <Text type="secondary">File upload is disabled</Text>
         : <>

@@ -1,25 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Tabs, Typography, Layout, Button, Modal, Divider, List, Space, Row } from 'antd';
+import { Typography, Layout, Button, Modal, Divider, List, Space } from 'antd';
 import HomeHeader from 'components/HomeHeader';
 import { PortofolioAvatar } from 'components/PortofolioAvatar';
-import { handleDownloadCsv } from 'services/memberService';
-import { saveAs } from 'file-saver';
-import * as moment from 'moment';
-import windowSize from 'react-window-size';
-import Text from 'antd/lib/typography/Text';
 import {
   SyncOutlined, DeleteOutlined
 } from '@ant-design/icons';
-import { listPortofolio, savePortofolio, deletePortofolio } from 'services/portofolioService';
-import { random } from 'lodash';
 import { TimeAgo } from 'components/TimeAgo';
 import { listNotification, getNotification, deleteNotification } from 'services/notificationService';
-import { Alert } from 'antd';
 import { GlobalContext } from 'contexts/GlobalContext';
 
 const { Title, Paragraph, Link } = Typography;
-const { TabPane } = Tabs;
 
 const ContainerStyled = styled.div`
 margin: 6rem auto 2rem auto;
@@ -49,17 +40,12 @@ const LayoutStyled = styled(Layout)`
 
 const NotificationPage = (props) => {
 
-  const [modalVisible, setModalVisible] = React.useState(false);
   const [list, setList] = React.useState([]);
-  const [currentId, setCurrentId] = React.useState();
   const [loading, setLoading] = React.useState(true);
   const context = React.useContext(GlobalContext);
 
-  const { role, setUser, user } = context;
-  const isAdmin = role === 'admin';
+  const { role } = context;
   const isClient = role === 'client';
-  const isAgent = role === 'agent';
-  const isGuest = role === 'guest';
 
   const loadList = async () => {
     setLoading(true);
@@ -106,7 +92,7 @@ const NotificationPage = (props) => {
 
   const readNotificationDetail = async (notificationId) => {
     const item = await getNotification(notificationId);
-    const { id, content, createdAt, readAt, lodgementId, name, forWhom } = item;
+    const { content, createdAt, readAt, lodgementId, name, forWhom } = item;
     Modal.destroyAll();
     Modal.info({
       icon: null,
@@ -145,7 +131,6 @@ const NotificationPage = (props) => {
                 // style={{backgroundImage: 'linear-gradient(to right, white, #f5f5f5)'}}
                 key={item.id}
                 onClick={e => handleRead(e, item)}
-                key={item.id}
                 actions={[
                   // !isClient ? <Paragraph>
                   //   To {item.forWhom} for {item.name} 

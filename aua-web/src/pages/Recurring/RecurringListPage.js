@@ -1,30 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Tabs, Typography, Layout, Button, Drawer, Table, Tooltip, Modal } from 'antd';
+import { Typography, Layout, Button, Drawer, Table, Tooltip, Modal } from 'antd';
 import HomeHeader from 'components/HomeHeader';
-import { handleDownloadCsv } from 'services/memberService';
-import { saveAs } from 'file-saver';
 import * as moment from 'moment';
-import windowSize from 'react-window-size';
 import Text from 'antd/lib/typography/Text';
 import {
   DeleteOutlined, EditOutlined, CaretRightFilled, PlusOutlined
 } from '@ant-design/icons';
 import { Link, withRouter } from 'react-router-dom';
-import { List } from 'antd';
 import { Space } from 'antd';
 
-import { listLodgement, searchLodgement, assignLodgement } from 'services/lodgementService';
-import { random } from 'lodash';
-import { listJobTemplate } from 'services/jobTemplateService';
-import { listPortofolio } from 'services/portofolioService';
-import { LodgementProgressBar } from 'components/LodgementProgressBar';
-import { AutoComplete } from 'antd';
-import { listAgents } from 'services/userService';
-import Highlighter from "react-highlight-words";
-import ReviewSignPage from 'pages/MyLodgement/ReviewSignPage';
 import { TimeAgo } from 'components/TimeAgo';
-import { reactLocalStorage } from 'reactjs-localstorage';
 import { listRecurring, deleteRecurring, runRecurring } from 'services/recurringService';
 import RecurringForm from './RecurringForm';
 import { PortofolioAvatar } from 'components/PortofolioAvatar';
@@ -32,8 +18,7 @@ import { notify } from 'util/notify';
 import cronstrue from 'cronstrue';
 import * as cronParser from 'cron-parser';
 
-const { Title, Paragraph, Link: TextLink } = Typography;
-const { TabPane } = Tabs;
+const { Title, Link: TextLink } = Typography;
 
 const ContainerStyled = styled.div`
   margin: 6rem 0.5rem 2rem 0.5rem;
@@ -52,15 +37,6 @@ const LayoutStyled = styled(Layout)`
   height: 100%;
 `;
 
-const DEFAULT_QUERY_INFO = {
-  text: '',
-  page: 1,
-  size: 50,
-  total: 0,
-  status: ['submitted', 'to_sign', 'signed'],
-  orderField: 'lastUpdatedAt',
-  orderDirection: 'DESC'
-};
 
 const StyledDrawer = styled(Drawer)`
 
@@ -83,7 +59,6 @@ const RecurringListPage = (props) => {
   const [formVisible, setFormVisible] = React.useState(false);
   const [list, setList] = React.useState([]);
   const [currentId, setCurrentId] = React.useState();
-  const [agentList, setAgentList] = React.useState([]);
 
   const isRecurringDeprecated = item => !item.email || !item.jobTemplateId || !item.portofolioName;
 
@@ -133,13 +108,13 @@ const RecurringListPage = (props) => {
     {
       title: 'Name Template',
       dataIndex: 'nameTemplate',
-      render: (text, record) => text,
+      render: (text) => text,
       ellipsis: false
     },
     {
       title: 'Recurring',
       dataIndex: 'cron',
-      render: (text, record) => {
+      render: (text) => {
         return cronstrue.toString(text, { use24HourTimeFormat: false, verbose: true });
         // return <TimeAgo value={text} />;
       }
@@ -147,7 +122,7 @@ const RecurringListPage = (props) => {
     {
       title: 'Last Update At',
       dataIndex: 'lastUpdatedAt',
-      render: (text, record) => {
+      render: (text) => {
         return <TimeAgo value={text} />;
       }
     },
@@ -198,7 +173,7 @@ const RecurringListPage = (props) => {
 
   const handleDelete = async (e, item) => {
     e.stopPropagation();
-    const { id, jobTemplateName, portofolioName, email } = item;
+    const { id, jobTemplateName, portofolioName } = item;
     Modal.confirm({
       title: <>To delete Recurring <strong>{jobTemplateName}</strong> for <strong>{portofolioName}</strong>?</>,
       onOk: async () => {
@@ -252,8 +227,8 @@ const RecurringListPage = (props) => {
             pagination={false}
             // pagination={queryInfo}
             // onChange={handleTableChange}
-            onRow={(record, index) => ({
-              onDoubleClick: e => {
+            onRow={(record) => ({
+              onDoubleClick: () => {
                 setCurrentId(record.id);
                 setFormVisible(true);
               }

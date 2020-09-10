@@ -1,39 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Tabs, Typography, Layout, Button, Drawer, Table, Input, Modal, Form, Tooltip } from 'antd';
+import { Typography, Layout, Button, Table, Input, Modal, Form, Tooltip } from 'antd';
 import HomeHeader from 'components/HomeHeader';
-import { handleDownloadCsv } from 'services/memberService';
-import { saveAs } from 'file-saver';
-import * as moment from 'moment';
-import windowSize from 'react-window-size';
-import Text from 'antd/lib/typography/Text';
 import {
-  DeleteOutlined, SafetyCertificateOutlined, CaretRightFilled, PlusOutlined
+  DeleteOutlined, SafetyCertificateOutlined, PlusOutlined
 } from '@ant-design/icons';
-import { Link, withRouter } from 'react-router-dom';
-import { List } from 'antd';
+import { withRouter } from 'react-router-dom';
 import { Space } from 'antd';
-
-import { listLodgement, searchLodgement, assignLodgement } from 'services/lodgementService';
-import { random } from 'lodash';
-import { listJobTemplate } from 'services/jobTemplateService';
-import { listPortofolio } from 'services/portofolioService';
-import { LodgementProgressBar } from 'components/LodgementProgressBar';
-import { AutoComplete } from 'antd';
-import { listAgents, listAllUsers, deleteUser, setPasswordForUser } from 'services/userService';
+import { listAllUsers, deleteUser, setPasswordForUser } from 'services/userService';
 import { inviteUser } from 'services/authService';
-import Highlighter from "react-highlight-words";
-import ReviewSignPage from 'pages/MyLodgement/ReviewSignPage';
 import { TimeAgo } from 'components/TimeAgo';
-import { reactLocalStorage } from 'reactjs-localstorage';
-import { listRecurring, deleteRecurring, runRecurring } from 'services/recurringService';
-import { PortofolioAvatar } from 'components/PortofolioAvatar';
-import { notify } from 'util/notify';
-import cronstrue from 'cronstrue';
-import * as cronParser from 'cron-parser';
 
-const { Title, Paragraph, Link: TextLink } = Typography;
-const { TabPane } = Tabs;
+const { Title, Paragraph } = Typography;
 
 const ContainerStyled = styled.div`
   margin: 6rem 0.5rem 2rem 0.5rem;
@@ -52,32 +30,9 @@ const LayoutStyled = styled(Layout)`
   height: 100%;
 `;
 
-const DEFAULT_QUERY_INFO = {
-  text: '',
-  page: 1,
-  size: 50,
-  total: 0,
-  status: ['submitted', 'to_sign', 'signed'],
-  orderField: 'lastUpdatedAt',
-  orderDirection: 'DESC'
-};
 
-const StyledDrawer = styled(Drawer)`
 
-.ant-drawer-content-wrapper {
-  max-width: 90vw;
-}
-
-.rce-mbox {
-  padding-bottom: 2rem;
-
-  .rce-mbox-time {
-    bottom: -1.5rem;
-  }
-}
-`;
-
-const UserPage = (props) => {
+const UserPage = () => {
 
   const [loading, setLoading] = React.useState(true);
   const [setPasswordVisible, setSetPasswordVisible] = React.useState(false);
@@ -89,22 +44,22 @@ const UserPage = (props) => {
     {
       title: 'Email',
       dataIndex: 'email',
-      render: (text, record) => text,
+      render: (text) => text,
     },
     {
       title: 'Role',
       dataIndex: 'role',
-      render: (text, record) => text
+      render: (text) => text
     },
     {
       title: 'Last Logged In At',
       dataIndex: 'lastLoggedInAt',
-      render: (text, record) => <TimeAgo value={text} />,
+      render: (text) => <TimeAgo value={text} />,
     },
     {
       title: 'Last Action At',
       dataIndex: 'lastNudgedAt',
-      render: (text, record) => <TimeAgo value={text} />,
+      render: (text) => <TimeAgo value={text} />,
     },
     {
       title: 'Action',

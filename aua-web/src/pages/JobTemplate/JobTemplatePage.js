@@ -1,27 +1,15 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Tabs, Typography, Layout, Button, Drawer, Tooltip, Col, Modal, Table } from 'antd';
-import HomeHeader from 'components/HomeHeader';
-import JobTemplateForm from 'pages/JobTemplate/JobTemplateForm';
-import JobTemplateCard from 'pages/JobTemplate/JobTemplateCard';
-import { saveAs } from 'file-saver';
-import * as moment from 'moment';
-import windowSize from 'react-window-size';
-import Text from 'antd/lib/typography/Text';
 import {
-  EditOutlined,
-  DeleteOutlined,
-  PlusOutlined
+  DeleteOutlined, EditOutlined, PlusOutlined
 } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
-import { LargePlusButton } from 'components/LargePlusButton';
-import { List } from 'antd';
-import { Space } from 'antd';
-import { listJobTemplate, saveJobTemplate, deleteJobTemplate } from 'services/jobTemplateService';
+import { Button, Drawer, Layout, Modal, Space, Table, Tooltip, Typography } from 'antd';
+import HomeHeader from 'components/HomeHeader';
 import { TimeAgo } from 'components/TimeAgo';
+import JobTemplateForm from 'pages/JobTemplate/JobTemplateForm';
+import React from 'react';
+import { deleteJobTemplate, listJobTemplate } from 'services/jobTemplateService';
+import styled from 'styled-components';
 
 const { Title } = Typography;
-const { TabPane } = Tabs;
 
 const ContainerStyled = styled.div`
   margin: 6rem 0.5rem 2rem 0.5rem;
@@ -57,31 +45,28 @@ const LayoutStyled = styled(Layout)`
   height: 100%;
 `;
 
-const NEW_JOB_TEMPLATE = {
-  name: 'New Job Template'
-}
 
 
-export const JobTemplatePage = (props) => {
+export const JobTemplatePage = () => {
   const columnDef = [
     {
       title: 'Name',
       dataIndex: 'name',
-      render: (text, records, index) => text
+      render: (text) => text
     },
     {
       title: 'Created At',
       dataIndex: 'createdAt',
-      render: (text, records, index) => <TimeAgo value={text} />
+      render: (text) => <TimeAgo value={text} />
     },
     {
       title: 'Updated At',
       dataIndex: 'lastUpdatedAt',
-      render: (text, records, index) => <TimeAgo value={text} />
+      render: (text) => <TimeAgo value={text} />
     },
     {
       title: 'Action',
-      render: (text, record, index) => (
+      render: (text, record) => (
         <Space size="small">
           <Tooltip placement="bottom" title="Edit job template">
 
@@ -147,9 +132,6 @@ export const JobTemplatePage = (props) => {
     setDrawerVisible(false);
   }
 
-  const hasUnsavedNewTemplate = () => {
-    return list.some(item => !item.id);
-  }
 
   return (
     <LayoutStyled>
@@ -168,8 +150,8 @@ export const JobTemplatePage = (props) => {
             loading={loading}
             pagination={false}
             // onChange={handleTableChange}
-            onRow={(record, index) => ({
-              onDoubleClick: e => {
+            onRow={(record) => ({
+              onDoubleClick: () => {
                 setCurrentId(record.id);
                 setDrawerVisible(true);
               }

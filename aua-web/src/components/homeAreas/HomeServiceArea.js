@@ -1,8 +1,6 @@
 import React from 'react';
 import HomeRowArea from "./HomeRowArea";
 import styled from 'styled-components';
-import { MailOutlined, PhoneOutlined, WechatOutlined } from '@ant-design/icons';
-import { HashAnchorPlaceholder } from 'components/HashAnchorPlaceholder';
 import { Typography } from 'antd';
 
 const { Title } = Typography;

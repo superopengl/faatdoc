@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import * as _ from 'lodash';
 import styled from 'styled-components';
 import { FileIcon as ReactFileIcon, defaultStyles } from 'react-file-icon';
 

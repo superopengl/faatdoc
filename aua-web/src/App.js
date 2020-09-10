@@ -1,16 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-
 import 'antd/dist/antd.less';
 import 'react-image-lightbox/style.css';
-import { Route, BrowserRouter, Switch, Redirect } from 'react-router-dom';
+import { BrowserRouter, Switch } from 'react-router-dom';
 import HomePage from 'pages/HomePage';
 import LogInPage from 'pages/LogInPage';
 import ResetPasswordPage from 'pages/ResetPasswordPage';
-import MembershipPage from 'pages/MembershipPage';
 import { GlobalContext } from './contexts/GlobalContext';
 import ForgotPasswordPage from 'pages/ForgotPasswordPage';
-import * as _ from 'lodash';
 import ChangePasswordPage from 'pages/ChangePasswordPage';
 import SignUpPage from 'pages/SignUpPage';
 import TermAndConditionPage from 'pages/TermAndConditionPage';
@@ -22,7 +18,6 @@ import PortofolioPage from 'pages/Portofolio/PortofolioPage';
 import AdminLodgementListPage from 'pages/AdminLodgement/AdminLodgementListPage';
 import ProceedLodgementPage from 'pages/AdminLodgement/ProceedLodgementPage';
 import { getAuthUser } from 'services/authService';
-import { Spin } from 'antd';
 import {RoleRoute} from 'components/RoleRoute';
 import MyLodgementPage from 'pages/MyLodgement/MyLodgementPage';
 import RecurringListPage from 'pages/Recurring/RecurringListPage';

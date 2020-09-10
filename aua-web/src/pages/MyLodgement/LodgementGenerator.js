@@ -1,23 +1,8 @@
 
 import React from 'react';
-import styled from 'styled-components';
-import { withRouter, Link } from 'react-router-dom';
-import { Input, Button, Form, Select, DatePicker, Checkbox, Table, Space, Typography, Radio } from 'antd';
-import { FileUploader } from '../../components/FileUploader';
-import * as moment from 'moment';
-import { GlobalContext } from 'contexts/GlobalContext';
-import { Menu, Dropdown, message, Tooltip } from 'antd';
-import { UpOutlined, DownOutlined, DeleteOutlined, PlusOutlined, DoubleRightOutlined } from '@ant-design/icons';
-import { Divider } from 'antd';
-import { BuiltInFieldDef } from "components/FieldDef";
-import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
-import { listJobTemplate } from 'services/jobTemplateService';
-import { listLodgement } from 'services/lodgementService';
-import { listPortofolio } from 'services/portofolioService';
-import { Modal } from 'antd';
-
-const { Text, Paragraph, Title } = Typography;
-
+import { Button, Form, Typography, Radio } from 'antd';
+import { DoubleRightOutlined } from '@ant-design/icons';
+const { Text } = Typography;
 
 export const LodgementGenerator = props => {
   const { jobTemplateList, portofolioList } = props;

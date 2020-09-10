@@ -1,43 +1,13 @@
 import React from 'react';
-import styled from 'styled-components';
 import PropTypes from 'prop-types';
-
 import { withRouter } from 'react-router-dom';
-import { Input, Button, Form, Select, DatePicker, Checkbox, Table, Space, Typography, Radio } from 'antd';
-import { FileUploader } from '../../components/FileUploader';
-import * as moment from 'moment';
-import { GlobalContext } from 'contexts/GlobalContext';
-import { Menu, Dropdown, message, Tooltip } from 'antd';
-import { UpOutlined, DownOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-import { Divider } from 'antd';
+import { Input, Button, Form, Checkbox, Space, Typography, Radio } from 'antd';
 import { BuiltInFieldDef } from "components/FieldDef";
-import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
 import { varNameToLabelName } from 'util/varNameToLabelName';
 import { getPortofolio } from 'services/portofolioService';
 import { DateInput } from 'components/DateInput';
 
-const { Text, Paragraph, Title } = Typography;
-
-const StyledTypeButton = styled(Button)`
-  height: 100%;
-
-  h1, div {
-    margin: 0;
-  }
-
-  div {
-    white-space: break-spaces; 
-  }
-`;
-
-const EMPTY_ROW = {
-  label: '',
-  name: '',
-  required: true,
-  type: 'text'
-}
-
-
+const { Text } = Typography;
 
 const PortofolioForm = (props) => {
   const { id, defaultType } = props;

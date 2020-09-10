@@ -1,10 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { withRouter } from 'react-router-dom';
 import { Layout, Typography, AutoComplete, Button, Form, Alert, Space, Modal } from 'antd';
 import { impersonate } from 'services/authService';
 import HomeHeader from 'components/HomeHeader';
-import { notify } from 'util/notify';
 import { GlobalContext } from 'contexts/GlobalContext';
 import { listAllUsers } from 'services/userService';
 import {reactLocalStorage} from 'reactjs-localstorage';
@@ -41,7 +39,7 @@ const ImpersonatePage = props => {
   }
 
   React.useEffect(() => {
-    load()
+    load();
   }, []);
 
   const goBack = () => {

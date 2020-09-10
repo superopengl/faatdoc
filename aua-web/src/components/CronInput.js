@@ -1,18 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import * as _ from 'lodash';
 import styled from 'styled-components';
-import { FileIcon as ReactFileIcon, defaultStyles } from 'react-file-icon';
-import toMaterialStyle from 'material-color-hash';
-import { Tabs, Typography, Radio, Button, Modal, Checkbox, TimePicker, Space, Select } from 'antd';
-import Cron, { HEADER } from 'react-cron-generator';
+import { Tabs, Typography, TimePicker, Space, Select } from 'antd';
 import * as moment from 'moment';
-import * as cronParser from 'cron-parser';
 import cronstrue from 'cronstrue';
 // import 'react-cron-generator/dist/cron-builder.css'
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 const StyledSpace = styled(Space)`
 border: 1px solid rgba(217,217,217);
@@ -112,12 +107,6 @@ export const CronInput = props => {
     }
   }
 
-  const handleLastDayOfMonth = (e) => {
-    const checked = e.target.checked;
-    if(checked) {
-
-    }
-  }
 
 
   return (<><StyledSpace direction="vertical" size="middle">
