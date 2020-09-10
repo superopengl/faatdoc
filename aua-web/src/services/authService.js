@@ -27,4 +27,10 @@ export async function getAuthUser() {
   return httpGet(`auth/user`);
 }
 
+export async function impersonate(email) {
+  return httpPost(`auth/impersonate`, { email });
+}
 
+export async function inviteUser(email) {
+  return httpPost(`auth/invite`, { email });
+}

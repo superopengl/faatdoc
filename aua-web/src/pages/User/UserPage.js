@@ -21,6 +21,7 @@ import { listPortofolio } from 'services/portofolioService';
 import { LodgementProgressBar } from 'components/LodgementProgressBar';
 import { AutoComplete } from 'antd';
 import { listAgents, listAllUsers, deleteUser, setPasswordForUser } from 'services/userService';
+import { inviteUser } from 'services/authService';
 import Highlighter from "react-highlight-words";
 import ReviewSignPage from 'pages/MyLodgement/ReviewSignPage';
 import { TimeAgo } from 'components/TimeAgo';
@@ -82,7 +83,7 @@ const UserPage = (props) => {
   const [setPasswordVisible, setSetPasswordVisible] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState();
   const [list, setList] = React.useState([]);
-  const [currentId, setCurrentId] = React.useState();
+  const [inviteVisible, setInviteVisible] = React.useState(false);
 
   const columnDef = [
     {
@@ -168,6 +169,16 @@ const UserPage = (props) => {
     setLoading(false);
   }
 
+  const handleNewUser = () => {
+    setInviteVisible(true);
+  }
+
+  const handleInviteUser = async values => {
+    const {email} = values;
+    await inviteUser(email);
+    setInviteVisible(false);
+  }
+
   return (
     <LayoutStyled>
       <HomeHeader></HomeHeader>
@@ -176,7 +187,9 @@ const UserPage = (props) => {
           <StyledTitleRow>
             <Title level={2} style={{ margin: 'auto' }}>User Management</Title>
           </StyledTitleRow>
-
+          <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
+            <Button type="primary" ghost onClick={() => handleNewUser()} icon={<PlusOutlined />}>Invite User</Button>
+          </Space>
           {/* <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
             <Button type="primary" ghost icon={<PlusOutlined />} onClick={() => handleCreateNew()}>New Recurring</Button>
           </Space> */}
@@ -218,6 +231,26 @@ const UserPage = (props) => {
           <Form.Item>
             <Button block type="primary" htmlType="submit" disabled={loading}>Set Password</Button>
 
+          </Form.Item>
+        </Form>
+      </Modal>
+      <Modal
+        visible={inviteVisible}
+        destroyOnClose={true}
+        maskClosable={true}
+        onOk={() => setInviteVisible(false)}
+        onCancel={() => setInviteVisible(false)}
+        title={<>Invite User</>}
+        footer={null}
+        width={500}
+      >
+        <Paragraph>System will send an invitation to the email address if the email address isn't a sign up user.</Paragraph>
+        <Form layout="vertical" onFinish={handleInviteUser}>
+          <Form.Item label="Email" name="email" rules={[{ required: true, type: 'email', whitespace: true, max: 100, message: ' ' }]}>
+            <Input placeholder="abc@xyz.com" type="email" autoComplete="email" allowClear={true} maxLength="100" autoFocus={true} />
+          </Form.Item>
+          <Form.Item>
+            <Button block type="primary" htmlType="submit" disabled={loading}>Invite</Button>
           </Form.Item>
         </Form>
       </Modal>

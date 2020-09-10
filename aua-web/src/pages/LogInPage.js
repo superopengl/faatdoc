@@ -68,7 +68,7 @@ class LogInPage extends React.Component {
       <GlobalContext.Consumer>
         {
           context => {
-            const { setUser } = context;
+            const { setUser, setNotifyCount } = context;
             const { windowHeight } = this.props;
             const shouldShowSignUpLink = windowHeight < 800;
 
@@ -83,7 +83,8 @@ class LogInPage extends React.Component {
                 const user = await login(values.name, values.password);
                 setUser(user);
 
-                await refreshNotificationUnreadCount();
+                const count = await refreshNotificationUnreadCount();
+                setNotifyCount(count);
 
                 this.props.history.push('/lodgement');
               } catch {

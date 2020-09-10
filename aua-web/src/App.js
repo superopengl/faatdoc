@@ -28,6 +28,8 @@ import MyLodgementPage from 'pages/MyLodgement/MyLodgementPage';
 import RecurringListPage from 'pages/Recurring/RecurringListPage';
 import NotificationPage from 'pages/Notification/NotificationPage';
 import UserPage from 'pages/User/UserPage';
+import ImpersonatePage from 'pages/Impersonate/ImpersonatePage';
+import { refreshNotificationUnreadCount as getNotificationUnreadCount} from 'services/notificationService';
 
 
 class App extends React.Component {
@@ -40,6 +42,8 @@ class App extends React.Component {
       loading: true,
       setUser: this.setUser,
       setLoading: this.setLoading,
+      notifyCount: 0,
+      setNotifyCount: this.setNotifyCount
     };
   }
 
@@ -48,6 +52,8 @@ class App extends React.Component {
     const user = await getAuthUser();
     if (user) {
       this.setUser(user);
+      const count = await getNotificationUnreadCount();
+      this.setNotifyCount(count);
     }
     this.setLoading(false);
   }
@@ -58,6 +64,10 @@ class App extends React.Component {
 
   setLoading = (value) => {
     this.setState({ loading: !!value });
+  }
+
+  setNotifyCount = (value) => {
+    this.setState({ notifyCount: value });
   }
 
   render() {
@@ -80,6 +90,7 @@ class App extends React.Component {
             <RoleRoute visible={isAdmin} loading={loading} path="/job_template" exact component={JobTemplatePage} />
             <RoleRoute visible={isAdmin} loading={loading} path="/user" exact component={UserPage} />
             <RoleRoute visible={isAdmin} loading={loading} path="/recurring" exact component={RecurringListPage} />
+            <RoleRoute visible={isAdmin} loading={loading} path="/impersonate" exact component={ImpersonatePage} />
             {/* <RoleRoute visible={isAdmin} loading={loading} path="/clients" exact component={ClientsPage} /> */}
             <RoleRoute visible={!isGuest} loading={loading} path="/notification" exact component={NotificationPage} />
             <RoleRoute visible={isClient} loading={loading} path="/lodgement/:id" exact component={MyLodgementPage} />

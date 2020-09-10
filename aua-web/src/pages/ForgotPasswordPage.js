@@ -24,7 +24,7 @@ const LogoContainer = styled.div`
 `;
 
 const { Title } = Typography;
-class ResetPasswordPage extends React.Component {
+class ForgotPasswordPage extends React.Component {
 
   constructor(props) {
     super(props);
@@ -86,8 +86,8 @@ class ResetPasswordPage extends React.Component {
   }
 }
 
-ResetPasswordPage.propTypes = {};
+ForgotPasswordPage.propTypes = {};
 
-ResetPasswordPage.defaultProps = {};
+ForgotPasswordPage.defaultProps = {};
 
-export default withRouter(ResetPasswordPage);
+export default withRouter(ForgotPasswordPage);

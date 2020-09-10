@@ -4,8 +4,9 @@ import { Link, withRouter } from 'react-router-dom';
 import { Typography, Input, Button, Form, Divider, Layout } from 'antd';
 import { Logo } from 'components/Logo';
 import * as queryString from 'query-string';
-import { resetPassword } from 'services/authService';
+import { resetPassword, login } from 'services/authService';
 import { notify } from 'util/notify';
+import Modal from 'antd/lib/modal/Modal';
 
 const LayoutStyled = styled(Layout)`
   margin: 0 auto 0 auto;
@@ -17,7 +18,8 @@ const ContainerStyled = styled.div`
   margin: 2rem auto;
   padding: 2rem 0.5rem;
   text-align: center;
-  max-width: 400px;
+  width: 100%;
+  max-width: 300px;
 `;
 
 const LogoContainer = styled.div`

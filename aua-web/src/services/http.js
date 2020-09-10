@@ -42,10 +42,10 @@ export async function request(method, path, queryParams, body, responseType = 'j
     const code = _.get(e, 'response.status', null);
     if (code === 401) {
       notify.error('Session timeout.');
-      Window.location = '/';
+      window.location = '/';
       return;
     }
-    const errorMessage = _.get(e, 'response.data.message', e.message);
+    const errorMessage = _.get(e, 'response.data.message') || _.get(e, 'response.data') || e.message;
     notify.error('Error', errorMessage);
     console.error(e.response);
     throw e;

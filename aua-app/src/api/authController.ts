@@ -18,25 +18,31 @@ import { getUtcNow } from '../utils/getUtcNow';
 import { Role } from '../enums/Role';
 import * as jwt from 'jsonwebtoken';
 import { attachJwtCookie, clearJwtCookie } from '../utils/jwt';
+import { UserRole } from 'aws-sdk/clients/workmail';
 
 export const getAuthUser = handlerWrapper(async (req, res) => {
   const { user } = (req as any);
   res.json(user || null);
 });
 
-export const login = handlerWrapper(async (req, res) => {
-  const { name, password } = req.body;
-
+async function getLoginUser(email) {
   const repo = getRepository(User);
   const user: User = await repo
     .createQueryBuilder()
     .where(
-      'LOWER(email) = LOWER(:name) AND status != :status',
+      'LOWER(email) = LOWER(:email) AND status != :status',
       {
-        name,
+        email,
         status: UserStatus.Disabled
       })
     .getOne();
+  return user;
+}
+
+export const login = handlerWrapper(async (req, res) => {
+  const { name, password } = req.body;
+
+  const user = await getLoginUser(name);
 
   assert(user, 400, 'User or password is not valid');
 
@@ -125,6 +131,25 @@ export const signup = handlerWrapper(async (req, res) => {
   res.json(info);
 });
 
+async function setUserToResetPasswordStatus(user: User) {
+  const userRepo = getRepository(User);
+  const resetPasswordToken = uuidv4();
+  user.resetPasswordToken = resetPasswordToken;
+  user.status = UserStatus.ResetPassword;
+
+  const url = `${process.env.AUA_DOMAIN_NAME}/reset_password/${resetPasswordToken}/`;
+  await sendEmail({
+    to: user.email,
+    templateName: 'resetPassword',
+    vars: {
+      url
+    },
+    shouldBcc: false
+  });
+
+  await userRepo.save(user);
+}
+
 export const forgotPassword = handlerWrapper(async (req, res) => {
   const email = req.body.email.toLowerCase();
   const userRepo = getRepository(User);
@@ -134,28 +159,7 @@ export const forgotPassword = handlerWrapper(async (req, res) => {
     return;
   }
 
-  const { id, role } = user;
-
-  const resetPasswordToken = uuidv4();
-  user.resetPasswordToken = resetPasswordToken;
-  user.status = UserStatus.ResetPassword;
-
-  const { fields: { givenName, surname } } = await getRepository(Portofolio).findOne(id);
-  const name = `${givenName} ${surname}`;
-
-  const url = `${process.env.AUA_DOMAIN_NAME}/reset_password/${resetPasswordToken}/`;
-  await sendEmail({
-    to: email,
-    templateName: 'resetPassword',
-    vars: {
-      email,
-      name,
-      url
-    },
-    shouldBcc: false
-  });
-
-  await userRepo.save(user);
+  await setUserToResetPasswordStatus(user);
 
   res.json();
 });
@@ -196,4 +200,40 @@ export const retrievePassword = handlerWrapper(async (req, res) => {
 
   const url = `${process.env.AUA_DOMAIN_NAME}/reset_password?token=${token}`;
   res.redirect(url);
+});
+
+export const impersonate = handlerWrapper(async (req, res) => {
+  assertRole(req, 'admin');
+  const { email } = req.body;
+  assert(email, 400, 'Invalid email');
+
+  const user = await getLoginUser(email);
+
+  assert(user, 404, 'User not found');
+
+  attachJwtCookie({
+    id: user.id,
+    ...user
+  }, res);
+
+  res.json();
+});
+
+export const inviteUser = handlerWrapper(async (req, res) => {
+  assertRole(req, 'admin');
+  const { email, role } = req.body;
+  assert(email, 400, 'Invalid email');
+
+  const existingUser = await getLoginUser(email);
+  assert(!existingUser, 400, 'User exists');
+
+  const user = createUserEntity({
+    email,
+    password: uuidv4(),
+    role: role || 'client',
+  });
+
+  await setUserToResetPasswordStatus(user);
+
+  res.json();
 });

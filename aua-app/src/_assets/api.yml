@@ -99,6 +99,22 @@ paths:
       responses:
         200:
           description: OK
+  /auth/impersonate:
+    post:
+      operationId: impersonate
+      # security:
+      #   - authAnyRole: []
+      responses:
+        200:
+          description: OK         
+  /auth/invite:
+    post:
+      operationId: inviteUser
+      # security:
+      #   - authAnyRole: []
+      responses:
+        200:
+          description: OK               
   /auth/reset_password:
     post:
       operationId: resetPassword

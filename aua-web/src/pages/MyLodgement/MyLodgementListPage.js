@@ -167,7 +167,7 @@ const MyLodgementListPage = (props) => {
           <List.Item.Meta
             avatar={<LodgementProgressBar key="1" status={item.status} width={80} style={{ marginTop: 6 }} />}
 
-            title={<Text style={{ fontSize: '1.3rem' }}>{item.name}</Text>}
+            title={<Text style={{ fontSize: '1rem' }}>{item.name}</Text>}
             description={<Space style={{ width: '100%', justifyContent: 'space-between' }}>
               <TimeAgo value={item.lastUpdatedAt} surfix="Last Updated" />
               <Space>

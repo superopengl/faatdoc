@@ -137,7 +137,7 @@ const PortofolioPage = (props) => {
               >
                 <List.Item.Meta
                   avatar={<PortofolioAvatar style={{ marginTop: 6 }} value={item.name} />}
-                  title={<Text style={{ fontSize: '1.3rem' }}>{item.name}</Text>}
+                  title={<Text style={{ fontSize: '1.2rem' }}>{item.name}</Text>}
                   description={<Space style={{width: '100%', justifyContent: 'space-between'}}>
                   <TimeAgo value={item.lastUpdatedAt} surfix="Last Updated" />
                   <Space>

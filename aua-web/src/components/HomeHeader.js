@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { Layout, Menu, Drawer, Button, Modal, Typography } from 'antd';
 import MediaQuery from 'react-responsive'
 import {
-  MenuOutlined, HomeOutlined, MailOutlined, SmileOutlined, PictureOutlined,
-  BellOutlined, SettingOutlined,
+  MenuOutlined, HomeOutlined, MailOutlined, CalendarOutlined, SkinOutlined, ToolOutlined,
+  BellOutlined, NotificationOutlined,
   IdcardOutlined, UserOutlined, LogoutOutlined, SecurityScanOutlined,
   LoginOutlined, TeamOutlined, SnippetsOutlined, UserAddOutlined
 } from '@ant-design/icons';
@@ -16,7 +16,6 @@ import { logout } from 'services/authService';
 import { PortofolioAvatar } from './PortofolioAvatar';
 import { Avatar } from 'antd';
 import { Badge } from 'antd';
-import { getNotificationCount } from 'services/notificationService';
 
 const { Title, Text } = Typography;
 const { Header } = Layout;
@@ -54,20 +53,13 @@ height: ${headerHeight}px;
 
 const HomeHeaderRaw = props => {
   const [visible, setVisible] = React.useState(false);
-  const [notificationNumber, setNotificationNumber] = React.useState(0);
   const context = React.useContext(GlobalContext);
 
-  const { role, setUser, user } = context;
+  const { role, setUser, user, notifyCount } = context;
   const isAdmin = role === 'admin';
   const isClient = role === 'client';
   const isAgent = role === 'agent';
   const isGuest = role === 'guest';
-
-  React.useEffect(() => {
-    // Only shows the notification for clients
-    const count = context.role === 'client' ? getNotificationCount() : 0;
-    setNotificationNumber(count);
-  });
 
   const handleLogout = () => {
     Modal.confirm({
@@ -119,9 +111,10 @@ const HomeHeaderRaw = props => {
             {/* {isAdmin && <Menu.Item key="admin"><Link to="/admin">Admin</Link></Menu.Item>} */}
             {isAdmin && <Menu.Item key="job_template"><Link to="/job_template">Job Template</Link></Menu.Item>}
             {isAdmin && <Menu.Item key="recurring"><Link to="/recurring">Recurring</Link></Menu.Item>}
-            {!isGuest && <Menu.Item key="notification"><Link to="/notification"><Badge count={notificationNumber} showZero={false} offset={[10, 0]}>Notification</Badge></Link></Menu.Item>}
             {isAdmin && <Menu.Item key="user"><Link to="/user">User</Link></Menu.Item>}
+            {!isGuest && <Menu.Item key="notification"><Link to="/notification"><Badge count={notifyCount} showZero={false} offset={[10, 0]}>Notification</Badge></Link></Menu.Item>}
             {!isGuest && <Menu.SubMenu key="me" title={<Avatar size={40} icon={<UserOutlined style={{ fontSize: 20 }} />} style={{ backgroundColor: isAdmin ? '#FF4D4F' : isAgent ? '#000000' : '#143e86' }} />}>
+              {isAdmin && <Menu.Item key="impersonate"><Link to="/impersonate">Impersonate</Link></Menu.Item>}
               <Menu.Item key="changePassword"><Link to="/change_password">Change Password</Link></Menu.Item>
               <Menu.Item key="logout" onClick={handleLogout}>Log Out</Menu.Item>
             </Menu.SubMenu>}
@@ -131,7 +124,7 @@ const HomeHeaderRaw = props => {
         {/* <Tag>{user?.memberId}</Tag> */}
       </MediaQuery>
       <MediaQuery maxDeviceWidth={800}>
-        <Badge count={notificationNumber} showZero={false} ><Button type="default" onClick={showDrawer}>
+        <Badge count={notifyCount} showZero={false} ><Button type="default" onClick={showDrawer}>
           <MenuOutlined />
         </Button></Badge>
         <Drawer
@@ -148,11 +141,12 @@ const HomeHeaderRaw = props => {
             {/* {isAdmin && <Menu.Item key="admin"><SettingOutlined /> <Link to="/admin">Admin</Link></Menu.Item>} */}
             {!isGuest && <Menu.Item key="lodgement"><SnippetsOutlined /> <Link to="/lodgement">Lodgement</Link></Menu.Item>}
             {isClient && <Menu.Item key="portofolio"><IdcardOutlined /> <Link to="/portofolio">Portofolio</Link></Menu.Item>}
-            {isAdmin && <Menu.Item key="job_template"><SettingOutlined /> <Link to="/job_template">Job Template</Link></Menu.Item>}
-            {isAdmin && <Menu.Item key="recurring"><SettingOutlined /> <Link to="/recurring">Recurring</Link></Menu.Item>}
+            {isAdmin && <Menu.Item key="job_template"><ToolOutlined /> <Link to="/job_template">Job Template</Link></Menu.Item>}
+            {isAdmin && <Menu.Item key="recurring"><CalendarOutlined /> <Link to="/recurring">Recurring</Link></Menu.Item>}
             {/* {isAdmin && <Menu.Item key="clients"><SettingOutlined /> <Link to="/clients">Users</Link></Menu.Item>} */}
-            {!isGuest && <Menu.Item key="notification"><MailOutlined /> <Link to="/notification">Notification <Badge count={notificationNumber} showZero={false} /></Link></Menu.Item>}
-            {isAdmin && <Menu.Item key="user"><SettingOutlined /> <Link to="/user">User</Link></Menu.Item>}
+            {isAdmin && <Menu.Item key="user"><TeamOutlined /> <Link to="/user">User</Link></Menu.Item>}
+            {!isGuest && <Menu.Item key="notification"><NotificationOutlined/> <Link to="/notification">Notification <Badge count={notifyCount} showZero={false} /></Link></Menu.Item>}
+            {isAdmin && <Menu.Item key="impersonate"><SkinOutlined /> <Link to="/impersonate">Impersonate</Link></Menu.Item>}
             {!isGuest && <Menu.Item key="changePassword"><SecurityScanOutlined /> <Link to="/change_password">Change Password</Link></Menu.Item>}
             {isGuest && <Menu.Item key="home"><HomeOutlined /> <HashLink to="/#home" onClick={onClose}>Home</HashLink></Menu.Item>}
             {isGuest && <Menu.Item key="services"><BellOutlined /> <HashLink to="/#services" onClick={onClose}>Services</HashLink></Menu.Item>}

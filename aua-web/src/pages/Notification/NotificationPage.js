@@ -14,7 +14,7 @@ import {
 import { listPortofolio, savePortofolio, deletePortofolio } from 'services/portofolioService';
 import { random } from 'lodash';
 import { TimeAgo } from 'components/TimeAgo';
-import { listNotification, getNotification, setNotificationCount, deleteNotification } from 'services/notificationService';
+import { listNotification, getNotification, deleteNotification } from 'services/notificationService';
 import { Alert } from 'antd';
 import { GlobalContext } from 'contexts/GlobalContext';
 
@@ -65,7 +65,7 @@ const NotificationPage = (props) => {
     setLoading(true);
     const data = await listNotification();
     setList(data);
-    setNotificationCount(data.filter(x => !x.readAt).length);
+    context.setNotifyCount(data.filter(x => !x.readAt).length);
     setLoading(false);
   }
 
@@ -131,10 +131,10 @@ const NotificationPage = (props) => {
             <Title level={2} style={{ margin: 'auto' }}>{isClient ? 'Notification' : 'Sent Out Notification'}</Title>
           </StyledTitleRow>
           {isClient && <Paragraph type="secondary">Notifications are the comments and adviced actions by your agent against your specific lodgement. All the notifications here are associated with certain lodgements. Please use the contact methods on the homepage for any inquiry that is not relavant to lodgement.</Paragraph>}
-          {!isClient && <Paragraph type="secondary">These sent out notifications are the comments and adviced actions ... You can see if the notification has been read by the clients.</Paragraph>}
+          {!isClient && <Paragraph type="secondary">You can see if the notification has been read by the clients. The status of the message can only change to 'read' when the client has opened it.</Paragraph>}
           <Space style={{width: '100%', justifyContent: 'flex-end'}}>
             
-            <Button onClick={() => loadList()} icon={<SyncOutlined/>}>Refresh</Button>
+            <Button type="primary" ghost onClick={() => loadList()} icon={<SyncOutlined/>}>Refresh</Button>
             </Space>
           <List
             itemLayout="horizontal"
@@ -151,8 +151,8 @@ const NotificationPage = (props) => {
                   //   To {item.forWhom} for {item.name} 
                   // </Paragraph> : null,
                   <TimeAgo value={item.createdAt} strong={!item.readAt} />,
-                  isClient ? <Button shape="circle" danger icon={<DeleteOutlined />} onClick={e => handleDelete(e, item)} /> : null
-                ]}
+                  isClient ? <Button shape="circle" danger icon={<DeleteOutlined />} onClick={e => handleDelete(e, item)} /> : undefined
+                ].filter(x => !!x)}
               >
                 <Paragraph ellipsis={{ rows: 1, expandable: false }} style={{ fontWeight: item.readAt ? 300 : 800 }}>
                   {item.content}
