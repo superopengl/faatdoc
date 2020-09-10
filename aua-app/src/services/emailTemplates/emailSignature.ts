@@ -4,7 +4,7 @@ const signature = `
 <p>--</p>
 <p>Kind Regards,</p>
 <small style="color:#888888">
-<img alt="Au Accouting Office Logo" src="${process.env.AUA_DOMAIN_NAME}/images/header-logo.png"></img>
+<img alt="AU Accouting Office Logo" src="${process.env.AUA_DOMAIN_NAME}/images/header-logo.png"></img>
 <p>
 W <a href="${process.env.AUA_DOMAIN_NAME}" target="_blank" rel="noreferrer noopener">${process.env.AUA_DOMAIN_NAME}</a><br/>
 A 101, 11 Spring St, Chatswood, NSW, 2067<br/>

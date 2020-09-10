@@ -146,16 +146,32 @@ async function raceSingletonLock(): Promise<boolean> {
   if (process.env.NODE_ENV === 'dev') {
     return true;
   }
-  const result = await getRepository(CronLock).update(
-    { gitHash: Not(Equal(gitHash)) },
+
+  const hostname = os.hostname();
+  const repo = getRepository(CronLock);
+  const key = 'cron-singleton-lock';
+  const result = await repo.update(
+    {
+      key,
+      gitHash: Not(Equal(gitHash))
+    },
     {
       gitHash,
       lockedAt: getUtcNow(),
-      by: os.hostname()
+      winner: hostname
     }
   );
+  const won = result.affected === 1;
 
-  return result.affected === 1;
+  if (!won) {
+    const entity = await repo.findOne({ key });
+    if (entity) {
+      entity.loser = hostname;
+      await repo.save(entity);
+    }
+  }
+
+  return won;
 }
 
 export async function restartCronService(throws = false) {
