@@ -1,12 +1,10 @@
 dependencies:
   '@types/body-parser': 1.19.0
   '@types/express': 4.17.7
-  '@types/express-session': 1.17.0
   '@types/node': 14.0.27
   aws-sdk: 2.730.0
   body-parser: 1.19.0
   compression: 1.7.4
-  connect-typeorm: 1.1.4_typeorm@0.2.25
   cookie-parser: 1.4.5
   cors: 2.8.5
   cron: 1.8.2
@@ -18,16 +16,13 @@ dependencies:
   express-async-handler: 1.1.4
   express-fileupload: 1.1.10
   express-list-endpoints: 4.0.1
-  express-session: 1.17.1
   fs-extra: 9.0.1
   http-assert: 1.4.1
-  json-2-csv: 3.7.6
   jsonwebtoken: 8.5.1
   lodash: 4.17.19
   moment: 2.27.0
   passport: 0.4.1
-  passport-local: 1.0.0
-  pg: 8.3.0_pg@8.3.0
+  pg: 8.3.3_pg@8.3.3
   sanitize-html: 1.27.4
   serialize-error: 7.0.1
   swagger-routes-express: 3.2.1
@@ -105,10 +100,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-2+FrkXY4zllzTNfJth7jOqEHC+enpLeGslEhpnTAkg21GkRrWV4SsAtqchtT4YS9/nODBU2/ZfsBY2X4J/dX7A==
-  /@types/debug/0.0.31:
-    dev: false
-    resolution:
-      integrity: sha512-LS1MCPaQKqspg7FvexuhmDbWUhE2yIJ+4AgVIyObfc06/UKZ8REgxGNjZc82wPLWmbeOm7S+gSsLgo75TanG4A==
   /@types/express-serve-static-core/4.17.9:
     dependencies:
       '@types/node': 14.0.27
@@ -117,13 +108,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-DG0BYg6yO+ePW+XoDENYz8zhNGC3jDDEpComMYn7WJc4mY1Us8Rw9ax2YhJXxpyk2SF47PQAoQ0YyVT1a0bEkA==
-  /@types/express-session/1.17.0:
-    dependencies:
-      '@types/express': 4.17.7
-      '@types/node': 14.6.0
-    dev: false
-    resolution:
-      integrity: sha512-OQEHeBFE1UhChVIBhRh9qElHUvTp4BzKKHxMDkGHT7WuYk5eL93hPG7D8YAIkoBSbhNEY0RjreF15zn+U0eLjA==
   /@types/express/4.17.7:
     dependencies:
       '@types/body-parser': 1.19.0
@@ -141,10 +125,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-kVrqXhbclHNHGu9ztnAwSncIgJv/FaxmzXJvGXNdcCpV1b8u1/Mi6z6m0vwy0LzKeXFTPLH0NzwmoJ3fNCIq0g==
-  /@types/node/14.6.0:
-    dev: false
-    resolution:
-      integrity: sha512-mikldZQitV94akrc4sCcSjtJfsTKt4p+e/s0AGscVA6XArQ9kFclP+ZiYUMnq987rc6QlYxXv/EivqlfSLxpKA==
   /@types/qs/6.9.4:
     dev: false
     resolution:
@@ -709,18 +689,6 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-aMKprgk5YhBNyH25hj8wGt2+D52Sw1DRRIzqBwLp2Ya9mFmY8KPvvtvmna8SxVR9JMZ4kzMD68N22vlaRpkeFA==
-  /connect-typeorm/1.1.4_typeorm@0.2.25:
-    dependencies:
-      '@types/debug': 0.0.31
-      '@types/express-session': 1.17.0
-      debug: 4.1.1
-      express-session: 1.17.1
-      typeorm: 0.2.25
-    dev: false
-    peerDependencies:
-      typeorm: ^0.1.4 || ^0.2.5
-    resolution:
-      integrity: sha512-1/0b1aFzip0UBzuaSUkVZE4EW3n4UZzi3x2fmKeCaOb+sB4VZGj79txzLvtWIHLYY6kls/PKNcQHfEurdEjsUw==
   /content-disposition/0.5.3:
     dependencies:
       safe-buffer: 5.1.2
@@ -843,12 +811,6 @@ packages:
       node: '>=4'
     resolution:
       integrity: sha1-gKTdMjdIOEv6JICDYirt7Jgq3/M=
-  /deeks/2.2.6:
-    dev: false
-    engines:
-      node: '>= 8'
-    resolution:
-      integrity: sha512-KlfWy96oUxxfAEC8q8QVoik++6yWsTYT9Cm5S6nUddLciZaOy7WDfcFbVCyeHKFO44ptWxtz7sQd9Upm4SGf4g==
   /deep-equal/1.0.1:
     dev: false
     resolution:
@@ -908,12 +870,6 @@ packages:
       node: '>= 0.6'
     resolution:
       integrity: sha1-m81S4UwJd2PnSbJ0xDRu0uVgtak=
-  /depd/2.0.0:
-    dev: false
-    engines:
-      node: '>= 0.8'
-    resolution:
-      integrity: sha512-g7nH6P6dyDioJogAAGprGpCtVImJhpPk/roCzdb3fIh61/s/nPsfR6onyMwkCAR/OlC3yBC0lESvUoQEAssIrw==
   /destroy/1.0.4:
     dev: false
     resolution:
@@ -941,12 +897,6 @@ packages:
       node: '>=4'
     resolution:
       integrity: sha512-37qirFDz8cA5fimp9feo43fSuRo2gHwaIn6dXL8Ber1dGwUosDrGZeCCXq57WnIqE4aQ+u3eQZzsk1yOzhdwag==
-  /doc-path/2.0.4:
-    dev: false
-    engines:
-      node: '>=6.0'
-    resolution:
-      integrity: sha512-y/Q1mjxFks4hvNv1KZkkuTZ6lx9zxLtldKf5GsMTdIXF4gNAOaXZ3YxrgHg/uO7JSME1xw/+G7fZ7/Dj/Ss88g==
   /dom-serializer/1.0.1:
     dependencies:
       domelementtype: 2.0.1
@@ -1108,21 +1058,6 @@ packages:
       node: '>=6'
     resolution:
       integrity: sha512-KjY7frYk72/Jwk2VgqyvuXlTPslEkWkzjUXPUMCUguVmAWqd6fh60VHr+sEfqJgMAOE3hKhUjm/7tLASVaE2Qg==
-  /express-session/1.17.1:
-    dependencies:
-      cookie: 0.4.0
-      cookie-signature: 1.0.6
-      debug: 2.6.9
-      depd: 2.0.0
-      on-headers: 1.0.2
-      parseurl: 1.3.3
-      safe-buffer: 5.2.0
-      uid-safe: 2.1.5
-    dev: false
-    engines:
-      node: '>= 0.8.0'
-    resolution:
-      integrity: sha512-UbHwgqjxQZJiWRTMyhvWGvjBQduGCSBDhhZXYenziMFjxst5rMV+aJZ6hKPHZnPyHGsrqRICxtX8jtEbm/z36Q==
   /express/4.17.1:
     dependencies:
       accepts: 1.3.7
@@ -1828,15 +1763,6 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-/4IbIeHcD9VMHFqDR/gQ7EdZdLimOvW2DdcxFjdyyZ9NsbS+ccrXqVWDtab/lRl5AlUqmpBx8EhPaWR+OtY17A==
-  /json-2-csv/3.7.6:
-    dependencies:
-      deeks: 2.2.6
-      doc-path: 2.0.4
-    dev: false
-    engines:
-      node: '>= 8'
-    resolution:
-      integrity: sha512-um9bT7CgI77f/m5G/V5uRKz9UruFQFijD5Fh+EAnr5QowOJpdIk1ya37KSq1MxjBnJgvmpqCnI7ZjsvyTYiW0w==
   /json-buffer/3.0.0:
     dev: true
     resolution:
@@ -2452,14 +2378,6 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-s2PlXoAGym/iF4TS2yK9FdeRfxQ=
-  /passport-local/1.0.0:
-    dependencies:
-      passport-strategy: 1.0.0
-    dev: false
-    engines:
-      node: '>= 0.4.0'
-    resolution:
-      integrity: sha1-H+YyaMkudWBmJkN+O5BmYsFbpu4=
   /passport-strategy/1.0.0:
     dev: false
     engines:
@@ -2525,9 +2443,9 @@ packages:
       node: '>=4.0.0'
     resolution:
       integrity: sha512-WCtabS6t3c8SkpDBUlb1kjOs7l66xsGdKpIPZsg4wR+B3+u9UAum2odSsF9tnvxg80h4ZxLWMy4pRjOsFIqQpw==
-  /pg-pool/3.2.1_pg@8.3.0:
+  /pg-pool/3.2.1_pg@8.3.3:
     dependencies:
-      pg: 8.3.0_pg@8.3.0
+      pg: 8.3.3_pg@8.3.3
     dev: false
     peerDependencies:
       pg: '>=8.0'
@@ -2542,19 +2460,19 @@ packages:
       pg-int8: 1.0.1
       postgres-array: 2.0.0
       postgres-bytea: 1.0.0
-      postgres-date: 1.0.6
+      postgres-date: 1.0.7
       postgres-interval: 1.2.0
     dev: false
     engines:
       node: '>=4'
     resolution:
       integrity: sha512-qTAAlrEsl8s4OiEQY69wDvcMIdQN6wdz5ojQiOy6YRMuynxenON0O5oCpJI6lshc6scgAY8qvJ2On/p+CXY0GA==
-  /pg/8.3.0_pg@8.3.0:
+  /pg/8.3.3_pg@8.3.3:
     dependencies:
       buffer-writer: 2.0.0
       packet-reader: 1.0.0
       pg-connection-string: 2.3.0
-      pg-pool: 3.2.1_pg@8.3.0
+      pg-pool: 3.2.1_pg@8.3.3
       pg-protocol: 1.2.5
       pg-types: 2.2.0
       pgpass: 1.0.2
@@ -2565,7 +2483,7 @@ packages:
     peerDependencies:
       pg: '*'
     resolution:
-      integrity: sha512-jQPKWHWxbI09s/Z9aUvoTbvGgoj98AU7FDCcQ7kdejupn/TcNpx56v2gaOTzXkzOajmOEJEdi9eTh9cA2RVAjQ==
+      integrity: sha512-wmUyoQM/Xzmo62wgOdQAn5tl7u+IA1ZYK7qbuppi+3E+Gj4hlUxVHjInulieWrd0SfHi/ADriTb5ILJ/lsJrSg==
   /pgpass/1.0.2:
     dependencies:
       split: 1.0.1
@@ -2612,12 +2530,12 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-AntTPAqokOJtFy1Hz5zOzFIazTU=
-  /postgres-date/1.0.6:
+  /postgres-date/1.0.7:
     dev: false
     engines:
       node: '>=0.10.0'
     resolution:
-      integrity: sha512-o2a4gxeFcox+CgB3Ig/kNHBP23PiEXHCXx7pcIIsvzoNz4qv+lKTyiSkjOXIMNUl12MO/mOYl2K6wR9X5K6Plg==
+      integrity: sha512-suDmjLVQg78nMK2UZ454hAG+OAW+HQPZ6n++TNDUX+L0+uUlLywnoxJKDou51Zm+zTCjrCl0Nq6J9C5hP9vK/Q==
   /postgres-interval/1.2.0:
     dependencies:
       xtend: 4.0.2
@@ -2682,12 +2600,6 @@ packages:
       node: '>=4'
     resolution:
       integrity: sha1-Q2CxfGETatOAeDl/8RQW4Ybc+7g=
-  /random-bytes/1.0.0:
-    dev: false
-    engines:
-      node: '>= 0.8'
-    resolution:
-      integrity: sha1-T2ih3Arli9P7lYSMMDJNt11kNgs=
   /range-parser/1.2.1:
     dev: false
     engines:
@@ -2829,10 +2741,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==
-  /safe-buffer/5.2.0:
-    dev: false
-    resolution:
-      integrity: sha512-fZEwUGbVl7kouZs1jCdMLdt95hdIv0ZeHg6L7qPeciMZhZ+/gdesW4wgTARkrFWEpspjEATAzUGPG8N2jJiwbg==
   /safe-buffer/5.2.1:
     dev: false
     resolution:
@@ -3392,14 +3300,6 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-BLbiRkiBzAwsjut4x/dsibSTB6yWpwT5qWmC2OfuCg3GgVQCSgMs4vEctYPhsaGtd0AeuuHMkjZ2h2WG8MSzRw==
-  /uid-safe/2.1.5:
-    dependencies:
-      random-bytes: 1.0.0
-    dev: false
-    engines:
-      node: '>= 0.8'
-    resolution:
-      integrity: sha512-KPHm4VL5dDXKz01UuEd88Df+KzynaohSL9fBh096KWAxSKZQDI2uBrVqtvRM4rwrIrRRKsdLNML/lnaaVSRioA==
   /undefsafe/2.0.3:
     dependencies:
       debug: 2.6.9
@@ -3689,12 +3589,10 @@ packages:
 specifiers:
   '@types/body-parser': ^1.19.0
   '@types/express': ^4.17.6
-  '@types/express-session': ^1.17.0
   '@types/node': ^14.0.5
   aws-sdk: ^2.686.0
   body-parser: ^1.19.0
   compression: ^1.7.4
-  connect-typeorm: ^1.1.4
   cookie-parser: ^1.4.5
   cors: ^2.8.5
   cron: ^1.8.2
@@ -3706,17 +3604,14 @@ specifiers:
   express-async-handler: ^1.1.4
   express-fileupload: ^1.1.7-alpha.3
   express-list-endpoints: ^4.0.1
-  express-session: ^1.17.1
   fs-extra: ^9.0.1
   http-assert: ^1.4.1
-  json-2-csv: ^3.7.6
   jsonwebtoken: ^8.5.1
   lodash: ^4.17.15
   moment: ^2.27.0
   nodemon: ^2.0.4
   passport: ^0.4.1
-  passport-local: ^1.0.0
-  pg: ^8.3.0
+  pg: ^8.3.3
   sanitize-html: ^1.27.4
   serialize-error: ^7.0.1
   swagger-routes-express: ^3.1.2
