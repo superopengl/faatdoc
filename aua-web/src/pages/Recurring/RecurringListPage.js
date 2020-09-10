@@ -99,7 +99,7 @@ const RecurringListPage = (props) => {
         const interval = cronParser.parseExpression(cron.replace('L', lastDayOfMonth));
         let dateString = interval.next().toString(); // The run time in current month
 
-        if(moment(dateString).isBefore(now)) {
+        if (moment(dateString).isBefore(now)) {
           // If the time has passed by on the last day of the current month,
           // return the time in the next month.
           dateString = interval.next().toString();
@@ -121,7 +121,13 @@ const RecurringListPage = (props) => {
       dataIndex: 'portofolioName',
       onFilter: (value, record) => record.agentId === value,
       render: (text, record) => record.portofolioName ? <>
-        <PortofolioAvatar value={text} size={40} /> {text} <Text type="secondary"><small>{record.email || <Text type="danger">deleted user</Text>}</small></Text>
+        <Space>
+          <PortofolioAvatar value={text} size={40} />
+          <div direction="vertical" style={{display: 'flex', flexDirection: 'column', justifyContent: 'flex-start'}}>
+            {text}
+            <Text type="secondary"><small>{record.email || <Text type="danger">deleted user</Text>}</small></Text>
+          </div>
+        </Space>
       </> : <Text type="danger">deleted portofolio</Text>
     },
     {

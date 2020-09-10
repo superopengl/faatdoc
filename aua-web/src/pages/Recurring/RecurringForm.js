@@ -54,7 +54,7 @@ const RecurringForm = (props) => {
   const [recurring, setRecurring] = React.useState();
   const [jobTemplateList, setJobTemplateList] = React.useState([]);
   const [portofolioList, setPortofolioList] = React.useState([]);
-  const [initialValues, setInitialValues] = React.useState(null);
+  const [initialValues, setInitialValues] = React.useState({cron: '0 0 0 L */1 *'});
 
   const loadEntity = async () => {
     setLoading(true);
@@ -87,7 +87,7 @@ const RecurringForm = (props) => {
 
   return <>
      {!loading && <Form layout="vertical" onFinish={handleSaveRecurring} form={form} initialValues={initialValues}>
-       <Space direction="vertical" size="middle">
+       <Space direction="vertical" size="small">
         <Form.Item label="Job Template" name="jobTemplateId" rules={[{ required: true, message: ' ' }]}>
           <Select allowClear>
             {jobTemplateList.map((x, i) => (<Select.Option key={i} value={x.id}>
@@ -128,7 +128,7 @@ const RecurringForm = (props) => {
           {/* <InputNumber min={1} max={31} /> */}
 
         </Form.Item>
-        <Form.Item>
+        <Form.Item style={{marginTop: '1rem'}}>
           <Button type="primary" block htmlType="submit" disabled={loading} >Save</Button>
         </Form.Item>
         </Space>
