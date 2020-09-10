@@ -1,5 +1,5 @@
 
-import { getRepository, getManager, getConnection } from 'typeorm';
+import { getRepository, getConnection } from 'typeorm';
 import { User } from '../entity/User';
 import { assert, assertRole } from '../utils/assert';
 import { validatePasswordStrength } from '../utils/validatePasswordStrength';
@@ -7,20 +7,13 @@ import * as _ from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import { UserStatus } from '../enums/UserStatus';
 import { computeUserSecret } from '../utils/computeUserSecret';
-import { Portofolio } from '../entity/Portofolio';
 import { handlerWrapper } from '../utils/asyncHandler';
-import { createProfileEntity } from '../utils/createProfileEntity';
 import { sendEmail } from '../services/emailService';
-import { getForgotPasswordHtmlEmail, getForgotPasswordTextEmail, getSignUpHtmlEmail, getSignUpTextEmail } from '../utils/emailTemplates';
-import * as moment from 'moment';
 import { logError } from '../utils/logger';
 import { getUtcNow } from '../utils/getUtcNow';
 import { Role } from '../enums/Role';
 import * as jwt from 'jsonwebtoken';
 import { attachJwtCookie, clearJwtCookie } from '../utils/jwt';
-import { UserRole } from 'aws-sdk/clients/workmail';
-import { OAuth2Client } from 'google-auth-library';
-import * as jwtSimple from 'jwt-simple';
 
 export const getAuthUser = handlerWrapper(async (req, res) => {
   const { user } = (req as any);
@@ -42,7 +35,7 @@ async function getLoginUser(email) {
 }
 
 function sanitizeUser(user: User) {
-  return _.pick(user, ['id', 'email', 'role', 'lastLoggedInAt', 'status']);
+  return _.pick(user, ['id', 'email', 'role', 'lastLoggedInAt', 'status', 'loginType']);
 }
 
 export const login = handlerWrapper(async (req, res) => {
@@ -238,19 +231,19 @@ export const inviteUser = handlerWrapper(async (req, res) => {
   res.json();
 });
 
-async function verifyGoogleJwt(token) {
-  const CLIENT_ID = '1036301846271-e8sto3acfpcd06mgbl7e4tl5cdfanqjm.apps.googleusercontent.com';
-  const secret = 'vaHNi4j2ynFbBbKO6jWcCVw3';
-  
+async function decodeEmailFromGoogleToken(token) {
+  assert(token, 400, 'Empty code payload');
+  const secret = process.env.AUA_GOOGLE_SSO_CLIENT_SECRET;
   const decoded = jwt.decode(token, secret);
+  const { email } = decoded;
+  assert(email, 400, 'Invalid Google token');
+  return email;
 }
 
 export const ssoGoogle = handlerWrapper(async (req, res) => {
-  const { email, code } = req.body;
-  assert(email, 400, 'Invalid email');
-  assert(code, 400, 'Empty code payload');
+  const { token } = req.body;
 
-  await verifyGoogleJwt(code);
+  const email = await decodeEmailFromGoogleToken(token);
 
   const repo = getRepository(User);
   let user = await repo
@@ -263,11 +256,10 @@ export const ssoGoogle = handlerWrapper(async (req, res) => {
 
   if (!user) {
     user = createUserEntity(email, uuidv4(), 'client');
-
     user.status = UserStatus.Enabled;
-    user.loginType = 'google';
   }
 
+  user.loginType = 'google';
   user.lastLoggedInAt = getUtcNow();
   user.lastNudgedAt = getUtcNow();
 

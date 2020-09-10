@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link, withRouter } from 'react-router-dom';
-import { Typography, Input, Button, Form, Layout } from 'antd';
+import { Typography, Input, Button, Form, Layout, Divider } from 'antd';
 import { GoogleOutlined } from '@ant-design/icons';
 import { Logo } from 'components/Logo';
 import isEmail from 'validator/es/lib/isEmail';
@@ -10,6 +10,7 @@ import { login, ssoGoogle } from 'services/authService';
 import { refreshNotificationUnreadCount } from 'services/notificationService';
 import { GoogleLogin } from 'react-google-login';
 import { notify } from 'util/notify';
+import GoogleSsoButton from 'components/GoogleSsoButton';
 
 const LayoutStyled = styled(Layout)`
 margin: 0 auto 0 auto;
@@ -47,27 +48,6 @@ const LogInPage = props => {
     }
   }
 
-  const handleAfterSuccessfulLogin = async (user) => {
-    setUser(user);
-
-    const count = await refreshNotificationUnreadCount();
-    setNotifyCount(count);
-
-    props.history.push('/lodgement');
-  }
-
-  const handleGoogleSso = async (response) => {
-    console.log('Google sso', response);
-    const { profileObj, tokenId } = response;
-    const { email } = profileObj || {};
-    if (email) {
-      const user = await ssoGoogle(email, tokenId);
-      await handleAfterSuccessfulLogin(user);
-    } else {
-      notify.error('Failed to log in with Google');
-    }
-  }
-
   const handleSubmit = async values => {
     if (sending) {
       return;
@@ -77,7 +57,12 @@ const LogInPage = props => {
       setLoading(true);
 
       const user = await login(values.name, values.password);
-      await handleAfterSuccessfulLogin(user);
+      setUser(user);
+
+      const count = await refreshNotificationUnreadCount();
+      setNotifyCount(count);
+
+      props.history.push('/lodgement');
     } catch {
       setLoading(false);
     }
@@ -90,6 +75,21 @@ const LogInPage = props => {
         <Title level={2}>Log In</Title>
         <Link to="/signup"><Button size="small" block type="link">Not a user? Click to sign up</Button></Link>
 
+        <GoogleSsoButton 
+          render={
+            renderProps => (
+              <Button
+                ghost block type="primary"
+                size="large"
+                icon={<GoogleOutlined />}
+                style={{ marginTop: '1.5rem' }}
+                onClick={renderProps.onClick}
+                disabled={renderProps.disabled}
+              >Log In with Google</Button>
+            )} 
+        />
+
+        <Divider>or</Divider>
         <Form layout="vertical" onFinish={handleSubmit} style={{ textAlign: 'left' }}>
           <Form.Item label="Email" name="name"
             rules={[{ required: true, validator: validateName, whitespace: true, max: 100, message: 'Please input valid email address' }]}
@@ -102,26 +102,10 @@ const LogInPage = props => {
           <Form.Item>
             <Button block type="primary" htmlType="submit" disabled={sending}>Log In</Button>
           </Form.Item>
-          <Form.Item>
-            <GoogleLogin
-              clientId="1036301846271-e8sto3acfpcd06mgbl7e4tl5cdfanqjm.apps.googleusercontent.com"
-              // buttonText="Log In with Google"
-              // isSignedIn={true}
-              render={renderProps => (
-                <Button ghost block type="primary"
-                  icon={<GoogleOutlined />}
-                  onClick={renderProps.onClick}
-                  disabled={renderProps.disabled}
-                >Log In with Google</Button>
-              )}
-              onSuccess={handleGoogleSso}
-              onFailure={handleGoogleSso}
-            // cookiePolicy={'single_host_origin'}
-            />
-          </Form.Item>
-          <Form.Item>
+
+          {/* <Form.Item>
             <Link to="/signup"><Button ghost block type="primary">Sign Up</Button></Link>
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item>
             <Link to="/forgot_password">
               <Button block type="link">Forgot password? Click here to reset</Button>

@@ -5,6 +5,8 @@ import { Typography, Button, Modal, Divider, Form, Input, Checkbox, Layout } fro
 import { Logo } from 'components/Logo';
 import { signUp } from 'services/authService';
 import { GlobalContext } from 'contexts/GlobalContext';
+import GoogleSsoButton from 'components/GoogleSsoButton';
+import { GoogleOutlined } from '@ant-design/icons';
 const { Title } = Typography;
 
 const PageContainer = styled.div`
@@ -101,6 +103,7 @@ const SignUpPage = (props) => {
             <ContainerStyled>
               <LogoContainer><Logo /></LogoContainer>
               <Title level={2}>Sign Up</Title>
+
               <Link to="/login"><Button size="small" block type="link">Already a user? Click to log in</Button></Link>
               <Form layout="vertical" onFinish={handleSignUp} style={{ textAlign: 'left' }} initialValues={{ role: 'client' }}>
                 <Form.Item label="Email" name="email" rules={[{ required: true, type: 'email', whitespace: true, max: 100, message: ' ' }]}>
@@ -121,10 +124,25 @@ const SignUpPage = (props) => {
                 <Form.Item style={{ marginTop: '1rem' }}>
                   <Button block type="primary" htmlType="submit" disabled={sending}>Sign Up</Button>
                 </Form.Item>
-                  <Button block type="link" onClick={() => goBack()}>Cancel</Button>
                 <Form.Item>
+                  <Button block type="link" onClick={() => goBack()}>Cancel</Button>
                 </Form.Item>
               </Form>
+              <Divider>or</Divider>
+              <GoogleSsoButton
+                render={
+                  renderProps => (
+                    <Button
+                      ghost block type="primary"
+                      size="large"
+                      icon={<GoogleOutlined />}
+                      style={{ marginTop: '1.5rem' }}
+                      onClick={renderProps.onClick}
+                      disabled={renderProps.disabled}
+                    >Log In with Google</Button>
+                  )}
+              />
+
               <Divider />
               <Link to="/"><Button block type="link">Go to home page</Button></Link>
             </ContainerStyled>

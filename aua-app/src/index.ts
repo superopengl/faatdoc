@@ -12,6 +12,7 @@ function validateEnvVars() {
     'AWS_DEFAULT_REGION',
     'AUA_FILE_PREFIX',
     'GIT_HASH',
+    'AUA_GOOGLE_SSO_CLIENT_SECRET',
   ];
 
   const missingVars = requiredEnvVars.map(v => process.env[v]).filter(x => !x);

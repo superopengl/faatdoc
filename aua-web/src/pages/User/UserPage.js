@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Typography, Layout, Button, Table, Input, Modal, Form, Tooltip } from 'antd';
+import { Typography, Layout, Button, Table, Input, Modal, Form, Tooltip, Tag} from 'antd';
 import HomeHeader from 'components/HomeHeader';
 import {
-  DeleteOutlined, SafetyCertificateOutlined, PlusOutlined
+  DeleteOutlined, SafetyCertificateOutlined, UserAddOutlined, GoogleOutlined, SyncOutlined
 } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
 import { Space } from 'antd';
@@ -50,6 +50,11 @@ const UserPage = () => {
       title: 'Role',
       dataIndex: 'role',
       render: (text) => text
+    },
+    {
+      title: 'Login Type',
+      dataIndex: 'loginType',
+      render: (text) => text === 'local' ? <Tag color="#333333">Local</Tag> : <Tag icon={<GoogleOutlined />} color="#143e86">Google</Tag>
     },
     {
       title: 'Last Logged In At',
@@ -143,7 +148,8 @@ const UserPage = () => {
             <Title level={2} style={{ margin: 'auto' }}>User Management</Title>
           </StyledTitleRow>
           <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
-            <Button type="primary" ghost onClick={() => handleNewUser()} icon={<PlusOutlined />}>Invite User</Button>
+            <Button type="primary" ghost onClick={() => handleNewUser()} icon={<UserAddOutlined />}>Invite User</Button>
+            <Button type="primary" ghost onClick={() => loadList()} icon={<SyncOutlined/>}>Refresh</Button>
           </Space>
           {/* <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
             <Button type="primary" ghost icon={<PlusOutlined />} onClick={() => handleCreateNew()}>New Recurring</Button>
@@ -199,7 +205,7 @@ const UserPage = () => {
         footer={null}
         width={500}
       >
-        <Paragraph>System will send an invitation to the email address if the email address isn't a sign up user.</Paragraph>
+        <Paragraph>System will send an invitation to the email address if the email address hasn't signed up before.</Paragraph>
         <Form layout="vertical" onFinish={handleInviteUser}>
           <Form.Item label="Email" name="email" rules={[{ required: true, type: 'email', whitespace: true, max: 100, message: ' ' }]}>
             <Input placeholder="abc@xyz.com" type="email" autoComplete="email" allowClear={true} maxLength="100" autoFocus={true} />

@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { Typography, Button, Space } from 'antd';
+import { Typography, Button, Space, Row, Col } from 'antd';
 import { withRouter } from 'react-router-dom';
-import {
-  useWindowWidth,
-} from '@react-hook/window-size'
+import { GoogleOutlined } from '@ant-design/icons';
+import { useWindowWidth } from '@react-hook/window-size'
 import { GlobalContext } from 'contexts/GlobalContext';
+import GoogleSsoButton from 'components/GoogleSsoButton';
 
 const { Title } = Typography;
 
@@ -18,12 +18,14 @@ width: 100%;
 `;
 
 const SignUpButton = styled(Button)`
+margin-top: 1rem;
 max-width: 300px;
-height: 60px;
+height: 50px;
 border-radius: 30px;
-font-size: 1.3rem;
+// font-size: 1.3rem;
 border: 2px solid white;
 `;
+
 
 const PosterContainer = styled.div`
 background-repeat: no-repeat;
@@ -46,7 +48,14 @@ padding: 1rem;
 
 `;
 
-
+const span = {
+  xs: 24,
+  sm: 24,
+  md: 24,
+  lg: 12,
+  xl: 12,
+  xxl: 12
+}
 
 const HomeCarouselAreaRaw = props => {
 
@@ -76,7 +85,27 @@ const HomeCarouselAreaRaw = props => {
             We are providing professional accounting and tax services to our clients including individuals, Sole traders, Partnerships, Companies, Trusts etc.
             You’ve got the skills and the experience. We’ve got diverse projects and meaningful work. Let’s take your career to the next level.
               </Title>
-          {isGuest && <SignUpButton type="primary" block onClick={() => handleSignUp()}>Sign Up Now!</SignUpButton>}
+          {isGuest &&
+            <Row style={{maxWidth: 500, margin: '0 auto'}} gutter={30}>
+              <Col {...span}>
+                <SignUpButton block type="primary" onClick={() => handleSignUp()}>Sign Up Now!</SignUpButton>
+              </Col>
+              <Col {...span}>
+                <GoogleSsoButton
+                  render={
+                    renderProps => (
+                      <SignUpButton
+                        block
+                        type="secondary"
+                        size="large"
+                        icon={<GoogleOutlined />}
+                        onClick={renderProps.onClick}
+                        disabled={renderProps.disabled}
+                      >Sign In with Google</SignUpButton>
+                    )}
+                />
+              </Col>
+            </Row>}
         </Space>
       </PosterContainer>
     </ContainerStyled>

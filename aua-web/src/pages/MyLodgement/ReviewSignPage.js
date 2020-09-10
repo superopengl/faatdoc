@@ -93,7 +93,7 @@ const ReviewSignPage = (props) => {
 };
 
 ReviewSignPage.propTypes = {
-  id: PropTypes.string.isRequired
+  id: PropTypes.string
 };
 
 ReviewSignPage.defaultProps = {};

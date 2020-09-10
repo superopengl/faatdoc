@@ -54,11 +54,13 @@ const HomeHeaderRaw = props => {
   const context = React.useContext(GlobalContext);
   const [current, setCurrent] = React.useState();
 
-  const { role, setUser, notifyCount } = context;
+  const { user, role, setUser, notifyCount } = context;
   const isAdmin = role === 'admin';
   const isClient = role === 'client';
   const isAgent = role === 'agent';
   const isGuest = role === 'guest';
+  // debugger;
+  const canChangePassword = !isGuest && user?.loginType === 'local';
 
   const handleLogout = () => {
     Modal.confirm({
@@ -120,7 +122,7 @@ const HomeHeaderRaw = props => {
             {!isGuest && <Menu.Item key="notification"><Link to="/notification"><Badge count={notifyCount} showZero={false} offset={[10, 0]}>Notification</Badge></Link></Menu.Item>}
             {!isGuest && <Menu.SubMenu key="me" title={<Avatar size={40} icon={<UserOutlined style={{ fontSize: 20 }} />} style={{ backgroundColor: isAdmin ? '#FF4D4F' : isAgent ? '#000000' : '#143e86' }} />}>
               {isAdmin && <Menu.Item key="impersonate"><Link to="/impersonate">Impersonate</Link></Menu.Item>}
-              <Menu.Item key="changePassword"><Link to="/change_password">Change Password</Link></Menu.Item>
+              {canChangePassword && <Menu.Item key="changePassword"><Link to="/change_password">Change Password</Link></Menu.Item>}
               <Menu.Item key="logout" onClick={handleLogout}>Log Out</Menu.Item>
             </Menu.SubMenu>}
           </Menu>
@@ -157,7 +159,7 @@ const HomeHeaderRaw = props => {
             {isAdmin && <Menu.Item key="user"><TeamOutlined /> <Link to="/user">User</Link></Menu.Item>}
             {!isGuest && <Menu.Item key="notification"><NotificationOutlined /> <Link to="/notification">Notification <Badge count={notifyCount} showZero={false} /></Link></Menu.Item>}
             {isAdmin && <Menu.Item key="impersonate"><SkinOutlined /> <Link to="/impersonate">Impersonate</Link></Menu.Item>}
-            {!isGuest && <Menu.Item key="changePassword"><SecurityScanOutlined /> <Link to="/change_password">Change Password</Link></Menu.Item>}
+            {canChangePassword && <Menu.Item key="changePassword"><SecurityScanOutlined /> <Link to="/change_password">Change Password</Link></Menu.Item>}
             {isGuest && <Menu.Item key="home"><HomeOutlined /> <HashLink to="/#home" onClick={onClose}>Home</HashLink></Menu.Item>}
             {isGuest && <Menu.Item key="services"><BellOutlined /> <HashLink to="/#services" onClick={onClose}>Services</HashLink></Menu.Item>}
             {isGuest && <Menu.Item key="team"><TeamOutlined /> <HashLink to="/#team" onClick={onClose}>Team</HashLink></Menu.Item>}

@@ -35,6 +35,6 @@ export async function inviteUser(email) {
   return httpPost(`auth/invite`, { email });
 }
 
-export async function ssoGoogle(email, code) {
-  return httpPost(`auth/sso/google`, { email, code });
+export async function ssoGoogle(token) {
+  return httpPost(`auth/sso/google`, { token });
 }
