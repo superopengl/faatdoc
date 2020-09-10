@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Typography, Button, Space } from 'antd';
 import { withRouter } from 'react-router-dom';
 import {
   useWindowWidth,
 } from '@react-hook/window-size'
+import { GlobalContext } from 'contexts/GlobalContext';
 
 const { Title } = Typography;
 
@@ -50,7 +51,9 @@ padding: 1rem;
 const HomeCarouselAreaRaw = props => {
 
   const windowWidth = useWindowWidth();
+  const context = useContext(GlobalContext);
 
+  const isGuest = context.role === 'guest';
 
   const posterHeight = windowWidth < 576 ? 400 :
     windowWidth < 992 ? 450 :
@@ -73,7 +76,7 @@ const HomeCarouselAreaRaw = props => {
             We are providing professional accounting and tax services to our clients including individuals, Sole traders, Partnerships, Companies, Trusts etc.
             You’ve got the skills and the experience. We’ve got diverse projects and meaningful work. Let’s take your career to the next level.
               </Title>
-          <SignUpButton type="primary" block onClick={() => handleSignUp()}>Sign Up Now!</SignUpButton>
+          {isGuest && <SignUpButton type="primary" block onClick={() => handleSignUp()}>Sign Up Now!</SignUpButton>}
         </Space>
       </PosterContainer>
     </ContainerStyled>
