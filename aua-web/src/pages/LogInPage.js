@@ -7,7 +7,6 @@ import { Logo } from 'components/Logo';
 import isEmail from 'validator/es/lib/isEmail';
 import { GlobalContext } from '../contexts/GlobalContext';
 import { login } from 'services/authService';
-import windowSize from 'react-window-size';
 import { refreshNotificationUnreadCount } from 'services/notificationService';
 
 const LayoutStyled = styled(Layout)`
@@ -127,4 +126,4 @@ LogInPage.propTypes = {};
 
 LogInPage.defaultProps = {};
 
-export default windowSize(withRouter(LogInPage));
+export default withRouter(LogInPage);

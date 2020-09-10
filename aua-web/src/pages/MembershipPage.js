@@ -7,7 +7,6 @@ import { Layout, Typography, Button } from 'antd';
 import HomeHeader from 'components/HomeHeader';
 import * as _ from 'lodash';
 import { GlobalContext } from 'contexts/GlobalContext';
-import windowSize from 'react-window-size';
 import ReactToPrint, { PrintContextConsumer } from 'react-to-print';
 import { Link } from 'react-router-dom';
 import * as moment from 'moment';
@@ -175,4 +174,4 @@ MembershipPage.propTypes = {};
 
 MembershipPage.defaultProps = {};
 
-export default windowSize(MembershipPage);
+export default MembershipPage;

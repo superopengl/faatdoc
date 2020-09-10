@@ -5,7 +5,6 @@ import HomeHeader from 'components/HomeHeader';
 import { handleDownloadCsv } from 'services/memberService';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment';
-import windowSize from 'react-window-size';
 import Text from 'antd/lib/typography/Text';
 import {
   ExclamationCircleOutlined
@@ -165,4 +164,4 @@ ClientsPage.propTypes = {};
 
 ClientsPage.defaultProps = {};
 
-export default windowSize(ClientsPage);
+export default ClientsPage;

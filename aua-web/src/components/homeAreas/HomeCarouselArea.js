@@ -1,7 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Typography } from 'antd';
-import windowSize from 'react-window-size';
+import { Typography, Button, Space } from 'antd';
+import { withRouter } from 'react-router-dom';
+import {
+  useWindowWidth,
+} from '@react-hook/window-size'
 
 const { Title } = Typography;
 
@@ -11,6 +14,14 @@ border-bottom: 1px solid #f0f0f0;
 margin: 0 auto 0 auto;
 // padding: 1rem;
 width: 100%;
+`;
+
+const SignUpButton = styled(Button)`
+max-width: 300px;
+height: 60px;
+border-radius: 30px;
+font-size: 1.3rem;
+border: 2px solid white;
 `;
 
 const PosterContainer = styled.div`
@@ -25,7 +36,7 @@ flex-direction: column;
 justify-content: center;
 align-items: center;
 padding: 1rem;
-padding-top: 40px;
+// padding-top: 40px;
 
 .ant-typography {
   color: rgba(255,255,255,1) !important;
@@ -36,49 +47,43 @@ padding-top: 40px;
 
 
 
-class HomeCarouselAreaRaw extends React.Component {
+const HomeCarouselAreaRaw = props => {
 
-  constructor(props) {
-    super(props);
+  const windowWidth = useWindowWidth();
 
-    this.carousel = React.createRef();
+
+  const posterHeight = windowWidth < 576 ? 400 :
+    windowWidth < 992 ? 450 :
+      500;
+
+  const catchPhraseSize = windowWidth < 576 ? 28 :
+    windowWidth < 992 ? 36 :
+      44;
+
+  const handleSignUp = () => {
+    props.history.push('/signup')
   }
 
-  goTo = (i) => {
-    this.carousel.goTo(i);
-  }
-
-  render() {
-    const { windowWidth } = this.props;
-
-    const posterHeight = windowWidth < 576 ? 200 :
-      windowWidth < 992 ? 300 :
-        500;
-
-    const catchPhraseSize = windowWidth < 576 ? 28 :
-      windowWidth < 992 ? 36 :
-        44;
-
-    return (
-      <ContainerStyled gutter={0} style={{ position: 'relative' }}>
-        <PosterContainer style={{ height: posterHeight, position: 'relative' }}>
-          <div style={{maxWidth: '1200px'}}>
-              <Title style={{ fontSize: catchPhraseSize, marginTop: '1.2rem' }}>AU Accounting Office</Title>
-              <Title level={2} style={{ marginTop: 0, fontWeight: 400, fontSize: Math.max(catchPhraseSize * 0.6, 14) }}>
-              We are providing professional accounting and tax services to our clients including individuals, Sole traders, Partnerships, Companies, Trusts etc.
-              You’ve got the skills and the experience. We’ve got diverse projects and meaningful work. Let’s take your career to the next level.
+  return (
+    <ContainerStyled gutter={0} style={{ position: 'relative' }}>
+      <PosterContainer style={{ height: posterHeight, position: 'relative' }}>
+        <Space direction="vertical" style={{ maxWidth: '1200px', textAlign: 'center' }}>
+          <Title style={{ fontSize: catchPhraseSize }}>AU Accounting Office</Title>
+          <Title level={2} style={{ marginTop: 0, fontWeight: 300, fontSize: Math.max(catchPhraseSize * 0.5, 14) }}>
+            We are providing professional accounting and tax services to our clients including individuals, Sole traders, Partnerships, Companies, Trusts etc.
+            You’ve got the skills and the experience. We’ve got diverse projects and meaningful work. Let’s take your career to the next level.
               </Title>
-              </div>
-            </PosterContainer>
-      </ContainerStyled>
-    );
-  }
+          <SignUpButton type="primary" block onClick={() => handleSignUp()}>Sign Up Now!</SignUpButton>
+        </Space>
+      </PosterContainer>
+    </ContainerStyled>
+  );
 }
 
 HomeCarouselAreaRaw.propTypes = {};
 
 HomeCarouselAreaRaw.defaultProps = {};
 
-export const HomeCarouselArea = windowSize(HomeCarouselAreaRaw);
+export const HomeCarouselArea = withRouter(HomeCarouselAreaRaw);
 
 export default HomeCarouselArea;

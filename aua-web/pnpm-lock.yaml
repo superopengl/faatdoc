@@ -1,6 +1,7 @@
 dependencies:
   '@ant-design/icons': 4.2.2_react@16.13.1
   '@craco/craco': 5.6.4_react-scripts@3.4.1
+  '@react-hook/window-size': 3.0.7_react@16.13.1
   '@testing-library/jest-dom': 4.2.4
   antd: 4.6.2_react-dom@16.13.1+react@16.13.1
   axios: 0.19.2
@@ -28,7 +29,6 @@ dependencies:
   react-scripts: 3.4.1
   react-time-ago: 6.0.1_react-dom@16.13.1+react@16.13.1
   react-to-print: 2.9.0_react-dom@16.13.1+react@16.13.1
-  react-window-size: 1.2.2_react@16.13.1
   reactjs-localstorage: 1.0.1
   styled-components: 5.1.1_479e60ee9c1aa71dc1eb81036e3619dc
   uuid: 8.3.0
@@ -1613,6 +1613,61 @@ packages:
       node: '>= 6'
     resolution:
       integrity: sha512-shAmDyaQC4H92APFoIaVDHCx5bStIocgvbwQyxPRrbUY20V1EYTbSDchWbuwlMG3V17cprZhA6+78JfB+3DTPw==
+  /@react-hook/debounce/3.0.0_react@16.13.1:
+    dependencies:
+      '@react-hook/latest': 1.0.2_react@16.13.1
+      react: 16.13.1
+    dev: false
+    peerDependencies:
+      react: '>=16.8'
+    resolution:
+      integrity: sha512-ir/kPrSfAzY12Gre0sOHkZ2rkEmM4fS5M5zFxCi4BnCeXh2nvx9Ujd+U4IGpKCuPA+EQD0pg1eK2NGLvfWejag==
+  /@react-hook/event/1.2.2_react@16.13.1:
+    dependencies:
+      '@react-hook/latest': 1.0.2_react@16.13.1
+      '@react-hook/passive-layout-effect': 1.2.1_react@16.13.1
+      react: 16.13.1
+    dev: false
+    peerDependencies:
+      react: '>=16.8'
+    resolution:
+      integrity: sha512-TDPC2zyMnvExp6Brg5pbEt8yFGoiVFcyduW2auqbJ825pmlK91rrC+/k8UZpnPjA6UdmFRX16uY9PYeydpJW1Q==
+  /@react-hook/latest/1.0.2_react@16.13.1:
+    dependencies:
+      react: 16.13.1
+    dev: false
+    peerDependencies:
+      react: '>=16.8'
+    resolution:
+      integrity: sha512-zLtOIToct1EBTbwldkMJsXC2eCsmWOOP7z6UG0M/sCgnPExtIjvVMCpPESvPnMbQzDZytXVy0nvMbUuK2gZs2A==
+  /@react-hook/passive-layout-effect/1.2.1_react@16.13.1:
+    dependencies:
+      react: 16.13.1
+    dev: false
+    peerDependencies:
+      react: '>=16.8'
+    resolution:
+      integrity: sha512-IwEphTD75liO8g+6taS+4oqz+nnroocNfWVHWz7j+N+ZO2vYrc6PV1q7GQhuahL0IOR7JccFTsFKQ/mb6iZWAg==
+  /@react-hook/throttle/2.2.0_react@16.13.1:
+    dependencies:
+      '@react-hook/latest': 1.0.2_react@16.13.1
+      react: 16.13.1
+    dev: false
+    peerDependencies:
+      react: '>=16.8'
+    resolution:
+      integrity: sha512-LJ5eg+yMV8lXtqK3lR+OtOZ2WH/EfWvuiEEu0M3bhR7dZRfTyEJKxH1oK9uyBxiXPtWXiQggWbZirMCXam51tg==
+  /@react-hook/window-size/3.0.7_react@16.13.1:
+    dependencies:
+      '@react-hook/debounce': 3.0.0_react@16.13.1
+      '@react-hook/event': 1.2.2_react@16.13.1
+      '@react-hook/throttle': 2.2.0_react@16.13.1
+      react: 16.13.1
+    dev: false
+    peerDependencies:
+      react: '>=16.8'
+    resolution:
+      integrity: sha512-bK5ed/jN+cxy0s1jt2CelCnUt7jZRseUvPQ22ZJkUl/QDOsD+7CA/6wcqC3c0QweM/fPBRP6uI56TJ48SnlVww==
   /@sindresorhus/is/0.14.0:
     dev: true
     engines:
@@ -10718,15 +10773,6 @@ packages:
       react-dom: ^15.0.0 || ^16.0.0
     resolution:
       integrity: sha512-5SwxY+Bg69cHmsIZQRwAUMBN4C5SxQ+IXBnmsU7YPfOpv32qYB6AocC0RXK4gOHO7pYj0NlM0z5ZFIHQ4cjlog==
-  /react-window-size/1.2.2_react@16.13.1:
-    dependencies:
-      babel-runtime: 6.26.0
-      react: 16.13.1
-    dev: false
-    peerDependencies:
-      react: ~0.14.8 || ^15.0.0 || ^16.0.0
-    resolution:
-      integrity: sha512-eJ906OEbNtEJHXSfZvqyKtrK4+duCHe6b2dECod1ZToXQzab9tgAJZS8x4F/eItYbg4HFp5BgDBtTJ75dMv/MA==
   /react/16.13.1:
     dependencies:
       loose-envify: 1.4.0
@@ -13277,6 +13323,7 @@ packages:
 specifiers:
   '@ant-design/icons': ^4.2.2
   '@craco/craco': ^5.6.4
+  '@react-hook/window-size': ^3.0.7
   '@testing-library/jest-dom': ^4.2.4
   antd: ^4.6.2
   axios: ^0.19.2
@@ -13308,7 +13355,6 @@ specifiers:
   react-scripts: 3.4.1
   react-time-ago: ^6.0.1
   react-to-print: ^2.9.0
-  react-window-size: ^1.2.2
   reactjs-localstorage: ^1.0.1
   styled-components: ^5.1.0
   uuid: ^8.3.0
