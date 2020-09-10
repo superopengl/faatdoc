@@ -52,6 +52,7 @@ height: ${headerHeight}px;
 const HomeHeaderRaw = props => {
   const [visible, setVisible] = React.useState(false);
   const context = React.useContext(GlobalContext);
+  const [current, setCurrent] = React.useState();
 
   const { role, setUser, notifyCount } = context;
   const isAdmin = role === 'admin';
@@ -86,6 +87,9 @@ const HomeHeaderRaw = props => {
 
   const history = props.history;
 
+  const handleClick  = (e) => {
+    setCurrent(e.key);
+  }
 
   return (
     <HeaderStyled>
@@ -97,7 +101,10 @@ const HomeHeaderRaw = props => {
       </HeaderLogo>
       <MediaQuery minDeviceWidth={801}>
         <MenuContianer>
-          <Menu mode="horizontal" style={{ border: 0 }}>
+          <Menu 
+          onClick={handleClick} 
+          selectedKeys={[current]}
+          mode="horizontal" style={{ border: 0 }}>
             {isGuest && <Menu.Item key="home"><HashLink to="/#home">Home</HashLink></Menu.Item>}
             {isGuest && <Menu.Item key="services"><HashLink to="/#services">Services</HashLink></Menu.Item>}
             {isGuest && <Menu.Item key="team"><HashLink to="/#team">Team</HashLink></Menu.Item>}
@@ -133,7 +140,12 @@ const HomeHeaderRaw = props => {
           width={290}
           bodyStyle={{ paddingLeft: 0, paddingRight: 0 }}
         >
-          <Menu mode="inline" style={{ border: 0 }} openKeys={['gallery']}>
+          <Menu 
+          onClick={handleClick} 
+          selectedKeys={[current]}
+          mode="inline" 
+          style={{ border: 0 }} 
+          >
             {isGuest && <Menu.Item key="login"><LoginOutlined /> <Link to="/login">Log In</Link></Menu.Item>}
             {isGuest && <Menu.Item key="signup"><UserAddOutlined /> <Link to="/signup">Sign Up</Link></Menu.Item>}
             {/* {isAdmin && <Menu.Item key="admin"><SettingOutlined /> <Link to="/admin">Admin</Link></Menu.Item>} */}
