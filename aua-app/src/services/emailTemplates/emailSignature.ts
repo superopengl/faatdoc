@@ -4,9 +4,9 @@ const signature = `
 <p>--</p>
 <p>Kind Regards,</p>
 <small style="color:#888888">
-<img alt="Au Accouting Office Logo" src="https://www.auao.com.au/images/header-logo.png"></img>
+<img alt="Au Accouting Office Logo" src="${process.env.AUA_DOMAIN_NAME}/images/header-logo.png"></img>
 <p>
-W <a href="https://www.auao.com.au" target="_blank" rel="noreferrer noopener">https://www.auao.com.au</a><br/>
+W <a href="${process.env.AUA_DOMAIN_NAME}" target="_blank" rel="noreferrer noopener">${process.env.AUA_DOMAIN_NAME}</a><br/>
 A 101, 11 Spring St, Chatswood, NSW, 2067<br/>
 M 0433 388 655<br/>
 M 0401 093 580<br/>
