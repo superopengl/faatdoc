@@ -19,6 +19,8 @@ import { Role } from '../enums/Role';
 import * as jwt from 'jsonwebtoken';
 import { attachJwtCookie, clearJwtCookie } from '../utils/jwt';
 import { UserRole } from 'aws-sdk/clients/workmail';
+import { OAuth2Client } from 'google-auth-library';
+import * as jwtSimple from 'jwt-simple';
 
 export const getAuthUser = handlerWrapper(async (req, res) => {
   const { user } = (req as any);
@@ -37,6 +39,10 @@ async function getLoginUser(email) {
       })
     .getOne();
   return user;
+}
+
+function sanitizeUser(user: User) {
+  return _.pick(user, ['id', 'email', 'role', 'lastLoggedInAt', 'status']);
 }
 
 export const login = handlerWrapper(async (req, res) => {
@@ -61,9 +67,7 @@ export const login = handlerWrapper(async (req, res) => {
     ...user
   }, res);
 
-  // res.session.save();
-  const returnedUser = _.pick(user, ['id', 'email', 'role', 'lastLoggedInAt', 'status']);
-  res.json(returnedUser);
+  res.json(sanitizeUser(user));
 });
 
 export const logout = handlerWrapper(async (req, res) => {
@@ -72,8 +76,7 @@ export const logout = handlerWrapper(async (req, res) => {
 });
 
 
-function createUserEntity(payload): User {
-  const { email, password, role } = payload;
+function createUserEntity(email, password, role): User {
   validatePasswordStrength(password);
   assert([Role.Client, Role.Agent].includes(role), 400, `Unsupported role ${role}`);
 
@@ -92,8 +95,9 @@ function createUserEntity(payload): User {
 }
 
 
-async function createUser(payload): Promise<User> {
-  const user = createUserEntity(payload);
+async function createNewLocalUser(payload): Promise<User> {
+  const { email, password, role } = payload;
+  const user = createUserEntity(email, password, role);
 
   const repo = getRepository(User);
   await repo.save(user);
@@ -105,7 +109,7 @@ async function createUser(payload): Promise<User> {
 export const signup = handlerWrapper(async (req, res) => {
   const payload = req.body;
 
-  const result = await createUser(payload);
+  const result = await createNewLocalUser(payload);
 
   const { id, email } = result;
 
@@ -216,7 +220,7 @@ export const impersonate = handlerWrapper(async (req, res) => {
     ...user
   }, res);
 
-  res.json();
+  res.json(sanitizeUser(user));
 });
 
 export const inviteUser = handlerWrapper(async (req, res) => {
@@ -227,13 +231,52 @@ export const inviteUser = handlerWrapper(async (req, res) => {
   const existingUser = await getLoginUser(email);
   assert(!existingUser, 400, 'User exists');
 
-  const user = createUserEntity({
-    email,
-    password: uuidv4(),
-    role: role || 'client',
-  });
+  const user = createUserEntity(email, uuidv4(), role || 'client');
 
   await setUserToResetPasswordStatus(user);
 
   res.json();
+});
+
+async function verifyGoogleJwt(token) {
+  const CLIENT_ID = '1036301846271-e8sto3acfpcd06mgbl7e4tl5cdfanqjm.apps.googleusercontent.com';
+  const secret = 'vaHNi4j2ynFbBbKO6jWcCVw3';
+  
+  const decoded = jwt.decode(token, secret);
+}
+
+export const ssoGoogle = handlerWrapper(async (req, res) => {
+  const { email, code } = req.body;
+  assert(email, 400, 'Invalid email');
+  assert(code, 400, 'Empty code payload');
+
+  await verifyGoogleJwt(code);
+
+  const repo = getRepository(User);
+  let user = await repo
+    .createQueryBuilder()
+    .where(
+      'LOWER(email) = LOWER(:email)',
+      { email })
+    .getOne();
+
+
+  if (!user) {
+    user = createUserEntity(email, uuidv4(), 'client');
+
+    user.status = UserStatus.Enabled;
+    user.loginType = 'google';
+  }
+
+  user.lastLoggedInAt = getUtcNow();
+  user.lastNudgedAt = getUtcNow();
+
+  await getRepository(User).save(user);
+
+  attachJwtCookie({
+    id: user.id,
+    ...user
+  }, res);
+
+  res.json(sanitizeUser(user));
 });

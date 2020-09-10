@@ -151,6 +151,14 @@ paths:
       responses:
         200:
           description: OK
+  /auth/sso/google:
+    post:
+      operationId: ssoGoogle
+      # security:
+      #   - authAnyRole: []
+      responses:
+        200:
+          description: OK             
   /user:
     get:
       operationId: listAllUsers
