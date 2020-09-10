@@ -88,7 +88,9 @@ const HomeCarouselAreaRaw = props => {
           {isGuest &&
             <Row style={{maxWidth: 500, margin: '0 auto'}} gutter={30}>
               <Col {...span}>
-                <SignUpButton block type="primary" onClick={() => handleSignUp()}>Sign Up Now!</SignUpButton>
+                <SignUpButton block type="primary" 
+                        size="large"
+                        onClick={() => handleSignUp()}>Sign Up Now!</SignUpButton>
               </Col>
               <Col {...span}>
                 <GoogleSsoButton
