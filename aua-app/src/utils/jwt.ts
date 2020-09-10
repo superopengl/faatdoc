@@ -25,9 +25,7 @@ export function attachJwtCookie(user: { id: string, email: string, role: UserRol
     signed: false,
     sameSite: isProd ? 'strict' : undefined,
     secure: isProd ? true : undefined,
- 
   });
-
 }
 
 export const JwtSecret = 'techseeding.aua';

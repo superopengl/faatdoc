@@ -20,13 +20,13 @@ export const PortofolioAvatar = props => {
   const {backgroundColor, color} = toMaterialStyle(value, 800);
   const name = getLabel(value);
   const fontSize = 28 * size / 64;
-  return <Avatar
+  return <div><Avatar
     size={size}
     {...other}
     style={{...style, backgroundColor}}
   >
     <Text style={{fontSize, color}}>{name}</Text>
-  </Avatar>
+  </Avatar></div>
 }
 
 PortofolioAvatar.propTypes = {

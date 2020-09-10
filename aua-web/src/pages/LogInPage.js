@@ -13,13 +13,13 @@ import windowSize from 'react-window-size';
 import { refreshNotificationUnreadCount, setNotificationCount } from 'services/notificationService';
 
 const LayoutStyled = styled(Layout)`
-  margin: 0 auto 0 auto;
-  background-color: #ffffff;
-  height: 100%;
+margin: 0 auto 0 auto;
+background-color: #ffffff;
+height: 100%;
 `;
 
 const ContainerStyled = styled.div`
-  margin: 2rem auto;
+  margin: 0 auto;
   padding: 2rem 1rem;
   text-align: center;
   max-width: 400px;
@@ -95,6 +95,9 @@ class LogInPage extends React.Component {
               <LayoutStyled>
                 <ContainerStyled>
                   <LogoContainer><Logo /></LogoContainer>
+                  <Title level={2}>Log In</Title>
+                  <Link to="/signup"><Button size="small" block type="link">Not a user? Click to sign up</Button></Link>
+
                   <Form layout="vertical" onFinish={handleSubmit} style={{ textAlign: 'left' }}>
                     <Form.Item label="Email" name="name"
                       rules={[{ required: true, validator: this.validateName, whitespace: true, max: 100, message: 'Please input valid email address' }]}

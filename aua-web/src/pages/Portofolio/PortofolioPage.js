@@ -9,11 +9,10 @@ import * as moment from 'moment';
 import windowSize from 'react-window-size';
 import Text from 'antd/lib/typography/Text';
 import {
-  UserOutlined, PlusOutlined, TeamOutlined
+  UserOutlined, PlusOutlined, TeamOutlined, DeleteOutlined, EditOutlined
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import PortofolioForm from './PortofolioForm';
-import PortofolioCard from './PortofolioCard';
 import { listPortofolio, savePortofolio, deletePortofolio } from 'services/portofolioService';
 import { random } from 'lodash';
 import { TimeAgo } from 'components/TimeAgo';
@@ -119,7 +118,7 @@ const PortofolioPage = (props) => {
           </StyledTitleRow>
           <Paragraph>Portofolios are predefined information that can be used to automatically fill in your lodgement application. You can save the information like name, phone, address, TFN, and etc. for future usage.</Paragraph>
           <Row style={{ flexDirection: 'row-reverse' }}>
-            <Button type="primary" ghost icon={<PlusOutlined />} onClick={() => setNewModalVisible(true)}>New Portofolio</Button>
+            <Button type="primary" size="large" ghost icon={<PlusOutlined />} onClick={() => setNewModalVisible(true)}>New Portofolio</Button>
           </Row>
           <List
             itemLayout="horizontal"
@@ -129,18 +128,25 @@ const PortofolioPage = (props) => {
                 // style={{backgroundImage: 'linear-gradient(to right, white, #f5f5f5)'}}
                 key={item.id}
                 onClick={() => openModalToEdit(item.id)}
+                // title={item.name}
                 key={item.id}
-                actions={[
-                  <Button key="edit" type="link" disabled={loading} >edit</Button>,
-                  <Button key="delete" type="link" danger disabled={loading} onClick={e => handleDelete(e, item)}>delete</Button>
-                ]}
+              // actions={[
+              //   <Button key="edit" type="link" disabled={loading} icon={<EditOutlined />}></Button>,
+              // <Button key="delete" type="link" danger disabled={loading} onClick={e => handleDelete(e, item)} icon={<DeleteOutlined />}></Button>
+              // ]}
               >
                 <List.Item.Meta
                   avatar={<PortofolioAvatar style={{ marginTop: 6 }} value={item.name} />}
                   title={<Text style={{ fontSize: '1.3rem' }}>{item.name}</Text>}
-                  description={<TimeAgo value={item.lastUpdatedAt} surfix="Last Updated" />}
+                  description={<Space style={{width: '100%', justifyContent: 'space-between'}}>
+                  <TimeAgo value={item.lastUpdatedAt} surfix="Last Updated" />
+                  <Space>
+                    <Button key="edit" type="link" disabled={loading}>edit</Button>
+                    <Divider type="vertical" />
+                    <Button key="delete" type="link" danger disabled={loading} onClick={e => handleDelete(e, item)}>delete</Button>
+                  </Space>
+                </Space>}
                 />
-                {/* <PortofolioCard onClick={() => openModalToEdit(item.id)} onDelete={() => loadList()} id={item.id} name={item.name} /> */}
               </List.Item>
             )}
           />
@@ -172,6 +178,7 @@ const PortofolioPage = (props) => {
         onCancel={() => setNewModalVisible(false)}
         footer={null}
         width="90vw"
+        centered={true}
         style={{ maxWidth: 400 }}
       >
         <StyledSpace style={{ textAlign: 'center', width: '100%' }} size="small" direction="vertical">
@@ -180,24 +187,24 @@ const PortofolioPage = (props) => {
             hoverable={true}
             onClick={() => handleCreateNew('individual')}
           >
-            <Space direction="vertical" style={{width: '100%'}}>
-              <UserOutlined style={{fontSize: '2rem'}}/>
+            <Space direction="vertical" style={{ width: '100%' }}>
+              <UserOutlined style={{ fontSize: '2rem' }} />
               <Title level={3}>Individual Portofolio</Title>
              For individual information like given name, surname, date of birth, etc.
               </Space>
-            </Card>
+          </Card>
           <Divider>or</Divider>
           <Card
             title={null}
             hoverable={true}
             onClick={() => handleCreateNew('business')}
           >
-            <Space direction="vertical" style={{width: '100%'}}>
-              <TeamOutlined style={{fontSize: '2rem'}}/>
+            <Space direction="vertical" style={{ width: '100%' }}>
+              <TeamOutlined style={{ fontSize: '2rem' }} />
               <Title level={3}>Business Portofolio</Title>
               For organisation or compnay information like company name, ACN, ABN, etc.
               </Space>
-            </Card>
+          </Card>
         </StyledSpace>
       </Modal>
     </LayoutStyled >

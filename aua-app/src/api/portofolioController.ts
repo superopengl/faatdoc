@@ -81,7 +81,7 @@ export const getPortofolio = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
   const { id } = req.params;
   const repo = getRepository(Portofolio);
-  const portofolio = await repo.findOne({ id, deleted: true });
+  const portofolio = await repo.findOne({ id, deleted: false });
   assert(portofolio, 404);
 
   res.json(portofolio);
@@ -91,7 +91,7 @@ export const deletePortofolio = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
   const { id } = req.params;
   const repo = getRepository(Portofolio);
-  await repo.update({ id }, { deleted: true });
+  await repo.update({ id }, { deleted: false });
 
   res.json();
 });

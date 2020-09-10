@@ -65,7 +65,7 @@ const SignUpPage = (props) => {
             Congratulations and thank you very much for signing up AU Accouting Office. Your registration email as well as the login user is <strong>{user?.email}</strong>.
           </p>
           <p>
-            You can login with either the registration email anytime.
+            You can login with the registration email anytime.
           </p>
         </>,
         onOk() {
@@ -121,14 +121,11 @@ const SignUpPage = (props) => {
                 }]}>
                   <Checkbox disabled={sending}>I have read and agree to the <a target="_blank" href="/terms_and_conditions">terms & conditions</a> and <a target="_blank" href="/privacy_policy">privacy policy</a>.</Checkbox>
                 </Form.Item>
-                {/* <Form.Item label="" name="isEmployee" rules={[{ required: false }]}>
-                <Checkbox disabled={sending}>I am an employee of AU Accounting Office</Checkbox>
-              </Form.Item> */}
                 <Form.Item style={{ marginTop: '1rem' }}>
                   <Button block type="primary" htmlType="submit" disabled={sending}>Sign Up</Button>
                 </Form.Item>
-                <Form.Item>
                   <Button block type="link" onClick={() => goBack()}>Cancel</Button>
+                <Form.Item>
                 </Form.Item>
               </Form>
               <Divider />

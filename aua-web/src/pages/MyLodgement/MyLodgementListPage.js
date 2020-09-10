@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Tabs, Typography, Layout, Button, Modal, Alert } from 'antd';
+import { Tabs, Typography, Layout, Button, Modal, Alert, Divider } from 'antd';
 import { LargePlusButton } from 'components/LargePlusButton';
 import HomeHeader from 'components/HomeHeader';
 import { handleDownloadCsv } from 'services/memberService';
@@ -9,7 +9,7 @@ import * as moment from 'moment';
 import windowSize from 'react-window-size';
 import Text from 'antd/lib/typography/Text';
 import {
-  SendOutlined, PlusOutlined, SyncOutlined, EditOutlined, FormOutlined, CheckCircleOutlined, SmileOutlined
+  DeleteOutlined, PlusOutlined, SyncOutlined, EditOutlined, FormOutlined, CheckCircleOutlined, SmileOutlined
 } from '@ant-design/icons';
 import { Link, withRouter } from 'react-router-dom';
 import { List } from 'antd';
@@ -156,17 +156,29 @@ const MyLodgementListPage = (props) => {
           style={{ paddingLeft: 0, paddingRight: 0 }}
           key={item.id}
           onClick={() => actionOnLodgement(item)}
-          extra={[
-            <LodgementProgressBar key="1" status={item.status} width={80} />
-          ]}
-          actions={[
-            <Button type="link" key="action" onClick={() => actionOnLodgement(item)}>{getActionLabel(item.status)}</Button>,
-            item.status === 'draft' ? <Button type="link" key="delete" danger onClick={e => handleDelete(e, item)}>delete</Button> : null,
-          ]}
+          // extra={[
+          //   <LodgementProgressBar key="1" status={item.status} width={80} />
+          // ]}
+          // actions={[
+          //   <Button type="link" key="action" onClick={() => actionOnLodgement(item)}>{getActionLabel(item.status)}</Button>,
+          //   item.status === 'draft' ? <Button type="link" key="delete" danger onClick={e => handleDelete(e, item)}>delete</Button> : null,
+          // ]}
         >
           <List.Item.Meta
+            avatar={<LodgementProgressBar key="1" status={item.status} width={80} style={{ marginTop: 6 }} />}
+
             title={<Text style={{ fontSize: '1.3rem' }}>{item.name}</Text>}
-            description={<TimeAgo value={item.lastUpdatedAt} surfix="Last Updated" />}
+            description={<Space style={{ width: '100%', justifyContent: 'space-between' }}>
+              <TimeAgo value={item.lastUpdatedAt} surfix="Last Updated" />
+              <Space>
+                <Button type="link" key="action" onClick={() => actionOnLodgement(item)}>{getActionLabel(item.status)}</Button>
+                {item.status === 'draft' && <>
+                  <Divider type="vertical" />
+                  <Button key="delete" type="link" danger disabled={loading} onClick={e => handleDelete(e, item)}>delete</Button>
+                </>}
+              </Space>
+            </Space>
+            }
           />
         </List.Item>
       )}
@@ -189,11 +201,11 @@ const MyLodgementListPage = (props) => {
           </Steps> */}
           <Space style={{ width: '100%', justifyContent: 'flex-end' }} >
             {/* <Button type="link" onClick={() => loadList()} icon={<SyncOutlined />}></Button> */}
-            <Button type="primary" icon={<PlusOutlined />} onClick={() => createNewLodgement()}>New Lodgement</Button>
+            <Button type="primary" size="large" icon={<PlusOutlined />} onClick={() => createNewLodgement()}>New Lodgement</Button>
           </Space>
 
-          <Tabs defaultActiveKey="ongoing" type="card" tabBarExtraContent={{right:  <Button type="link" onClick={() => loadList()} icon={<SyncOutlined />}></Button>}}>
-            <TabPane tab={<>In Progress <Badge count={lodgementList.filter(x => ['to_sign'].includes(x.status)).length} showZero={false}/></>} key="ongoing">
+          <Tabs defaultActiveKey="ongoing" type="card" tabBarExtraContent={{ right: <Button type="link" onClick={() => loadList()} icon={<SyncOutlined />}></Button> }}>
+            <TabPane tab={<>In Progress <Badge count={lodgementList.filter(x => ['to_sign'].includes(x.status)).length} showZero={false} /></>} key="ongoing">
               {RenderListFilteredByStatus(['submitted', 'to_sign', 'signed'])}
             </TabPane>
             <TabPane tab={"Draft"} key="draft">
@@ -215,8 +227,8 @@ const MyLodgementListPage = (props) => {
         footer={null}
         width={700}
       >
-        {currentLodgement?.status === 'signed' ? <Alert message="The lodgement has been signed." description="Please wait for the lodgement to be completed by us." type="success" showIcon/> : null}
-        {currentLodgement?.status === 'to_sign' ? <Alert message="The lodgement requires signature." description="All above documents have been viewed and the lodgement is ready to e-sign." type="warning" showIcon/> : null}
+        {currentLodgement?.status === 'signed' ? <Alert message="The lodgement has been signed." description="Please wait for the lodgement to be completed by us." type="success" showIcon /> : null}
+        {currentLodgement?.status === 'to_sign' ? <Alert message="The lodgement requires signature." description="All above documents have been viewed and the lodgement is ready to e-sign." type="warning" showIcon /> : null}
         <Tabs>
           <Tabs.TabPane tab="Review and Sign" key="sign">
             <ReviewSignPage id={currentLodgement?.id} onFinish={() => handleModalExit()} onCancel={() => setSignModalVisible(false)} />

@@ -6,7 +6,7 @@ import {
   MenuOutlined, HomeOutlined, MailOutlined, SmileOutlined, PictureOutlined,
   BellOutlined, SettingOutlined,
   IdcardOutlined, UserOutlined, LogoutOutlined, SecurityScanOutlined,
-  LoginOutlined, TeamOutlined, SnippetsOutlined
+  LoginOutlined, TeamOutlined, SnippetsOutlined, UserAddOutlined
 } from '@ant-design/icons';
 import { Link, withRouter } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
@@ -111,7 +111,8 @@ const HomeHeaderRaw = props => {
             {isGuest && <Menu.Item key="home"><HashLink to="/#home">Home</HashLink></Menu.Item>}
             {isGuest && <Menu.Item key="services"><HashLink to="/#services">Services</HashLink></Menu.Item>}
             {isGuest && <Menu.Item key="team"><HashLink to="/#team">Team</HashLink></Menu.Item>}
-            {isGuest && <Menu.Item key="login"><Link to="/login">Log In / Sign Up</Link></Menu.Item>}
+            {isGuest && <Menu.Item key="signup"><Link to="/signup">Sign Up</Link></Menu.Item>}
+            {isGuest && <Menu.Item key="login"><Link to="/login">Log In</Link></Menu.Item>}
             {!isGuest && <Menu.Item key="lodgement"><Link to="/lodgement">Lodgement</Link></Menu.Item>}
             {isClient && <Menu.Item key="portofolio"><Link to="/portofolio">Portofolio</Link></Menu.Item>}
             {/* {isAdmin && <Menu.Item key="clients"><Link to="/clients">Users</Link></Menu.Item>} */}
@@ -142,7 +143,8 @@ const HomeHeaderRaw = props => {
           bodyStyle={{ paddingLeft: 0, paddingRight: 0 }}
         >
           <Menu mode="inline" style={{ border: 0 }} openKeys={['gallery']}>
-            {isGuest && <Menu.Item key="login"><LoginOutlined /> <Link to="/login">Log In / Sign Up</Link></Menu.Item>}
+            {isGuest && <Menu.Item key="login"><LoginOutlined /> <Link to="/login">Log In</Link></Menu.Item>}
+            {isGuest && <Menu.Item key="signup"><UserAddOutlined /> <Link to="/signup">Sign Up</Link></Menu.Item>}
             {/* {isAdmin && <Menu.Item key="admin"><SettingOutlined /> <Link to="/admin">Admin</Link></Menu.Item>} */}
             {!isGuest && <Menu.Item key="lodgement"><SnippetsOutlined /> <Link to="/lodgement">Lodgement</Link></Menu.Item>}
             {isClient && <Menu.Item key="portofolio"><IdcardOutlined /> <Link to="/portofolio">Portofolio</Link></Menu.Item>}
