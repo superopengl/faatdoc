@@ -4,7 +4,7 @@ import { Typography, Layout, Button, Modal, List, Space, Row, Divider } from 'an
 import HomeHeader from 'components/HomeHeader';
 import { PortofolioAvatar } from 'components/PortofolioAvatar';
 import Text from 'antd/lib/typography/Text';
-import { EditOutlined, UserOutlined, PlusOutlined, TeamOutlined, DeleteOutlined} from '@ant-design/icons';
+import { EditOutlined, UserOutlined, PlusOutlined, TeamOutlined, DeleteOutlined } from '@ant-design/icons';
 import PortofolioForm from './PortofolioForm';
 import { listPortofolio, savePortofolio, deletePortofolio } from 'services/portofolioService';
 import { TimeAgo } from 'components/TimeAgo';
@@ -43,13 +43,10 @@ color: #143e86 !important;
 `
 
 
-const PortofolioPage = () => {
+const PortofolioPage = props => {
 
-  const [formVisible, setFormVisible] = React.useState(false);
   const [list, setList] = React.useState([]);
-  const [currentId, setCurrentId] = React.useState();
   const [loading, setLoading] = React.useState(true);
-  const [newPortofolioType, setNewPortofolioType] = React.useState();
   const [newModalVisible, setNewModalVisible] = React.useState(false);
 
   const loadList = async () => {
@@ -63,15 +60,12 @@ const PortofolioPage = () => {
     loadList();
   }, [])
 
-  const saveJob = async item => {
-    await savePortofolio(item);
-    await loadList();
-    setFormVisible(false);
+  const handleEdit = id => {
+    props.history.push(`/portofolio/${id}`);
   }
 
-  const openModalToEdit = id => {
-    setCurrentId(id);
-    setFormVisible(true);
+  const handleCreateNew = (type) => {
+    props.history.push(`/portofolio/new/${type}`);
   }
 
   const handleDelete = (e, item) => {
@@ -89,13 +83,6 @@ const PortofolioPage = () => {
       },
       okText: 'Yes, delete it!'
     });
-  }
-
-  const handleCreateNew = (type) => {
-    setNewModalVisible(false);
-    setNewPortofolioType(type);
-    setCurrentId();
-    setFormVisible(true);
   }
 
   return (
@@ -117,8 +104,8 @@ const PortofolioPage = () => {
               <List.Item
                 // style={{backgroundImage: 'linear-gradient(to right, white, #f5f5f5)'}}
                 key={item.id}
-                onClick={() => openModalToEdit(item.id)}
-                // title={item.name}
+                onClick={() => handleEdit(item.id)}
+              // title={item.name}
               // actions={[
               //   <Button key="edit" type="link" disabled={loading} icon={<EditOutlined />}></Button>,
               // <Button key="delete" type="link" danger disabled={loading} onClick={e => handleDelete(e, item)} icon={<DeleteOutlined />}></Button>
@@ -127,37 +114,19 @@ const PortofolioPage = () => {
                 <List.Item.Meta
                   avatar={<PortofolioAvatar style={{ marginTop: 6 }} value={item.name} />}
                   title={<Text style={{ fontSize: '1.2rem' }}>{item.name}</Text>}
-                  description={<Space style={{width: '100%', justifyContent: 'space-between'}}>
-                  <TimeAgo value={item.lastUpdatedAt} surfix="Last Updated" />
-                  <Space>
-                    <Button key="edit" shape="circle" disabled={loading} icon={<EditOutlined />}></Button>
-            <Button key="delete" shape="circle" danger disabled={loading} onClick={e => handleDelete(e, item)}  icon={<DeleteOutlined />}></Button>
-                  </Space>
-                </Space>}
+                  description={<Space style={{ width: '100%', justifyContent: 'space-between' }}>
+                    <TimeAgo value={item.lastUpdatedAt} surfix="Last Updated" />
+                    <Space>
+                      <Button key="edit" shape="circle" disabled={loading} icon={<EditOutlined />}></Button>
+                      <Button key="delete" shape="circle" danger disabled={loading} onClick={e => handleDelete(e, item)} icon={<DeleteOutlined />}></Button>
+                    </Space>
+                  </Space>}
                 />
               </List.Item>
             )}
           />
         </Space>
-
       </ContainerStyled>
-      <Modal
-        visible={formVisible}
-        onOk={() => setFormVisible(false)}
-        onCancel={() => setFormVisible(false)}
-        destroyOnClose={true}
-        footer={null}
-        title={currentId ? "Edit Portofolio" : "Create Portofolio"}
-        width="90vw"
-        style={{ maxWidth: 700 }}
-      >
-        <PortofolioForm
-          onOk={item => saveJob(item)}
-          onCancel={() => setFormVisible(false)}
-          id={currentId}
-          defaultType={newPortofolioType}
-        />
-      </Modal>
       <Modal
         title="Please choose portofolio type"
         visible={newModalVisible}
@@ -181,7 +150,7 @@ const PortofolioPage = () => {
              For individual information like given name, surname, date of birth, etc.
               </Space>
           </Card>
-          <Divider>or</Divider>
+          <Divider>or</Divider> 
           <Card
             title={null}
             hoverable={true}

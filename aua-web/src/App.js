@@ -25,6 +25,7 @@ import NotificationPage from 'pages/Notification/NotificationPage';
 import UserPage from 'pages/User/UserPage';
 import ImpersonatePage from 'pages/Impersonate/ImpersonatePage';
 import { refreshNotificationUnreadCount as getNotificationUnreadCount} from 'services/notificationService';
+import PortofolioForm from 'pages/Portofolio/PortofolioForm';
 
 
 class App extends React.Component {
@@ -77,15 +78,17 @@ class App extends React.Component {
         <BrowserRouter basename="/">
           <Switch>
             <RoleRoute loading={loading} path="/" exact component={HomePage} />
-            <RoleRoute visible={isGuest} loading={loading} path="/login" exact component={LogInPage} />
-            <RoleRoute visible={isGuest} loading={loading} path="/signup" component={SignUpPage} />
-            <RoleRoute visible={isGuest} loading={loading} path="/forgot_password" exact component={ForgotPasswordPage} />
-            <RoleRoute visible={isClient} loading={loading} path="/portofolio" component={PortofolioPage} />
+            <RoleRoute visible={isGuest} loading={loading} exact path="/login" component={LogInPage} />
+            <RoleRoute visible={isGuest} loading={loading} exact path="/signup" component={SignUpPage} />
+            <RoleRoute visible={isGuest} loading={loading} exact path="/forgot_password" component={ForgotPasswordPage} />
+            <RoleRoute visible={isClient} loading={loading} exact path="/portofolio" component={PortofolioPage} />
+            <RoleRoute visible={isClient} loading={loading} exact path="/portofolio/:id" component={PortofolioForm} />
+            <RoleRoute visible={isClient} loading={loading} exact path="/portofolio/new/:type" component={PortofolioForm} />
             <RoleRoute loading={loading} path="/reset_password" exact component={ResetPasswordPage} />
-            <RoleRoute visible={isAdmin} loading={loading} path="/job_template" exact component={JobTemplatePage} />
-            <RoleRoute visible={isAdmin} loading={loading} path="/user" exact component={UserPage} />
-            <RoleRoute visible={isAdmin} loading={loading} path="/recurring" exact component={RecurringListPage} />
-            <RoleRoute visible={isAdmin} loading={loading} path="/impersonate" exact component={ImpersonatePage} />
+            <RoleRoute visible={isAdmin} loading={loading} exact path="/job_template" component={JobTemplatePage} />
+            <RoleRoute visible={isAdmin} loading={loading} exact path="/user" component={UserPage} />
+            <RoleRoute visible={isAdmin} loading={loading} exact path="/recurring" component={RecurringListPage} />
+            <RoleRoute visible={isAdmin} loading={loading} exact path="/impersonate" component={ImpersonatePage} />
             {/* <RoleRoute visible={isAdmin} loading={loading} path="/clients" exact component={ClientsPage} /> */}
             <RoleRoute visible={!isGuest} loading={loading} path="/notification" exact component={NotificationPage} />
             <RoleRoute visible={isClient} loading={loading} path="/lodgement/:id" exact component={MyLodgementPage} />
