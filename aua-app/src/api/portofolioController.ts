@@ -1,24 +1,12 @@
 
-import { getRepository, getManager, getConnection } from 'typeorm';
+import { getManager, getRepository } from 'typeorm';
+import { v4 as uuidv4 } from 'uuid';
+import { Portofolio } from '../entity/Portofolio';
 import { User } from '../entity/User';
 import { assert, assertRole } from '../utils/assert';
-import { validatePasswordStrength } from '../utils/validatePasswordStrength';
-import * as _ from 'lodash';
-import { v4 as uuidv4 } from 'uuid';
-import { UserStatus } from '../enums/UserStatus';
-import { computeUserSecret } from '../utils/computeUserSecret';
-import { Portofolio } from '../entity/Portofolio';
 import { handlerWrapper } from '../utils/asyncHandler';
-import { createProfileEntity } from '../utils/createProfileEntity';
-import { sendEmail } from '../services/emailService';
-import { getForgotPasswordHtmlEmail, getForgotPasswordTextEmail, getSignUpHtmlEmail, getSignUpTextEmail } from '../utils/emailTemplates';
-import * as moment from 'moment';
-import { logError } from '../utils/logger';
 import { getUtcNow } from '../utils/getUtcNow';
-import { json } from 'body-parser';
-import { normalizeFieldNameToVar } from '../utils/normalizeFieldNameToVar';
 import { guessDisplayNameFromFields } from '../utils/guessDisplayNameFromFields';
-
 
 export const savePortofolio = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');

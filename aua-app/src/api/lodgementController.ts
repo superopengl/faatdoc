@@ -1,32 +1,18 @@
 
-import { getRepository, getManager, getConnection, In } from 'typeorm';
-import { User } from '../entity/User';
-import { assert, assertRole } from '../utils/assert';
-import { validatePasswordStrength } from '../utils/validatePasswordStrength';
-import * as _ from 'lodash';
-import { v4 as uuidv4 } from 'uuid';
-import { UserStatus } from '../enums/UserStatus';
-import { computeUserSecret } from '../utils/computeUserSecret';
-import { Lodgement } from '../entity/Lodgement';
-import { handlerWrapper } from '../utils/asyncHandler';
-import { createProfileEntity } from '../utils/createProfileEntity';
-import { sendEmail } from '../services/emailService';
-import { getForgotPasswordHtmlEmail, getForgotPasswordTextEmail, getSignUpHtmlEmail, getSignUpTextEmail } from '../utils/emailTemplates';
 import * as moment from 'moment';
-import { logError } from '../utils/logger';
-import { getUtcNow } from '../utils/getUtcNow';
-import { generateLodgementByJobTemplateAndPortofolio } from '../utils/generateLodgementByJobTemplateAndPortofolio';
-import { json } from 'body-parser';
+import { getConnection, getManager, getRepository } from 'typeorm';
+import { v4 as uuidv4 } from 'uuid';
 import { JobTemplate } from '../entity/JobTemplate';
-import { Portofolio } from '../entity/Portofolio';
-import { LodgementStatus } from '../enums/LodgementStatus';
-import e = require('express');
-import { normalizeFieldNameToVar } from '../utils/normalizeFieldNameToVar';
+import { Lodgement } from '../entity/Lodgement';
 import { Notification } from '../entity/Notification';
-import { AnalysisSchemeLanguage } from 'aws-sdk/clients/cloudsearch';
+import { User } from '../entity/User';
+import { LodgementStatus } from '../enums/LodgementStatus';
+import { sendEmail } from '../services/emailService';
+import { assert, assertRole } from '../utils/assert';
+import { handlerWrapper } from '../utils/asyncHandler';
+import { generateLodgementByJobTemplateAndPortofolio } from '../utils/generateLodgementByJobTemplateAndPortofolio';
+import { getUtcNow } from '../utils/getUtcNow';
 import { guessDisplayNameFromFields } from '../utils/guessDisplayNameFromFields';
-import template from '../services/emailTemplates/welcome';
-
 
 export const generateLodgement = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');

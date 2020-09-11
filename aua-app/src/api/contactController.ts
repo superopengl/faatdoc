@@ -1,16 +1,7 @@
 
-import { getRepository, Not, IsNull } from 'typeorm';
-import { User } from '../entity/User';
-import { assert, assertRole } from '../utils/assert';
+import { assert } from '../utils/assert';
 import * as _ from 'lodash';
-import { v4 as uuidv4 } from 'uuid';
-import { Portofolio } from '../entity/Portofolio';
 import { handlerWrapper } from '../utils/asyncHandler';
-import { getUtcNow } from '../utils/getUtcNow';
-import { JobTemplate } from '../entity/JobTemplate';
-import { Notification } from '../entity/Notification';
-import { restartCronService } from '../services/cronService';
-import { Lodgement } from '../entity/Lodgement';
 import { sendEmail } from '../services/emailService';
 import * as delay from 'delay';
 

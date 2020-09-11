@@ -1,24 +1,11 @@
 
-import { getRepository, getManager, getConnection } from 'typeorm';
-import { User } from '../entity/User';
+import { getRepository } from 'typeorm';
 import { assert, assertRole } from '../utils/assert';
-import { validatePasswordStrength } from '../utils/validatePasswordStrength';
 import * as _ from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
-import { UserStatus } from '../enums/UserStatus';
-import { computeUserSecret } from '../utils/computeUserSecret';
-import { Portofolio } from '../entity/Portofolio';
 import { handlerWrapper } from '../utils/asyncHandler';
-import { createProfileEntity } from '../utils/createProfileEntity';
-import { sendEmail } from '../services/emailService';
-import { getForgotPasswordHtmlEmail, getForgotPasswordTextEmail, getSignUpHtmlEmail, getSignUpTextEmail } from '../utils/emailTemplates';
-import * as moment from 'moment';
-import { logError } from '../utils/logger';
 import { getUtcNow } from '../utils/getUtcNow';
-import { Role } from '../enums/Role';
 import { JobTemplate } from '../entity/JobTemplate';
-import { json } from 'body-parser';
-import { normalizeFieldNameToVar } from '../utils/normalizeFieldNameToVar';
 
 export const saveJobTemplate = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin');

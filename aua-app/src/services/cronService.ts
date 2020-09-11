@@ -8,7 +8,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { LodgementStatus } from '../enums/LodgementStatus';
 import { Lodgement } from '../entity/Lodgement';
 import errorToJSON from 'error-to-json';
-import * as cronParser from 'cron-parser';
 import * as moment from 'moment';
 import { getUtcNow } from '../utils/getUtcNow';
 import { CronLock } from '../entity/CronLock';

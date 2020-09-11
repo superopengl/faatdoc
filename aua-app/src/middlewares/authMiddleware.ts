@@ -1,7 +1,6 @@
 
 import { getRepository } from 'typeorm';
 import { User } from '../entity/User';
-import * as moment from 'moment';
 import { getUtcNow } from '../utils/getUtcNow';
 import { verifyJwtFromCookie, attachJwtCookie } from '../utils/jwt';
 

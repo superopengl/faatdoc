@@ -1,6 +1,4 @@
-import { Entity, Column, PrimaryColumn, Index } from 'typeorm';
-import { Role } from '../enums/Role';
-import { UserStatus } from '../enums/UserStatus';
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 
 @Entity()

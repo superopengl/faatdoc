@@ -1,4 +1,3 @@
-import signature from './emailSignature';
 import * as _ from 'lodash';
 
 const template = {

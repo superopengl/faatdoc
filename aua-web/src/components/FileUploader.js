@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { InboxOutlined } from '@ant-design/icons';
 import { searchFile } from 'services/fileService';
 import { FileIcon } from './FileIcon';
+import { saveAs } from 'file-saver';
 
 const { Dragger } = Upload;
 
@@ -72,6 +73,12 @@ export const FileUploader = (props) => {
     props.onChange(fileIds);
   };
 
+  const handlePreview = file => {
+    const fileName = file.name || file.response.fileName;
+    const url = file.url || file.response.location;
+    saveAs(url, fileName);
+  }
+
 
   const { size, disabled } = props;
 
@@ -88,10 +95,10 @@ export const FileUploader = (props) => {
         accept="*/*"
         listType="text"
         fileList={fileList}
-        // onPreview={handlePreview}
+        onPreview={handlePreview}
         onChange={handleChange}
         showUploadList={{
-          showDownloadIcon: true,
+          showDownloadIcon: false,
           showRemoveIcon: true,
         }}
         // iconRender={() => <UploadOutlined />}

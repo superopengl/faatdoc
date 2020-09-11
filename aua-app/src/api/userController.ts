@@ -1,24 +1,18 @@
 
-import { getRepository, getManager, getConnection, Not } from 'typeorm';
-import { User } from '../entity/User';
-import { assert, assertRole } from '../utils/assert';
-import { validatePasswordStrength } from '../utils/validatePasswordStrength';
-import * as _ from 'lodash';
-import { computeUserSecret } from '../utils/computeUserSecret';
-import { Portofolio } from '../entity/Portofolio';
-import { handlerWrapper } from '../utils/asyncHandler';
-import { Role } from '../enums/Role';
-import { createProfileEntity } from '../utils/createProfileEntity';
-import { File } from '../entity/File';
+import { getConnection, getRepository, Not } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { Agent } from '../entity/Agent';
+import { Portofolio } from '../entity/Portofolio';
+import { User } from '../entity/User';
 import { UserStatus } from '../enums/UserStatus';
-import { UserRole } from 'aws-sdk/clients/workmail';
-import { Lodgement } from '../entity/Lodgement';
+import { assert, assertRole } from '../utils/assert';
+import { handlerWrapper } from '../utils/asyncHandler';
+import { computeUserSecret } from '../utils/computeUserSecret';
+import { validatePasswordStrength } from '../utils/validatePasswordStrength';
 
 export const getProfile = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
-  const { id, role } = (req as any).user as User;
+  const { id } = (req as any).user as User;
 
   const profileRepo = getRepository(Portofolio);
   const profile = await profileRepo.findOne(id);

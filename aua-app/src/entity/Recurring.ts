@@ -1,4 +1,4 @@
-import { Column, PrimaryColumn, Entity, Index } from 'typeorm';
+import { Column, PrimaryColumn, Entity } from 'typeorm';
 
 @Entity()
 export class Recurring {
