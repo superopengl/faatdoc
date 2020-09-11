@@ -96,7 +96,7 @@ const NotificationPage = (props) => {
     Modal.destroyAll();
     Modal.info({
       icon: null,
-      title: <Space style={{alignItems: 'flex-start'}}><PortofolioAvatar value={forWhom} size={32} /><Link onClick={e => handleGoToLodgement(e, lodgementId)}>{name} for {forWhom}</Link></Space>,
+      title: <Space style={{ alignItems: 'flex-start' }}><PortofolioAvatar value={forWhom} size={32} /><Link onClick={e => handleGoToLodgement(e, lodgementId)}>{name} for {forWhom}</Link></Space>,
       width: 600,
       maskClosable: true,
       content: <>
@@ -112,7 +112,7 @@ const NotificationPage = (props) => {
     <LayoutStyled>
       <HomeHeader></HomeHeader>
       <ContainerStyled>
-        <Space size="small" direction="vertical" style={{ width: '100%' }}>
+        <Space size="small" direction="vertical" style={{ width: '100%'}}>
           <StyledTitleRow>
             <Title level={2} style={{ margin: 'auto' }}>{isClient ? 'Notification' : 'Sent Out Notification'}</Title>
           </StyledTitleRow>
@@ -125,37 +125,18 @@ const NotificationPage = (props) => {
             itemLayout="horizontal"
             dataSource={list}
             size="small"
-            renderItem={item => (
-              <List.Item
-                // style={{backgroundImage: 'linear-gradient(to right, white, #f5f5f5)'}}
-                key={item.id}
-                onClick={e => handleRead(e, item)}
-                actions={[
-                  // !isClient ? <Paragraph>
-                  //   To {item.forWhom} for {item.name} 
-                  // </Paragraph> : null,
-                  <Space>
-                    <TimeAgo value={item.createdAt} strong={!item.readAt} />
-                  {isClient && <Button shape="circle" danger icon={<DeleteOutlined />} onClick={e => handleDelete(e, item)} />}
-                  </Space>
-                ].filter(x => !!x)}
-              >
-                <Paragraph ellipsis={{ rows: 1, expandable: false }} style={{ fontWeight: item.readAt ? 300 : 800 }}>
-                  {item.content}
-                  {/* {!isClient && <div style={{marginTop: '0.5rem', fontWeight: 'normal'}}>
-                <PortofolioAvatar value={item.forWhom} size={32} /> <Link onClick={e => handleGoToLodgement(e, item.lodgementId)}>{item.name}</Link>
-                  </div>} */}
-                </Paragraph>
-
-                {/* <br/>
-                <PortofolioAvatar value={item.forWhom} size={32} /> */}
-                {/* <Space direction="vertical" style={{ display: 'block' }}>
-
-                  {!isClient && <div>
-                    
-                  </div>}
-                </Space> */}
-              </List.Item>
+            style={{marginTop: '1rem'}}
+            renderItem={item => (<div 
+              onClick={e => handleRead(e, item)}
+              style={{display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '0.8rem'}}>
+              <Paragraph ellipsis={{ rows: 1, expandable: false }} style={{ fontWeight: item.readAt ? 300 : 800, width: 'calc(100% - 150px)' }}>
+                {item.content}
+              </Paragraph>
+              <Space>
+                <TimeAgo value={item.createdAt} strong={!item.readAt} />
+                {isClient && <Button shape="circle" danger icon={<DeleteOutlined />} onClick={e => handleDelete(e, item)} />}
+              </Space>
+            </div>
             )}
           />
         </Space>

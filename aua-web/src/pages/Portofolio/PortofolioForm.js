@@ -8,7 +8,6 @@ import { BuiltInFieldDef } from "components/FieldDef";
 import { varNameToLabelName } from 'util/varNameToLabelName';
 import { getPortofolio, savePortofolio } from 'services/portofolioService';
 import { DateInput } from 'components/DateInput';
-import { PageHeader } from 'antd';
 
 const { Text, Title } = Typography;
 
@@ -32,15 +31,6 @@ const LayoutStyled = styled(Layout)`
   height: 100%;
 `;
 
-const StyledSpace = styled(Space)`
-svg, h3 {
-color: #143e86 !important;
-}
-
-.ant-card {
-  border-color: #143e86;
-}
-`
 
 const PortofolioForm = (props) => {
   const {id, type: newType} = props.match.params;
