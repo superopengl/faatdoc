@@ -163,7 +163,7 @@ const HomeHeaderRaw = props => {
             {isGuest && <Menu.Item key="home"><HomeOutlined /> <HashLink to="/#home" onClick={onClose}>Home</HashLink></Menu.Item>}
             {isGuest && <Menu.Item key="services"><BellOutlined /> <HashLink to="/#services" onClick={onClose}>Services</HashLink></Menu.Item>}
             {isGuest && <Menu.Item key="team"><TeamOutlined /> <HashLink to="/#team" onClick={onClose}>Team</HashLink></Menu.Item>}
-            {!isGuest && <Menu.Item key="logout" onClick={handleLogout}><LogoutOutlined />{isAdmin ? 'Admin ' : isAgent ? 'Agent ' : null}Log Out</Menu.Item>}
+            {!isGuest && <Menu.Item key="logout" onClick={handleLogout}><LogoutOutlined />{isAdmin ? ' Admin ' : isAgent ? ' Agent ' : null}Log Out</Menu.Item>}
           </Menu>
         </Drawer>
       </MediaQuery>

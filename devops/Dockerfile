@@ -1,6 +1,12 @@
-FROM node:12
+FROM node:12-alpine
 
-RUN curl -sL https://unpkg.com/@pnpm/self-installer | node
+RUN npm install -g pnpm
+#RUN apk update && apk add curl
+
+# RUN curl -sL https://unpkg.com/@pnpm/self-installer | node
+
+# install node-prune (https://github.com/tj/node-prune)
+# RUN curl -sfL https://install.goreleaser.com/github.com/tj/node-prune.sh | sh -s -- -b /usr/local/bin
 
 EXPOSE 80
 # Install dependencies
@@ -27,6 +33,8 @@ ENV REACT_APP_AUA_GOOGLE_SSO_CLIENT_ID=1036301846271-e8sto3acfpcd06mgbl7e4tl5cdf
 # Build app
 COPY ./aua-app /usr/portal/app
 RUN pnpm run build:prod
+RUN pnpm prune --production
+# RUN /usr/local/bin/node-prune
 
 # Build web
 WORKDIR /usr/portal/web
@@ -36,6 +44,8 @@ RUN pnpm run compile:prod
 # Copy web to app/www
 RUN cp -rf /usr/portal/web/build /usr/portal/app/www
 RUN rm -rf /usr/portal/web
+
+RUN npm uninstall -g pnpm
 
 # Start the portal website
 WORKDIR /usr/portal/app
