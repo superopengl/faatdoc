@@ -437,6 +437,12 @@ paths:
       responses:
         200:
           description: OK
+  /recurring/healthcheck:
+    get:
+      operationId: healthCheckRecurring
+      responses:
+        200:
+          description: OK
   /recurring/:id:
     get:
       operationId: getRecurring

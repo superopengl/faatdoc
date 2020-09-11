@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Typography, Layout, Button, Drawer, Table, Tooltip, Modal } from 'antd';
+import { Typography, Layout, Button, Drawer, Table, Tooltip, Modal, Alert } from 'antd';
 import HomeHeader from 'components/HomeHeader';
 import * as moment from 'moment';
 import Text from 'antd/lib/typography/Text';
@@ -11,7 +11,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { Space } from 'antd';
 
 import { TimeAgo } from 'components/TimeAgo';
-import { listRecurring, deleteRecurring, runRecurring } from 'services/recurringService';
+import { listRecurring, deleteRecurring, runRecurring, healthCheckRecurring } from 'services/recurringService';
 import RecurringForm from './RecurringForm';
 import { PortofolioAvatar } from 'components/PortofolioAvatar';
 import { notify } from 'util/notify';
@@ -59,6 +59,7 @@ const RecurringListPage = (props) => {
   const [formVisible, setFormVisible] = React.useState(false);
   const [list, setList] = React.useState([]);
   const [currentId, setCurrentId] = React.useState();
+  const [healthCheckResult, setHealthCheckResult] = React.useState();
 
   const isRecurringDeprecated = item => !item.email || !item.jobTemplateId || !item.portofolioName;
 
@@ -153,6 +154,8 @@ const RecurringListPage = (props) => {
     setLoading(true);
     const list = await listRecurring();
     setList(list);
+    const healthCheckResult = await healthCheckRecurring();
+    setHealthCheckResult(healthCheckResult);
     setLoading(false);
   }
 
@@ -215,7 +218,11 @@ const RecurringListPage = (props) => {
             <Title level={2} style={{ margin: 'auto' }}>Recurring Management</Title>
           </StyledTitleRow>
 
-          <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
+          <Space style={{ width: '100%', justifyContent: 'space-between' }}>
+            {healthCheckResult && <Alert 
+            message={healthCheckResult.error || `Recurring service is healthy. Started at ${moment(healthCheckResult.lock.lockedAt).format('DD MMM YYYY hh:mm A')}`} 
+            type={healthCheckResult.error ? 'error' : 'success'} 
+            showIcon />}
             <Button type="primary" ghost icon={<PlusOutlined />} onClick={() => handleCreateNew()}>New Recurring</Button>
           </Space>
 

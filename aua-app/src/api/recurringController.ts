@@ -10,6 +10,7 @@ import { getUtcNow } from '../utils/getUtcNow';
 import { JobTemplate } from '../entity/JobTemplate';
 import { Recurring } from '../entity/Recurring';
 import { executeRecurring, restartCronService } from '../services/cronService';
+import { CronLock } from '../entity/CronLock';
 
 export const saveRecurring = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin');
@@ -85,3 +86,20 @@ export const runRecurring = handlerWrapper(async (req, res) => {
 
   res.json(lodgement);
 });
+
+export const healthCheckRecurring = handlerWrapper(async (req, res) => {
+  assertRole(req, 'admin');
+
+  const expected = process.env.GIT_HASH;
+  const lock = await getRepository(CronLock).findOne({key: 'cron-singleton-lock'});
+  const actual = lock?.gitHash;
+  const healthy = actual === expected;
+
+  const result = {
+    error: healthy ? null : `Expecting ${expected} but got ${actual}`,
+    lock,
+  };
+
+  res.json(result);
+});
+
