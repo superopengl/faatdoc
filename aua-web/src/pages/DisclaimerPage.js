@@ -45,7 +45,7 @@ const DisclaimerPage = () => (
     <p>Occasionally, we may also disclose your personal information for the purposes of facilitating the distribution of marketing materials to you by AU Accounting Office Pty Ltd employing a third party. We will not do this if you ask us not to do so. There are other situations where we are compelled by law to disclose your personal information.</p>
     <Divider/>
     <Title level={2} id="direct-marketing">Direct Marketing</Title>
-    <p>AU Accounting Office Pty Ltd may use the personal information we collect from you to identify particular AUA Allied
+    <p>AU Accounting Office Pty Ltd may use the personal information we collect from you to identify particular AU Accounting Office
     Pty Ltd products and services, which we believe may be of interest and benefit to you, such as from third
     parties. This may include such activities as competitions, policy announcements, campaigns or to hear about
     shows and entertainment from AU Accounting Office Pty Ltd, our community partners or affiliated sponsors. We may

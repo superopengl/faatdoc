@@ -96,7 +96,7 @@ const HomeHeaderRaw = props => {
     <HeaderStyled>
       <HeaderLogo>
         <HashLink to="/">
-          <img alt="AUA logo" src="/images/header-logo.png" width="auto" height="60" style={{ padding: '2px 0 2px 0' }}></img>
+          <img alt="AUAU logo" src="/images/header-logo.png" width="auto" height="60" style={{ padding: '2px 0 2px 0' }}></img>
         </HashLink>
         {/* {isAdmin && <Text>Admin</Text>} */}
       </HeaderLogo>
