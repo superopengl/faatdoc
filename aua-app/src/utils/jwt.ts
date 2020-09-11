@@ -9,11 +9,13 @@ import { assert } from './assert';
 const cookieName = 'jwt';
 const isProd = process.env.NODE_ENV === 'prod';
 
-export function attachJwtCookie(user: { id: string, email: string, role: UserRole }, res) {
+export function attachJwtCookie(user, res) {
+  assert(user.id, 500, `User has no id`);
   const payload = {
     id: user.id,
     email: user.email,
     role: user.role,
+    loginType: user.loginType,
     expires: moment(getUtcNow()).add(24, 'hours').toDate()
   };
   const token = jwt.sign(payload, JwtSecret);

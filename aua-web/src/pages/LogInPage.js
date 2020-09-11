@@ -6,10 +6,8 @@ import { GoogleOutlined } from '@ant-design/icons';
 import { Logo } from 'components/Logo';
 import isEmail from 'validator/es/lib/isEmail';
 import { GlobalContext } from '../contexts/GlobalContext';
-import { login, ssoGoogle } from 'services/authService';
+import { login } from 'services/authService';
 import { refreshNotificationUnreadCount } from 'services/notificationService';
-import { GoogleLogin } from 'react-google-login';
-import { notify } from 'util/notify';
 import GoogleSsoButton from 'components/GoogleSsoButton';
 
 const LayoutStyled = styled(Layout)`
@@ -37,9 +35,6 @@ const LogInPage = props => {
   const context = React.useContext(GlobalContext);
   const { setUser, setNotifyCount } = context;
 
-  const goBack = () => {
-    props.history.goBack();
-  }
 
   const validateName = async (rule, value) => {
     const isValid = value && isEmail(value);

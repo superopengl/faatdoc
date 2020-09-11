@@ -1,14 +1,9 @@
 
 
 import React from 'react';
-import styled from 'styled-components';
-import { Link, withRouter } from 'react-router-dom';
-import { Typography, Input, Button, Form, Layout, Divider } from 'antd';
-import { GoogleOutlined } from '@ant-design/icons';
-import { Logo } from 'components/Logo';
-import isEmail from 'validator/es/lib/isEmail';
+import { withRouter } from 'react-router-dom';
 import { GlobalContext } from '../contexts/GlobalContext';
-import { login, ssoGoogle } from 'services/authService';
+import { ssoGoogle } from 'services/authService';
 import { refreshNotificationUnreadCount } from 'services/notificationService';
 import { GoogleLogin } from 'react-google-login';
 import { notify } from 'util/notify';

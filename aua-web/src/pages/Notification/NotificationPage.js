@@ -96,7 +96,7 @@ const NotificationPage = (props) => {
     Modal.destroyAll();
     Modal.info({
       icon: null,
-      title: <><PortofolioAvatar value={forWhom} size={32} /> About lodgement <Link onClick={e => handleGoToLodgement(e, lodgementId)}>{name} for {forWhom}</Link></>,
+      title: <Space style={{alignItems: 'flex-start'}}><PortofolioAvatar value={forWhom} size={32} /><Link onClick={e => handleGoToLodgement(e, lodgementId)}>{name} for {forWhom}</Link></Space>,
       width: 600,
       maskClosable: true,
       content: <>
@@ -118,10 +118,9 @@ const NotificationPage = (props) => {
           </StyledTitleRow>
           {isClient && <Paragraph type="secondary">Notifications are the comments and adviced actions by your agent against your specific lodgement. All the notifications here are associated with certain lodgements. Please use the contact methods on the homepage for any inquiry that is not relavant to lodgement.</Paragraph>}
           {!isClient && <Paragraph type="secondary">You can see if the notification has been read by the clients. The status of the message can only change to 'read' when the client has opened it. Only client role can delete notifications.</Paragraph>}
-          <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
-
+          {!isClient && <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
             <Button type="primary" ghost onClick={() => loadList()} icon={<SyncOutlined />}>Refresh</Button>
-          </Space>
+          </Space>}
           <List
             itemLayout="horizontal"
             dataSource={list}
@@ -135,8 +134,10 @@ const NotificationPage = (props) => {
                   // !isClient ? <Paragraph>
                   //   To {item.forWhom} for {item.name} 
                   // </Paragraph> : null,
-                  <TimeAgo value={item.createdAt} strong={!item.readAt} />,
-                  isClient ? <Button shape="circle" danger icon={<DeleteOutlined />} onClick={e => handleDelete(e, item)} /> : undefined
+                  <Space>
+                    <TimeAgo value={item.createdAt} strong={!item.readAt} />
+                  {isClient && <Button shape="circle" danger icon={<DeleteOutlined />} onClick={e => handleDelete(e, item)} />}
+                  </Space>
                 ].filter(x => !!x)}
               >
                 <Paragraph ellipsis={{ rows: 1, expandable: false }} style={{ fontWeight: item.readAt ? 300 : 800 }}>

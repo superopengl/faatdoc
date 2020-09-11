@@ -7,7 +7,7 @@ import {
   SnippetsOutlined, TeamOutlined, ToolOutlined,
   UserAddOutlined, UserOutlined
 } from '@ant-design/icons';
-import { Avatar, Badge, Button, Drawer, Layout, Menu, Modal } from 'antd';
+import { Avatar, Badge, Button, Drawer, Layout, Menu, Modal, Typography } from 'antd';
 import React from 'react';
 import MediaQuery from 'react-responsive';
 import { Link, withRouter } from 'react-router-dom';
@@ -17,6 +17,7 @@ import styled from 'styled-components';
 import { GlobalContext } from '../contexts/GlobalContext';
 
 const { Header } = Layout;
+const { Text } = Typography;
 const HeaderStyled = styled(Header)`
 position: fixed;
 z-index: 1;
@@ -59,14 +60,12 @@ const HomeHeaderRaw = props => {
   const isClient = role === 'client';
   const isAgent = role === 'agent';
   const isGuest = role === 'guest';
-  // debugger;
   const canChangePassword = !isGuest && user?.loginType === 'local';
 
   const handleLogout = () => {
     Modal.confirm({
-      title: <>Do you want to log out?</>,
-      icon: null,
-      // content: 'Some descriptions',
+      title: "Logout",
+      content: <>Do you want to log out <Text code>{user.email}</Text></>,
       async onOk() {
         await logout();
         setUser(null);
@@ -89,7 +88,7 @@ const HomeHeaderRaw = props => {
 
   const history = props.history;
 
-  const handleClick  = (e) => {
+  const handleClick = (e) => {
     setCurrent(e.key);
   }
 
@@ -103,10 +102,10 @@ const HomeHeaderRaw = props => {
       </HeaderLogo>
       <MediaQuery minDeviceWidth={801}>
         <MenuContianer>
-          <Menu 
-          onClick={handleClick} 
-          selectedKeys={[current]}
-          mode="horizontal" style={{ border: 0 }}>
+          <Menu
+            onClick={handleClick}
+            selectedKeys={[current]}
+            mode="horizontal" style={{ border: 0 }}>
             {isGuest && <Menu.Item key="home"><HashLink to="/#home">Home</HashLink></Menu.Item>}
             {isGuest && <Menu.Item key="services"><HashLink to="/#services">Services</HashLink></Menu.Item>}
             {isGuest && <Menu.Item key="team"><HashLink to="/#team">Team</HashLink></Menu.Item>}
@@ -142,11 +141,11 @@ const HomeHeaderRaw = props => {
           width={290}
           bodyStyle={{ paddingLeft: 0, paddingRight: 0 }}
         >
-          <Menu 
-          onClick={handleClick} 
-          selectedKeys={[current]}
-          mode="inline" 
-          style={{ border: 0 }} 
+          <Menu
+            onClick={handleClick}
+            selectedKeys={[current]}
+            mode="inline"
+            style={{ border: 0 }}
           >
             {isGuest && <Menu.Item key="login"><LoginOutlined /> <Link to="/login">Log In</Link></Menu.Item>}
             {isGuest && <Menu.Item key="signup"><UserAddOutlined /> <Link to="/signup">Sign Up</Link></Menu.Item>}
@@ -163,7 +162,7 @@ const HomeHeaderRaw = props => {
             {isGuest && <Menu.Item key="home"><HomeOutlined /> <HashLink to="/#home" onClick={onClose}>Home</HashLink></Menu.Item>}
             {isGuest && <Menu.Item key="services"><BellOutlined /> <HashLink to="/#services" onClick={onClose}>Services</HashLink></Menu.Item>}
             {isGuest && <Menu.Item key="team"><TeamOutlined /> <HashLink to="/#team" onClick={onClose}>Team</HashLink></Menu.Item>}
-            {!isGuest && <Menu.Item key="logout" onClick={handleLogout}><LogoutOutlined />{isAdmin ? ' Admin ' : isAgent ? ' Agent ' : null}Log Out</Menu.Item>}
+            {!isGuest && <Menu.Item key="logout" onClick={handleLogout}><LogoutOutlined />{isAdmin ? ' Admin' : isAgent ? ' Agent' : null} Log Out</Menu.Item>}
           </Menu>
         </Drawer>
       </MediaQuery>

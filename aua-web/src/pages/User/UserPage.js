@@ -178,7 +178,7 @@ const UserPage = () => {
         maskClosable={true}
         onOk={() => setSetPasswordVisible(false)}
         onCancel={() => setSetPasswordVisible(false)}
-        title={<>Set Password</>}
+        title={<>Reset Password</>}
         footer={null}
         width={400}
       >
@@ -190,7 +190,7 @@ const UserPage = () => {
             <Input placeholder="New password" autoComplete="new-password" disabled={loading} />
           </Form.Item>
           <Form.Item>
-            <Button block type="primary" htmlType="submit" disabled={loading}>Set Password</Button>
+            <Button block type="primary" htmlType="submit" disabled={loading}>Reset Password</Button>
 
           </Form.Item>
         </Form>

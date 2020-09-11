@@ -107,7 +107,7 @@ const ProceedLodgementPage = (props) => {
   const handleArchive = () => {
     const { id, name } = lodgement;
     Modal.confirm({
-      title: <>Archive lodgement <Text strong>{name}</Text>?</>,
+      title: 'Archive this lodgement?',
       okText: 'Yes, Archive it',
       onOk: async () => {
         await deleteLodgement(id);

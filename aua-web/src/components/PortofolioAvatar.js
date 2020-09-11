@@ -30,5 +30,5 @@ PortofolioAvatar.propTypes = {
 };
 
 PortofolioAvatar.defaultProps = {
-  size: 64
+  size: 60
 };

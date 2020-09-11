@@ -106,7 +106,7 @@ const PortofolioForm = (props) => {
           <Checkbox>I have read and agree on the disclaimer</Checkbox>
         </Form.Item>}
         <Form.Item>
-          <Button block type="primary" htmlType="submit" disabled={loading}>Save</Button>
+          <Button block type="primary" size="large" htmlType="submit" disabled={loading}>Save</Button>
         </Form.Item>
         <Form.Item>
           <Button block size="large" type="link" onClick={() => handleCancel()}>Cancel</Button>

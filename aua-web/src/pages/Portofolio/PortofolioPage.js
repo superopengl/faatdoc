@@ -4,8 +4,7 @@ import { Typography, Layout, Button, Modal, List, Space, Row, Divider } from 'an
 import HomeHeader from 'components/HomeHeader';
 import { PortofolioAvatar } from 'components/PortofolioAvatar';
 import Text from 'antd/lib/typography/Text';
-import {
-  UserOutlined, PlusOutlined, TeamOutlined} from '@ant-design/icons';
+import { EditOutlined, UserOutlined, PlusOutlined, TeamOutlined, DeleteOutlined} from '@ant-design/icons';
 import PortofolioForm from './PortofolioForm';
 import { listPortofolio, savePortofolio, deletePortofolio } from 'services/portofolioService';
 import { TimeAgo } from 'components/TimeAgo';
@@ -131,9 +130,8 @@ const PortofolioPage = () => {
                   description={<Space style={{width: '100%', justifyContent: 'space-between'}}>
                   <TimeAgo value={item.lastUpdatedAt} surfix="Last Updated" />
                   <Space>
-                    <Button key="edit" type="link" disabled={loading}>edit</Button>
-                    <Divider type="vertical" />
-                    <Button key="delete" type="link" danger disabled={loading} onClick={e => handleDelete(e, item)}>delete</Button>
+                    <Button key="edit" shape="circle" disabled={loading} icon={<EditOutlined />}></Button>
+            <Button key="delete" shape="circle" danger disabled={loading} onClick={e => handleDelete(e, item)}  icon={<DeleteOutlined />}></Button>
                   </Space>
                 </Space>}
                 />

@@ -55,10 +55,7 @@ export const login = handlerWrapper(async (req, res) => {
 
   await getRepository(User).save(user);
 
-  attachJwtCookie({
-    id: user.id,
-    ...user
-  }, res);
+  attachJwtCookie(user, res);
 
   res.json(sanitizeUser(user));
 });
@@ -208,10 +205,7 @@ export const impersonate = handlerWrapper(async (req, res) => {
 
   assert(user, 404, 'User not found');
 
-  attachJwtCookie({
-    id: user.id,
-    ...user
-  }, res);
+  attachJwtCookie(user, res);
 
   res.json(sanitizeUser(user));
 });
@@ -265,10 +259,7 @@ export const ssoGoogle = handlerWrapper(async (req, res) => {
 
   await getRepository(User).save(user);
 
-  attachJwtCookie({
-    id: user.id,
-    ...user
-  }, res);
+  attachJwtCookie(user, res);
 
   res.json(sanitizeUser(user));
 });

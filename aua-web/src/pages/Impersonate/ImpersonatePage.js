@@ -42,10 +42,6 @@ const ImpersonatePage = props => {
     load();
   }, []);
 
-  const goBack = () => {
-    props.history.goBack();
-  }
-
   const handleSubmit = async values => {
     if (loading) {
       return;
@@ -85,7 +81,7 @@ const ImpersonatePage = props => {
         ></Alert>}
         {isAdmin && <Form layout="vertical" onFinish={handleSubmit} style={{ textAlign: 'left' }}>
           <Space direction="vertical" style={{ width: '100%' }}>
-            <Form.Item label="User email" name="email" rules={[{ required: true, message: ' ' }]}>
+            <Form.Item label="User email" name="email" rules={[{ type: 'email', required: true, message: ' ' }]}>
               <AutoComplete placeholder="User email" maxLength="100" disabled={loading} autoFocus={true}
                 options={userOptions}
                 filterOption={(inputValue, option) =>
@@ -95,9 +91,6 @@ const ImpersonatePage = props => {
             </Form.Item>
             <Form.Item>
               <Button block type="primary" htmlType="submit" disabled={loading}>Impersonate</Button>
-            </Form.Item>
-            <Form.Item>
-              <Button block size="large" type="link" onClick={() => goBack()}>Cancel</Button>
             </Form.Item>
           </Space>
         </Form>}

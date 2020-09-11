@@ -97,7 +97,7 @@ const LodgementChat = (props) => {
       <Form.Item name="content" style={{ marginBottom: 4 }}>
         <Input.TextArea autoSize={{ minRows: 3, maxRows: 20 }} maxLength={2000} placeholder="Type here ..." allowClear disabled={loading} />
       </Form.Item>
-      <Button type="primary" ghost block icon={<SendOutlined />} htmlType="submit" disabled={loading} >Send</Button>
+      <Button type="primary" block icon={<SendOutlined />} htmlType="submit" disabled={loading} >Send</Button>
     </Form>}
   >
     <Space direction="vertical" style={{ width: '100%', padding: '10px 0', flexDirection: 'column-reverse' }}>

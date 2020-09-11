@@ -1,4 +1,3 @@
-import { PlusOutlined, SyncOutlined } from '@ant-design/icons';
 import { Alert, Badge, Button, Divider, Layout, List, Modal, Space, Tabs, Typography } from 'antd';
 import Text from 'antd/lib/typography/Text';
 import HomeHeader from 'components/HomeHeader';
@@ -9,6 +8,7 @@ import { withRouter } from 'react-router-dom';
 import { listJobTemplate } from 'services/jobTemplateService';
 import { deleteLodgement, listLodgement } from 'services/lodgementService';
 import { listPortofolio } from 'services/portofolioService';
+import { PlusOutlined, DeleteOutlined, EditOutlined, ZoomInOutlined, SyncOutlined, HighlightOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import LodgementForm from './MyLodgementForm';
 import ReviewSignPage from './ReviewSignPage';
@@ -103,15 +103,19 @@ const MyLodgementListPage = (props) => {
     await loadList();
   }
 
-  const getActionLabel = status => {
-    return {
-      draft: 'edit',
-      submitted: 'edit',
-      to_sign: 'sign',
-      signed: 'view',
-      done: 'view',
-      archive: 'view'
-    }[status];
+  const getActionIcon = status => {
+    switch (status) {
+      case 'draft':
+      case 'submitted':
+        return <EditOutlined />
+      case 'to_sign':
+        return <HighlightOutlined />
+      case 'signed':
+      case 'done':
+      case 'archive':
+      default:
+        return <ZoomInOutlined />
+    }
   }
 
   const handleDelete = async (e, item) => {
@@ -144,25 +148,24 @@ const MyLodgementListPage = (props) => {
           style={{ paddingLeft: 0, paddingRight: 0 }}
           key={item.id}
           onClick={() => actionOnLodgement(item)}
-          // extra={[
-          //   <LodgementProgressBar key="1" status={item.status} width={80} />
-          // ]}
-          // actions={[
-          //   <Button type="link" key="action" onClick={() => actionOnLodgement(item)}>{getActionLabel(item.status)}</Button>,
-          //   item.status === 'draft' ? <Button type="link" key="delete" danger onClick={e => handleDelete(e, item)}>delete</Button> : null,
-          // ]}
+        // extra={[
+        //   <LodgementProgressBar key="1" status={item.status} width={80} />
+        // ]}
+        // actions={[
+        //   <Button type="link" key="action" onClick={() => actionOnLodgement(item)}>{getActionLabel(item.status)}</Button>,
+        //   item.status === 'draft' ? <Button type="link" key="delete" danger onClick={e => handleDelete(e, item)}>delete</Button> : null,
+        // ]}
         >
           <List.Item.Meta
-            avatar={<LodgementProgressBar key="1" status={item.status} width={80} style={{ marginTop: 6 }} />}
+            avatar={<LodgementProgressBar key="1" status={item.status} width={60} style={{ marginTop: 6 }} />}
 
             title={<Text style={{ fontSize: '1rem' }}>{item.name}</Text>}
             description={<Space style={{ width: '100%', justifyContent: 'space-between' }}>
               <TimeAgo value={item.lastUpdatedAt} surfix="Last Updated" />
               <Space>
-                <Button type="link" key="action" onClick={() => actionOnLodgement(item)}>{getActionLabel(item.status)}</Button>
+                <Button shape="circle" key="action" onClick={() => actionOnLodgement(item)} icon={getActionIcon(item.status)}></Button>
                 {item.status === 'draft' && <>
-                  <Divider type="vertical" />
-                  <Button key="delete" type="link" danger disabled={loading} onClick={e => handleDelete(e, item)}>delete</Button>
+                  <Button key="delete" shape="circle" danger disabled={loading} onClick={e => handleDelete(e, item)} icon={<DeleteOutlined />}></Button>
                 </>}
               </Space>
             </Space>
