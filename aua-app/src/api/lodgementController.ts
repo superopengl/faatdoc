@@ -35,7 +35,7 @@ export const generateLodgement = handlerWrapper(async (req, res) => {
   const lodgement = await generateLodgementByJobTemplateAndPortofolio(
     jobTemplateId,
     portofolioId,
-    (j, p) => `[New] ${j.name} for ${p.name}`
+    (j, p) => `${j.name} for ${p.name}`
   );
 
   res.json(lodgement);
