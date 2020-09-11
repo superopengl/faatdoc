@@ -167,10 +167,10 @@ const MyLodgementForm = (props) => {
             );
           })}
           {(canEdit && lodgement.status === 'draft') && <Form.Item>
-            <Button key="save" block ghost type="primary" size="large" disabled={disabled} onClick={() => saveDraft()}>Save As Draft</Button>
+            <Button key="save" block ghost type="primary" disabled={disabled} onClick={() => saveDraft()}>Save As Draft</Button>
           </Form.Item>}
           {canEdit && <Form.Item>
-            <Button key="submit" block type="primary" size="large" htmlType="submit" disabled={disabled}>Submit Now</Button>
+            <Button key="submit" block type="primary" htmlType="submit" disabled={disabled}>Submit Now</Button>
             </Form.Item>}
         </Form>
       </>}

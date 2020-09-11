@@ -33,7 +33,7 @@ const RecurringForm = (props) => {
   const [, setRecurring] = React.useState();
   const [jobTemplateList, setJobTemplateList] = React.useState([]);
   const [portofolioList, setPortofolioList] = React.useState([]);
-  const [initialValues, setInitialValues] = React.useState({cron: '0 0 0 L */1 *'});
+  const [initialValues, setInitialValues] = React.useState({ cron: '0 0 0 L */1 *' });
 
   const loadEntity = async () => {
     setLoading(true);
@@ -64,8 +64,8 @@ const RecurringForm = (props) => {
   }, [id]);
 
   return <>
-     {!loading && <Form layout="vertical" onFinish={handleSaveRecurring} form={form} initialValues={initialValues}>
-       <Space direction="vertical" size="small">
+    {!loading && <Form layout="vertical" onFinish={handleSaveRecurring} form={form} initialValues={initialValues}>
+      <Space direction="vertical" size="small">
         <Form.Item label="Job Template" name="jobTemplateId" rules={[{ required: true, message: ' ' }]}>
           <Select allowClear>
             {jobTemplateList.map((x, i) => (<Select.Option key={i} value={x.id}>
@@ -76,26 +76,32 @@ const RecurringForm = (props) => {
         <Form.Item label="Client Portofolio" name="portofolioId" rules={[{ required: true, message: ' ' }]}>
           <StyledPortofolioSelect allowClear>
             {portofolioList.map((x, i) => (<Select.Option key={i} value={x.id}>
-              <PortofolioAvatar value={x.name} size={40}/> {x.name} <Text type="secondary"><small> - {x.email}</small></Text>
+              <Space>
+                <PortofolioAvatar value={x.name} size={40} />
+                <div style={{display: 'flex', flexDirection: 'column'}}>
+                  <div style={{margin: 0, lineHeight: '1rem'}}>{x.name}</div>
+                  <Text style={{margin: 0, lineHeight: '0.8rem'}} type="secondary"><small>{x.email}</small></Text>
+                </div>
+              </Space>
             </Select.Option>))}
           </StyledPortofolioSelect>
         </Form.Item>
-        <Form.Item label="Lodgement Name Template" 
-        help={<>Supported variables: <br/><Text code>{'{{createdDate}}'}</Text> for the creation date, like '09 Sep 2020'</>}
-        name="nameTemplate" 
-        rules={[{ required: true, message: ' ', max: 100, whitespace: true }]}>
-          <Input maxLength={100}/>
+        <Form.Item label="Lodgement Name Template"
+          help={<>Supported variables: <br /><Text code>{'{{createdDate}}'}</Text> for the creation date, like '09 Sep 2020'</>}
+          name="nameTemplate"
+          rules={[{ required: true, message: ' ', max: 100, whitespace: true }]}>
+          <Input maxLength={100} />
         </Form.Item>
-        <Form.Item 
-        label="Creation Period" name="cron" rules={[{ required: true, message: ' ' }]}
+        <Form.Item
+          label="Creation Period" name="cron" rules={[{ required: true, message: ' ' }]}
         // help={`Preview: ${cornPreview}`}
         >
           {/* <Input autoSize={{ minRows: 3, maxRows: 20 }} maxLength={20} placeholder="Type here ..." allowClear disabled={loading} /> */}
-          <CronInput/>
+          <CronInput />
         </Form.Item>
-        <Form.Item 
-        label="Due Day (+N days after the recurring executes)" name="dueDay" rules={[{ required: false, message: ' ', type: 'number', min: 1, max: 31 }]}
-        help="When the recurring executes, this value will be used to automatically populate the 'Due Date' field (if defined) on the job template."
+        <Form.Item
+          label="Due Day (+N days after the recurring executes)" name="dueDay" rules={[{ required: false, message: ' ', type: 'number', min: 1, max: 31 }]}
+          help="When the recurring executes, this value will be used to automatically populate the 'Due Date' field (if defined) on the job template."
         >
           {/* <Input autoSize={{ minRows: 3, maxRows: 20 }} maxLength={20} placeholder="Type here ..." allowClear disabled={loading} /> */}
           {/* <Text type="secondary"><small>This will automatically fill the 'Due Date' field if it's defined on the job template when the recurring creates one.</small></Text> */}
@@ -106,11 +112,11 @@ const RecurringForm = (props) => {
           {/* <InputNumber min={1} max={31} /> */}
 
         </Form.Item>
-        <Form.Item style={{marginTop: '1rem'}}>
+        <Form.Item style={{ marginTop: '1rem' }}>
           <Button type="primary" block htmlType="submit" disabled={loading} >Save</Button>
         </Form.Item>
-        </Space>
-      </Form>}
+      </Space>
+    </Form>}
   </>;
 };
 

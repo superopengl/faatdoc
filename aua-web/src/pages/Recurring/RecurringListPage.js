@@ -244,7 +244,7 @@ const RecurringListPage = (props) => {
         visible={formVisible}
         onClose={() => setFormVisible(false)}
         destroyOnClose={true}
-        width={500}
+        width={380}
         // bodyStyle={{ padding: '0 10px' }}
         footer={null}
       >

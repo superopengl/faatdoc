@@ -192,7 +192,7 @@ const MyLodgementListPage = (props) => {
           </Steps> */}
           <Space style={{ width: '100%', justifyContent: 'flex-end' }} >
             {/* <Button type="link" onClick={() => loadList()} icon={<SyncOutlined />}></Button> */}
-            <Button type="primary" size="large" icon={<PlusOutlined />} onClick={() => createNewLodgement()}>New Lodgement</Button>
+            <Button type="primary" icon={<PlusOutlined />} onClick={() => createNewLodgement()}>New Lodgement</Button>
           </Space>
 
           <Tabs defaultActiveKey="ongoing" type="card" tabBarExtraContent={{ right: <Button type="link" onClick={() => loadList()} icon={<SyncOutlined />}></Button> }}>

@@ -53,7 +53,7 @@ class ResetPasswordPage extends React.Component {
       await resetPassword(token, password);
 
       notify.success('Successfully reset password');
-      
+
       // Go back to home page
       this.setState({ sending: false }, () => this.props.history.push('/'));
     } catch (e) {
@@ -79,22 +79,23 @@ class ResetPasswordPage extends React.Component {
         <LogoContainer><Logo /></LogoContainer>
         <Title level={2}>Reset Password</Title>
         <Form layout="vertical" onFinish={this.handleSubmit} style={{ textAlign: 'left' }}>
-          <Form.Item label="Password (at least 8 letters)" name="password" rules={[{ required: true,  min: 8, message: ' ' }]}>
-            <Input.Password placeholder="Password" maxLength="50" autoComplete="new-password" disabled={sending} visibilityToggle={false} autoFocus={true}/>
+          <Form.Item label="Password (at least 8 letters)" name="password" rules={[{ required: true, min: 8, message: ' ' }]}>
+            <Input.Password placeholder="Password" maxLength="50" autoComplete="new-password" disabled={sending} visibilityToggle={false} autoFocus={true} />
           </Form.Item>
-          <Form.Item label="Confirm Password" name="confirmPassword" rules={[{ required: true,  min: 8, message: ' ' }, this.validateConfirmPasswordRule]}>
+          <Form.Item label="Confirm Password" name="confirmPassword" rules={[{ required: true, min: 8, message: ' ' }, this.validateConfirmPasswordRule]}>
             <Input.Password placeholder="Password" maxLength="50" autoComplete="new-password" disabled={sending} visibilityToggle={false} />
           </Form.Item>
-          <Form.Item style={{marginTop: '2rem'}}>
+          <Form.Item style={{ marginTop: '2rem' }}>
             <Button block type="primary" htmlType="submit" disabled={sending}>Reset Password</Button>
-            <Button block size="large" type="link" onClick={() => this.goBack()}>Cancel</Button>
+          </Form.Item>
+          <Form.Item>
+            <Button block type="link" onClick={() => this.goBack()}>Cancel</Button>
           </Form.Item>
         </Form>
         <Divider />
-        <Link to="/"><Button block size="large" type="link">Go to home page</Button></Link>
+        <Link to="/"><Button block type="link">Go to home page</Button></Link>
       </ContainerStyled>
-
-      </LayoutStyled>;
+    </LayoutStyled>
   }
 }
 

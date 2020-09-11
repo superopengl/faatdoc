@@ -95,7 +95,7 @@ const PortofolioPage = props => {
           </StyledTitleRow>
           <Paragraph>Portofolios are predefined information that can be used to automatically fill in your lodgement application. You can save the information like name, phone, address, TFN, and etc. for future usage.</Paragraph>
           <Row style={{ flexDirection: 'row-reverse' }}>
-            <Button type="primary" size="large" ghost icon={<PlusOutlined />} onClick={() => setNewModalVisible(true)}>New Portofolio</Button>
+            <Button type="primary" ghost icon={<PlusOutlined />} onClick={() => setNewModalVisible(true)}>New Portofolio</Button>
           </Row>
           <List
             itemLayout="horizontal"

@@ -69,19 +69,19 @@ const LogInPage = props => {
         <LogoContainer><Logo /></LogoContainer>
         <Title level={2}>Log In</Title>
         <Link to="/signup"><Button size="small" block type="link">Not a user? Click to sign up</Button></Link>
-
-        <GoogleSsoButton 
+        <GoogleSsoButton
           render={
             renderProps => (
               <Button
-                ghost block type="primary"
-                size="large"
+                ghost
+                type="primary"
+                block
                 icon={<GoogleOutlined />}
                 style={{ marginTop: '1.5rem' }}
                 onClick={renderProps.onClick}
                 disabled={renderProps.disabled}
               >Log In with Google</Button>
-            )} 
+            )}
         />
 
         <Divider>or</Divider>
@@ -105,7 +105,7 @@ const LogInPage = props => {
             <Link to="/forgot_password">
               <Button block type="link">Forgot password? Click here to reset</Button>
             </Link>
-            <Link to="/"><Button block type="link">Go to home page</Button></Link>
+            {/* <Link to="/"><Button block type="link">Go to home page</Button></Link> */}
           </Form.Item>
         </Form>
       </ContainerStyled>

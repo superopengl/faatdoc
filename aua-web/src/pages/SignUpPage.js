@@ -5,8 +5,6 @@ import { Typography, Button, Modal, Divider, Form, Input, Checkbox, Layout } fro
 import { Logo } from 'components/Logo';
 import { signUp } from 'services/authService';
 import { GlobalContext } from 'contexts/GlobalContext';
-import GoogleSsoButton from 'components/GoogleSsoButton';
-import { GoogleOutlined } from '@ant-design/icons';
 const { Title } = Typography;
 
 const PageContainer = styled.div`
@@ -128,23 +126,7 @@ const SignUpPage = (props) => {
                   <Button block type="link" onClick={() => goBack()}>Cancel</Button>
                 </Form.Item>
               </Form>
-              <Divider>or</Divider>
-              <GoogleSsoButton
-                render={
-                  renderProps => (
-                    <Button
-                      ghost block type="primary"
-                      size="large"
-                      icon={<GoogleOutlined />}
-                      style={{ marginTop: '1.5rem' }}
-                      onClick={renderProps.onClick}
-                      disabled={renderProps.disabled}
-                    >Log In with Google</Button>
-                  )}
-              />
-
-              <Divider />
-              <Link to="/"><Button block type="link">Go to home page</Button></Link>
+              {/* <Link to="/"><Button block type="link">Go to home page</Button></Link> */}
             </ContainerStyled>
           </PageContainer>
         </LayoutStyled>;
