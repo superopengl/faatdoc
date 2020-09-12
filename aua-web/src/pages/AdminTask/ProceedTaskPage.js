@@ -154,12 +154,12 @@ const ProceedTaskPage = (props) => {
     setShowsNotify(true);
   }
 
-  const inputDisabled = loading || ['archive', 'complete'].includes(task.status);
-  const archiveDisabled = loading || ['todo', 'archive', 'complete'].includes(task.status);
-  const completeDisabled = loading || ['todo', 'archive', 'complete'].includes(task.status);
-  const requiresSignDisabled = loading || 'todo' !== task.status;
-  const communicateDisabled = loading;
-  const saveDisabled = loading || ['archive', 'complete', 'signed'].includes(task.status);
+  // const inputDisabled = loading || ['archive', 'complete'].includes(task.status);
+  // const archiveDisabled = loading || ['todo', 'archive', 'complete'].includes(task.status);
+  // const completeDisabled = loading || ['todo', 'archive', 'complete'].includes(task.status);
+  // const requiresSignDisabled = loading || 'todo' !== task.status;
+  // const communicateDisabled = loading;
+  // const saveDisabled = loading || ['archive', 'complete', 'signed'].includes(task.status);
 
   return (<LayoutStyled>
     <HomeHeader></HomeHeader>
@@ -175,11 +175,11 @@ const ProceedTaskPage = (props) => {
         >
         </PageHeader>
         <Space style={{width: '100%', justifyContent: 'flex-end'}}>
-          <Button key="1" type="primary" danger disabled={archiveDisabled} onClick={() => handleArchive()}>Archive</Button>
-          <Button key="2" type="primary" ghost disabled={completeDisabled} onClick={() => handleCompleteTask()}>Complete</Button>
-          <Button key="3" type="primary" ghost disabled={requiresSignDisabled} onClick={() => handleRequestSign()}>Request Sign</Button>
-          <Button key="4" type="primary" ghost disabled={communicateDisabled} onClick={() => handleMessage()}>Notify</Button>
-          <Button key="5" type="primary" htmlType="submit" disabled={saveDisabled}>Save</Button>
+          <Button key="1" type="primary" danger disabled={loading} onClick={() => handleArchive()}>Archive</Button>
+          <Button key="2" type="primary" ghost disabled={loading} onClick={() => handleCompleteTask()}>Complete</Button>
+          <Button key="3" type="primary" ghost disabled={loading} onClick={() => handleRequestSign()}>Request Sign</Button>
+          <Button key="4" type="primary" ghost disabled={loading} onClick={() => handleMessage()}>Notify</Button>
+          <Button key="5" type="primary" htmlType="submit" disabled={loading}>Save</Button>
         </Space>
         <Divider />
         <Row gutter={32}>
@@ -193,13 +193,13 @@ const ProceedTaskPage = (props) => {
               }
               return (
                 <Form.Item key={i} {...formItemProps}>
-                  {type === 'text' ? <Input disabled={inputDisabled} /> :
-                    type === 'year' ? <DateInput picker="year" placeholder="YYYY" disabled={inputDisabled} /> :
-                      type === 'monthRange' ? <RangePickerInput picker="month" disabled={inputDisabled} /> :
-                        type === 'number' ? <Input disabled={inputDisabled} type="number" /> :
-                          type === 'paragraph' ? <Input.TextArea disabled={inputDisabled} /> :
-                            type === 'date' ? <DateInput picker="date" disabled={inputDisabled} placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD" /> :
-                              type === 'select' ? <Radio.Group disabled={inputDisabled} buttonStyle="solid">
+                  {type === 'text' ? <Input disabled={loading} /> :
+                    type === 'year' ? <DateInput picker="year" placeholder="YYYY" disabled={loading} /> :
+                      type === 'monthRange' ? <RangePickerInput picker="month" disabled={loading} /> :
+                        type === 'number' ? <Input disabled={loading} type="number" /> :
+                          type === 'paragraph' ? <Input.TextArea disabled={loading} /> :
+                            type === 'date' ? <DateInput picker="date" disabled={loading} placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD" /> :
+                              type === 'select' ? <Radio.Group disabled={loading} buttonStyle="solid">
                                 {field.options?.map((x, i) => <Radio key={i} style={{ display: 'block', height: '2rem' }} value={x.value}>{x.label}</Radio>)}
                               </Radio.Group> :
                                 null}
@@ -217,7 +217,7 @@ const ProceedTaskPage = (props) => {
               }
               return (
                 <Form.Item key={i} {...formItemProps} >
-                  <FileUploader disabled={inputDisabled} />
+                  <FileUploader disabled={loading} />
                 </Form.Item>
               );
             })}
