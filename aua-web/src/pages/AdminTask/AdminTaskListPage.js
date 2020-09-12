@@ -38,7 +38,7 @@ const DEFAULT_QUERY_INFO = {
   page: 1,
   size: 50,
   total: 0,
-  status: ['submitted', 'to_sign', 'signed'],
+  status: ['todo', 'to_sign', 'signed'],
   orderField: 'lastUpdatedAt',
   orderDirection: 'DESC'
 };
@@ -259,7 +259,7 @@ const AdminTaskListPage = (props) => {
               <Select.Option value='todo'>To Do</Select.Option>
               <Select.Option value='to_sign'>To Sign</Select.Option>
               <Select.Option value='signed'>Signed</Select.Option>
-              <Select.Option value='done'>Done</Select.Option>
+              <Select.Option value='complete'>Complete</Select.Option>
               <Select.Option value='archive'>Archive</Select.Option>
             </Select>
             <Button onClick={() => clearAllFilters()}>Create All Filters</Button>

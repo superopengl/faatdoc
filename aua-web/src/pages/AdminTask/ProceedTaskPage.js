@@ -154,12 +154,12 @@ const ProceedTaskPage = (props) => {
     setShowsNotify(true);
   }
 
-  const inputDisabled = loading || ['archive', 'done'].includes(task.status);
-  const archiveDisabled = loading || ['todo', 'archive', 'done'].includes(task.status);
-  const completeDisabled = loading || ['todo', 'archive', 'done'].includes(task.status);
+  const inputDisabled = loading || ['archive', 'complete'].includes(task.status);
+  const archiveDisabled = loading || ['todo', 'archive', 'complete'].includes(task.status);
+  const completeDisabled = loading || ['todo', 'archive', 'complete'].includes(task.status);
   const requiresSignDisabled = loading || 'todo' !== task.status;
   const communicateDisabled = loading;
-  const saveDisabled = loading || ['archive', 'done', 'signed'].includes(task.status);
+  const saveDisabled = loading || ['archive', 'complete', 'signed'].includes(task.status);
 
   return (<LayoutStyled>
     <HomeHeader></HomeHeader>

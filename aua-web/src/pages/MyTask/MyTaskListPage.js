@@ -91,7 +91,7 @@ const MyTaskListPage = (props) => {
 
   const actionOnTask = task => {
     setCurrentTask(task);
-    if (['to_sign', 'signed', 'done'].includes(task.status)) {
+    if (['to_sign', 'signed', 'complete'].includes(task.status)) {
       setSignModalVisible(true);
     } else {
       goToTask(task.id);
@@ -110,7 +110,7 @@ const MyTaskListPage = (props) => {
       case 'to_sign':
         return <HighlightOutlined />
       case 'signed':
-      case 'done':
+      case 'complete':
       case 'archive':
       default:
         return <ZoomInOutlined />
@@ -176,12 +176,6 @@ const MyTaskListPage = (props) => {
           <StyledTitleRow>
             <Title level={2} style={{ margin: 'auto' }}>Tasks</Title>
           </StyledTitleRow>
-          {/* <Steps current={0} size="small">
-            <Steps.Step status="submitted" title="submitted" icon={<SendOutlined />} />
-            <Steps.Step status="to_sign" title="to sign" icon={<EditOutlined />} />
-            <Steps.Step status="signed" title="signed" icon={<FormOutlined />} />
-            <Steps.Step status="done" title="complete" icon={<CheckCircleOutlined />} />
-          </Steps> */}
           <Space style={{ width: '100%', justifyContent: 'flex-end' }} >
             {/* <Button type="link" onClick={() => loadList()} icon={<SyncOutlined />}></Button> */}
             <Button type="primary" icon={<PlusOutlined />} onClick={() => createNewTask()}>New Task</Button>
@@ -192,10 +186,10 @@ const MyTaskListPage = (props) => {
               {RenderListFilteredByStatus(['todo'])}
             </TabPane>
             <TabPane tab={<>In Progress <Badge count={taskList.filter(x => ['to_sign'].includes(x.status)).length} showZero={false} /></>} key="ongoing">
-              {RenderListFilteredByStatus(['submitted', 'to_sign', 'signed'])}
+              {RenderListFilteredByStatus(['to_sign', 'signed'])}
             </TabPane>
-            <TabPane tab={"Completed"} key="done">
-              {RenderListFilteredByStatus(['done'])}
+            <TabPane tab={"Completed"} key="complete">
+              {RenderListFilteredByStatus(['complete'])}
             </TabPane>
           </Tabs>
         </Space>

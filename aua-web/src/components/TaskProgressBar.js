@@ -10,7 +10,7 @@ const percentage = {
   'todo': 25,
   'to_sign': 50,
   'signed': 75,
-  'done': 100,
+  'complete': 100,
   'archive': 0
 }
 
@@ -18,7 +18,7 @@ const progressStatus = {
   'todo': 'normal',
   'to_sign': 'exception',
   'signed': 'normal',
-  'done': 'success',
+  'complete': 'success',
   'archive': 'normal'
 }
 
@@ -26,7 +26,7 @@ const tagColor = {
   'todo': 'blue',
   'to_sign': 'red',
   'signed': 'blue',
-  'done': 'green',
+  'complete': 'green',
   'archive': undefined
 }
 

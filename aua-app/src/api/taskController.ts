@@ -37,10 +37,10 @@ function validateTaskStatusChange(oldStatus, newStatus) {
     case undefined:
       nextStatii = [s.TODO];
     case s.TODO:
-      nextStatii = [s.TODO, s.TO_SIGN, s.DONE];
+      nextStatii = [s.TODO, s.TO_SIGN, s.COMPLETE];
     case s.TO_SIGN:
-      nextStatii = [s.DONE];
-    case s.DONE:
+      nextStatii = [s.COMPLETE];
+    case s.COMPLETE:
     default:
   }
 
@@ -230,9 +230,9 @@ export const completeTask = handlerWrapper(async (req, res) => {
   const repo = getRepository(Task);
   const task = await repo.findOne(id);
   assert(task, 404);
-  assert(['submitted', 'to_sign', 'signed'].includes(task.status), 400, 'Status invalid');
+  assert(['todo', 'to_sign', 'signed'].includes(task.status), 400, 'Status invalid');
 
-  await repo.update(id, { status: TaskStatus.DONE });
+  await repo.update(id, { status: TaskStatus.COMPLETE });
 
   res.json();
 });
