@@ -8,13 +8,13 @@ import { GlobalContext } from 'contexts/GlobalContext';
 import { Menu, Dropdown, message, Tooltip } from 'antd';
 import { UpOutlined, DownOutlined, DeleteOutlined, QuestionOutlined } from '@ant-design/icons';
 import { Divider } from 'antd';
-import { listLodgement, deleteLodgement } from 'services/lodgementService';
+import { listTask, deleteTask } from 'services/taskService';
 import { normalizeFieldNameToVar } from 'util/normalizeFieldNameToVar';
 import { varNameToLabelName } from 'util/varNameToLabelName';
 import { Tag } from 'antd';
 import { Progress } from 'antd';
 import { Steps, Popover } from 'antd';
-import { LodgementProgressBar } from 'components/LodgementProgressBar';
+import { TaskProgressBar } from 'components/TaskProgressBar';
 
 const { Text, Title, Paragraph } = Typography;
 
@@ -31,7 +31,7 @@ box-shadow: 0px 2px 8px #888888;
 `
 
 
-const MyLodgementCard = (props) => {
+const MyTaskCard = (props) => {
 
   const { value } = props;
 
@@ -46,7 +46,7 @@ const MyLodgementCard = (props) => {
       <Paragraph type="secondary"><small>{moment(createdAt).format('DD MMM YYYY')}</small></Paragraph>
       </>}
       extra={<>
-        <LodgementProgressBar status={status} width={80} />
+        <TaskProgressBar status={status} width={80} />
       </>}
       bodyStyle={{ margin: 0, padding: 0 }}
       onClick={props.onClick}
@@ -56,8 +56,8 @@ const MyLodgementCard = (props) => {
   );
 };
 
-MyLodgementCard.propTypes = {};
+MyTaskCard.propTypes = {};
 
-MyLodgementCard.defaultProps = {};
+MyTaskCard.defaultProps = {};
 
-export default withRouter(MyLodgementCard);
+export default withRouter(MyTaskCard);

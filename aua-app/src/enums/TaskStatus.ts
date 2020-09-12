@@ -1,5 +1,5 @@
 
-export enum LodgementStatus {
+export enum TaskStatus {
   DRAFT = 'draft',
   SUBMITTED = 'submitted',
   TO_SIGN = 'to_sign',

@@ -196,10 +196,10 @@ const RecurringListPage = (props) => {
   const handleRunRecurring = async (e, item) => {
     e.stopPropagation();
     const { id } = item;
-    const lodgement = await runRecurring(id);
+    const task = await runRecurring(id);
     notify.success(
       'Successfully run the recurring',
-      <Text>The lodgement <TextLink strong onClick={() => props.history.push(`/lodgement/${lodgement.id}/proceed`)}>{lodgement.name}</TextLink> was created</Text>,
+      <Text>The task <TextLink strong onClick={() => props.history.push(`/task/${task.id}/proceed`)}>{task.name}</TextLink> was created</Text>,
       15
     );
   }

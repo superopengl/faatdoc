@@ -4,7 +4,7 @@ import { Button, Form, Typography, Radio } from 'antd';
 import { DoubleRightOutlined } from '@ant-design/icons';
 const { Text } = Typography;
 
-export const LodgementGenerator = props => {
+export const TaskGenerator = props => {
   const { jobTemplateList, portofolioList } = props;
 
   const handleChange = (values) => {
@@ -20,14 +20,14 @@ export const LodgementGenerator = props => {
   return (
     <Form layout="vertical" onFinish={handleChange}>
       <Form.Item>
-        <Text type="secondary">Please choose a lodgement type</Text>
+        <Text type="secondary">Please choose a task type</Text>
       </Form.Item>
-      <Form.Item label="Choose the type of your lodgement" name="jobTemplateId" rules={[{ required: true, message: 'Please choose which type lodgement to proceed' }]}>
+      <Form.Item label="Choose the type of your task" name="jobTemplateId" rules={[{ required: true, message: 'Please choose which type task to proceed' }]}>
         <Radio.Group  buttonStyle="solid" style={{width: '100%'}}>
           {jobTemplateList.map((item, i) => <Radio style={radioStyle} key={i} value={item.id}>{item.name}</Radio>)}
         </Radio.Group>
       </Form.Item>
-      <Form.Item label="Reuse existing portofolio to prefill the lodgment" name="portofolioId" rules={[{ required: true, message: 'Please choose how to fill the lodgement form' }]}>
+      <Form.Item label="Reuse existing portofolio to prefill the lodgment" name="portofolioId" rules={[{ required: true, message: 'Please choose how to fill the task form' }]}>
         <Radio.Group  buttonStyle="solid" style={{width: '100%'}}>
           {portofolioList.map((item, i) => <Radio style={radioStyle} key={i} value={item.id}>{item.name}</Radio>)}
         </Radio.Group>

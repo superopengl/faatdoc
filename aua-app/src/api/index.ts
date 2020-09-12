@@ -3,7 +3,7 @@ export * from './authController';
 export * from './userController';
 export * from './portofolioController';
 export * from './jobTemplateController';
-export * from './lodgementController';
+export * from './taskController';
 export * from './recurringController';
 export * from './notificationController';
 export * from './contactController';

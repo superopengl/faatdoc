@@ -26,7 +26,7 @@ const GoogleSsoButton = props => {
       const count = await refreshNotificationUnreadCount();
       setNotifyCount(count);
       
-      props.history.push('/lodgement');
+      props.history.push('/task');
     } else {
       notify.error('Failed to log in with Google');
     }

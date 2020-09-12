@@ -2,15 +2,15 @@ import { DeleteOutlined, EditOutlined, SearchOutlined, SyncOutlined } from '@ant
 import { Button, Input, Layout, Modal, Select, Space, Table, Tooltip, Typography } from 'antd';
 import Text from 'antd/lib/typography/Text';
 import HomeHeader from 'components/HomeHeader';
-import { LodgementProgressBar } from 'components/LodgementProgressBar';
+import { TaskProgressBar } from 'components/TaskProgressBar';
 import { TimeAgo } from 'components/TimeAgo';
 import * as moment from 'moment';
-import ReviewSignPage from 'pages/MyLodgement/ReviewSignPage';
+import ReviewSignPage from 'pages/MyTask/ReviewSignPage';
 import React from 'react';
 import Highlighter from "react-highlight-words";
 import { Link } from 'react-router-dom';
 import { reactLocalStorage } from 'reactjs-localstorage';
-import { assignLodgement, deleteLodgement, searchLodgement } from 'services/lodgementService';
+import { assignTask, deleteTask, searchTask } from '../../services/taskService';
 import { listAgents } from 'services/userService';
 import styled from 'styled-components';
 
@@ -43,10 +43,10 @@ const DEFAULT_QUERY_INFO = {
   orderDirection: 'DESC'
 };
 
-const AdminLodgementListPage = (props) => {
+const AdminTaskListPage = (props) => {
 
   const [loading, setLoading] = React.useState(true);
-  const [lodgementList, setLodgementList] = React.useState([]);
+  const [taskList, setTaskList] = React.useState([]);
   const [agentList, setAgentList] = React.useState([]);
 
   const [queryInfo, setQueryInfoRaw] = React.useState(reactLocalStorage.getObject('query', DEFAULT_QUERY_INFO, true))
@@ -58,7 +58,7 @@ const AdminLodgementListPage = (props) => {
 
   const columnDef = [
     {
-      title: 'Lodgement Name',
+      title: 'Task Name',
       dataIndex: 'name',
       // filteredValue: filteredInfo.name || null,
       onFilter: (value, record) => record.name.includes(value),
@@ -90,7 +90,7 @@ const AdminLodgementListPage = (props) => {
     {
       title: 'Status',
       dataIndex: 'status',
-      render: (text) => <LodgementProgressBar width={60} status={text}></LodgementProgressBar>,
+      render: (text) => <TaskProgressBar width={60} status={text}></TaskProgressBar>,
       ellipsis: false
     },
     {
@@ -102,7 +102,7 @@ const AdminLodgementListPage = (props) => {
       render: (text, record) => <Select
         placeholder="Select an agent"
         style={{ width: 130 }}
-        onChange={value => assignLodgementToAgent(record, value)}
+        onChange={value => assignTaskToAgent(record, value)}
         value={text}
       >
         <Select.Option key={-1} value={null}>{' '}</Select.Option>
@@ -131,10 +131,10 @@ const AdminLodgementListPage = (props) => {
       // width: 200,
       render: (text, record) => (
         <Space size="small">
-          <Tooltip placement="bottom" title="Proceed lodgement">
-            <Link to={`/lodgement/${record.id}/proceed`}><Button shape="circle" icon={<EditOutlined />}></Button></Link>
+          <Tooltip placement="bottom" title="Proceed task">
+            <Link to={`/task/${record.id}/proceed`}><Button shape="circle" icon={<EditOutlined />}></Button></Link>
           </Tooltip>
-          <Tooltip placement="bottom" title="Delete lodgement">
+          <Tooltip placement="bottom" title="Delete task">
             <Button shape="circle" danger onClick={e => handleDelete(e, record)} icon={<DeleteOutlined />}></Button>
           </Tooltip>
         </Space>
@@ -156,23 +156,23 @@ const AdminLodgementListPage = (props) => {
     setQueryInfo({ ...DEFAULT_QUERY_INFO });
   }
 
-  const assignLodgementToAgent = async (lodgement, agentId) => {
-    await assignLodgement(lodgement.id, agentId);
+  const assignTaskToAgent = async (task, agentId) => {
+    await assignTask(task.id, agentId);
     await loadList();
   }
 
-  const loadLodgementWithQuery = async (queryInfo) => {
+  const loadTaskWithQuery = async (queryInfo) => {
     setLoading(true);
-    const { data, pagination: { total } } = await searchLodgement(queryInfo);
+    const { data, pagination: { total } } = await searchTask(queryInfo);
 
-    setLodgementList(data);
+    setTaskList(data);
     setQueryInfo({ ...queryInfo, total })
     setLoading(false);
   }
 
   const loadList = async () => {
     setLoading(true);
-    await loadLodgementWithQuery(queryInfo);
+    await loadTaskWithQuery(queryInfo);
     const agentList = await listAgents();
     setAgentList(agentList);
     setLoading(false);
@@ -182,10 +182,10 @@ const AdminLodgementListPage = (props) => {
     e.stopPropagation();
     const { id, name } = item;
     Modal.confirm({
-      title: <>Archive lodgement <Text strong>{name}</Text>?</>,
+      title: <>Archive task <Text strong>{name}</Text>?</>,
       okText: 'Yes, Archive it',
       onOk: async () => {
-        await deleteLodgement(id);
+        await deleteTask(id);
         await loadList();
       },
       maskClosable: true,
@@ -203,13 +203,13 @@ const AdminLodgementListPage = (props) => {
       text
     }
 
-    await loadLodgementWithQuery(newQueryInfo);
+    await loadTaskWithQuery(newQueryInfo);
   }
 
-  const handleShowSignDetail = async (lodgementId) => {
+  const handleShowSignDetail = async (taskId) => {
     Modal.info({
       title: 'Client Review And Sign Details',
-      content: <ReviewSignPage id={lodgementId} readonly={true} />,
+      content: <ReviewSignPage id={taskId} readonly={true} />,
       width: 700,
       icon: null,
       maskClosable: true,
@@ -221,7 +221,7 @@ const AdminLodgementListPage = (props) => {
       ...queryInfo,
       status
     }
-    await loadLodgementWithQuery(newQueryInfo);
+    await loadTaskWithQuery(newQueryInfo);
   }
 
   React.useEffect(() => {
@@ -234,7 +234,7 @@ const AdminLodgementListPage = (props) => {
       <ContainerStyled>
         <Space direction="vertical" style={{ width: '100%' }}>
           <StyledTitleRow>
-            <Title level={2} style={{ margin: 'auto' }}>Lodgement Management</Title>
+            <Title level={2} style={{ margin: 'auto' }}>Task Management</Title>
           </StyledTitleRow>
           <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
             <Input.Search
@@ -266,7 +266,7 @@ const AdminLodgementListPage = (props) => {
             <Button onClick={() => clearAllFilters()}>Create All Filters</Button>
           </Space>
           <Table columns={columnDef}
-            dataSource={lodgementList}
+            dataSource={taskList}
             // scroll={{x: 1000}}
             rowKey="id"
             loading={loading}
@@ -274,7 +274,7 @@ const AdminLodgementListPage = (props) => {
             onChange={handleTableChange}
             onRow={(record) => ({
               onDoubleClick: () => {
-                props.history.push(`/lodgement/${record.id}/proceed`);
+                props.history.push(`/task/${record.id}/proceed`);
               }
             })}
           ></Table>
@@ -285,8 +285,8 @@ const AdminLodgementListPage = (props) => {
   );
 };
 
-AdminLodgementListPage.propTypes = {};
+AdminTaskListPage.propTypes = {};
 
-AdminLodgementListPage.defaultProps = {};
+AdminTaskListPage.defaultProps = {};
 
-export default AdminLodgementListPage;
+export default AdminTaskListPage;

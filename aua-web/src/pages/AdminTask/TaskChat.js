@@ -7,7 +7,7 @@ import React from 'react';
 import { MessageBox } from 'react-chat-elements';
 import 'react-chat-elements/dist/main.css';
 import { withRouter } from 'react-router-dom';
-import { listLodgementNotifies, notifyLodgement } from 'services/lodgementService';
+import { listTaskNotifies, notifyTask } from '../../services/taskService';
 import styled from 'styled-components';
 
 const { Text } = Typography;
@@ -50,8 +50,8 @@ const SentMessage = (props) => <StyledSentMessageBox {...props} position="right"
 
 const ReceivedMessage = (props) => <StyledReceivedMessageBox {...props} position="left" />
 
-const LodgementChat = (props) => {
-  const { lodgementId, visible, onClose, readonly } = props;
+const TaskChat = (props) => {
+  const { taskId, visible, onClose, readonly } = props;
   // const { name, id, fields } = value || {};
 
   const context = React.useContext(GlobalContext);
@@ -64,14 +64,14 @@ const LodgementChat = (props) => {
 
   const loadList = async () => {
     setLoading(true);
-    const list = await listLodgementNotifies(lodgementId);
+    const list = await listTaskNotifies(taskId);
     setList(list);
     setLoading(false);
   }
 
   React.useEffect(() => {
     loadList();
-  }, [lodgementId, visible])
+  }, [taskId, visible])
 
   const sendMessage = async (values) => {
     const { content } = values;
@@ -79,13 +79,13 @@ const LodgementChat = (props) => {
     if (!content?.trim()) return;
     setList([...list, { createdAt: new Date(), content, status: 'waiting' }]);
     setLoading(true);
-    await notifyLodgement(lodgementId, content);
+    await notifyTask(taskId, content);
     await loadList();
     setLoading(false);
   }
 
   return <StyledDrawer
-    title="Lodgement Notification"
+    title="Task Notification"
     placement="right"
     closable={true}
     visible={visible}
@@ -103,7 +103,7 @@ const LodgementChat = (props) => {
     <Space direction="vertical" style={{ width: '100%', padding: '10px 0', flexDirection: 'column-reverse' }}>
       {/* {!list.length && <Text type="secondary">No communication yet</Text>} */}
       {readonly && <Divider>
-        <Text type="secondary" strong={false}><small>The communication for this lodgement is closed.</small></Text>
+        <Text type="secondary" strong={false}><small>The communication for this task is closed.</small></Text>
       </Divider>}
       {list.map((x, i) => {
         const MessageComponent = x.sender === myUserId ? SentMessage : ReceivedMessage;
@@ -120,15 +120,15 @@ const LodgementChat = (props) => {
   </StyledDrawer>
 };
 
-LodgementChat.propTypes = {
-  lodgementId: PropTypes.string.isRequired,
+TaskChat.propTypes = {
+  taskId: PropTypes.string.isRequired,
   visible: PropTypes.bool.isRequired,
   readonly: PropTypes.bool.isRequired,
 };
 
-LodgementChat.defaultProps = {
+TaskChat.defaultProps = {
   visible: false,
   readonly: false
 };
 
-export default withRouter(LodgementChat);
+export default withRouter(TaskChat);

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 import { Layout } from 'antd';
 import HomeHeader from 'components/HomeHeader';
-import MyLodgementForm from './MyLodgementForm';
+import MyTaskForm from './MyTaskForm';
 import { listJobTemplate } from 'services/jobTemplateService';
 import { listPortofolio } from 'services/portofolioService';
 
@@ -23,7 +23,7 @@ const LayoutStyled = styled(Layout)`
   height: 100%;
 `;
 
-const MyLodgementCard = (props) => {
+const MyTaskCard = (props) => {
   const id = props.match.params.id;
   const isNew = id === 'new';
 
@@ -42,7 +42,7 @@ const MyLodgementCard = (props) => {
   }
 
   const onOk = () => {
-    props.history.push('/lodgement');
+    props.history.push('/task');
   }
   const onCancel = () => {
     props.history.goBack();
@@ -61,9 +61,9 @@ const MyLodgementCard = (props) => {
     <LayoutStyled>
       <HomeHeader />
       <ContainerStyled>
-        {/* <Title level={2} style={{ margin: 'auto' }}>{isNew ? 'New Lodgement' : 'Edit Lodgement'}</Title> */}
+        {/* <Title level={2} style={{ margin: 'auto' }}>{isNew ? 'New Task' : 'Edit Task'}</Title> */}
 
-        <MyLodgementForm
+        <MyTaskForm
           onChange={() => onOk()}
           onCancel={() => onCancel()}
           jobTemplateList={jobTemplateList}
@@ -75,12 +75,12 @@ const MyLodgementCard = (props) => {
   );
 };
 
-MyLodgementCard.propTypes = {
+MyTaskCard.propTypes = {
   // id: PropTypes.string.isRequired
 };
 
-MyLodgementCard.defaultProps = {
+MyTaskCard.defaultProps = {
   // id: 'new'
 };
 
-export default withRouter(MyLodgementCard);
+export default withRouter(MyTaskCard);

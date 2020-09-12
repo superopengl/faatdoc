@@ -1,14 +1,14 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { LodgementStatus } from '../enums/LodgementStatus';
+import { TaskStatus } from '../enums/TaskStatus';
 
 
 @Entity()
-export class LodgementHistory {
+export class TaskHistory {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column('uuid')
-  lodgementId: string;
+  taskId: string;
 
   @Column()
   lastUpdatedAt: Date;
@@ -16,8 +16,8 @@ export class LodgementHistory {
   @Column()
   name: string;
 
-  @Column({ default: LodgementStatus.DRAFT })
-  status: LodgementStatus;
+  @Column({ default: TaskStatus.DRAFT })
+  status: TaskStatus;
 
   @Column('uuid', { nullable: true })
   agentId?: string;

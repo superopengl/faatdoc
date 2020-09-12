@@ -11,7 +11,7 @@ export class Notification {
 
   @Column('uuid')
   @Index()
-  lodgementId: string;
+  taskId: string;
 
   @Column('uuid')
   sender: string;

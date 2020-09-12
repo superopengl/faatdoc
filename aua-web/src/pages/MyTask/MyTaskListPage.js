@@ -1,16 +1,16 @@
 import { Alert, Badge, Button, Divider, Layout, List, Modal, Space, Tabs, Typography } from 'antd';
 import Text from 'antd/lib/typography/Text';
 import HomeHeader from 'components/HomeHeader';
-import { LodgementProgressBar } from 'components/LodgementProgressBar';
+import { TaskProgressBar } from 'components/TaskProgressBar';
 import { TimeAgo } from 'components/TimeAgo';
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { listJobTemplate } from 'services/jobTemplateService';
-import { deleteLodgement, listLodgement } from 'services/lodgementService';
+import { deleteTask, listTask } from 'services/taskService';
 import { listPortofolio } from 'services/portofolioService';
 import { PlusOutlined, DeleteOutlined, EditOutlined, ZoomInOutlined, SyncOutlined, HighlightOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
-import LodgementForm from './MyLodgementForm';
+import TaskForm from './MyTaskForm';
 import ReviewSignPage from './ReviewSignPage';
 
 const { Title } = Typography;
@@ -36,7 +36,7 @@ const LayoutStyled = styled(Layout)`
   background-color: #ffffff;
   height: 100%;
 
-  .lodgement-count .ant-badge-count {
+  .task-count .ant-badge-count {
     background-color: #143e86;
     color: #eeeeee;
     // box-shadow: 0 0 0 1px #143e86 inset;
@@ -44,24 +44,24 @@ const LayoutStyled = styled(Layout)`
 `;
 
 
-const MyLodgementListPage = (props) => {
+const MyTaskListPage = (props) => {
 
   const [loading, setLoading] = React.useState(true);
   const [signModalVisible, setSignModalVisible] = React.useState(false);
-  const [lodgementList, setLodgementList] = React.useState([]);
+  const [taskList, setTaskList] = React.useState([]);
   const [, setJobTemplateList] = React.useState([]);
   const [portofolioList, setPortofolioList] = React.useState([]);
-  const [currentLodgement, setCurrentLodgement] = React.useState();
+  const [currentTask, setCurrentTask] = React.useState();
 
 
   const loadList = async () => {
     setLoading(true);
     const portofolioList = await listPortofolio() || [];
 
-    const list = await listLodgement();
+    const list = await listTask();
     const jobTemplateList = await listJobTemplate() || [];
 
-    setLodgementList(list);
+    setTaskList(list);
     setJobTemplateList(jobTemplateList);
     setPortofolioList(portofolioList);
     setLoading(false);
@@ -72,29 +72,29 @@ const MyLodgementListPage = (props) => {
     loadList();
   }, [])
 
-  const goToLodgement = (id) => {
-    props.history.push(`/lodgement/${id || 'new'}`);
+  const goToTask = (id) => {
+    props.history.push(`/task/${id || 'new'}`);
   }
 
-  const createNewLodgement = () => {
+  const createNewTask = () => {
     if (!portofolioList.length) {
       Modal.confirm({
         title: 'No portofolio',
-        content: 'Please create portofolio before creating lodgement. Go to create protofolio now?',
+        content: 'Please create portofolio before creating task. Go to create protofolio now?',
         okText: 'Yes, go to create portofolio',
         onOk: () => props.history.push('/portofolio')
       });
       return;
     }
-    goToLodgement();
+    goToTask();
   }
 
-  const actionOnLodgement = lodgement => {
-    setCurrentLodgement(lodgement);
-    if (['to_sign', 'signed', 'done'].includes(lodgement.status)) {
+  const actionOnTask = task => {
+    setCurrentTask(task);
+    if (['to_sign', 'signed', 'done'].includes(task.status)) {
       setSignModalVisible(true);
     } else {
-      goToLodgement(lodgement.id);
+      goToTask(task.id);
     }
   }
 
@@ -121,10 +121,10 @@ const MyLodgementListPage = (props) => {
   const handleDelete = async (e, item) => {
     e.stopPropagation();
     Modal.confirm({
-      title: <>To delete lodgement <strong>{item.name}</strong>?</>,
+      title: <>To delete task <strong>{item.name}</strong>?</>,
       onOk: async () => {
         setLoading(true);
-        await deleteLodgement(item.id);
+        await deleteTask(item.id);
         await loadList();
         setLoading(false);
       },
@@ -137,7 +137,7 @@ const MyLodgementListPage = (props) => {
   }
 
   const RenderListFilteredByStatus = (statuses = []) => {
-    const data = lodgementList.filter(x => statuses.includes(x.status));
+    const data = taskList.filter(x => statuses.includes(x.status));
 
     return <List
       itemLayout="horizontal"
@@ -147,23 +147,23 @@ const MyLodgementListPage = (props) => {
         <List.Item
           style={{ paddingLeft: 0, paddingRight: 0 }}
           key={item.id}
-          onClick={() => actionOnLodgement(item)}
+          onClick={() => actionOnTask(item)}
         // extra={[
-        //   <LodgementProgressBar key="1" status={item.status} width={80} />
+        //   <TaskProgressBar key="1" status={item.status} width={80} />
         // ]}
         // actions={[
-        //   <Button type="link" key="action" onClick={() => actionOnLodgement(item)}>{getActionLabel(item.status)}</Button>,
+        //   <Button type="link" key="action" onClick={() => actionOnTask(item)}>{getActionLabel(item.status)}</Button>,
         //   item.status === 'draft' ? <Button type="link" key="delete" danger onClick={e => handleDelete(e, item)}>delete</Button> : null,
         // ]}
         >
           <List.Item.Meta
-            avatar={<LodgementProgressBar key="1" status={item.status} width={60} style={{ marginTop: 6 }} />}
+            avatar={<TaskProgressBar key="1" status={item.status} width={60} style={{ marginTop: 6 }} />}
 
             title={<Text style={{ fontSize: '1rem' }}>{item.name}</Text>}
             description={<Space style={{ width: '100%', justifyContent: 'space-between' }}>
               <TimeAgo value={item.lastUpdatedAt} surfix="Last Updated" />
               <Space>
-                <Button shape="circle" key="action" onClick={() => actionOnLodgement(item)} icon={getActionIcon(item.status)}></Button>
+                <Button shape="circle" key="action" onClick={() => actionOnTask(item)} icon={getActionIcon(item.status)}></Button>
                 {item.status === 'draft' && <>
                   <Button key="delete" shape="circle" danger disabled={loading} onClick={e => handleDelete(e, item)} icon={<DeleteOutlined />}></Button>
                 </>}
@@ -182,7 +182,7 @@ const MyLodgementListPage = (props) => {
       <ContainerStyled>
         <Space size="large" direction="vertical" style={{ width: '100%' }}>
           <StyledTitleRow>
-            <Title level={2} style={{ margin: 'auto' }}>Lodgements</Title>
+            <Title level={2} style={{ margin: 'auto' }}>Tasks</Title>
           </StyledTitleRow>
           {/* <Steps current={0} size="small">
             <Steps.Step status="submitted" title="submitted" icon={<SendOutlined />} />
@@ -192,11 +192,11 @@ const MyLodgementListPage = (props) => {
           </Steps> */}
           <Space style={{ width: '100%', justifyContent: 'flex-end' }} >
             {/* <Button type="link" onClick={() => loadList()} icon={<SyncOutlined />}></Button> */}
-            <Button type="primary" icon={<PlusOutlined />} onClick={() => createNewLodgement()}>New Lodgement</Button>
+            <Button type="primary" icon={<PlusOutlined />} onClick={() => createNewTask()}>New Task</Button>
           </Space>
 
           <Tabs defaultActiveKey="ongoing" type="card" tabBarExtraContent={{ right: <Button type="link" onClick={() => loadList()} icon={<SyncOutlined />}></Button> }}>
-            <TabPane tab={<>In Progress <Badge count={lodgementList.filter(x => ['to_sign'].includes(x.status)).length} showZero={false} /></>} key="ongoing">
+            <TabPane tab={<>In Progress <Badge count={taskList.filter(x => ['to_sign'].includes(x.status)).length} showZero={false} /></>} key="ongoing">
               {RenderListFilteredByStatus(['submitted', 'to_sign', 'signed'])}
             </TabPane>
             <TabPane tab={"Draft"} key="draft">
@@ -210,7 +210,7 @@ const MyLodgementListPage = (props) => {
 
       </ContainerStyled>
       <Modal
-        title={currentLodgement?.name || 'New Lodgement'}
+        title={currentTask?.name || 'New Task'}
         visible={signModalVisible}
         destroyOnClose={true}
         onCancel={() => setSignModalVisible(false)}
@@ -218,14 +218,14 @@ const MyLodgementListPage = (props) => {
         footer={null}
         width={700}
       >
-        {currentLodgement?.status === 'signed' ? <Alert message="The lodgement has been signed." description="Please wait for the lodgement to be completed by us." type="success" showIcon /> : null}
-        {currentLodgement?.status === 'to_sign' ? <Alert message="The lodgement requires signature." description="All above documents have been viewed and the lodgement is ready to e-sign." type="warning" showIcon /> : null}
+        {currentTask?.status === 'signed' ? <Alert message="The task has been signed." description="Please wait for the task to be completed by us." type="success" showIcon /> : null}
+        {currentTask?.status === 'to_sign' ? <Alert message="The task requires signature." description="All above documents have been viewed and the task is ready to e-sign." type="warning" showIcon /> : null}
         <Tabs>
           <Tabs.TabPane tab="Review and Sign" key="sign">
-            <ReviewSignPage id={currentLodgement?.id} onFinish={() => handleModalExit()} onCancel={() => setSignModalVisible(false)} />
+            <ReviewSignPage id={currentTask?.id} onFinish={() => handleModalExit()} onCancel={() => setSignModalVisible(false)} />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Lodgement" key="view">
-            <LodgementForm id={currentLodgement?.id} onFinish={() => handleModalExit()} onCancel={() => setSignModalVisible(false)} />
+          <Tabs.TabPane tab="Task" key="view">
+            <TaskForm id={currentTask?.id} onFinish={() => handleModalExit()} onCancel={() => setSignModalVisible(false)} />
           </Tabs.TabPane>
         </Tabs>
       </Modal>
@@ -233,8 +233,8 @@ const MyLodgementListPage = (props) => {
   );
 };
 
-MyLodgementListPage.propTypes = {};
+MyTaskListPage.propTypes = {};
 
-MyLodgementListPage.defaultProps = {};
+MyTaskListPage.defaultProps = {};
 
-export default withRouter(MyLodgementListPage);
+export default withRouter(MyTaskListPage);

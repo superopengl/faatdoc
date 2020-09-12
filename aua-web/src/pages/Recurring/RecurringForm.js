@@ -86,7 +86,7 @@ const RecurringForm = (props) => {
             </Select.Option>))}
           </StyledPortofolioSelect>
         </Form.Item>
-        <Form.Item label="Lodgement Name Template"
+        <Form.Item label="Task Name Template"
           help={<>Supported variables: <br /><Text code>{'{{createdDate}}'}</Text> for the creation date, like '09 Sep 2020'</>}
           name="nameTemplate"
           rules={[{ required: true, message: ' ', max: 100, whitespace: true }]}>

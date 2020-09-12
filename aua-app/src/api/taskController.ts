@@ -3,34 +3,34 @@ import * as moment from 'moment';
 import { getConnection, getManager, getRepository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { JobTemplate } from '../entity/JobTemplate';
-import { Lodgement } from '../entity/Lodgement';
+import { Task } from '../entity/Task';
 import { Notification } from '../entity/Notification';
 import { User } from '../entity/User';
-import { LodgementStatus } from '../enums/LodgementStatus';
+import { TaskStatus } from '../enums/TaskStatus';
 import { sendEmail } from '../services/emailService';
 import { assert, assertRole } from '../utils/assert';
 import { handlerWrapper } from '../utils/asyncHandler';
-import { generateLodgementByJobTemplateAndPortofolio } from '../utils/generateLodgementByJobTemplateAndPortofolio';
+import { generateTaskByJobTemplateAndPortofolio } from '../utils/generateTaskByJobTemplateAndPortofolio';
 import { getUtcNow } from '../utils/getUtcNow';
 import { guessDisplayNameFromFields } from '../utils/guessDisplayNameFromFields';
 
-export const generateLodgement = handlerWrapper(async (req, res) => {
+export const generateTask = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
   const { jobTemplateId, portofolioId, name } = req.body;
 
-  const lodgement = await generateLodgementByJobTemplateAndPortofolio(
+  const task = await generateTaskByJobTemplateAndPortofolio(
     jobTemplateId,
     portofolioId,
     (j, p) => `${j.name} for ${p.name}`
   );
 
-  await getRepository(Lodgement).save(lodgement);
+  await getRepository(Task).save(task);
 
-  res.json(lodgement);
+  res.json(task);
 });
 
-function validateLodgementStatusChange(oldStatus, newStatus) {
-  const s = LodgementStatus;
+function validateTaskStatusChange(oldStatus, newStatus) {
+  const s = TaskStatus;
   let nextStatii = [];
   switch (oldStatus) {
     case null:
@@ -51,7 +51,7 @@ function validateLodgementStatusChange(oldStatus, newStatus) {
 }
 
 
-export const saveLodgement = handlerWrapper(async (req, res) => {
+export const saveTask = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
 
   const { user: { id: userId } } = req as any;
@@ -59,56 +59,56 @@ export const saveLodgement = handlerWrapper(async (req, res) => {
   const { id, name, jobTemplateId, portofolioId, fields, status } = req.body;
   assert(name, 400, 'name is empty');
 
-  let lodgement: Lodgement;
+  let task: Task;
   if (id) {
     // Existing lodgment save
-    lodgement = await getRepository(Lodgement).findOne(id);
-    assert(lodgement, 404, 'Lodgment is not found');
-    validateLodgementStatusChange(lodgement.status, status);
+    task = await getRepository(Task).findOne(id);
+    assert(task, 404, 'Lodgment is not found');
+    validateTaskStatusChange(task.status, status);
   } else {
     // New lodgment
-    validateLodgementStatusChange(null, status);
-    lodgement = new Lodgement();
-    lodgement.id = uuidv4();
-    lodgement.userId = userId;
-    lodgement.jobTemplateId = jobTemplateId;
-    lodgement.portofolioId = portofolioId;
+    validateTaskStatusChange(null, status);
+    task = new Task();
+    task.id = uuidv4();
+    task.userId = userId;
+    task.jobTemplateId = jobTemplateId;
+    task.portofolioId = portofolioId;
   }
 
-  lodgement.name = name;
-  lodgement.forWhom = guessDisplayNameFromFields(fields);
-  lodgement.fields = fields;
-  lodgement.status = status;
-  lodgement.lastUpdatedAt = getUtcNow();
+  task.name = name;
+  task.forWhom = guessDisplayNameFromFields(fields);
+  task.fields = fields;
+  task.status = status;
+  task.lastUpdatedAt = getUtcNow();
 
-  const repo = getRepository(Lodgement);
-  await repo.save(lodgement);
+  const repo = getRepository(Task);
+  await repo.save(task);
 
   res.json();
 });
 
-interface ISearchLodgementQuery {
+interface ISearchTaskQuery {
   text?: string;
   page?: number;
   size?: number;
-  status?: LodgementStatus[];
+  status?: TaskStatus[];
   assignee?: string;
   orderField?: string;
   orderDirection?: 'ASC' | 'DESC';
 }
 
-const defaultSearch: ISearchLodgementQuery = {
+const defaultSearch: ISearchTaskQuery = {
   page: 1,
   size: 50,
-  status: [LodgementStatus.SUBMITTED, LodgementStatus.TO_SIGN],
+  status: [TaskStatus.SUBMITTED, TaskStatus.TO_SIGN],
   orderField: 'lastUpdatedAt',
   orderDirection: 'DESC'
 };
 
 
-export const searchLodgement = handlerWrapper(async (req, res) => {
+export const searchTask = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent');
-  const option: ISearchLodgementQuery = { ...defaultSearch, ...req.body };
+  const option: ISearchTaskQuery = { ...defaultSearch, ...req.body };
 
   const { text, status, page, assignee, orderDirection, orderField } = option;
   const size = option.size;
@@ -116,7 +116,7 @@ export const searchLodgement = handlerWrapper(async (req, res) => {
 
   let query = getManager()
     .createQueryBuilder()
-    .from(Lodgement, 'x');
+    .from(Task, 'x');
   if (status?.length) {
     query = query.where(`x.status IN (:...status)`, { status });
   }
@@ -150,17 +150,17 @@ export const searchLodgement = handlerWrapper(async (req, res) => {
   res.json({ data: list, pagination: { page, size, total } });
 });
 
-export const listLodgement = handlerWrapper(async (req, res) => {
+export const listTask = handlerWrapper(async (req, res) => {
   assertRole(req, 'client');
   const query = getConnection()
     .createQueryBuilder()
-    .from(Lodgement, 'x')
+    .from(Task, 'x')
     .orderBy('x.createdAt', 'DESC')
     .where(
       'x.userId = :userId AND x.status != :status',
       {
         userId: (req as any).user.id,
-        status: LodgementStatus.ARCHIVE
+        status: TaskStatus.ARCHIVE
       })
     .select([
       `x.id as id`,
@@ -176,79 +176,79 @@ export const listLodgement = handlerWrapper(async (req, res) => {
   res.json(list);
 });
 
-export const getLodgement = handlerWrapper(async (req, res) => {
+export const getTask = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
   const { id } = req.params;
-  const repo = getRepository(Lodgement);
-  const lodgement = await repo.findOne(id);
-  assert(lodgement, 404);
+  const repo = getRepository(Task);
+  const task = await repo.findOne(id);
+  assert(task, 404);
 
-  res.json(lodgement);
+  res.json(task);
 });
 
-export const deleteLodgement = handlerWrapper(async (req, res) => {
+export const deleteTask = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
   const { id } = req.params;
-  const repo = getRepository(Lodgement);
-  const lodgement = await repo.findOne(id);
-  if (lodgement.status === LodgementStatus.DRAFT) {
+  const repo = getRepository(Task);
+  const task = await repo.findOne(id);
+  if (task.status === TaskStatus.DRAFT) {
     // If it's a draft then hard delete it.
     await repo.delete(id);
   } else {
     // If it's not a draft then soft delete it.
-    await repo.update(id, { status: LodgementStatus.ARCHIVE });
+    await repo.update(id, { status: TaskStatus.ARCHIVE });
   }
 
   res.json();
 });
 
 
-export const assignLodgement = handlerWrapper(async (req, res) => {
+export const assignTask = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin');
   const { id } = req.params;
   const { agentId } = req.body;
 
-  await getRepository(Lodgement).update(id, { agentId });
+  await getRepository(Task).update(id, { agentId });
 
   res.json();
 });
 
-export const signLodgement = handlerWrapper(async (req, res) => {
+export const signTask = handlerWrapper(async (req, res) => {
   assertRole(req, 'client');
   const { id } = req.params;
 
   const now = getUtcNow();
-  await getRepository(Lodgement).update(id, {
+  await getRepository(Task).update(id, {
     signedAt: now,
     lastUpdatedAt: now,
-    status: LodgementStatus.SIGNED
+    status: TaskStatus.SIGNED
   });
 
   res.json();
 });
 
-export const completeLodgement = handlerWrapper(async (req, res) => {
+export const completeTask = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent');
   const { id } = req.params;
-  const repo = getRepository(Lodgement);
-  const lodgement = await repo.findOne(id);
-  assert(lodgement, 404);
-  assert(['submitted', 'to_sign', 'signed'].includes(lodgement.status), 400, 'Status invalid');
+  const repo = getRepository(Task);
+  const task = await repo.findOne(id);
+  assert(task, 404);
+  assert(['submitted', 'to_sign', 'signed'].includes(task.status), 400, 'Status invalid');
 
-  await repo.update(id, { status: LodgementStatus.DONE });
+  await repo.update(id, { status: TaskStatus.DONE });
 
   res.json();
 });
 
-async function sendLodgementMessage(lodgement, senderId, content) {
-  const user = await getRepository(User).findOne(lodgement.userId);
+async function sendTaskMessage(task, senderId, content) {
+  const user = await getRepository(User).findOne(task.userId);
   assert(user, 404);
 
   const message = new Notification();
   message.sender = senderId;
-  message.lodgementId = lodgement.id;
-  message.clientUserId = lodgement.userId;
-  message.agentUserId = lodgement.agentId;
+  message.taskId = task.id;
+  message.clientUserId = task.userId;
+  message.agentUserId = task.agentId;
   message.content = content;
 
   await getRepository(Notification).save(message);
@@ -256,33 +256,33 @@ async function sendLodgementMessage(lodgement, senderId, content) {
   sendEmail({
     to: user.email,
     vars: {
-      name: lodgement.name
+      name: task.name
     },
-    templateName: 'lodgementNotification'
+    templateName: 'taskNotification'
   }).catch(() => {});
 }
 
-export const notifyLodgement = handlerWrapper(async (req, res) => {
+export const notifyTask = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent');
   const { id } = req.params;
   const { content } = req.body;
 
-  const lodgement = await getRepository(Lodgement).findOne(id);
-  assert(lodgement, 404);
+  const task = await getRepository(Task).findOne(id);
+  assert(task, 404);
 
-  await sendLodgementMessage(lodgement, (req as any).user.id, content);
+  await sendTaskMessage(task, (req as any).user.id, content);
 
   res.json();
 });
 
-export const listLodgementNotifies = handlerWrapper(async (req, res) => {
+export const listTaskNotifies = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent', 'client');
   const { id } = req.params;
   const { from, size } = req.query;
   const {user: {role, id: userId}} = req as any;
 
   let query = getRepository(Notification).createQueryBuilder()
-    .where(`"lodgementId" = :id`, { id });
+    .where(`"taskId" = :id`, { id });
   if (role === 'client') {
     query = query.where(`"clientUserId" = :userId`, { userId });
   }
@@ -300,19 +300,19 @@ export const listLodgementNotifies = handlerWrapper(async (req, res) => {
 
 
 
-// export const requireSignLodgement = handlerWrapper(async (req, res) => {
+// export const requireSignTask = handlerWrapper(async (req, res) => {
 //   assertRole(req, 'admin', 'agent');
 //   const { id } = req.params;
 
-//   const repo = getRepository(Lodgement);
-//   const lodgement = await repo.findOne(id);
-//   assert(lodgement, 404);
-//   assert(lodgement.status === 'submitted', 400, `Cannot require sign for this lodgement`);
+//   const repo = getRepository(Task);
+//   const task = await repo.findOne(id);
+//   assert(task, 404);
+//   assert(task.status === 'submitted', 400, `Cannot require sign for this task`);
 
-//   lodgement.status = LodgementStatus.TO_SIGN;
-//   await repo.save(lodgement);
+//   task.status = TaskStatus.TO_SIGN;
+//   await repo.save(task);
 
-//   await notifyLodgement(lodgement, req.user.id, 'The lodgement is waiting for your signature.');
+//   await notifyTask(task, req.user.id, 'The task is waiting for your signature.');
 
 //   res.json();
 // });

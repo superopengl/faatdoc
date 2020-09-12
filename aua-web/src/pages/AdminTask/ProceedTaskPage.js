@@ -8,11 +8,11 @@ import { FileUploader } from 'components/FileUploader';
 import HomeHeader from 'components/HomeHeader';
 
 import { Divider } from 'antd';
-import { deleteLodgement, getLodgement, saveLodgement, completeLodgement, notifyLodgement } from 'services/lodgementService';
+import { deleteTask, getTask, saveTask, completeTask, notifyTask } from '../../services/taskService';
 import { varNameToLabelName } from 'util/varNameToLabelName';
 import { DateInput } from 'components/DateInput';
-import LodgementChat from './LodgementChat';
-import { LodgementProgressBar } from 'components/LodgementProgressBar';
+import TaskChat from './TaskChat';
+import { TaskProgressBar } from 'components/TaskProgressBar';
 import { RangePickerInput } from 'components/RangePickerInput';
 
 const { Text } = Typography;
@@ -35,22 +35,22 @@ const LayoutStyled = styled(Layout)`
   }
 `;
 
-const ProceedLodgementPage = (props) => {
+const ProceedTaskPage = (props) => {
   const id = props.match.params.id;
   // const { name, id, fields } = value || {};
 
   const [loading, setLoading] = React.useState(true);
   const [form] = Form.useForm();
 
-  const [lodgement, setLodgement] = React.useState();
+  const [task, setTask] = React.useState();
   const [showsNotify, setShowsNotify] = React.useState(false);
 
 
   const loadEntity = async () => {
     setLoading(true);
     if (id) {
-      const lodgement = await getLodgement(id);
-      setLodgement(lodgement);
+      const task = await getTask(id);
+      setTask(task);
     }
     setLoading(false);
   }
@@ -60,25 +60,25 @@ const ProceedLodgementPage = (props) => {
   }, [])
 
   const updateLodgmentWithFormValues = values => {
-    lodgement.name = values.name;
+    task.name = values.name;
 
-    lodgement.fields.forEach(field => {
+    task.fields.forEach(field => {
       field.value = values[field.name];
     })
 
-    return lodgement;
+    return task;
   }
 
   const handleValuesChange = (changedValues, allValues) => {
     const lodgment = updateLodgmentWithFormValues(allValues);
-    setLodgement({ ...lodgment });
+    setTask({ ...lodgment });
   }
 
   const handleSubmit = async () => {
 
     // debugger;
     setLoading(true);
-    await saveLodgement({ ...lodgement });
+    await saveTask({ ...task });
     // form.resetFields();
     setLoading(false);
   }
@@ -88,16 +88,16 @@ const ProceedLodgementPage = (props) => {
   }
 
   const goToListPage = () => {
-    props.history.push('/lodgement');
+    props.history.push('/task');
   }
 
   const getFormInitialValues = () => {
     const values = {
-      name: lodgement?.name || 'New Lodgement',
-      status: lodgement?.name || 'draft'
+      name: task?.name || 'New Task',
+      status: task?.name || 'draft'
     };
-    if (lodgement && lodgement.fields) {
-      for (const f of lodgement.fields) {
+    if (task && task.fields) {
+      for (const f of task.fields) {
         values[f.name] = f.value;
       }
     }
@@ -105,13 +105,13 @@ const ProceedLodgementPage = (props) => {
   }
 
   const handleArchive = () => {
-    const { id, name } = lodgement;
+    const { id, name } = task;
     Modal.confirm({
-      title: 'Archive this lodgement?',
+      title: 'Archive this task?',
       okText: 'Yes, Archive it',
       onOk: async () => {
-        await deleteLodgement(id);
-        props.history.push('/lodgement');
+        await deleteTask(id);
+        props.history.push('/task');
       },
       maskClosable: true,
       okButtonProps: {
@@ -120,20 +120,20 @@ const ProceedLodgementPage = (props) => {
     });
   }
 
-  const handleCompleteLodgement = () => {
+  const handleCompleteTask = () => {
     Modal.confirm({
-      title: 'Complete this lodgement',
+      title: 'Complete this task',
       okText: 'Yes, Complete it',
       maskClosable: true,
       onOk: async () => {
-        await completeLodgement(lodgement.id);
+        await completeTask(task.id);
         goToListPage();
       }
     })
   }
 
   const handleRequestSign = async () => {
-    const signFiles = lodgement.fields.find(x => x.name === 'requireSign');
+    const signFiles = task.fields.find(x => x.name === 'requireSign');
     if (!signFiles?.value?.length) {
       Modal.error({
         title: 'Cannot request sign',
@@ -142,10 +142,10 @@ const ProceedLodgementPage = (props) => {
       });
       return;
     }
-    lodgement.status = 'to_sign';
+    task.status = 'to_sign';
     setLoading(true);
-    await saveLodgement(lodgement);
-    await notifyLodgement(lodgement.id, `The lodgement is waiting for your signature. Please view the documents and sign if OK.`);
+    await saveTask(task);
+    await notifyTask(task.id, `The task is waiting for your signature. Please view the documents and sign if OK.`);
     loadEntity();
     setLoading(false);
   }
@@ -154,30 +154,30 @@ const ProceedLodgementPage = (props) => {
     setShowsNotify(true);
   }
 
-  const inputDisabled = loading || ['draft', 'archive', 'done'].includes(lodgement.status);
-  const archiveDisabled = loading || ['draft', 'archive', 'done'].includes(lodgement.status);
-  const completeDisabled = loading || ['draft', 'archive', 'done'].includes(lodgement.status);
-  const requiresSignDisabled = loading || 'submitted' !== lodgement.status;
+  const inputDisabled = loading || ['draft', 'archive', 'done'].includes(task.status);
+  const archiveDisabled = loading || ['draft', 'archive', 'done'].includes(task.status);
+  const completeDisabled = loading || ['draft', 'archive', 'done'].includes(task.status);
+  const requiresSignDisabled = loading || 'submitted' !== task.status;
   const communicateDisabled = loading;
-  const saveDisabled = loading || ['draft', 'archive', 'done', 'signed'].includes(lodgement.status);
-  const communicationReadonly = loading || ['draft', 'archive', 'done'].includes(lodgement.status);
+  const saveDisabled = loading || ['draft', 'archive', 'done', 'signed'].includes(task.status);
+  const communicationReadonly = loading || ['draft', 'archive', 'done'].includes(task.status);
 
   return (<LayoutStyled>
     <HomeHeader></HomeHeader>
     <ContainerStyled>
-      {lodgement && <Form form={form} layout="vertical"
+      {task && <Form form={form} layout="vertical"
         onValuesChange={handleValuesChange}
         onFinish={handleSubmit}
         style={{ textAlign: 'left', width: '100%' }} initialValues={getFormInitialValues()}>
         <PageHeader
           onBack={() => handleCancel()}
-          title={lodgement.name}
-          subTitle={<LodgementProgressBar status={lodgement.status} width={60} />}
+          title={task.name}
+          subTitle={<TaskProgressBar status={task.status} width={60} />}
         >
         </PageHeader>
         <Space style={{width: '100%', justifyContent: 'flex-end'}}>
           <Button key="1" type="primary" danger disabled={archiveDisabled} onClick={() => handleArchive()}>Archive</Button>
-          <Button key="2" type="primary" ghost disabled={completeDisabled} onClick={() => handleCompleteLodgement()}>Complete</Button>
+          <Button key="2" type="primary" ghost disabled={completeDisabled} onClick={() => handleCompleteTask()}>Complete</Button>
           <Button key="3" type="primary" ghost disabled={requiresSignDisabled} onClick={() => handleRequestSign()}>Request Sign</Button>
           <Button key="4" type="primary" ghost disabled={communicateDisabled} onClick={() => handleMessage()}>Notify</Button>
           <Button key="5" type="primary" htmlType="submit" disabled={saveDisabled}>Save</Button>
@@ -185,7 +185,7 @@ const ProceedLodgementPage = (props) => {
         <Divider />
         <Row gutter={32}>
           <Col span={12}>
-            {lodgement.fields.filter(f => f.type !== 'upload').map((field, i) => {
+            {task.fields.filter(f => f.type !== 'upload').map((field, i) => {
               const { name, description, type } = field;
               const formItemProps = {
                 label: <>{varNameToLabelName(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
@@ -209,7 +209,7 @@ const ProceedLodgementPage = (props) => {
             })}
           </Col>
           <Col span={12}>
-            {lodgement.fields.filter(f => f.type === 'upload').map((field, i) => {
+            {task.fields.filter(f => f.type === 'upload').map((field, i) => {
               const { name, description } = field;
               const formItemProps = {
                 label: <>{varNameToLabelName(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
@@ -230,17 +230,17 @@ const ProceedLodgementPage = (props) => {
       {/* <Divider type="vertical" style={{ height: "100%" }} /> */}
     </ContainerStyled>
 
-    {(lodgement && showsNotify) && <LodgementChat visible={showsNotify} onClose={() => setShowsNotify(false)} lodgementId={lodgement?.id} readonly={communicationReadonly} />}
+    {(task && showsNotify) && <TaskChat visible={showsNotify} onClose={() => setShowsNotify(false)} taskId={task?.id} readonly={communicationReadonly} />}
 
   </LayoutStyled >
 
   );
 };
 
-ProceedLodgementPage.propTypes = {
+ProceedTaskPage.propTypes = {
   id: PropTypes.string
 };
 
-ProceedLodgementPage.defaultProps = {};
+ProceedTaskPage.defaultProps = {};
 
-export default withRouter(ProceedLodgementPage);
+export default withRouter(ProceedTaskPage);

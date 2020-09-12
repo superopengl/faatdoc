@@ -1,6 +1,6 @@
 
 import { getRepository, IsNull } from 'typeorm';
-import { Lodgement } from '../entity/Lodgement';
+import { Task } from '../entity/Task';
 import { Notification } from '../entity/Notification';
 import { assert, assertRole } from '../utils/assert';
 import { handlerWrapper } from '../utils/asyncHandler';
@@ -25,12 +25,12 @@ async function listNotificationForAgent(agentId) {
   const list = await getRepository(Notification)
     .createQueryBuilder('x')
     .where({ agentUserId: agentId, deleted: false })
-    .innerJoin(q => q.from(Lodgement, 'l').select('*'), 'l', `l.id = x."lodgementId"`)
+    .innerJoin(q => q.from(Task, 'l').select('*'), 'l', `l.id = x."taskId"`)
     .orderBy('"createdAt"', 'DESC')
     .select([
       'x.id as id',
       'x."createdAt" as "createdAt"',
-      'l.id as "lodgementId"',
+      'l.id as "taskId"',
       'l."forWhom" as "forWhom"',
       'l.name as name',
       'content',
@@ -44,12 +44,12 @@ async function listNotificationForAdmin() {
   const list = await getRepository(Notification)
     .createQueryBuilder('x')
     .where({deleted: false})
-    .innerJoin(q => q.from(Lodgement, 'l').select('*'), 'l', `l.id = x."lodgementId"`)
+    .innerJoin(q => q.from(Task, 'l').select('*'), 'l', `l.id = x."taskId"`)
     .orderBy('"createdAt"', 'DESC')
     .select([
       'x.id as id',
       'x."createdAt" as "createdAt"',
-      'l.id as "lodgementId"',
+      'l.id as "taskId"',
       'l."forWhom" as "forWhom"',
       'l.name as name',
       'content',
@@ -93,13 +93,13 @@ export const getNotification = handlerWrapper(async (req, res) => {
 
   const result = await repo.createQueryBuilder('x')
     .where(query)
-    .innerJoin(q => q.from(Lodgement, 'l').select('*'), 'l', `l.id = x.lodgementId`)
+    .innerJoin(q => q.from(Task, 'l').select('*'), 'l', `l.id = x.taskId`)
     .select([
       `x.id as id`,
       `x.content as content`,
       `x."createdAt" as "createdAt"`,
       `x."readAt" as "readAt"`,
-      `x."lodgementId" as "lodgementId"`,
+      `x."taskId" as "taskId"`,
       `l."name" as name`,
       `l."forWhom" as "forWhom"`,
     ])

@@ -37,7 +37,7 @@ function getLabelFromStatus(status) {
   return <small>{(status || '').replace(/_/g, ' ')}</small>
 }
 
-export const LodgementProgressBar = ({ status, shape, ...props }) => {
+export const TaskProgressBar = ({ status, shape, ...props }) => {
   const label = getLabelFromStatus(status);
   if (shape === 'circle') {
     return <Progress 
@@ -54,11 +54,11 @@ export const LodgementProgressBar = ({ status, shape, ...props }) => {
   return <Tag color={tagColor[status]}>{label}</Tag>
 }
 
-LodgementProgressBar.propTypes = {
+TaskProgressBar.propTypes = {
   status: PropTypes.string.isRequired,
   shape: PropTypes.string.isRequired
 };
 
-LodgementProgressBar.defaultProps = {
+TaskProgressBar.defaultProps = {
   shape: 'circle',
 }

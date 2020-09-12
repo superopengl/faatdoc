@@ -295,40 +295,40 @@ paths:
       responses:
         200:
           description: OK
-  /lodgement:
+  /task:
     post:
-      operationId: saveLodgement
+      operationId: saveTask
       # security:
       #   - authClient: []
       responses:
         200:
           description: OK
     get:
-      operationId: listLodgement
+      operationId: listTask
       # security:
       #   - authLoggedInUser: []
       responses:
         200:
           description: OK
-  /lodgement/search:
+  /task/search:
     post:
-      operationId: searchLodgement
+      operationId: searchTask
       # security:
       #   - authLoggedInUser: []
       responses:
         200:
           description: OK
-  /lodgement/generate:
+  /task/generate:
     post:
-      operationId: generateLodgement
+      operationId: generateTask
       # security:
       #   - authClient: []
       responses:
         200:
           description: OK
-  /lodgement/{id}:
+  /task/{id}:
     get:
-      operationId: getLodgement
+      operationId: getTask
       # security:
       #   - authLoggedInUser: []
       parameters:
@@ -341,7 +341,7 @@ paths:
         200:
           description: OK
     delete:
-      operationId: deleteLodgement
+      operationId: deleteTask
       # security:
       #   - authLoggedInUser: []
       parameters:
@@ -353,9 +353,9 @@ paths:
       responses:
         200:
           description: OK
-  /lodgement/{id}/sign:
+  /task/{id}/sign:
     post:
-      operationId: signLodgement
+      operationId: signTask
       # security:
       #   - authClient: []
       parameters:
@@ -367,9 +367,9 @@ paths:
       responses:
         200:
           description: OK
-  /lodgement/{id}/assign:
+  /task/{id}/assign:
     post:
-      operationId: assignLodgement
+      operationId: assignTask
       # security:
       #   - authClient: []
       parameters:
@@ -381,9 +381,9 @@ paths:
       responses:
         200:
           description: OK      
-  /lodgement/{id}/notify:
+  /task/{id}/notify:
     get:
-      operationId: listLodgementNotifies
+      operationId: listTaskNotifies
       # security:
       #   - authClient: []
       parameters:
@@ -396,7 +396,7 @@ paths:
         200:
           description: OK
     post:
-      operationId: notifyLodgement
+      operationId: notifyTask
       # security:
       #   - authClient: []
       parameters:
@@ -408,9 +408,9 @@ paths:
       responses:
         200:
           description: OK
-  /lodgement/{id}/complete:
+  /task/{id}/complete:
     post:
-      operationId: completeLodgement
+      operationId: completeTask
       # security:
       #   - authClient: []
       parameters:

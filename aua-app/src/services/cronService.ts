@@ -2,11 +2,11 @@ import { getRepository, Not, Equal } from 'typeorm';
 import { Recurring } from '../entity/Recurring';
 import { CronJob } from 'cron';
 import { SysLog } from '../entity/SysLog';
-import { generateLodgementByJobTemplateAndPortofolio } from '../utils/generateLodgementByJobTemplateAndPortofolio';
+import { generateTaskByJobTemplateAndPortofolio } from '../utils/generateTaskByJobTemplateAndPortofolio';
 import { assert } from '../utils/assert';
 import { v4 as uuidv4 } from 'uuid';
-import { LodgementStatus } from '../enums/LodgementStatus';
-import { Lodgement } from '../entity/Lodgement';
+import { TaskStatus } from '../enums/TaskStatus';
+import { Task } from '../entity/Task';
 import errorToJSON from 'error-to-json';
 import * as moment from 'moment';
 import { getUtcNow } from '../utils/getUtcNow';
@@ -50,9 +50,9 @@ function logging(log: SysLog) {
   getRepository(SysLog).save(log).catch(() => { });
 }
 
-function trySetLodgementDueDateField(lodgement, dueDay) {
+function trySetTaskDueDateField(task, dueDay) {
   if (!dueDay) return;
-  const dueDateField = lodgement.fields.find(x => x.name === 'dueDate');
+  const dueDateField = task.fields.find(x => x.name === 'dueDate');
   if (!dueDateField) return;
   dueDateField.value = moment().add(dueDay, 'day').toDate();
 }
@@ -63,19 +63,19 @@ export async function executeRecurring(recurringId) {
   assert(recurring, 404);
   const { jobTemplateId, portofolioId, nameTemplate } = recurring;
 
-  const lodgement = await generateLodgementByJobTemplateAndPortofolio(
+  const task = await generateTaskByJobTemplateAndPortofolio(
     jobTemplateId,
     portofolioId,
     (j, p) => nameTemplate.replace('{{createdDate}}', moment().format('DD MMM YYYY'))
   );
 
-  lodgement.status = LodgementStatus.SUBMITTED;
+  task.status = TaskStatus.SUBMITTED;
 
-  trySetLodgementDueDateField(lodgement, recurring.dueDay);
+  trySetTaskDueDateField(task, recurring.dueDay);
 
-  await getRepository(Lodgement).save(lodgement);
+  await getRepository(Task).save(task);
 
-  return lodgement;
+  return task;
 }
 
 function createCronJob(cron, onRunFn) {
@@ -108,7 +108,7 @@ function startSingleRecurring(recurring: Recurring): CronJob {
   const job = createCronJob(
     cron,
     async () => {
-      const lodgement = await executeRecurring(id);
+      const task = await executeRecurring(id);
 
       const log = new SysLog();
       log.level = 'info';
@@ -117,7 +117,7 @@ function startSingleRecurring(recurring: Recurring): CronJob {
         recurringId: id,
         jobTemplateId,
         portofolioId,
-        createdLodgementId: lodgement.id
+        createdTaskId: task.id
       };
 
       logging(log);

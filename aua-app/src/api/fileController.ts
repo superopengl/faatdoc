@@ -11,7 +11,7 @@ import * as fs from 'fs';
 import { uuidToRelativePath } from '../utils/uuidToRelativePath';
 import { assertRole } from '../utils';
 import { getUtcNow } from '../utils/getUtcNow';
-import { Lodgement } from '../entity/Lodgement';
+import { Task } from '../entity/Task';
 
 function getS3Service() {
   awsConfig();

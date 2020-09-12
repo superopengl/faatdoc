@@ -83,20 +83,20 @@ const NotificationPage = (props) => {
     });
   }
 
-  const handleGoToLodgement = (e, lodgementId) => {
+  const handleGoToTask = (e, taskId) => {
     e.stopPropagation();
-    const url = isClient ? `/lodgement/${lodgementId}` : `/lodgement/${lodgementId}/proceed`;
+    const url = isClient ? `/task/${taskId}` : `/task/${taskId}/proceed`;
     props.history.push(url);
     Modal.destroyAll();
   }
 
   const readNotificationDetail = async (notificationId) => {
     const item = await getNotification(notificationId);
-    const { content, createdAt, readAt, lodgementId, name, forWhom } = item;
+    const { content, createdAt, readAt, taskId, name, forWhom } = item;
     Modal.destroyAll();
     Modal.info({
       icon: null,
-      title: <Space style={{ alignItems: 'flex-start' }}><PortofolioAvatar value={forWhom} size={32} /><Link onClick={e => handleGoToLodgement(e, lodgementId)}>{name} for {forWhom}</Link></Space>,
+      title: <Space style={{ alignItems: 'flex-start' }}><PortofolioAvatar value={forWhom} size={32} /><Link onClick={e => handleGoToTask(e, taskId)}>{name} for {forWhom}</Link></Space>,
       width: 600,
       maskClosable: true,
       content: <>
@@ -116,7 +116,7 @@ const NotificationPage = (props) => {
           <StyledTitleRow>
             <Title level={2} style={{ margin: 'auto' }}>{isClient ? 'Notification' : 'Sent Out Notification'}</Title>
           </StyledTitleRow>
-          {isClient && <Paragraph type="secondary">Notifications are the comments and adviced actions by your agent against your specific lodgement. All the notifications here are associated with certain lodgements. Please use the contact methods on the homepage for any inquiry that is not relavant to lodgement.</Paragraph>}
+          {isClient && <Paragraph type="secondary">Notifications are the comments and adviced actions by your agent against your specific task. All the notifications here are associated with certain tasks. Please use the contact methods on the homepage for any inquiry that is not relavant to task.</Paragraph>}
           {!isClient && <Paragraph type="secondary">You can see if the notification has been read by the clients. The status of the message can only change to 'read' when the client has opened it. Only client role can delete notifications.</Paragraph>}
           {!isClient && <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
             <Button type="primary" ghost onClick={() => loadList()} icon={<SyncOutlined />}>Refresh</Button>

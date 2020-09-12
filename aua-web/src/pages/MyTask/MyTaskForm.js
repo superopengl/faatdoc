@@ -5,13 +5,13 @@ import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 import { Input, Button, Form, Space, Typography, Radio } from 'antd';
 import { FileUploader } from '../../components/FileUploader';
-import { generateLodgement, getLodgement, saveLodgement } from 'services/lodgementService';
-import { LodgementGenerator } from './LodgementGenerator';
+import { generateTask, getTask, saveTask } from 'services/taskService';
+import { TaskGenerator } from './TaskGenerator';
 import { varNameToLabelName } from 'util/varNameToLabelName';
 import { DateInput } from 'components/DateInput';
 import { RangePickerInput } from 'components/RangePickerInput';
 import { PageHeader } from 'antd';
-import LodgementChat from 'pages/AdminLodgement/LodgementChat';
+import TaskChat from 'pages/AdminTask/TaskChat';
 
 const { Text } = Typography;
 
@@ -19,7 +19,7 @@ const StyledPageHeader = styled(PageHeader)`
 margin-bottom: 2rem;
 `;
 
-const MyLodgementForm = (props) => {
+const MyTaskForm = (props) => {
   const { id, jobTemplateList, portofolioList } = props;
 
   const isNew = !id;
@@ -29,13 +29,13 @@ const MyLodgementForm = (props) => {
   const [showsMessage, setShowsMessage] = React.useState(false);
   const [form] = Form.useForm();
 
-  const [lodgement, setLodgement] = React.useState();
+  const [task, setTask] = React.useState();
 
   const loadEntity = async () => {
     setLoading(true);
     if (id) {
-      const lodgement = await getLodgement(id);
-      setLodgement(lodgement);
+      const task = await getTask(id);
+      setTask(task);
     }
     setLoading(false);
   }
@@ -45,32 +45,32 @@ const MyLodgementForm = (props) => {
   }, [])
 
   const updateLodgmentWithFormValues = values => {
-    lodgement.name = values.name;
+    task.name = values.name;
 
-    lodgement.fields.forEach(field => {
+    task.fields.forEach(field => {
       field.value = values[field.name];
     })
 
-    return lodgement;
+    return task;
   }
 
   const saveDraft = async () => {
     setLoading(true);
-    await saveLodgement({ name: 'New Lodgment', ...lodgement, status: 'draft' });
+    await saveTask({ name: 'New Lodgment', ...task, status: 'draft' });
     await props.onChange();
     setLoading(false);
   }
 
   const handleValuesChange = (changedValues, allValues) => {
     const lodgment = updateLodgmentWithFormValues(allValues);
-    setLodgement({ ...lodgment });
+    setTask({ ...lodgment });
   }
 
   const handleSubmit = async (values) => {
     // debugger;
     setLoading(true);
     try {
-      await saveLodgement({ ...lodgement, ...values, status: 'submitted' });
+      await saveTask({ ...task, ...values, status: 'submitted' });
       // form.resetFields();
       await props.onChange();
     } finally {
@@ -87,57 +87,57 @@ const MyLodgementForm = (props) => {
   const handleSelectedTemplate = async (values) => {
     setLoading(true);
     const { jobTemplateId, portofolioId } = values;
-    const lodgement = await generateLodgement(jobTemplateId, portofolioId);
-    setLodgement(lodgement);
+    const task = await generateTask(jobTemplateId, portofolioId);
+    setTask(task);
     setLoading(false);
   }
 
   const getFormInitialValues = () => {
     const values = {
-      name: lodgement?.name || 'New Lodgement',
-      status: lodgement?.name || 'draft'
+      name: task?.name || 'New Task',
+      status: task?.name || 'draft'
     };
-    if (lodgement && lodgement.fields) {
-      for (const f of lodgement.fields) {
+    if (task && task.fields) {
+      for (const f of task.fields) {
         values[f.name] = f.value;
       }
     }
     return values;
   }
 
-  const checkIfCanEdit = (lodgement) => {
+  const checkIfCanEdit = (task) => {
     if (loading) return false;
-    if (!lodgement) return false;
-    const { status } = lodgement;
+    if (!task) return false;
+    const { status } = task;
     return ['draft', 'submitted'].includes(status);
   }
 
-  const canEdit = checkIfCanEdit(lodgement);
+  const canEdit = checkIfCanEdit(task);
   const disabled = !canEdit || loading;
 
   // console.log('value', formInitValues);
-  const showsGenerator = !lodgement && jobTemplateList && portofolioList;
-  const communicationReadonly = loading || isNew || ['draft', 'archive', 'done'].includes(lodgement.status);
+  const showsGenerator = !task && jobTemplateList && portofolioList;
+  const communicationReadonly = loading || isNew || ['draft', 'archive', 'done'].includes(task.status);
 
   return (<>
     <Space direction="vertical" size="large" style={{ width: '100%' }}>
-      {showsGenerator && <LodgementGenerator onChange={handleSelectedTemplate} jobTemplateList={jobTemplateList} portofolioList={portofolioList} />}
+      {showsGenerator && <TaskGenerator onChange={handleSelectedTemplate} jobTemplateList={jobTemplateList} portofolioList={portofolioList} />}
 
-      {lodgement && <>
+      {task && <>
         <Form form={form} layout="vertical"
           onValuesChange={handleValuesChange}
           onFinish={handleSubmit}
           style={{ textAlign: 'left' }} initialValues={getFormInitialValues()}>
           <StyledPageHeader
             onBack={() => handleCancel()}
-            title={isNew ? 'New Lodgement' : lodgement.name}
+            title={isNew ? 'New Task' : task.name}
             style={{ padding: '0' }}
           />
           <Form.Item label="Name" name="name" rules={[{ required: true }]}>
             <Input disabled={disabled} />
           </Form.Item>
 
-          {lodgement.fields.filter(field => !field.officialOnly).map((field, i) => {
+          {task.fields.filter(field => !field.officialOnly).map((field, i) => {
             const { name, description, type, required } = field;
             const formItemProps = {
               label: <>{varNameToLabelName(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
@@ -160,7 +160,7 @@ const MyLodgementForm = (props) => {
               </Form.Item>
             );
           })}
-          {(canEdit && lodgement.status === 'draft') && <Form.Item>
+          {(canEdit && task.status === 'draft') && <Form.Item>
             <Button key="save" block ghost type="primary" disabled={disabled} onClick={() => saveDraft()}>Save</Button>
           </Form.Item>}
           {canEdit && <Form.Item>
@@ -169,15 +169,15 @@ const MyLodgementForm = (props) => {
         </Form>
       </>}
     </Space>
-    {lodgement && <LodgementChat visible={showsMessage} onClose={() => setShowsMessage(false)} lodgementId={lodgement?.id} readonly={communicationReadonly} />}
+    {task && <TaskChat visible={showsMessage} onClose={() => setShowsMessage(false)} taskId={task?.id} readonly={communicationReadonly} />}
   </>
   );
 };
 
-MyLodgementForm.propTypes = {
+MyTaskForm.propTypes = {
   id: PropTypes.string
 };
 
-MyLodgementForm.defaultProps = {};
+MyTaskForm.defaultProps = {};
 
-export default withRouter(MyLodgementForm);
+export default withRouter(MyTaskForm);

@@ -112,7 +112,7 @@ const HomeHeaderRaw = props => {
             {isGuest && <Menu.Item key="team"><HashLink to="/#team">Team</HashLink></Menu.Item>}
             {isGuest && <Menu.Item key="signup"><Link to="/signup">Sign Up</Link></Menu.Item>}
             {isGuest && <Menu.Item key="login"><Link to="/login">Log In</Link></Menu.Item>}
-            {!isGuest && <Menu.Item key="lodgement"><Link to="/lodgement">Lodgement</Link></Menu.Item>}
+            {!isGuest && <Menu.Item key="task"><Link to="/task">Task</Link></Menu.Item>}
             {isClient && <Menu.Item key="portofolio"><Link to="/portofolio">Portofolio</Link></Menu.Item>}
             {/* {isAdmin && <Menu.Item key="clients"><Link to="/clients">Users</Link></Menu.Item>} */}
             {/* {isAdmin && <Menu.Item key="admin"><Link to="/admin">Admin</Link></Menu.Item>} */}
@@ -151,7 +151,7 @@ const HomeHeaderRaw = props => {
             {isGuest && <Menu.Item key="login"><LoginOutlined /> <Link to="/login">Log In</Link></Menu.Item>}
             {isGuest && <Menu.Item key="signup"><UserAddOutlined /> <Link to="/signup">Sign Up</Link></Menu.Item>}
             {/* {isAdmin && <Menu.Item key="admin"><SettingOutlined /> <Link to="/admin">Admin</Link></Menu.Item>} */}
-            {!isGuest && <Menu.Item key="lodgement"><SnippetsOutlined /> <Link to="/lodgement">Lodgement</Link></Menu.Item>}
+            {!isGuest && <Menu.Item key="task"><SnippetsOutlined /> <Link to="/task">Task</Link></Menu.Item>}
             {isClient && <Menu.Item key="portofolio"><IdcardOutlined /> <Link to="/portofolio">Portofolio</Link></Menu.Item>}
             {isAdmin && <Menu.Item key="job_template"><ToolOutlined /> <Link to="/job_template">Job Template</Link></Menu.Item>}
             {isAdmin && <Menu.Item key="recurring"><CalendarOutlined /> <Link to="/recurring">Recurring</Link></Menu.Item>}

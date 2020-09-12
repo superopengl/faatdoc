@@ -57,7 +57,7 @@ const LogInPage = props => {
       const count = await refreshNotificationUnreadCount();
       setNotifyCount(count);
 
-      props.history.push('/lodgement');
+      props.history.push('/task');
     } catch {
       setLoading(false);
     }

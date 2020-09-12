@@ -12,14 +12,14 @@ import SignUpPage from 'pages/SignUpPage';
 import TermAndConditionPage from 'pages/TermAndConditionPage';
 import Error404 from 'pages/Error404';
 import PrivacyPolicyPage from 'pages/PrivacyPolicyPage';
-import MyLodgementListPage from 'pages/MyLodgement/MyLodgementListPage';
+import MyTaskListPage from 'pages/MyTask/MyTaskListPage';
 import JobTemplatePage from 'pages/JobTemplate/JobTemplatePage';
 import PortofolioPage from 'pages/Portofolio/PortofolioPage';
-import AdminLodgementListPage from 'pages/AdminLodgement/AdminLodgementListPage';
-import ProceedLodgementPage from 'pages/AdminLodgement/ProceedLodgementPage';
+import AdminTaskListPage from 'pages/AdminTask/AdminTaskListPage';
+import ProceedTaskPage from 'pages/AdminTask/ProceedTaskPage';
 import { getAuthUser } from 'services/authService';
 import {RoleRoute} from 'components/RoleRoute';
-import MyLodgementPage from 'pages/MyLodgement/MyLodgementPage';
+import MyTaskPage from 'pages/MyTask/MyTaskPage';
 import RecurringListPage from 'pages/Recurring/RecurringListPage';
 import NotificationPage from 'pages/Notification/NotificationPage';
 import UserPage from 'pages/User/UserPage';
@@ -91,9 +91,9 @@ class App extends React.Component {
             <RoleRoute visible={isAdmin} loading={loading} exact path="/recurring" component={RecurringListPage} />
             <RoleRoute visible={isAdmin} loading={loading} exact path="/impersonate" component={ImpersonatePage} />
             <RoleRoute visible={!isGuest} loading={loading} path="/notification" exact component={NotificationPage} />
-            <RoleRoute visible={isClient} loading={loading} path="/lodgement/:id" exact component={MyLodgementPage} />
-            <RoleRoute visible={isAdmin || isAgent || isClient} loading={loading} path="/lodgement" exact component={isClient ? MyLodgementListPage : AdminLodgementListPage} />
-            <RoleRoute visible={isAdmin || isAgent} loading={loading} path="/lodgement/:id/proceed" exact component={ProceedLodgementPage} />
+            <RoleRoute visible={isClient} loading={loading} path="/task/:id" exact component={MyTaskPage} />
+            <RoleRoute visible={isAdmin || isAgent || isClient} loading={loading} path="/task" exact component={isClient ? MyTaskListPage : AdminTaskListPage} />
+            <RoleRoute visible={isAdmin || isAgent} loading={loading} path="/task/:id/proceed" exact component={ProceedTaskPage} />
             <RoleRoute visible={!isGuest} loading={loading} path="/change_password" exact component={ChangePasswordPage} />
             <RoleRoute loading={loading} path="/terms_and_conditions" exact component={TermAndConditionPage} />
             <RoleRoute loading={loading} path="/privacy_policy" exact component={PrivacyPolicyPage} />

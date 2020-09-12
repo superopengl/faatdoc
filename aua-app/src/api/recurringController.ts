@@ -82,9 +82,9 @@ export const runRecurring = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin');
   const { id } = req.params;
 
-  const lodgement = await executeRecurring(id);
+  const task = await executeRecurring(id);
 
-  res.json(lodgement);
+  res.json(task);
 });
 
 export const healthCheckRecurring = handlerWrapper(async (req, res) => {
