@@ -105,8 +105,7 @@ const MyTaskListPage = (props) => {
 
   const getActionIcon = status => {
     switch (status) {
-      case 'draft':
-      case 'submitted':
+      case 'todo':
         return <EditOutlined />
       case 'to_sign':
         return <HighlightOutlined />
@@ -148,13 +147,6 @@ const MyTaskListPage = (props) => {
           style={{ paddingLeft: 0, paddingRight: 0 }}
           key={item.id}
           onClick={() => actionOnTask(item)}
-        // extra={[
-        //   <TaskProgressBar key="1" status={item.status} width={80} />
-        // ]}
-        // actions={[
-        //   <Button type="link" key="action" onClick={() => actionOnTask(item)}>{getActionLabel(item.status)}</Button>,
-        //   item.status === 'draft' ? <Button type="link" key="delete" danger onClick={e => handleDelete(e, item)}>delete</Button> : null,
-        // ]}
         >
           <List.Item.Meta
             avatar={<TaskProgressBar key="1" status={item.status} width={60} style={{ marginTop: 6 }} />}
@@ -164,9 +156,9 @@ const MyTaskListPage = (props) => {
               <TimeAgo value={item.lastUpdatedAt} surfix="Last Updated" />
               <Space>
                 <Button shape="circle" key="action" onClick={() => actionOnTask(item)} icon={getActionIcon(item.status)}></Button>
-                {item.status === 'draft' && <>
+                {/* {item.status === 'draft' && <>
                   <Button key="delete" shape="circle" danger disabled={loading} onClick={e => handleDelete(e, item)} icon={<DeleteOutlined />}></Button>
-                </>}
+                </>} */}
               </Space>
             </Space>
             }
@@ -196,11 +188,11 @@ const MyTaskListPage = (props) => {
           </Space>
 
           <Tabs defaultActiveKey="ongoing" type="card" tabBarExtraContent={{ right: <Button type="link" onClick={() => loadList()} icon={<SyncOutlined />}></Button> }}>
+            <TabPane tab={"To Do"} key="todo">
+              {RenderListFilteredByStatus(['todo'])}
+            </TabPane>
             <TabPane tab={<>In Progress <Badge count={taskList.filter(x => ['to_sign'].includes(x.status)).length} showZero={false} /></>} key="ongoing">
               {RenderListFilteredByStatus(['submitted', 'to_sign', 'signed'])}
-            </TabPane>
-            <TabPane tab={"Draft"} key="draft">
-              {RenderListFilteredByStatus(['draft'])}
             </TabPane>
             <TabPane tab={"Completed"} key="done">
               {RenderListFilteredByStatus(['done'])}

@@ -256,8 +256,7 @@ const AdminTaskListPage = (props) => {
               defaultValue={queryInfo?.status || []}
               onChange={handleStatusFilter}
             >
-              <Select.Option value='draft'>Draft</Select.Option>
-              <Select.Option value='submitted'>Submitted</Select.Option>
+              <Select.Option value='todo'>To Do</Select.Option>
               <Select.Option value='to_sign'>To Sign</Select.Option>
               <Select.Option value='signed'>Signed</Select.Option>
               <Select.Option value='done'>Done</Select.Option>

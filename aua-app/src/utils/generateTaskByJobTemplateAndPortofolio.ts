@@ -49,7 +49,7 @@ export const generateTaskByJobTemplateAndPortofolio = async (jobTemplateId, port
   task.portofolioId = portofolioId;
   task.fields = fields;
   task.lastUpdatedAt = getUtcNow();
-  task.status = TaskStatus.DRAFT;
+  task.status = TaskStatus.TODO;
 
   return task;
 }

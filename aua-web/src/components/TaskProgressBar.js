@@ -7,8 +7,7 @@ import { Tag } from 'antd';
 const {Text} = Typography;
 
 const percentage = {
-  'draft': 0,
-  'submitted': 25,
+  'todo': 25,
   'to_sign': 50,
   'signed': 75,
   'done': 100,
@@ -16,8 +15,7 @@ const percentage = {
 }
 
 const progressStatus = {
-  'draft': 'normal',
-  'submitted': 'normal',
+  'todo': 'normal',
   'to_sign': 'exception',
   'signed': 'normal',
   'done': 'success',
@@ -25,8 +23,7 @@ const progressStatus = {
 }
 
 const tagColor = {
-  'draft': undefined,
-  'submitted': 'blue',
+  'todo': 'blue',
   'to_sign': 'red',
   'signed': 'blue',
   'done': 'green',

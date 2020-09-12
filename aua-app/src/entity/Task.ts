@@ -18,7 +18,7 @@ export class Task {
   @Column()
   forWhom: string;
 
-  @Column({ default: TaskStatus.DRAFT })
+  @Column({ default: TaskStatus.TODO })
   status: TaskStatus;
 
   @Column('uuid')

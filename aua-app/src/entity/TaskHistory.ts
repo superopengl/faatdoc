@@ -16,7 +16,7 @@ export class TaskHistory {
   @Column()
   name: string;
 
-  @Column({ default: TaskStatus.DRAFT })
+  @Column()
   status: TaskStatus;
 
   @Column('uuid', { nullable: true })

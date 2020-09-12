@@ -94,7 +94,7 @@ const ProceedTaskPage = (props) => {
   const getFormInitialValues = () => {
     const values = {
       name: task?.name || 'New Task',
-      status: task?.name || 'draft'
+      status: task?.status || 'todo'
     };
     if (task && task.fields) {
       for (const f of task.fields) {
@@ -154,12 +154,12 @@ const ProceedTaskPage = (props) => {
     setShowsNotify(true);
   }
 
-  const inputDisabled = loading || ['draft', 'archive', 'done'].includes(task.status);
-  const archiveDisabled = loading || ['draft', 'archive', 'done'].includes(task.status);
-  const completeDisabled = loading || ['draft', 'archive', 'done'].includes(task.status);
-  const requiresSignDisabled = loading || 'submitted' !== task.status;
+  const inputDisabled = loading || ['archive', 'done'].includes(task.status);
+  const archiveDisabled = loading || ['todo', 'archive', 'done'].includes(task.status);
+  const completeDisabled = loading || ['todo', 'archive', 'done'].includes(task.status);
+  const requiresSignDisabled = loading || 'todo' !== task.status;
   const communicateDisabled = loading;
-  const saveDisabled = loading || ['draft', 'archive', 'done', 'signed'].includes(task.status);
+  const saveDisabled = loading || ['archive', 'done', 'signed'].includes(task.status);
 
   return (<LayoutStyled>
     <HomeHeader></HomeHeader>

@@ -69,7 +69,7 @@ export async function executeRecurring(recurringId) {
     (j, p) => nameTemplate.replace('{{createdDate}}', moment().format('DD MMM YYYY'))
   );
 
-  task.status = TaskStatus.SUBMITTED;
+  task.status = TaskStatus.TODO;
 
   trySetTaskDueDateField(task, recurring.dueDay);
 

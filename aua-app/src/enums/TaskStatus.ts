@@ -1,7 +1,6 @@
 
 export enum TaskStatus {
-  DRAFT = 'draft',
-  SUBMITTED = 'submitted',
+  TODO = 'todo',
   TO_SIGN = 'to_sign',
   SIGNED = 'signed',
   DONE = 'done',

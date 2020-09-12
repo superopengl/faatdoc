@@ -56,7 +56,7 @@ const MyTaskForm = (props) => {
 
   const saveDraft = async () => {
     setLoading(true);
-    await saveTask({ name: 'New Lodgment', ...task, status: 'draft' });
+    await saveTask({ name: 'New Lodgment', ...task, status: 'todo' });
     await props.onChange();
     setLoading(false);
   }
@@ -95,7 +95,7 @@ const MyTaskForm = (props) => {
   const getFormInitialValues = () => {
     const values = {
       name: task?.name || 'New Task',
-      status: task?.name || 'draft'
+      status: task?.status || 'todo'
     };
     if (task && task.fields) {
       for (const f of task.fields) {
@@ -109,7 +109,7 @@ const MyTaskForm = (props) => {
     if (loading) return false;
     if (!task) return false;
     const { status } = task;
-    return ['draft', 'submitted'].includes(status);
+    return status === 'todo';
   }
 
   const canEdit = checkIfCanEdit(task);
@@ -159,7 +159,7 @@ const MyTaskForm = (props) => {
               </Form.Item>
             );
           })}
-          {(canEdit && task.status === 'draft') && <Form.Item>
+          {canEdit && <Form.Item>
             <Button key="save" block ghost type="primary" disabled={disabled} onClick={() => saveDraft()}>Save</Button>
           </Form.Item>}
           {canEdit && <Form.Item>
