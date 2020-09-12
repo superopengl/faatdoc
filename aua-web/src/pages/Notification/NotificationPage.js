@@ -4,10 +4,10 @@ import { Typography, Layout, Button, Modal, Divider, List, Space } from 'antd';
 import HomeHeader from 'components/HomeHeader';
 import { PortofolioAvatar } from 'components/PortofolioAvatar';
 import {
-  SyncOutlined, DeleteOutlined
+  SyncOutlined
 } from '@ant-design/icons';
 import { TimeAgo } from 'components/TimeAgo';
-import { listNotification, getNotification, deleteNotification } from 'services/notificationService';
+import { listNotification, getNotification } from 'services/notificationService';
 import { GlobalContext } from 'contexts/GlobalContext';
 
 const { Title, Paragraph, Link } = Typography;
@@ -65,24 +65,6 @@ const NotificationPage = (props) => {
     await readNotificationDetail(item.id)
   }
 
-  const handleDelete = async (e, item) => {
-    e.stopPropagation();
-    Modal.confirm({
-      title: <>To delete this notification?</>,
-      onOk: async () => {
-        setLoading(true);
-        await deleteNotification(item.id);
-        await loadList();
-        setLoading(false);
-      },
-      maskClosable: true,
-      okButtonProps: {
-        danger: true
-      },
-      okText: 'Yes, delete it!'
-    });
-  }
-
   const handleGoToTask = (e, taskId) => {
     e.stopPropagation();
     const url = isClient ? `/task/${taskId}` : `/task/${taskId}/proceed`;
@@ -117,7 +99,7 @@ const NotificationPage = (props) => {
             <Title level={2} style={{ margin: 'auto' }}>{isClient ? 'Notification' : 'Sent Out Notification'}</Title>
           </StyledTitleRow>
           {isClient && <Paragraph type="secondary">Notifications are the comments and adviced actions by your agent against your specific task. All the notifications here are associated with certain tasks. Please use the contact methods on the homepage for any inquiry that is not relavant to task.</Paragraph>}
-          {!isClient && <Paragraph type="secondary">You can see if the notification has been read by the clients. The status of the message can only change to 'read' when the client has opened it. Only client role can delete notifications.</Paragraph>}
+          {!isClient && <Paragraph type="secondary">You can see if the notification has been read by the clients. The status of the message can only change to 'read' when the client has opened it.</Paragraph>}
           {!isClient && <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
             <Button type="primary" ghost onClick={() => loadList()} icon={<SyncOutlined />}>Refresh</Button>
           </Space>}
@@ -134,7 +116,6 @@ const NotificationPage = (props) => {
               </Paragraph>
               <Space>
                 <TimeAgo value={item.createdAt} strong={!item.readAt} />
-                {isClient && <Button shape="circle" danger icon={<DeleteOutlined />} onClick={e => handleDelete(e, item)} />}
               </Space>
             </div>
             )}
