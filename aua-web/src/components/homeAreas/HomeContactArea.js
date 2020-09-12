@@ -1,5 +1,5 @@
 import { HomeOutlined, MailOutlined, PhoneOutlined } from '@ant-design/icons';
-import { Typography } from 'antd';
+import { Typography, Row, Col } from 'antd';
 import { HashAnchorPlaceholder } from 'components/HashAnchorPlaceholder';
 import React from 'react';
 import styled from 'styled-components';
@@ -39,35 +39,43 @@ class HomeContactArea extends React.Component {
       }
     }
 
+    const span = {
+      xs: 24,
+      sm: 12,
+      md: 12,
+      lg: 12,
+      xl: 12,
+      xxl: 12
+    };
+
     return (
       <HomeRowArea {...props}>
         <InfoCard >
           <HashAnchorPlaceholder id="about" />
           <Title style={{ color: "#ffffff" }}>Contact</Title>
-          <section style={{ textAlign: 'center', display: 'flex', flexDirection: 'column' }}>
-            <p>
-              <span style={{marginRight: '2rem'}}><MailOutlined style={{ marginRight: 8 }} /><a href="mailto:accountant@auao.com.au">accountant@auao.com.au</a></span>
-              <span><MailOutlined style={{ marginRight: 8 }} /><a href="mailto:jzhou@auao.com.au">jzhou@auao.com.au</a></span>
-            </p>
-            <p>
-              <span style={{marginRight: '2rem'}}><PhoneOutlined style={{ marginRight: 8 }} /><a href="tel:+61290615028">+61 2 9061 5028</a></span>
-              <span><PhoneOutlined style={{ marginRight: 8 }} /><a href="tel:+61433388655">+61 433 388 655</a></span>
-            </p>
-            <p>
-              <HomeOutlined style={{ marginRight: 8 }} /><a href="http://maps.google.com/?q=Unit 101, 11 Spring St., Chatswood, NSW 2067" target="_blank" rel="noopener noreferrer">
+          <Row style={{ maxWidth: 440, margin: '0.5rem auto' }} gutter={16}>
+            <Col {...span}>
+              <MailOutlined style={{ marginRight: 8 }} /><a href="mailto:accountant@auao.com.au">accountant@auao.com.au</a>
+            </Col>
+            <Col {...span}>
+              <MailOutlined style={{ marginRight: 8 }} /><a href="mailto:jzhou@auao.com.au">jzhou@auao.com.au</a>
+            </Col>
+          </Row>
+          <Row style={{ maxWidth: 440, margin: '0.5rem auto' }} gutter={16}>
+            <Col {...span}>
+              <PhoneOutlined style={{ marginRight: 8 }} /><a href="tel:+61290615028">+61 2 9061 5028</a>
+            </Col>
+            <Col {...span}>
+              <PhoneOutlined style={{ marginRight: 8 }} /><a href="tel:+61433388655">+61 433 388 655</a>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={24}>
+            <HomeOutlined style={{ marginRight: 8 }} /><a href="http://maps.google.com/?q=Unit 101, 11 Spring St., Chatswood, NSW 2067" target="_blank" rel="noopener noreferrer">
                 Unit 101, 11 Spring St., Chatswood, NSW 2067
                 </a>
-            </p>
-            {/* <MapContainer>
-              <GoogleMapReact
-                bootstrapURLKeys={{ key: 'AIzaSyAqcl9O4Ay_2qL7aZX_LMwIARUAXlPM9yQ' }}
-                defaultCenter={position}
-                defaultZoom={15}
-                yesIWantToUseGoogleMapApiInternals
-                onGoogleApiLoaded={({ map, maps }) => renderMarkers(map, maps)}
-              />
-            </MapContainer> */}
-          </section>
+            </Col>
+          </Row>
         </InfoCard>
       </HomeRowArea>
     );

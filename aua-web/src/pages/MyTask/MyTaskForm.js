@@ -117,7 +117,6 @@ const MyTaskForm = (props) => {
 
   // console.log('value', formInitValues);
   const showsGenerator = !task && jobTemplateList && portofolioList;
-  const communicationReadonly = loading || isNew || ['draft', 'archive', 'done'].includes(task.status);
 
   return (<>
     <Space direction="vertical" size="large" style={{ width: '100%' }}>
@@ -169,7 +168,7 @@ const MyTaskForm = (props) => {
         </Form>
       </>}
     </Space>
-    {task && <TaskChat visible={showsMessage} onClose={() => setShowsMessage(false)} taskId={task?.id} readonly={communicationReadonly} />}
+    {task && <TaskChat visible={showsMessage} onClose={() => setShowsMessage(false)} taskId={task?.id}/>}
   </>
   );
 };

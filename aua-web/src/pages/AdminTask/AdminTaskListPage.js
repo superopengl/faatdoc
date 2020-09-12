@@ -66,14 +66,14 @@ const AdminTaskListPage = (props) => {
       ellipsis: false,
     },
     {
-      title: 'For Whom',
+      title: 'Portofolio',
       dataIndex: 'forWhom',
       render: (text) => <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text || ''} />
     },
     {
-      title: 'Client',
+      title: 'User',
       dataIndex: 'email',
-      render: (text) => text
+    render: (text) => <Text code><small>{text}</small></Text>
     },
     {
       title: 'Created At',

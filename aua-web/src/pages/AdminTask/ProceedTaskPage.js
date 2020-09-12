@@ -160,7 +160,6 @@ const ProceedTaskPage = (props) => {
   const requiresSignDisabled = loading || 'submitted' !== task.status;
   const communicateDisabled = loading;
   const saveDisabled = loading || ['draft', 'archive', 'done', 'signed'].includes(task.status);
-  const communicationReadonly = loading || ['draft', 'archive', 'done'].includes(task.status);
 
   return (<LayoutStyled>
     <HomeHeader></HomeHeader>
@@ -230,7 +229,7 @@ const ProceedTaskPage = (props) => {
       {/* <Divider type="vertical" style={{ height: "100%" }} /> */}
     </ContainerStyled>
 
-    {(task && showsNotify) && <TaskChat visible={showsNotify} onClose={() => setShowsNotify(false)} taskId={task?.id} readonly={communicationReadonly} />}
+    {(task && showsNotify) && <TaskChat visible={showsNotify} onClose={() => setShowsNotify(false)} taskId={task?.id} />}
 
   </LayoutStyled >
 

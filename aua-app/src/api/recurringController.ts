@@ -16,9 +16,14 @@ export const saveRecurring = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin');
   const { id, nameTemplate, portofolioId, jobTemplateId, cron, dueDay } = req.body;
 
+  const portofolio = await getRepository(Portofolio).findOne(portofolioId);
+  assert(portofolio, 404, 'Porotofolio is not found');
+  const jobTemplate = await getRepository(JobTemplate).findOne(jobTemplateId);
+  assert(jobTemplate, 404, 'JobTemplate is not found');
+
   const recurring = new Recurring();
   recurring.id = id || uuidv4();
-  recurring.nameTemplate = nameTemplate;
+  recurring.nameTemplate = `${portofolio.name} ${jobTemplate.name} {{createdDate}}`;
   recurring.portofolioId = portofolioId;
   recurring.jobTemplateId = jobTemplateId;
   recurring.cron = cron;

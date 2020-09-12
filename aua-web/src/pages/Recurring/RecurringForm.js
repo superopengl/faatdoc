@@ -1,4 +1,4 @@
-import { Button, Form, Input, Select, Space, Typography } from 'antd';
+import { Button, Form, Input, Select, Space, Typography, InputNumber } from 'antd';
 import { CronInput } from 'components/CronInput';
 import { PortofolioAvatar } from 'components/PortofolioAvatar';
 import PropTypes from 'prop-types';
@@ -10,11 +10,7 @@ import { listPortofolio } from 'services/portofolioService';
 import { getRecurring, saveRecurring } from 'services/recurringService';
 import styled from 'styled-components';
 
-
-
 const { Text } = Typography;
-
-
 
 const StyledPortofolioSelect = styled(Select)`
   .ant-select-selector {
@@ -86,12 +82,12 @@ const RecurringForm = (props) => {
             </Select.Option>))}
           </StyledPortofolioSelect>
         </Form.Item>
-        <Form.Item label="Task Name Template"
+        {/* <Form.Item label="Task Name Template"
           help={<>Supported variables: <br /><Text code>{'{{createdDate}}'}</Text> for the creation date, like '09 Sep 2020'</>}
           name="nameTemplate"
           rules={[{ required: true, message: ' ', max: 100, whitespace: true }]}>
           <Input maxLength={100} />
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item
           label="Creation Period" name="cron" rules={[{ required: true, message: ' ' }]}
         // help={`Preview: ${cornPreview}`}
@@ -100,16 +96,16 @@ const RecurringForm = (props) => {
           <CronInput />
         </Form.Item>
         <Form.Item
-          label="Due Day (+N days after the recurring executes)" name="dueDay" rules={[{ required: false, message: ' ', type: 'number', min: 1, max: 31 }]}
+          label="Due Day (+N days after the recurring executes)" name="dueDay" rules={[{ required: false, message: ' ', type: 'number', min: 1, max: 366 }]}
           help="When the recurring executes, this value will be used to automatically populate the 'Due Date' field (if defined) on the job template."
         >
           {/* <Input autoSize={{ minRows: 3, maxRows: 20 }} maxLength={20} placeholder="Type here ..." allowClear disabled={loading} /> */}
           {/* <Text type="secondary"><small>This will automatically fill the 'Due Date' field if it's defined on the job template when the recurring creates one.</small></Text> */}
-          <Select>
+          {/* <Select>
             <Select.Option value={null}> </Select.Option>
             {new Array(31).fill(null).map((x, i) => <Select.Option key={i} value={i + 1}>{i + 1}</Select.Option>)}
-          </Select>
-          {/* <InputNumber min={1} max={31} /> */}
+          </Select> */}
+          <InputNumber min={1} max={366} />
 
         </Form.Item>
         <Form.Item style={{ marginTop: '1rem' }}>
