@@ -16,7 +16,7 @@ export class TaskHistoryTrigger1599197181037 implements MigrationInterface {
         LANGUAGE plpgsql;
         `);
         await queryRunner.query(`
-        CREATE TRIGGER lodgment_history_trigger AFTER INSERT OR UPDATE ON task
+        CREATE TRIGGER task_history_trigger AFTER INSERT OR UPDATE ON task
         FOR EACH ROW EXECUTE PROCEDURE function_task_history();
         `);
     }

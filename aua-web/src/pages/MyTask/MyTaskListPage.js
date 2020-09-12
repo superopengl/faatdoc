@@ -1,4 +1,4 @@
-import { Alert, Badge, Button, Divider, Layout, List, Modal, Space, Tabs, Typography } from 'antd';
+import { Alert, Badge, Button, Layout, List, Modal, Space, Tabs, Typography } from 'antd';
 import Text from 'antd/lib/typography/Text';
 import HomeHeader from 'components/HomeHeader';
 import { TaskProgressBar } from 'components/TaskProgressBar';
@@ -6,9 +6,9 @@ import { TimeAgo } from 'components/TimeAgo';
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { listJobTemplate } from 'services/jobTemplateService';
-import { deleteTask, listTask } from 'services/taskService';
+import { listTask } from 'services/taskService';
 import { listPortofolio } from 'services/portofolioService';
-import { PlusOutlined, DeleteOutlined, EditOutlined, ZoomInOutlined, SyncOutlined, HighlightOutlined } from '@ant-design/icons';
+import { PlusOutlined, EditOutlined, ZoomInOutlined, SyncOutlined, HighlightOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import TaskForm from './MyTaskForm';
 import ReviewSignPage from './ReviewSignPage';
@@ -46,7 +46,7 @@ const LayoutStyled = styled(Layout)`
 
 const MyTaskListPage = (props) => {
 
-  const [loading, setLoading] = React.useState(true);
+  const [, setLoading] = React.useState(true);
   const [signModalVisible, setSignModalVisible] = React.useState(false);
   const [taskList, setTaskList] = React.useState([]);
   const [, setJobTemplateList] = React.useState([]);
@@ -117,23 +117,6 @@ const MyTaskListPage = (props) => {
     }
   }
 
-  const handleDelete = async (e, item) => {
-    e.stopPropagation();
-    Modal.confirm({
-      title: <>To delete task <strong>{item.name}</strong>?</>,
-      onOk: async () => {
-        setLoading(true);
-        await deleteTask(item.id);
-        await loadList();
-        setLoading(false);
-      },
-      maskClosable: true,
-      okButtonProps: {
-        danger: true
-      },
-      okText: 'Yes, delete it!'
-    });
-  }
 
   const RenderListFilteredByStatus = (statuses = []) => {
     const data = taskList.filter(x => statuses.includes(x.status));
@@ -181,11 +164,11 @@ const MyTaskListPage = (props) => {
             <Button type="primary" icon={<PlusOutlined />} onClick={() => createNewTask()}>New Task</Button>
           </Space>
 
-          <Tabs defaultActiveKey="ongoing" type="card" tabBarExtraContent={{ right: <Button type="link" onClick={() => loadList()} icon={<SyncOutlined />}></Button> }}>
+          <Tabs defaultActiveKey="todo" type="card" tabBarExtraContent={{ right: <Button type="link" onClick={() => loadList()} icon={<SyncOutlined />}></Button> }}>
             <TabPane tab={"To Do"} key="todo">
               {RenderListFilteredByStatus(['todo'])}
             </TabPane>
-            <TabPane tab={<>In Progress <Badge count={taskList.filter(x => ['to_sign'].includes(x.status)).length} showZero={false} /></>} key="ongoing">
+            <TabPane tab={<>To Sign <Badge count={taskList.filter(x => ['to_sign'].includes(x.status)).length} showZero={false} /></>} key="ongoing">
               {RenderListFilteredByStatus(['to_sign', 'signed'])}
             </TabPane>
             <TabPane tab={"Completed"} key="complete">

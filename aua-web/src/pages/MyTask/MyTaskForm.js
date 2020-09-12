@@ -54,13 +54,6 @@ const MyTaskForm = (props) => {
     return task;
   }
 
-  const saveDraft = async () => {
-    setLoading(true);
-    await saveTask({ name: 'New Lodgment', ...task, status: 'todo' });
-    await props.onChange();
-    setLoading(false);
-  }
-
   const handleValuesChange = (changedValues, allValues) => {
     const lodgment = updateLodgmentWithFormValues(allValues);
     setTask({ ...lodgment });
@@ -70,7 +63,7 @@ const MyTaskForm = (props) => {
     // debugger;
     setLoading(true);
     try {
-      await saveTask({ ...task, ...values, status: 'submitted' });
+      await saveTask({ ...task, ...values, status: 'todo' });
       // form.resetFields();
       await props.onChange();
     } finally {
@@ -159,11 +152,11 @@ const MyTaskForm = (props) => {
               </Form.Item>
             );
           })}
-          {canEdit && <Form.Item>
+          {/* {canEdit && <Form.Item>
             <Button key="save" block ghost type="primary" disabled={disabled} onClick={() => saveDraft()}>Save</Button>
-          </Form.Item>}
+          </Form.Item>} */}
           {canEdit && <Form.Item>
-            <Button key="submit" block type="primary" htmlType="submit" disabled={disabled}>Submit Now</Button>
+            <Button key="submit" block type="primary" htmlType="submit" disabled={disabled}>Save and Submit</Button>
             </Form.Item>}
         </Form>
       </>}

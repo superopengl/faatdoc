@@ -8,12 +8,12 @@ import { FileUploader } from 'components/FileUploader';
 import HomeHeader from 'components/HomeHeader';
 
 import { Divider } from 'antd';
-import { deleteTask, getTask, saveTask, completeTask, notifyTask } from '../../services/taskService';
+import { deleteTask, getTask, saveTask, completeTask } from '../../services/taskService';
 import { varNameToLabelName } from 'util/varNameToLabelName';
 import { DateInput } from 'components/DateInput';
 import TaskChat from './TaskChat';
-import { TaskProgressBar } from 'components/TaskProgressBar';
 import { RangePickerInput } from 'components/RangePickerInput';
+import { Select } from 'antd';
 
 const { Text } = Typography;
 const ContainerStyled = styled.div`
@@ -34,6 +34,41 @@ const LayoutStyled = styled(Layout)`
     padding: 0;
   }
 `;
+
+const StatusSelect = styled(Select)`
+&.archive {
+  .ant-select-selector {
+    background: #ff4d4f;
+    border-color: #ff4d4f;
+  }
+
+  * {
+    color: #ffffff;
+  }
+}
+
+&.complete {
+  .ant-select-selector {
+    background: #52c41a;
+    border-color: #52c41a;
+  }
+
+  * {
+    color: #ffffff;
+  }
+}
+
+&.signed, &.to_sign, &.todo {
+  .ant-select-selector {
+    background: #1890ff;
+    border-color: #1890ff;
+  }
+
+  * {
+    color: #ffffff;
+  }
+}
+`
 
 const ProceedTaskPage = (props) => {
   const id = props.match.params.id;
@@ -104,62 +139,37 @@ const ProceedTaskPage = (props) => {
     return values;
   }
 
-  const handleArchive = () => {
-    const { id, name } = task;
-    Modal.confirm({
-      title: 'Archive this task?',
-      okText: 'Yes, Archive it',
-      onOk: async () => {
-        await deleteTask(id);
-        props.history.push('/task');
-      },
-      maskClosable: true,
-      okButtonProps: {
-        danger: true
-      }
-    });
-  }
-
-  const handleCompleteTask = () => {
-    Modal.confirm({
-      title: 'Complete this task',
-      okText: 'Yes, Complete it',
-      maskClosable: true,
-      onOk: async () => {
-        await completeTask(task.id);
-        goToListPage();
-      }
-    })
-  }
-
-  const handleRequestSign = async () => {
-    const signFiles = task.fields.find(x => x.name === 'requireSign');
-    if (!signFiles?.value?.length) {
-      Modal.error({
-        title: 'Cannot request sign',
-        maskClosable: true,
-        content: `No files to require sign. Please upload files to the 'Require Sign' field before request sign.`
-      });
-      return;
-    }
-    task.status = 'to_sign';
-    setLoading(true);
-    await saveTask(task);
-    await notifyTask(task.id, `The task is waiting for your signature. Please view the documents and sign if OK.`);
-    loadEntity();
-    setLoading(false);
-  }
-
   const handleMessage = () => {
     setShowsNotify(true);
   }
 
-  // const inputDisabled = loading || ['archive', 'complete'].includes(task.status);
-  // const archiveDisabled = loading || ['todo', 'archive', 'complete'].includes(task.status);
-  // const completeDisabled = loading || ['todo', 'archive', 'complete'].includes(task.status);
-  // const requiresSignDisabled = loading || 'todo' !== task.status;
-  // const communicateDisabled = loading;
-  // const saveDisabled = loading || ['archive', 'complete', 'signed'].includes(task.status);
+  const handleStatusChange = async option => {
+    const value = option?.value;
+    if (!value) return;
+    if (value !== task.status) {
+      task.status = value;
+      setLoading(true);
+      await saveTask(task);
+      loadEntity();
+    }
+  }
+
+  const status = task?.status;
+  const defaultStatus = {
+    todo: 'To Do',
+    to_sign: 'To Sign',
+    signed: 'Signed',
+    complete: 'Complete',
+    archive: 'Archive'
+  }[status];
+
+  const options = [
+    { value: 'todo', label: 'To Do' },
+    { value: 'to_sign', label: 'To Sign' },
+    { value: 'signed', label: 'Signed' },
+    { value: 'complete', label: <Text type="success">Complete</Text> },
+    { value: 'archive', label: <Text type="danger">Archive</Text> },
+  ];
 
   return (<LayoutStyled>
     <HomeHeader></HomeHeader>
@@ -171,16 +181,26 @@ const ProceedTaskPage = (props) => {
         <PageHeader
           onBack={() => handleCancel()}
           title={task.name}
-          subTitle={<TaskProgressBar status={task.status} width={60} />}
+          // subTitle={<TaskProgressBar status={task.status} width={60} />}
+          extra={[
+            <Space key="1" style={{ width: '100%', justifyContent: 'flex-end' }}>
+              <Button type="primary" htmlType="submit" disabled={loading}>Save</Button>
+              <Button type="primary" ghost disabled={loading} onClick={() => handleMessage()}>Notify</Button>
+              <StatusSelect defaultValue={{ value: defaultStatus }}
+                labelInValue={true}
+                style={{ width: 120 }}
+                className={status}
+                onChange={handleStatusChange}
+              >
+                {options
+                  .filter(x => x.value !== status)
+                  .map((x, i) => <Select.Option key={i} value={x.value}>{x.label}</Select.Option>)}
+              </StatusSelect>
+            </Space>
+          ]}
         >
         </PageHeader>
-        <Space style={{width: '100%', justifyContent: 'flex-end'}}>
-          <Button key="1" type="primary" danger disabled={loading} onClick={() => handleArchive()}>Archive</Button>
-          <Button key="2" type="primary" ghost disabled={loading} onClick={() => handleCompleteTask()}>Complete</Button>
-          <Button key="3" type="primary" ghost disabled={loading} onClick={() => handleRequestSign()}>Request Sign</Button>
-          <Button key="4" type="primary" ghost disabled={loading} onClick={() => handleMessage()}>Notify</Button>
-          <Button key="5" type="primary" htmlType="submit" disabled={loading}>Save</Button>
-        </Space>
+
         <Divider />
         <Row gutter={32}>
           <Col span={12}>

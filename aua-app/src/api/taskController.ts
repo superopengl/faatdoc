@@ -294,22 +294,3 @@ export const listTaskNotifies = handlerWrapper(async (req, res) => {
 
   res.json(list);
 });
-
-
-
-// export const requireSignTask = handlerWrapper(async (req, res) => {
-//   assertRole(req, 'admin', 'agent');
-//   const { id } = req.params;
-
-//   const repo = getRepository(Task);
-//   const task = await repo.findOne(id);
-//   assert(task, 404);
-//   assert(task.status === 'submitted', 400, `Cannot require sign for this task`);
-
-//   task.status = TaskStatus.TO_SIGN;
-//   await repo.save(task);
-
-//   await notifyTask(task, req.user.id, 'The task is waiting for your signature.');
-
-//   res.json();
-// });
