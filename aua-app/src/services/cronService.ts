@@ -69,8 +69,6 @@ export async function executeRecurring(recurringId) {
     (j, p) => nameTemplate.replace('{{createdDate}}', moment().format('DD MMM YYYY'))
   );
 
-  const lodgementId = uuidv4();
-  lodgement.id = lodgementId;
   lodgement.status = LodgementStatus.SUBMITTED;
 
   trySetLodgementDueDateField(lodgement, recurring.dueDay);

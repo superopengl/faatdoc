@@ -26,6 +26,7 @@ import UserPage from 'pages/User/UserPage';
 import ImpersonatePage from 'pages/Impersonate/ImpersonatePage';
 import { refreshNotificationUnreadCount as getNotificationUnreadCount} from 'services/notificationService';
 import PortofolioForm from 'pages/Portofolio/PortofolioForm';
+import DisclaimerPage from 'pages/DisclaimerPage';
 
 
 class App extends React.Component {
@@ -96,6 +97,7 @@ class App extends React.Component {
             <RoleRoute visible={!isGuest} loading={loading} path="/change_password" exact component={ChangePasswordPage} />
             <RoleRoute loading={loading} path="/terms_and_conditions" exact component={TermAndConditionPage} />
             <RoleRoute loading={loading} path="/privacy_policy" exact component={PrivacyPolicyPage} />
+            <RoleRoute loading={loading} path="/disclaimer" exact component={DisclaimerPage} />
             {/* <Redirect to="/" /> */}
             <RoleRoute loading={loading} component={Error404} />
 

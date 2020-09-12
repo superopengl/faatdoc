@@ -122,9 +122,9 @@ const SignUpPage = (props) => {
                 <Form.Item style={{ marginTop: '1rem' }}>
                   <Button block type="primary" htmlType="submit" disabled={sending}>Sign Up</Button>
                 </Form.Item>
-                <Form.Item>
+                {/* <Form.Item>
                   <Button block type="link" onClick={() => goBack()}>Cancel</Button>
-                </Form.Item>
+                </Form.Item> */}
               </Form>
               {/* <Link to="/"><Button block type="link">Go to home page</Button></Link> */}
             </ContainerStyled>

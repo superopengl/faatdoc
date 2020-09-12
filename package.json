@@ -9,7 +9,9 @@
   "scripts": {
     "docker:build": "docker build -t auao-portal -f ./devops/Dockerfile --build-arg NODE_ENV=prod --build-arg REACT_APP_GIT_HASH=$(git rev-parse --short HEAD) .",
     "docker:run": "docker run -p 80:80 --env-file ./devops/.env.prod auao-portal",
-    "docker:push": "aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin 945741931974.dkr.ecr.ap-southeast-2.amazonaws.com; docker tag auao-portal:latest 945741931974.dkr.ecr.ap-southeast-2.amazonaws.com/auao-portal:latest; docker push 945741931974.dkr.ecr.ap-southeast-2.amazonaws.com/auao-portal:latest"
+    "docker:push": "aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin 945741931974.dkr.ecr.ap-southeast-2.amazonaws.com; docker tag auao-portal:latest 945741931974.dkr.ecr.ap-southeast-2.amazonaws.com/auao-portal:latest; docker push 945741931974.dkr.ecr.ap-southeast-2.amazonaws.com/auao-portal:latest",
+    "ecs:update": "aws ecs update-service --cluster auao-website --service auao-website --force-new-deployment",
+    "release": "npm run docker:build; npm run docker:push; npm run ecs:update"
   },
   "author": "mr.shaojun@gmail.com",
   "license": "MIT",

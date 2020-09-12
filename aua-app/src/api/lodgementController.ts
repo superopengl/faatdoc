@@ -24,6 +24,8 @@ export const generateLodgement = handlerWrapper(async (req, res) => {
     (j, p) => `${j.name} for ${p.name}`
   );
 
+  await getRepository(Lodgement).save(lodgement);
+
   res.json(lodgement);
 });
 

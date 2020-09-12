@@ -23,12 +23,12 @@ export const LodgementGenerator = props => {
         <Text type="secondary">Please choose a lodgement type</Text>
       </Form.Item>
       <Form.Item label="Choose the type of your lodgement" name="jobTemplateId" rules={[{ required: true, message: 'Please choose which type lodgement to proceed' }]}>
-        <Radio.Group  buttonStyle="solid">
+        <Radio.Group  buttonStyle="solid" style={{width: '100%'}}>
           {jobTemplateList.map((item, i) => <Radio style={radioStyle} key={i} value={item.id}>{item.name}</Radio>)}
         </Radio.Group>
       </Form.Item>
-      <Form.Item label="Reuse existing portofolio to prefill the lodgment (Optional)" name="portofolioId" rules={[{ required: true, message: 'Please choose how to fill the lodgement form' }]}>
-        <Radio.Group>
+      <Form.Item label="Reuse existing portofolio to prefill the lodgment" name="portofolioId" rules={[{ required: true, message: 'Please choose how to fill the lodgement form' }]}>
+        <Radio.Group  buttonStyle="solid" style={{width: '100%'}}>
           {portofolioList.map((item, i) => <Radio style={radioStyle} key={i} value={item.id}>{item.name}</Radio>)}
         </Radio.Group>
       </Form.Item>

@@ -8,6 +8,7 @@ import { JobTemplate } from '../entity/JobTemplate';
 import { Portofolio } from '../entity/Portofolio';
 import { LodgementStatus } from '../enums/LodgementStatus';
 import { guessDisplayNameFromFields } from './guessDisplayNameFromFields';
+import { v4 as uuidv4 } from 'uuid';
 
 
 function prefillFieldsWithProtofolio(jobTemplateFields, portofolioFields) {
@@ -40,6 +41,7 @@ export const generateLodgementByJobTemplateAndPortofolio = async (jobTemplateId,
 
   const fields = prefillFieldsWithProtofolio(jobTemplate.fields, portofolio?.fields);
 
+  lodgement.id = uuidv4();
   lodgement.name = genName(jobTemplate, portofolio);
   lodgement.forWhom = guessDisplayNameFromFields(fields);
   lodgement.userId = portofolio.userId;

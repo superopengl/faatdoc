@@ -68,6 +68,7 @@ const HomeHeaderRaw = props => {
       content: <>Do you want to log out <Text code>{user.email}</Text></>,
       async onOk() {
         await logout();
+        setVisible(false);
         setUser(null);
         history.push('/');
       },

@@ -93,7 +93,7 @@ export const healthCheckRecurring = handlerWrapper(async (req, res) => {
   const expected = process.env.GIT_HASH;
   const lock = await getRepository(CronLock).findOne({key: 'cron-singleton-lock'});
   const actual = lock?.gitHash;
-  const healthy = actual === expected;
+  const healthy = process.env.NODE_ENV === 'dev' || actual === expected;
 
   const result = {
     error: healthy ? null : `Expecting ${expected} but got ${actual}`,
