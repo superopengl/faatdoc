@@ -6,6 +6,7 @@ import { GoogleOutlined } from '@ant-design/icons';
 import { useWindowWidth } from '@react-hook/window-size'
 import { GlobalContext } from 'contexts/GlobalContext';
 import GoogleSsoButton from 'components/GoogleSsoButton';
+import GoogleLogoSvg from 'components/GoogleLogoSvg';
 
 const { Title } = Typography;
 
@@ -17,7 +18,7 @@ margin: 0 auto 0 auto;
 width: 100%;
 `;
 
-const SignUpButton = styled(Button)`
+const SignInButton = styled(Button)`
 margin-top: 1rem;
 max-width: 300px;
 height: 50px;
@@ -72,8 +73,8 @@ const HomeCarouselAreaRaw = props => {
     windowWidth < 992 ? 36 :
       44;
 
-  const handleSignUp = () => {
-    props.history.push('/signup')
+  const handleSignIn = () => {
+    props.history.push('/signin')
   }
 
   return (
@@ -88,22 +89,22 @@ const HomeCarouselAreaRaw = props => {
           {isGuest &&
             <Row style={{maxWidth: 500, margin: '0 auto'}} gutter={30}>
               <Col {...span}>
-                <SignUpButton block type="primary" 
+                <SignInButton block type="primary" 
                   size="large"
-                  onClick={() => handleSignUp()}>Sign Up Now!</SignUpButton>
+                  onClick={() => handleSignIn()}>Sign In with Email</SignInButton>
               </Col>
               <Col {...span}>
                 <GoogleSsoButton
                   render={
                     renderProps => (
-                      <SignUpButton
+                      <SignInButton
                         block
                         type="secondary"
                         size="large"
-                        icon={<GoogleOutlined />}
+                        icon={<GoogleLogoSvg />}
                         onClick={renderProps.onClick}
                         disabled={renderProps.disabled}
-                      >Sign In with Google</SignUpButton>
+                      >Sign In with Google</SignInButton>
                     )}
                 />
               </Col>

@@ -137,9 +137,9 @@ paths:
       responses:
         200:
           description: OK
-  /auth/signup:
+  /auth/signin:
     post:
-      operationId: signup
+      operationId: signin
       # security:
       #   - authAnyRole: []
       responses:

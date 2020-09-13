@@ -9,6 +9,7 @@ import { GlobalContext } from '../contexts/GlobalContext';
 import { login } from 'services/authService';
 import { refreshNotificationUnreadCount } from 'services/notificationService';
 import GoogleSsoButton from 'components/GoogleSsoButton';
+import GoogleLogoSvg from 'components/GoogleLogoSvg';
 
 const LayoutStyled = styled(Layout)`
 margin: 0 auto 0 auto;
@@ -68,7 +69,7 @@ const LogInPage = props => {
       <ContainerStyled>
         <LogoContainer><Logo /></LogoContainer>
         <Title level={2}>Log In</Title>
-        <Link to="/signup"><Button size="small" block type="link">Not a user? Click to sign up</Button></Link>
+        <Link to="/signin"><Button size="small" block type="link">Not a user? Click to sign up</Button></Link>
         <GoogleSsoButton
           render={
             renderProps => (
@@ -76,7 +77,8 @@ const LogInPage = props => {
                 ghost
                 type="primary"
                 block
-                icon={<GoogleOutlined />}
+                icon={<GoogleLogoSvg size={16} />}
+                // icon={<GoogleOutlined />}
                 style={{ marginTop: '1.5rem' }}
                 onClick={renderProps.onClick}
                 disabled={renderProps.disabled}
@@ -99,7 +101,7 @@ const LogInPage = props => {
           </Form.Item>
 
           {/* <Form.Item>
-            <Link to="/signup"><Button ghost block type="primary">Sign Up</Button></Link>
+            <Link to="/signin"><Button ghost block type="primary">Sign In</Button></Link>
           </Form.Item> */}
           <Form.Item>
             <Link to="/forgot_password">

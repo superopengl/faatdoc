@@ -171,6 +171,10 @@ const ProceedTaskPage = (props) => {
     { value: 'archive', label: <Text type="danger">Archive</Text> },
   ];
 
+  const handleAddField = () => {
+    
+  }
+
   return (<LayoutStyled>
     <HomeHeader></HomeHeader>
     <ContainerStyled>
@@ -186,6 +190,7 @@ const ProceedTaskPage = (props) => {
             <Space key="1" style={{ width: '100%', justifyContent: 'flex-end' }}>
               <Button type="primary" htmlType="submit" disabled={loading}>Save</Button>
               <Button type="primary" ghost disabled={loading} onClick={() => handleMessage()}>Notify</Button>
+              <Button type="primary" ghost disabled={loading} onClick={() => handleAddField()}>Add Field</Button>
               <StatusSelect defaultValue={{ value: defaultStatus }}
                 labelInValue={true}
                 style={{ width: 120 }}

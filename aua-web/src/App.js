@@ -8,7 +8,7 @@ import ResetPasswordPage from 'pages/ResetPasswordPage';
 import { GlobalContext } from './contexts/GlobalContext';
 import ForgotPasswordPage from 'pages/ForgotPasswordPage';
 import ChangePasswordPage from 'pages/ChangePasswordPage';
-import SignUpPage from 'pages/SignUpPage';
+import SignInPage from 'pages/SignInPage';
 import TermAndConditionPage from 'pages/TermAndConditionPage';
 import Error404 from 'pages/Error404';
 import PrivacyPolicyPage from 'pages/PrivacyPolicyPage';
@@ -80,7 +80,7 @@ class App extends React.Component {
           <Switch>
             <RoleRoute loading={loading} path="/" exact component={HomePage} />
             <RoleRoute visible={isGuest} loading={loading} exact path="/login" component={LogInPage} />
-            <RoleRoute visible={isGuest} loading={loading} exact path="/signup" component={SignUpPage} />
+            <RoleRoute visible={isGuest} loading={loading} exact path="/signin" component={SignInPage} />
             <RoleRoute visible={isGuest} loading={loading} exact path="/forgot_password" component={ForgotPasswordPage} />
             <RoleRoute visible={isClient} loading={loading} exact path="/portofolio" component={PortofolioPage} />
             <RoleRoute visible={isClient} loading={loading} exact path="/portofolio/:id" component={PortofolioForm} />

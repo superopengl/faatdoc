@@ -44,7 +44,7 @@ ${url}
 ${SIGNATURE_TEXT}
 `;
 
-export const getSignUpHtmlEmail = (name, url) => `
+export const getSignInHtmlEmail = (name, url) => `
 <p>Dear ${name}</p>
 <p>
 Welcome to join us.
@@ -55,7 +55,7 @@ Your Membership eCard information is as below.</p>
 ${SIGNATURE_HTML}
 `;
 
-export const getSignUpTextEmail = (name, url) => `
+export const getSignInTextEmail = (name, url) => `
 Dear ${name}
 
 Welcome to join us.

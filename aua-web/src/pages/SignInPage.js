@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Link, withRouter } from 'react-router-dom';
 import { Typography, Button, Modal, Divider, Form, Input, Checkbox, Layout } from 'antd';
 import { Logo } from 'components/Logo';
-import { signUp } from 'services/authService';
+import { signIn } from 'services/authService';
 import { GlobalContext } from 'contexts/GlobalContext';
 const { Title } = Typography;
 
@@ -33,7 +33,7 @@ const LayoutStyled = styled(Layout)`
   height: 100%;
 `;
 
-const SignUpPage = (props) => {
+const SignInPage = (props) => {
 
   const [sending, setSending] = React.useState(false);
 
@@ -41,7 +41,7 @@ const SignUpPage = (props) => {
     props.history.goBack();
   }
 
-  const handleSignUp = async (values) => {
+  const handleSignIn = async (values) => {
     if (sending) {
       return;
     }
@@ -52,7 +52,7 @@ const SignUpPage = (props) => {
 
       // Sanitize pictures to imageIds
       values.role = values.isEmployee ? 'agent' : 'client';
-      const user = await signUp(values);
+      const user = await signIn(values);
 
       // Guest
       Modal.confirm({
@@ -100,10 +100,10 @@ const SignUpPage = (props) => {
           <PageContainer>
             <ContainerStyled>
               <LogoContainer><Logo /></LogoContainer>
-              <Title level={2}>Sign Up</Title>
+              <Title level={2}>Sign In</Title>
 
               <Link to="/login"><Button size="small" block type="link">Already a user? Click to log in</Button></Link>
-              <Form layout="vertical" onFinish={handleSignUp} style={{ textAlign: 'left' }} initialValues={{ role: 'client' }}>
+              <Form layout="vertical" onFinish={handleSignIn} style={{ textAlign: 'left' }} initialValues={{ role: 'client' }}>
                 <Form.Item label="Email" name="email" rules={[{ required: true, type: 'email', whitespace: true, max: 100, message: ' ' }]}>
                   <Input placeholder="abc@xyz.com" type="email" autoComplete="email" allowClear={true} maxLength="100" autoFocus={true} />
                 </Form.Item>
@@ -120,7 +120,7 @@ const SignUpPage = (props) => {
                   <Checkbox disabled={sending}>I have read and agree to the <a target="_blank" href="/terms_and_conditions">terms & conditions</a> and <a target="_blank" href="/privacy_policy">privacy policy</a>.</Checkbox>
                 </Form.Item>
                 <Form.Item style={{ marginTop: '1rem' }}>
-                  <Button block type="primary" htmlType="submit" disabled={sending}>Sign Up</Button>
+                  <Button block type="primary" htmlType="submit" disabled={sending}>Sign In</Button>
                 </Form.Item>
                 {/* <Form.Item>
                   <Button block type="link" onClick={() => goBack()}>Cancel</Button>
@@ -136,8 +136,8 @@ const SignUpPage = (props) => {
   );
 }
 
-SignUpPage.propTypes = {};
+SignInPage.propTypes = {};
 
-SignUpPage.defaultProps = {};
+SignInPage.defaultProps = {};
 
-export default withRouter(SignUpPage);
+export default withRouter(SignInPage);
