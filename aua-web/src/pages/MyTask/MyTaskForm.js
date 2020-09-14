@@ -3,20 +3,37 @@ import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
-import { Input, Button, Form, Space, Typography, Radio } from 'antd';
+import { Input, Button, Form, Space, Typography, Radio, Affix } from 'antd';
 import { FileUploader } from '../../components/FileUploader';
 import { generateTask, getTask, saveTask } from 'services/taskService';
 import { TaskGenerator } from './TaskGenerator';
 import { varNameToLabelName } from 'util/varNameToLabelName';
 import { DateInput } from 'components/DateInput';
 import { RangePickerInput } from 'components/RangePickerInput';
-import { PageHeader } from 'antd';
 import TaskChat from 'pages/AdminTask/TaskChat';
+import {
+  NotificationOutlined,
+} from '@ant-design/icons';
 
 const { Text } = Typography;
 
-const StyledPageHeader = styled(PageHeader)`
-margin-bottom: 2rem;
+const AffixContactButton = styled(Button)`
+width: 60px;
+height: 60px;
+display: flex;
+align-items: center;
+justify-content: center;
+border: none;
+background-color: rgba(20, 62, 134, 0.8);
+color: white;
+// box-shadow: 1px 1px 5px #222222;
+border: 2px solid white;
+
+&:focus,&:hover,&:active {
+color: white;
+background-color: rgba(20, 62, 134, 0.8);
+border: 2px solid white;
+}
 `;
 
 const MyTaskForm = (props) => {
@@ -114,7 +131,7 @@ const MyTaskForm = (props) => {
           onValuesChange={handleValuesChange}
           onFinish={handleSubmit}
           style={{ textAlign: 'left' }} initialValues={getFormInitialValues()}>
-          <Form.Item label="Name" name="name" rules={[{ required: true }]}>
+          <Form.Item label="Task Name" name="name" rules={[{ required: true }]}>
             <Input disabled={disabled} />
           </Form.Item>
 
@@ -146,11 +163,20 @@ const MyTaskForm = (props) => {
           </Form.Item>} */}
           {canEdit && <Form.Item>
             <Button key="submit" block type="primary" htmlType="submit" disabled={disabled}>Save and Submit</Button>
-            </Form.Item>}
+          </Form.Item>}
         </Form>
       </>}
     </Space>
-    {task && <TaskChat visible={showsMessage} onClose={() => setShowsMessage(false)} taskId={task?.id}/>}
+    {task && <TaskChat visible={showsMessage} onClose={() => setShowsMessage(false)} taskId={task?.id} />}
+    <Affix style={{ position: 'fixed', bottom: 30, right: 30 }}>
+      <AffixContactButton type="primary" shape="circle" size="large" 
+      onClick={() => setShowsMessage(true)}
+      danger
+      style={{fontSize: 24}}
+      >
+        <NotificationOutlined/>
+      </AffixContactButton>
+    </Affix>
   </>
   );
 };

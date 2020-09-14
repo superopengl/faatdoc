@@ -9,7 +9,7 @@ import { listJobTemplate } from 'services/jobTemplateService';
 import { listPortofolio } from 'services/portofolioService';
 
 const ContainerStyled = styled.div`
-margin: 4rem auto 2rem auto;
+margin: 4rem auto 0 auto;
 padding: 2rem 1rem;
 // text-align: center;
 max-width: 500px;

@@ -254,7 +254,7 @@ async function sendTaskMessage(task, senderId, content) {
 }
 
 export const notifyTask = handlerWrapper(async (req, res) => {
-  assertRole(req, 'admin', 'agent');
+  assertRole(req, 'admin', 'agent', 'client');
   const { id } = req.params;
   const { content } = req.body;
 
