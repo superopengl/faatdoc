@@ -27,6 +27,7 @@ import ImpersonatePage from 'pages/Impersonate/ImpersonatePage';
 import { refreshNotificationUnreadCount as getNotificationUnreadCount} from 'services/notificationService';
 import PortofolioForm from 'pages/Portofolio/PortofolioForm';
 import DisclaimerPage from 'pages/DisclaimerPage';
+import MyTaskViewPage from 'pages/MyTask/MyTaskViewPage';
 
 
 class App extends React.Component {
@@ -92,6 +93,7 @@ class App extends React.Component {
             <RoleRoute visible={isAdmin} loading={loading} exact path="/impersonate" component={ImpersonatePage} />
             <RoleRoute visible={!isGuest} loading={loading} path="/notification" exact component={NotificationPage} />
             <RoleRoute visible={isClient} loading={loading} path="/task/:id" exact component={MyTaskPage} />
+            <RoleRoute visible={isClient} loading={loading} path="/task/:id/view" exact component={MyTaskViewPage} />
             <RoleRoute visible={isAdmin || isAgent || isClient} loading={loading} path="/task" exact component={isClient ? MyTaskListPage : AdminTaskListPage} />
             <RoleRoute visible={isAdmin || isAgent} loading={loading} path="/task/:id/proceed" exact component={ProceedTaskPage} />
             <RoleRoute visible={!isGuest} loading={loading} path="/change_password" exact component={ChangePasswordPage} />

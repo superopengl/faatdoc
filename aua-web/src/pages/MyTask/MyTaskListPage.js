@@ -47,11 +47,8 @@ const LayoutStyled = styled(Layout)`
 const MyTaskListPage = (props) => {
 
   const [, setLoading] = React.useState(true);
-  const [signModalVisible, setSignModalVisible] = React.useState(false);
   const [taskList, setTaskList] = React.useState([]);
-  const [, setJobTemplateList] = React.useState([]);
   const [portofolioList, setPortofolioList] = React.useState([]);
-  const [currentTask, setCurrentTask] = React.useState();
 
 
   const loadList = async () => {
@@ -59,10 +56,8 @@ const MyTaskListPage = (props) => {
     const portofolioList = await listPortofolio() || [];
 
     const list = await listTask();
-    const jobTemplateList = await listJobTemplate() || [];
 
     setTaskList(list);
-    setJobTemplateList(jobTemplateList);
     setPortofolioList(portofolioList);
     setLoading(false);
   }
@@ -72,8 +67,12 @@ const MyTaskListPage = (props) => {
     loadList();
   }, [])
 
-  const goToTask = (id) => {
+  const goToEditTask = (id) => {
     props.history.push(`/task/${id || 'new'}`);
+  }
+
+  const goToViewTask = (id) => {
+    props.history.push(`/task/${id}/view`);
   }
 
   const createNewTask = () => {
@@ -86,21 +85,15 @@ const MyTaskListPage = (props) => {
       });
       return;
     }
-    goToTask();
+    goToEditTask();
   }
 
   const actionOnTask = task => {
-    setCurrentTask(task);
     if (['to_sign', 'signed', 'complete'].includes(task.status)) {
-      setSignModalVisible(true);
+      goToViewTask(task.id);
     } else {
-      goToTask(task.id);
+      goToEditTask(task.id);
     }
-  }
-
-  const handleModalExit = async () => {
-    setSignModalVisible(false);
-    await loadList();
   }
 
   const getActionIcon = status => {
@@ -176,28 +169,7 @@ const MyTaskListPage = (props) => {
             </TabPane>
           </Tabs>
         </Space>
-
       </ContainerStyled>
-      <Modal
-        title={currentTask?.name || 'New Task'}
-        visible={signModalVisible}
-        destroyOnClose={true}
-        onCancel={() => setSignModalVisible(false)}
-        onOk={() => setSignModalVisible(false)}
-        footer={null}
-        width={700}
-      >
-        {currentTask?.status === 'signed' ? <Alert message="The task has been signed." description="Please wait for the task to be completed by us." type="success" showIcon /> : null}
-        {currentTask?.status === 'to_sign' ? <Alert message="The task requires signature." description="All above documents have been viewed and the task is ready to e-sign." type="warning" showIcon /> : null}
-        <Tabs>
-          <Tabs.TabPane tab="Review and Sign" key="sign">
-            <ReviewSignPage id={currentTask?.id} onFinish={() => handleModalExit()} onCancel={() => setSignModalVisible(false)} />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Task" key="view">
-            <TaskForm id={currentTask?.id} onFinish={() => handleModalExit()} onCancel={() => setSignModalVisible(false)} />
-          </Tabs.TabPane>
-        </Tabs>
-      </Modal>
     </LayoutStyled >
   );
 };

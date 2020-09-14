@@ -20,16 +20,17 @@ const StyledPortofolioSelect = styled(Select)`
   }
 `;
 
+const DEFAULT_CRON = '0 0 0 L */1 *';
+
 const RecurringForm = (props) => {
   const { id } = props;
   // const { name, id, fields } = value || {};
 
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
   const [form] = Form.useForm();
-  const [, setRecurring] = React.useState();
   const [jobTemplateList, setJobTemplateList] = React.useState([]);
   const [portofolioList, setPortofolioList] = React.useState([]);
-  const [initialValues, setInitialValues] = React.useState({ cron: '0 0 0 L */1 *' });
+  const [initialValues, setInitialValues] = React.useState();
 
   const loadEntity = async () => {
     setLoading(true);
@@ -37,7 +38,6 @@ const RecurringForm = (props) => {
     const portofolioList = await listPortofolio();
     if (id) {
       const recurring = await getRecurring(id);
-      setRecurring(recurring);
       setInitialValues(recurring);
     }
     setJobTemplateList(jobTemplateList);

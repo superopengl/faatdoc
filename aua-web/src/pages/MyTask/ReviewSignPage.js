@@ -1,4 +1,4 @@
-import { Button, List, Space, Typography } from 'antd';
+import { Button, List, Space, Typography, Form, Checkbox } from 'antd';
 import Text from 'antd/lib/typography/Text';
 import { FileIcon } from 'components/FileIcon';
 import { TimeAgo } from 'components/TimeAgo';
@@ -29,7 +29,7 @@ const ReviewSignPage = (props) => {
 
 
   const getSignFiles = async (task) => {
-    const fileids = task?.fields?.find(x => x.name === 'requireSign')?.value;
+    const fileids = task?.fields?.find(x => x.name === 'requireSign')?.value || [];
     if (!fileids.length) return [];
 
     const files = await searchFile(fileids);
@@ -55,11 +55,7 @@ const ReviewSignPage = (props) => {
     await signTask(task.id);
     props.onFinish();
   }
-
-  const handleCancel = () => {
-    props.onCancel();
-  }
-
+  
   const { status } = task || {};
 
   const isSigned = status === 'signed';
@@ -83,11 +79,21 @@ const ReviewSignPage = (props) => {
           />
         </StyledListItem>)}
       />
-      {!readonly && <Space direction="vertical" style={{ width: '100%' }} size="middle">
+      {/* {!readonly && <Space direction="vertical" style={{ width: '100%' }} size="middle">
         {canSign && <Button type="primary" block onClick={() => handleSign()} disabled={!canSign}>e-Sign</Button>}
         <Button block type="link" onClick={() => handleCancel()}>Cancel</Button>
-      </Space>}
-
+      </Space>} */}
+      {canSign && <Form onFinish={handleSign}>
+        <Form.Item name="" valuePropName="checked" rules={[{
+          validator: (_, value) =>
+            value ? Promise.resolve() : Promise.reject('You have to agree to continue.'),
+        }]}>
+          <Checkbox>I have read and agree on the <a href="/disclaimer" target="_blank">disclaimer</a></Checkbox>
+        </Form.Item>
+        <Form.Item>
+          <Button htmlType="submit" type="primary" block disabled={!canSign}>e-Sign</Button>
+        </Form.Item>
+      </Form>}
     </Space>
   );
 };

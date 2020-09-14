@@ -20,7 +20,7 @@ margin-bottom: 2rem;
 `;
 
 const MyTaskForm = (props) => {
-  const { id, jobTemplateList, portofolioList } = props;
+  const { id, jobTemplateList, portofolioList, showsAll } = props;
 
   const isNew = !id;
   // const { name, id, fields } = value || {};
@@ -71,12 +71,6 @@ const MyTaskForm = (props) => {
     }
   }
 
-  const handleCancel = () => {
-    // form.resetFields();
-    // props.onCancel();
-    props.history.goBack();
-  }
-
   const handleSelectedTemplate = async (values) => {
     setLoading(true);
     const { jobTemplateId, portofolioId } = values;
@@ -120,16 +114,11 @@ const MyTaskForm = (props) => {
           onValuesChange={handleValuesChange}
           onFinish={handleSubmit}
           style={{ textAlign: 'left' }} initialValues={getFormInitialValues()}>
-          <StyledPageHeader
-            onBack={() => handleCancel()}
-            title={isNew ? 'New Task' : task.name}
-            style={{ padding: '0' }}
-          />
           <Form.Item label="Name" name="name" rules={[{ required: true }]}>
             <Input disabled={disabled} />
           </Form.Item>
 
-          {task.fields.filter(field => !field.officialOnly).map((field, i) => {
+          {task.fields.filter(field => showsAll || !field.officialOnly).map((field, i) => {
             const { name, description, type, required } = field;
             const formItemProps = {
               label: <>{varNameToLabelName(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
@@ -167,9 +156,12 @@ const MyTaskForm = (props) => {
 };
 
 MyTaskForm.propTypes = {
-  id: PropTypes.string
+  id: PropTypes.string,
+  showsAll: PropTypes.bool.isRequired
 };
 
-MyTaskForm.defaultProps = {};
+MyTaskForm.defaultProps = {
+  showsAll: false
+};
 
 export default withRouter(MyTaskForm);
