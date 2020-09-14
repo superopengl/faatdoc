@@ -1,21 +1,13 @@
-import { Alert, Badge, Button, Layout, List, Modal, Space, Tabs, Typography } from 'antd';
-import PropTypes from 'prop-types';
-import Text from 'antd/lib/typography/Text';
+import { Alert, Button, Layout, Space, Tabs, Typography } from 'antd';
 import HomeHeader from 'components/HomeHeader';
-import { TaskProgressBar } from 'components/TaskProgressBar';
-import { TimeAgo } from 'components/TimeAgo';
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { listJobTemplate } from 'services/jobTemplateService';
-import { listTask, getTask } from 'services/taskService';
-import { listPortofolio } from 'services/portofolioService';
-import { PlusOutlined, EditOutlined, ZoomInOutlined, SyncOutlined, HighlightOutlined } from '@ant-design/icons';
+import { getTask } from 'services/taskService';
 import styled from 'styled-components';
 import TaskForm from './MyTaskForm';
 import ReviewSignPage from './ReviewSignPage';
 
 const { Title } = Typography;
-const { TabPane } = Tabs;
 
 
 const ContainerStyled = styled.div`
@@ -47,7 +39,7 @@ const LayoutStyled = styled(Layout)`
 const MyTaskViewPage = (props) => {
   const {id} = props.match.params;
 
-  const [loading, setLoading] = React.useState(true);
+  const [, setLoading] = React.useState(true);
   const [task, setTask] = React.useState({});
 
   const loadEntity = async () => {
@@ -61,7 +53,7 @@ const MyTaskViewPage = (props) => {
     loadEntity();
   }, [])
 
-  const goToTaskList = (id) => {
+  const goToTaskList = () => {
     props.history.push(`/task`);
   }
 

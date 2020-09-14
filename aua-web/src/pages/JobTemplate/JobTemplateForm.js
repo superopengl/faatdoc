@@ -65,8 +65,7 @@ const JobTemplateForm = (props) => {
 
   return (
     <Space direction="vertical" size="large" style={{ width: '100%' }}>
-      <Text strong>Job Template Name</Text>
-      <Input placeholder="Job Template Name" value={name} onChange={e => setName(e.target.value)} />
+      <Input style={{flex: '1'}} placeholder="Job Template Name" value={name} onChange={e => setName(e.target.value)} />
       <FieldEditor
         onChange={handleSave}
         value={fields}

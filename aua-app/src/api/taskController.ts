@@ -183,21 +183,15 @@ export const getTask = handlerWrapper(async (req, res) => {
   res.json(task);
 });
 
-// export const deleteTask = handlerWrapper(async (req, res) => {
-//   assertRole(req, 'admin');
-//   const { id } = req.params;
-//   const repo = getRepository(Task);
-//   const task = await repo.findOne(id);
-//   if (task.status === TaskStatus.DRAFT) {
-//     // If it's a draft then hard delete it.
-//     await repo.delete(id);
-//   } else {
-//     // If it's not a draft then soft delete it.
-//     await repo.update(id, { status: TaskStatus.ARCHIVE });
-//   }
+export const deleteTask = handlerWrapper(async (req, res) => {
+  assertRole(req, 'admin');
+  const { id } = req.params;
+  const repo = getRepository(Task);
 
-//   res.json();
-// });
+  await repo.update(id, { status: TaskStatus.ARCHIVE });
+
+  res.json();
+});
 
 
 export const assignTask = handlerWrapper(async (req, res) => {

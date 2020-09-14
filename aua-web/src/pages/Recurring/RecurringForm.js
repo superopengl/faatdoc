@@ -20,8 +20,6 @@ const StyledPortofolioSelect = styled(Select)`
   }
 `;
 
-const DEFAULT_CRON = '0 0 0 L */1 *';
-
 const RecurringForm = (props) => {
   const { id } = props;
   // const { name, id, fields } = value || {};

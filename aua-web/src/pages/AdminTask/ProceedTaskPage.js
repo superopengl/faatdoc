@@ -8,15 +8,14 @@ import { FileUploader } from 'components/FileUploader';
 import HomeHeader from 'components/HomeHeader';
 
 import { Divider } from 'antd';
-import { deleteTask, getTask, saveTask, completeTask } from '../../services/taskService';
+import { getTask, saveTask } from '../../services/taskService';
 import { varNameToLabelName } from 'util/varNameToLabelName';
 import { DateInput } from 'components/DateInput';
 import TaskChat from './TaskChat';
 import { RangePickerInput } from 'components/RangePickerInput';
 import { Select } from 'antd';
 import FieldEditor from 'components/FieldEditor';
-import { AiOutlineSync } from 'react-icons/ai';
-import { DeleteOutlined, EditOutlined, SearchOutlined, SyncOutlined } from '@ant-design/icons';
+import { SyncOutlined } from '@ant-design/icons';
 
 const { Text } = Typography;
 const ContainerStyled = styled.div`

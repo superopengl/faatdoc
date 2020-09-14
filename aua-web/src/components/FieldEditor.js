@@ -155,9 +155,6 @@ const FieldEditor = (props) => {
 
   return (
     <Space direction="vertical" size="large" style={{ width: '100%' }}>
-      <Space style={{ width: '100%', justifyContent: 'space-between' }}>
-        <Text strong>Field Definitions</Text>
-      </Space>
       <Table
         style={{ width: '100%' }}
         size="small"
