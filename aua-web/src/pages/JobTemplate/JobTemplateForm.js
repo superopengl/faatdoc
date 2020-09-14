@@ -8,6 +8,7 @@ import { varNameToLabelName } from 'util/varNameToLabelName';
 import { saveJobTemplate, getJobTemplate } from 'services/jobTemplateService';
 import { notify } from 'util/notify';
 import { labelNameToVarName } from 'util/labelNameToVarName';
+import FieldEditor from 'components/FieldEditor';
 
 const { Text } = Typography;
 
@@ -46,56 +47,11 @@ const JobTemplateForm = (props) => {
     loadEntity();
   }, [])
 
-  const addNewRow = () => {
-    fields.push({ ...EMPTY_ROW });
-    setFields([...fields]);
-  }
-
-  const moveUp = (index) => {
-    if (index <= 0) return;
-    const current = fields[index];
-    fields[index] = fields[index - 1];
-    fields[index - 1] = current;
-    setFields([...fields]);
-  }
-
-  const moveDown = (index) => {
-    if (index >= fields.length - 1) return;
-    const current = fields[index];
-    fields[index] = fields[index + 1];
-    fields[index + 1] = current;
-    setFields([...fields]);
-  }
-
-  const deleteRow = (index) => {
-    fields.splice(index, 1);
-    setFields([...fields]);
-  }
-
-  const changeValue = (index, name, v) => {
-
-    fields[index][name] = v;
-    setFields([...fields]);
-  }
-
-  function groomField (field) {
-    return field && field.name?.trim() && field.type?.trim();
-  }
-
-  const handleSave = async () => {
+  const handleSave = async (fields) => {
     const newEntity = {
       ...entity,
       name,
-      fields: fields.filter(f => groomField(f)).map(f => {
-        const varName = labelNameToVarName(f.name);
-        const builtInField = getBuiltInFieldByVarName(varName);
-        const type = builtInField?.inputType || f.type;
-        return { 
-          ...f, 
-          name: varName,
-          type
-         };
-      }),
+      fields
     }
     await saveJobTemplate(newEntity);
     await loadEntity();
@@ -103,94 +59,20 @@ const JobTemplateForm = (props) => {
     notify.success(<>Successfully saved job template <strong>{name}</strong></>)
   }
 
-  const nameOptions = BuiltInFieldLabelNames.map(x => ({
-    // value: x,
-    value: x
-  }));
-
   const handleClose = () => {
     props.onClose();
   }
-
-  const columns = [
-    {
-      title: 'No',
-      render: (text, records, index) => <>{index + 1}</>
-    },
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      render: (text, records, index) => {
-        return <AutoComplete
-          placeholder="Name"
-          options={nameOptions}
-          allowClear={true}
-          maxLength={50}
-          defaultValue={text}
-          // defaultValue={getDisplayNameFromVarName(text)}
-          style={{ width: 200 }}
-          autoComplete="off"
-          onBlur={(e) => changeValue(index, 'name', e.target.value)}
-        />
-      }
-    },
-    {
-      title: 'Type',
-      dataIndex: 'type',
-      render: (value, records, index) => {
-        const fieldName = records.name;
-        const builtInField = getBuiltInFieldByLabelName(fieldName);
-        return !fieldName ? null : builtInField ? <Text disabled>{varNameToLabelName(builtInField.inputType)}</Text> : <Select value={value} style={{ width: '200px' }} onChange={(v) => changeValue(index, 'type', v)}>
-          {BuiltInFieldType.map((f, i) => <Select.Option key={i} value={f}>{varNameToLabelName(f)}</Select.Option>)}
-        </Select>
-      }
-    },
-    {
-      title: 'Required ?',
-      dataIndex: 'required',
-      render: (value, records, index) => <Checkbox checked={value} onChange={(e) => changeValue(index, 'required', e.target.checked)} />
-    },
-    {
-      title: 'Official Only ?',
-      dataIndex: 'officialOnly',
-      render: (value, records, index) => <Checkbox checked={value} onChange={(e) => changeValue(index, 'officialOnly', e.target.checked)} />
-    },
-    {
-      title: 'Action',
-      render: (text, record, index) => (
-        <Space size="small">
-          <Button type="link" icon={<UpOutlined />} onClick={() => moveUp(index)} />
-          <Button type="link" icon={<DownOutlined />} onClick={() => moveDown(index)} />
-          <Button type="link" danger icon={<DeleteOutlined />} onClick={() => deleteRow(index)} />
-        </Space>
-      ),
-    },
-  ];
-
 
   return (
     <Space direction="vertical" size="large" style={{ width: '100%' }}>
       <Text strong>Job Template Name</Text>
       <Input placeholder="Job Template Name" value={name} onChange={e => setName(e.target.value)} />
-      <Text strong>Field Definitions</Text>
-      <Table
-        style={{ width: '100%' }}
-        size="small"
-        columns={columns}
-        dataSource={fields}
+      <FieldEditor
+        onChange={handleSave}
+        value={fields}
         loading={loading}
-        pagination={false}
-        rowKey={record => record.name}
-        footer={null}
+        onCancel={() => handleClose()}
       />
-      {/* <Divider/> */}
-      <Space style={{ width: '100%', justifyContent: 'space-between' }}>
-        <Button icon={<PlusOutlined />} onClick={addNewRow}>Add New Field</Button>
-        <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
-          <Button onClick={() => handleClose()}>Cancel</Button>
-          <Button type="primary" onClick={() => handleSave()}>Save</Button>
-        </Space>
-      </Space>
     </Space>
   );
 };
