@@ -139,7 +139,7 @@ export const searchTask = handlerWrapper(async (req, res) => {
   }
   const total = await query.getCount();
   const list = await query
-    .orderBy(`x."${orderField}"`, orderDirection)
+    .orderBy(`"${orderField}"`, orderDirection)
     .skip(skip)
     .take(size)
     .execute();

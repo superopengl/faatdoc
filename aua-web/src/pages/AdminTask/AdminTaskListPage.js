@@ -38,7 +38,7 @@ const DEFAULT_QUERY_INFO = {
   page: 1,
   size: 50,
   total: 0,
-  status: ['todo', 'to_sign', 'signed'],
+  status: ['todo', 'signed'],
   orderField: 'lastUpdatedAt',
   orderDirection: 'DESC'
 };
@@ -49,47 +49,47 @@ const AdminTaskListPage = (props) => {
   const [taskList, setTaskList] = React.useState([]);
   const [agentList, setAgentList] = React.useState([]);
 
-  const [queryInfo, setQueryInfoRaw] = React.useState(reactLocalStorage.getObject('query', DEFAULT_QUERY_INFO, true))
-
-  const setQueryInfo = (queryInfo) => {
-    reactLocalStorage.setObject('query', queryInfo);
-    setQueryInfoRaw(queryInfo);
-  }
+  const [queryInfo, setQueryInfo] = React.useState(reactLocalStorage.getObject('query', DEFAULT_QUERY_INFO, true))
 
   const columnDef = [
     {
       title: 'Task Name',
       dataIndex: 'name',
       // filteredValue: filteredInfo.name || null,
-      onFilter: (value, record) => record.name.includes(value),
+      sorter: (a, b) => 0,
+      // onFilter: (value, record) => record.name.includes(value),
       render: (text) => <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text || ''} />,
       ellipsis: false,
     },
     {
       title: 'Portofolio',
       dataIndex: 'forWhom',
+      sorter: (a, b) => 0,
       render: (text) => <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text || ''} />
     },
     {
       title: 'User',
       dataIndex: 'email',
+      sorter: (a, b) => 0,
       render: (text) => <Text code><small>{text}</small></Text>
     },
     {
       title: 'Created At',
       dataIndex: 'createdAt',
-      sorter: (a, b) => moment(a.createdAt).toDate() - moment(b.createdAt).toDate(),
+      sorter: (a, b) => 0,
       render: (text) => <TimeAgo value={text} />
     },
     {
       title: 'Job',
       dataIndex: 'jobTemplateName',
+      sorter: (a, b) => 0,
       render: (text) => <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text || ''} />,
       ellipsis: false
     },
     {
       title: 'Status',
       dataIndex: 'status',
+      sorter: (a, b) => 0,
       render: (text) => <TaskProgressBar width={60} status={text}></TaskProgressBar>,
       ellipsis: false
     },
@@ -99,6 +99,7 @@ const AdminTaskListPage = (props) => {
       // filteredValue: filteredInfo.agentId || null,
       // filters: agentList.map(a => ({ text: `${a.givenName} ${a.surname}`, value: a.id })),
       // onFilter: (value, record) => record.agentId === value,
+      sorter: (a, b) => 0,
       render: (text, record) => <Select
         placeholder="Select an agent"
         style={{ width: 130 }}
@@ -112,7 +113,7 @@ const AdminTaskListPage = (props) => {
     {
       title: 'Last Update At',
       dataIndex: 'lastUpdatedAt',
-      sorter: (a, b) => moment(a.createdAt).toDate() - moment(b.createdAt).toDate(),
+      sorter: (a, b) => 0, // Server end sorting. moment(a.createdAt).toDate() - moment(b.createdAt).toDate(),
       render: (text) => {
         return <TimeAgo value={text} />;
       }
@@ -120,7 +121,7 @@ const AdminTaskListPage = (props) => {
     {
       title: 'Signed At',
       dataIndex: 'signedAt',
-      sorter: (a, b) => moment(a.createdAt).toDate() - moment(b.createdAt).toDate(),
+      sorter: (a, b) => 0, // Server end sorting. moment(a.createdAt).toDate() - moment(b.createdAt).toDate(),
       render: (text, record) => {
         return <Space size="small"><TimeAgo value={text} extra={<Button shape="circle" icon={<SearchOutlined />} onClick={() => handleShowSignDetail(record.id)} />} /></Space>;
       }
@@ -142,18 +143,27 @@ const AdminTaskListPage = (props) => {
     },
   ];
 
-  const handleTableChange = (pagination, filters, sorter) => {
+  const updateQueryInfo = (queryInfo) => {
+    reactLocalStorage.setObject('query', queryInfo);
+    setQueryInfo(queryInfo);
+  }
+
+  const handleTableChange = async (pagination, filters, sorter) => {
     const newQueryInfo = {
       ...queryInfo,
     }
     if (sorter) {
       newQueryInfo.orderField = sorter.field;
-      newQueryInfo.orderDirection = sorter.order
+      newQueryInfo.orderDirection = sorter.order === 'ascend' ? 'ASC' : 'DESC';
     }
+
+    console.log('queryInfo', newQueryInfo);
+
+    await loadTaskWithQuery(newQueryInfo);
   }
 
   const clearAllFilters = () => {
-    setQueryInfo({ ...DEFAULT_QUERY_INFO });
+    loadTaskWithQuery({ ...DEFAULT_QUERY_INFO });
   }
 
   const assignTaskToAgent = async (task, agentId) => {
@@ -166,7 +176,7 @@ const AdminTaskListPage = (props) => {
     const { data, pagination: { total } } = await searchTask(queryInfo);
 
     setTaskList(data);
-    setQueryInfo({ ...queryInfo, total })
+    updateQueryInfo({ ...queryInfo, total })
     setLoading(false);
   }
 
@@ -224,6 +234,15 @@ const AdminTaskListPage = (props) => {
     await loadTaskWithQuery(newQueryInfo);
   }
 
+  const handleSearchTextChange = text => {
+    const newQueryInfo = {
+      ...queryInfo,
+      text
+    }
+    updateQueryInfo(newQueryInfo);
+    // await loadTaskWithQuery(newQueryInfo);
+  }
+
   React.useEffect(() => {
     loadList();
   }, [])
@@ -242,8 +261,9 @@ const AdminTaskListPage = (props) => {
               enterButton={<><SearchOutlined /> Search</>}
               onSearch={value => handleSearch(value)}
               onPressEnter={e => handleSearch(e.target.value)}
+              onChange={e => handleSearchTextChange(e.target.value)}
               loading={loading}
-              defaultValue={queryInfo?.text}
+              value={queryInfo?.text}
               allowClear
             />
 
@@ -253,7 +273,7 @@ const AdminTaskListPage = (props) => {
               allowClear
               style={{ width: '520px' }}
               placeholder="Status filter"
-              defaultValue={queryInfo?.status || []}
+              value={queryInfo?.status || []}
               onChange={handleStatusFilter}
             >
               <Select.Option value='todo'>To Do</Select.Option>
@@ -262,7 +282,7 @@ const AdminTaskListPage = (props) => {
               <Select.Option value='complete'>Complete</Select.Option>
               <Select.Option value='archive'>Archive</Select.Option>
             </Select>
-            <Button onClick={() => clearAllFilters()}>Create All Filters</Button>
+            <Button onClick={() => clearAllFilters()}>Reset Filters</Button>
           </Space>
           <Table columns={columnDef}
             dataSource={taskList}
