@@ -2,7 +2,7 @@ import {
   BellOutlined, CalendarOutlined, HomeOutlined,
   IdcardOutlined,
   LoginOutlined, LogoutOutlined, MenuOutlined,
-  NotificationOutlined,
+  HeartOutlined,
   SecurityScanOutlined, SkinOutlined,
   SnippetsOutlined, TeamOutlined, ToolOutlined,
   UserAddOutlined, UserOutlined
@@ -15,6 +15,8 @@ import { HashLink } from 'react-router-hash-link';
 import { logout } from 'services/authService';
 import styled from 'styled-components';
 import { GlobalContext } from '../contexts/GlobalContext';
+import {MdNotificationsNone} from 'react-icons/md';
+import {RiServiceLine} from 'react-icons/ri';
 
 const { Header } = Layout;
 const { Text } = Typography;
@@ -157,11 +159,11 @@ const HomeHeaderRaw = props => {
             {isAdmin && <Menu.Item key="recurring"><CalendarOutlined /> <Link to="/recurring">Recurring</Link></Menu.Item>}
             {/* {isAdmin && <Menu.Item key="clients"><SettingOutlined /> <Link to="/clients">Users</Link></Menu.Item>} */}
             {isAdmin && <Menu.Item key="user"><TeamOutlined /> <Link to="/user">User</Link></Menu.Item>}
-            {!isGuest && <Menu.Item key="notification"><NotificationOutlined /> <Link to="/notification">Notification <Badge count={notifyCount} showZero={false} /></Link></Menu.Item>}
+            {!isGuest && <Menu.Item key="notification"><BellOutlined /> <Link to="/notification">Notification <Badge count={notifyCount} showZero={false} /></Link></Menu.Item>}
             {isAdmin && <Menu.Item key="impersonate"><SkinOutlined /> <Link to="/impersonate">Impersonate</Link></Menu.Item>}
             {canChangePassword && <Menu.Item key="changePassword"><SecurityScanOutlined /> <Link to="/change_password">Change Password</Link></Menu.Item>}
             {isGuest && <Menu.Item key="home"><HomeOutlined /> <HashLink to="/#home" onClick={onClose}>Home</HashLink></Menu.Item>}
-            {isGuest && <Menu.Item key="services"><BellOutlined /> <HashLink to="/#services" onClick={onClose}>Services</HashLink></Menu.Item>}
+            {isGuest && <Menu.Item key="services"><HeartOutlined /> <HashLink to="/#services" onClick={onClose}>Services</HashLink></Menu.Item>}
             {isGuest && <Menu.Item key="team"><TeamOutlined /> <HashLink to="/#team" onClick={onClose}>Team</HashLink></Menu.Item>}
             {!isGuest && <Menu.Item key="logout" onClick={handleLogout}><LogoutOutlined />{isAdmin ? ' Admin' : isAgent ? ' Agent' : null} Log Out</Menu.Item>}
           </Menu>

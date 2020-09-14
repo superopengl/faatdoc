@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Upload, Typography } from 'antd';
+import { Upload, Typography, Space } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
 import * as _ from 'lodash';
 import styled from 'styled-components';
@@ -8,6 +8,7 @@ import { InboxOutlined } from '@ant-design/icons';
 import { searchFile } from 'services/fileService';
 import { FileIcon } from './FileIcon';
 import { saveAs } from 'file-saver';
+import { AiOutlineUpload } from 'react-icons/ai';
 
 const { Dragger } = Upload;
 
@@ -104,18 +105,13 @@ export const FileUploader = (props) => {
         // iconRender={() => <UploadOutlined />}
         disabled={disabled || fileList.length >= maxSize}
         iconRender={getFileIcon}
-        // showUploadList={true}
+      // showUploadList={true}
       >
         {disabled ? <Text type="secondary">File upload is disabled</Text>
-        : <>
-          <p className="ant-upload-drag-icon">
-            <InboxOutlined />
-          </p>
-          <p className="ant-upload-text">Click or drag file to this area to upload</p>
-          <p className="ant-upload-hint">
-            Support single or bulk upload.
-          </p>
-        </>}
+          :<div style={{display: 'flex', flexDirection: 'column', width: '100%', alignItems: 'center'}}>
+              <AiOutlineUpload size={30} style={{ fill: 'rgba(0, 0, 0, 0.65)' }} />
+          Click or drag file to this area to upload
+        </div>}
       </Dragger>
     </Container>
   );

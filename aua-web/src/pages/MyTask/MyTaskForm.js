@@ -12,7 +12,7 @@ import { DateInput } from 'components/DateInput';
 import { RangePickerInput } from 'components/RangePickerInput';
 import TaskChat from 'pages/AdminTask/TaskChat';
 import {
-  NotificationOutlined,
+  BellOutlined,
 } from '@ant-design/icons';
 
 const { Text } = Typography;
@@ -24,7 +24,7 @@ display: flex;
 align-items: center;
 justify-content: center;
 border: none;
-background-color: rgba(20, 62, 134, 0.8);
+background-color: rgba(255,77,79, 0.8);
 color: white;
 // box-shadow: 1px 1px 5px #222222;
 border: 2px solid white;
@@ -171,10 +171,9 @@ const MyTaskForm = (props) => {
     <Affix style={{ position: 'fixed', bottom: 30, right: 30 }}>
       <AffixContactButton type="primary" shape="circle" size="large" 
       onClick={() => setShowsMessage(true)}
-      danger
       style={{fontSize: 24}}
       >
-        <NotificationOutlined/>
+        <BellOutlined />
       </AffixContactButton>
     </Affix>
   </>
