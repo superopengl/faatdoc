@@ -151,10 +151,6 @@ const UserPage = () => {
             <Button type="primary" ghost onClick={() => handleNewUser()} icon={<UserAddOutlined />}>Invite User</Button>
             <Button type="primary" ghost onClick={() => loadList()} icon={<SyncOutlined/>}>Refresh</Button>
           </Space>
-          {/* <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
-            <Button type="primary" ghost icon={<PlusOutlined />} onClick={() => handleCreateNew()}>New Recurring</Button>
-          </Space> */}
-
           <Table columns={columnDef}
             dataSource={list}
             // scroll={{x: 1000}}

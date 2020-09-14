@@ -179,9 +179,9 @@ export const CronInput = props => {
 }
 
 CronInput.propTypes = {
-  value: PropTypes.string,
+  value: PropTypes.string.isRequired,
 };
 
 CronInput.defaultProps = {
-  // value: '0 0 0 L */1 *'
+  value: '0 0 0 L */1 *'
 };

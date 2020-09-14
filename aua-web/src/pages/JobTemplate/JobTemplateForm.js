@@ -78,7 +78,7 @@ const JobTemplateForm = (props) => {
     setFields([...fields]);
   }
 
-  const validField = (field) => {
+  function groomField (field) {
     return field && field.name?.trim() && field.type?.trim();
   }
 
@@ -86,7 +86,7 @@ const JobTemplateForm = (props) => {
     const newEntity = {
       ...entity,
       name,
-      fields: fields.filter(f => validField(f)).map(f => {
+      fields: fields.filter(f => groomField(f)).map(f => {
         const varName = labelNameToVarName(f.name);
         const builtInField = getBuiltInFieldByVarName(varName);
         const type = builtInField?.inputType || f.type;

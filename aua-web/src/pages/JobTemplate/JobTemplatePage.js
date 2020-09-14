@@ -159,7 +159,7 @@ export const JobTemplatePage = () => {
           />
         </Space>
         <StyledDrawer
-          title={!currentId ? 'New Recurring' : 'Edit Recurring'}
+          title={!currentId ? 'New Job Template' : 'Edit Job Template'}
           placement="right"
           closable={true}
           visible={drawerVisible}
