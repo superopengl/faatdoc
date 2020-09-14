@@ -17,7 +17,7 @@ import styled from 'styled-components';
 const { Title } = Typography;
 
 const ContainerStyled = styled.div`
-  margin: 6rem 0.5rem 2rem 0.5rem;
+  margin: 6rem 1rem 2rem 1rem;
 `;
 
 const StyledTitleRow = styled.div`
@@ -73,7 +73,7 @@ const AdminTaskListPage = (props) => {
     {
       title: 'User',
       dataIndex: 'email',
-    render: (text) => <Text code><small>{text}</small></Text>
+      render: (text) => <Text code><small>{text}</small></Text>
     },
     {
       title: 'Created At',
@@ -98,7 +98,7 @@ const AdminTaskListPage = (props) => {
       dataIndex: 'agentId',
       // filteredValue: filteredInfo.agentId || null,
       // filters: agentList.map(a => ({ text: `${a.givenName} ${a.surname}`, value: a.id })),
-      onFilter: (value, record) => record.agentId === value,
+      // onFilter: (value, record) => record.agentId === value,
       render: (text, record) => <Select
         placeholder="Select an agent"
         style={{ width: 130 }}

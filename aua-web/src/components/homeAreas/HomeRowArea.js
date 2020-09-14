@@ -32,7 +32,7 @@ max-width: 1600px;
 `;
 
 const StyledRow = styled(Row)`
-padding: 0 0.5rem;
+padding: 0 1rem;
 `;
 
 const responsive = {

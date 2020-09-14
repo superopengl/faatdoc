@@ -15,7 +15,7 @@ const LayoutStyled = styled(Layout)`
 
 const ContainerStyled = styled.div`
   margin: 2rem auto;
-  padding: 2rem 0.5rem;
+  padding: 2rem 1rem;
   text-align: center;
   width: 100%;
   max-width: 300px;

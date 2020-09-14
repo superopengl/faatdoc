@@ -7,7 +7,7 @@ import { forgotPassword } from 'services/authService';
 import { notify } from 'util/notify';
 const ContainerStyled = styled.div`
   margin: 2rem auto;
-  padding: 2rem 0.5rem;
+  padding: 2rem 1rem;
   text-align: center;
   max-width: 400px;
   width: 100%;

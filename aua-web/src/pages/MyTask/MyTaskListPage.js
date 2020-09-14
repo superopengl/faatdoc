@@ -19,7 +19,7 @@ const { TabPane } = Tabs;
 
 const ContainerStyled = styled.div`
   margin: 6rem auto 2rem auto;
-  padding: 0 0.5rem;
+  padding: 0 1rem;
   width: 100%;
   max-width: 600px;
 `;

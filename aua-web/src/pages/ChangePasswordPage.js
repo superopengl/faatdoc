@@ -9,7 +9,7 @@ import { GlobalContext } from 'contexts/GlobalContext';
 
 const ContainerStyled = styled.div`
   margin: 4rem auto 2rem auto;
-  padding: 2rem 0.5rem;
+  padding: 2rem 1rem;
   text-align: center;
   max-width: 300px;
   width: 100%;

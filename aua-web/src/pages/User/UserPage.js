@@ -14,7 +14,7 @@ import { TimeAgo } from 'components/TimeAgo';
 const { Title, Paragraph } = Typography;
 
 const ContainerStyled = styled.div`
-  margin: 6rem 0.5rem 2rem 0.5rem;
+  margin: 6rem 1rem 2rem 1rem;
 `;
 
 const StyledTitleRow = styled.div`
