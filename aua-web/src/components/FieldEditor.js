@@ -90,12 +90,12 @@ const FieldEditor = (props) => {
   const columns = [
     {
       title: 'No',
-      render: (text, records, index) => <>{index + 1}</>
+      render: (text, record, index) => <>{index + 1}</>
     },
     {
       title: 'Name',
       dataIndex: 'name',
-      render: (text, records, index) => {
+      render: (text, record, index) => {
         return <AutoComplete
           placeholder="Name"
           options={nameOptions}
@@ -106,16 +106,18 @@ const FieldEditor = (props) => {
           style={{ width: 200 }}
           autoComplete="off"
           onBlur={(e) => changeValue(index, 'name', e.target.value)}
+          disabled={record.value}
         />
       }
     },
     {
       title: 'Type',
       dataIndex: 'type',
-      render: (value, records, index) => {
-        const fieldName = records.name;
+      render: (value, record, index) => {
+        const fieldName = record.name;
         const builtInField = getBuiltInFieldByLabelName(fieldName);
-        return !fieldName ? null : builtInField ? <Text disabled>{varNameToLabelName(builtInField.inputType)}</Text> : <Select value={value} style={{ width: '200px' }} onChange={(v) => changeValue(index, 'type', v)}>
+        const inputType = builtInField?.inputType || (record.value ? value : null);
+        return !fieldName ? null : inputType ? <Text disabled>{varNameToLabelName(inputType)}</Text> : <Select value={value} style={{ width: '200px' }} onChange={(v) => changeValue(index, 'type', v)}>
           {BuiltInFieldType.map((f, i) => <Select.Option key={i} value={f}>{varNameToLabelName(f)}</Select.Option>)}
         </Select>
       }
@@ -123,12 +125,20 @@ const FieldEditor = (props) => {
     {
       title: 'Required ?',
       dataIndex: 'required',
-      render: (value, records, index) => <Checkbox checked={value} onChange={(e) => changeValue(index, 'required', e.target.checked)} />
+      render: (value, record, index) => <Checkbox
+        checked={value}
+        onChange={(e) => changeValue(index, 'required', e.target.checked)}
+        disabled={record.value}
+      />
     },
     {
       title: 'Official Only ?',
       dataIndex: 'officialOnly',
-      render: (value, records, index) => <Checkbox checked={value} onChange={(e) => changeValue(index, 'officialOnly', e.target.checked)} />
+      render: (value, record, index) => <Checkbox
+        checked={value}
+        onChange={(e) => changeValue(index, 'officialOnly', e.target.checked)}
+        disabled={record.value}
+      />
     },
     {
       title: 'Action',
@@ -136,7 +146,7 @@ const FieldEditor = (props) => {
         <Space size="small">
           <Button type="link" icon={<UpOutlined />} onClick={() => moveUp(index)} />
           <Button type="link" icon={<DownOutlined />} onClick={() => moveDown(index)} />
-          <Button type="link" danger icon={<DeleteOutlined />} onClick={() => deleteRow(index)} />
+          {!record.value && <Button type="link" danger icon={<DeleteOutlined />} onClick={() => deleteRow(index)} />}
         </Space>
       ),
     },

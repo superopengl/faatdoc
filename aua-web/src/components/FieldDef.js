@@ -185,7 +185,7 @@ export const BuiltInFieldDef = [
   },
   {
     name: 'remark',
-    inputType: 'paragraphy',
+    inputType: 'paragraph',
     rules: [{ required: false, max: 500, message: ' ' }],
     inputProps: {
       maxLength: 500,

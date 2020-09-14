@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
-import { Input, Button, Form, PageHeader, Space, Layout, Modal, Typography, Radio, Row, Col } from 'antd';
+import { Input, Button, Form, PageHeader, Space, Layout, Drawer, Typography, Radio, Row, Col } from 'antd';
 import { FileUploader } from 'components/FileUploader';
 import HomeHeader from 'components/HomeHeader';
 
@@ -14,6 +14,9 @@ import { DateInput } from 'components/DateInput';
 import TaskChat from './TaskChat';
 import { RangePickerInput } from 'components/RangePickerInput';
 import { Select } from 'antd';
+import FieldEditor from 'components/FieldEditor';
+import { AiOutlineSync } from 'react-icons/ai';
+import { DeleteOutlined, EditOutlined, SearchOutlined, SyncOutlined } from '@ant-design/icons';
 
 const { Text } = Typography;
 const ContainerStyled = styled.div`
@@ -24,6 +27,12 @@ const ContainerStyled = styled.div`
   display: flex;
 `;
 
+
+const StyledDrawer = styled(Drawer)`
+.ant-drawer-content-wrapper {
+  max-width: 90vw;
+}
+`;
 
 const LayoutStyled = styled(Layout)`
   margin: 0 auto 0 auto;
@@ -75,6 +84,7 @@ const ProceedTaskPage = (props) => {
   // const { name, id, fields } = value || {};
 
   const [loading, setLoading] = React.useState(true);
+  const [drawerVisible, setDrawerVisible] = React.useState(false);
   const [form] = Form.useForm();
 
   const [task, setTask] = React.useState();
@@ -171,8 +181,15 @@ const ProceedTaskPage = (props) => {
     { value: 'archive', label: <Text type="danger">Archive</Text> },
   ];
 
-  const handleAddField = () => {
-    
+  const handleModifyFields = () => {
+    setDrawerVisible(true);
+  }
+
+  const handleFieldChange = async value => {
+    task.fields = value;
+    setDrawerVisible(false);
+    await handleSubmit();
+    await loadEntity();
   }
 
   return (<LayoutStyled>
@@ -188,9 +205,10 @@ const ProceedTaskPage = (props) => {
           // subTitle={<TaskProgressBar status={task.status} width={60} />}
           extra={[
             <Space key="1" style={{ width: '100%', justifyContent: 'flex-end' }}>
-              <Button type="primary" htmlType="submit" disabled={loading}>Save</Button>
+              <Button type="primary" ghost disabled={loading} icon={<SyncOutlined />} onClick={() => loadEntity()}></Button>
               <Button type="primary" ghost disabled={loading} onClick={() => handleMessage()}>Notify</Button>
-              <Button type="primary" ghost disabled={loading} onClick={() => handleAddField()}>Add Field</Button>
+              <Button type="primary" ghost disabled={loading} onClick={() => handleModifyFields()}>Modify Fields</Button>
+              <Button type="primary" htmlType="submit" disabled={loading}>Save</Button>
               <StatusSelect defaultValue={{ value: defaultStatus }}
                 labelInValue={true}
                 style={{ width: 120 }}
@@ -256,6 +274,18 @@ const ProceedTaskPage = (props) => {
 
     {(task && showsNotify) && <TaskChat visible={showsNotify} onClose={() => setShowsNotify(false)} taskId={task?.id} />}
 
+    <StyledDrawer
+      title="Modify Task Fields"
+      placement="right"
+      closable={true}
+      visible={drawerVisible}
+      onClose={() => setDrawerVisible(false)}
+      destroyOnClose={true}
+      width={900}
+      footer={null}
+    >
+      <FieldEditor value={task?.fields} onChange={handleFieldChange} onCancel={() => setDrawerVisible(false)} />
+    </StyledDrawer>
   </LayoutStyled >
 
   );
