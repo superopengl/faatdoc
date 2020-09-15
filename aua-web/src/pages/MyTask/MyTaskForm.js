@@ -120,7 +120,7 @@ const MyTaskForm = (props) => {
   const disabled = !canEdit || loading;
 
   // console.log('value', formInitValues);
-  const showsGenerator = !task && jobTemplateList && portofolioList;
+  const showsGenerator = !loading && !task && jobTemplateList && portofolioList;
 
   return (<>
     <Space direction="vertical" size="large" style={{ width: '100%' }}>

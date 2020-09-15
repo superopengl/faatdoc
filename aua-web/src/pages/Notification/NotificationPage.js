@@ -9,6 +9,7 @@ import {
 import { TimeAgo } from 'components/TimeAgo';
 import { listNotification, getNotification } from 'services/notificationService';
 import { GlobalContext } from 'contexts/GlobalContext';
+import { RiExternalLinkLine } from 'react-icons/ri';
 
 const { Title, Paragraph, Link } = Typography;
 
@@ -78,7 +79,7 @@ const NotificationPage = (props) => {
     Modal.destroyAll();
     Modal.info({
       icon: null,
-      title: <Space style={{ alignItems: 'flex-start' }}><PortofolioAvatar value={forWhom} size={32} /><Link onClick={e => handleGoToTask(e, taskId)}>{name} for {forWhom}</Link></Space>,
+      title: <Space style={{ alignItems: 'flex-start' }}><PortofolioAvatar value={forWhom} size={32} /><Link onClick={e => handleGoToTask(e, taskId)}>{name} for {forWhom}<RiExternalLinkLine style={{marginLeft: '0.5rem'}}/></Link></Space>,
       width: 600,
       maskClosable: true,
       content: <>
@@ -94,7 +95,7 @@ const NotificationPage = (props) => {
     <LayoutStyled>
       <HomeHeader></HomeHeader>
       <ContainerStyled>
-        <Space size="small" direction="vertical" style={{ width: '100%'}}>
+        <Space size="small" direction="vertical" style={{ width: '100%' }}>
           <StyledTitleRow>
             <Title level={2} style={{ margin: 'auto' }}>{isClient ? 'Notification' : 'Sent Out Notification'}</Title>
           </StyledTitleRow>
@@ -107,10 +108,10 @@ const NotificationPage = (props) => {
             itemLayout="horizontal"
             dataSource={list}
             size="small"
-            style={{marginTop: '1rem'}}
-            renderItem={item => (<div 
+            style={{ marginTop: '1rem' }}
+            renderItem={item => (<div
               onClick={e => handleRead(e, item)}
-              style={{display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '0.8rem'}}>
+              style={{ display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '0.8rem' }}>
               <Paragraph ellipsis={{ rows: 1, expandable: false }} style={{ fontWeight: item.readAt ? 300 : 800, width: 'calc(100% - 150px)' }}>
                 {item.content}
               </Paragraph>
