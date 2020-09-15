@@ -129,10 +129,10 @@ const TaskChat = (props) => {
           ref={textareaRef}
         />
       </Form.Item>
-      <Space>
-        {/* <Button icon={<ArrowLeftOutlined />} onClick={() => handleGoBack()}></Button> */}
-      </Space>
-      <Button type="primary" block icon={<SendOutlined />} htmlType="submit" disabled={loading} >Send</Button>
+      {/* <Space>
+        <Button icon={<ArrowLeftOutlined />} onClick={() => handleGoBack()}></Button>
+      </Space> */}
+        <Button type="primary" block icon={<SendOutlined />} htmlType="submit" disabled={loading} >Send</Button>
     </Form>}
   >
     {list.map((x, i) => {

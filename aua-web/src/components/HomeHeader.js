@@ -5,7 +5,7 @@ import {
   HeartOutlined,
   SecurityScanOutlined, SkinOutlined,
   SnippetsOutlined, TeamOutlined, ToolOutlined,
-  UserAddOutlined, UserOutlined
+  UserAddOutlined, UserOutlined, DashboardOutlined
 } from '@ant-design/icons';
 import { Avatar, Badge, Button, Drawer, Layout, Menu, Modal, Typography } from 'antd';
 import React from 'react';
@@ -114,6 +114,7 @@ const HomeHeaderRaw = props => {
             {isGuest && <Menu.Item key="team"><HashLink to="/#team">Team</HashLink></Menu.Item>}
             {isGuest && <Menu.Item key="signin"><Link to="/signin">Sign In</Link></Menu.Item>}
             {isGuest && <Menu.Item key="login"><Link to="/login">Log In</Link></Menu.Item>}
+            {isClient && <Menu.Item key="landing"><Link to="/landing">Dashboard</Link></Menu.Item>}
             {!isGuest && <Menu.Item key="task"><Link to="/task">Task</Link></Menu.Item>}
             {isClient && <Menu.Item key="portofolio"><Link to="/portofolio">Portofolio</Link></Menu.Item>}
             {/* {isAdmin && <Menu.Item key="clients"><Link to="/clients">Users</Link></Menu.Item>} */}
@@ -123,7 +124,7 @@ const HomeHeaderRaw = props => {
             {isAdmin && <Menu.Item key="user"><Link to="/user">User</Link></Menu.Item>}
             {!isGuest && <Menu.Item key="notification"><Link to="/notification"><Badge count={notifyCount} showZero={false} offset={[10, 0]}>Notification</Badge></Link></Menu.Item>}
             {!isGuest && <Menu.SubMenu key="me" title={<Avatar size={40} icon={<UserOutlined style={{ fontSize: 20 }} />} style={{ backgroundColor: isAdmin ? '#FF4D4F' : isAgent ? '#000000' : '#143e86' }} />}>
-              {isAdmin && <Menu.Item key="impersonate"><Link to="/impersonate">Impersonate</Link></Menu.Item>}
+              {/* {isAdmin && <Menu.Item key="impersonate"><Link to="/impersonate">Impersonate</Link></Menu.Item>} */}
               {canChangePassword && <Menu.Item key="changePassword"><Link to="/change_password">Change Password</Link></Menu.Item>}
               <Menu.Item key="logout" onClick={handleLogout}>Log Out</Menu.Item>
             </Menu.SubMenu>}
@@ -153,6 +154,7 @@ const HomeHeaderRaw = props => {
             {isGuest && <Menu.Item key="login"><LoginOutlined /> <Link to="/login">Log In</Link></Menu.Item>}
             {isGuest && <Menu.Item key="signin"><UserAddOutlined /> <Link to="/signin">Sign In</Link></Menu.Item>}
             {/* {isAdmin && <Menu.Item key="admin"><SettingOutlined /> <Link to="/admin">Admin</Link></Menu.Item>} */}
+            {isClient && <Menu.Item key="landing"><DashboardOutlined /> <Link to="/landing">Dashboard</Link></Menu.Item>}
             {!isGuest && <Menu.Item key="task"><SnippetsOutlined /> <Link to="/task">Task</Link></Menu.Item>}
             {isClient && <Menu.Item key="portofolio"><IdcardOutlined /> <Link to="/portofolio">Portofolio</Link></Menu.Item>}
             {isAdmin && <Menu.Item key="job_template"><ToolOutlined /> <Link to="/job_template">Job Template</Link></Menu.Item>}
@@ -160,7 +162,7 @@ const HomeHeaderRaw = props => {
             {/* {isAdmin && <Menu.Item key="clients"><SettingOutlined /> <Link to="/clients">Users</Link></Menu.Item>} */}
             {isAdmin && <Menu.Item key="user"><TeamOutlined /> <Link to="/user">User</Link></Menu.Item>}
             {!isGuest && <Menu.Item key="notification"><BellOutlined /> <Link to="/notification">Notification <Badge count={notifyCount} showZero={false} /></Link></Menu.Item>}
-            {isAdmin && <Menu.Item key="impersonate"><SkinOutlined /> <Link to="/impersonate">Impersonate</Link></Menu.Item>}
+            {/* {isAdmin && <Menu.Item key="impersonate"><SkinOutlined /> <Link to="/impersonate">Impersonate</Link></Menu.Item>} */}
             {canChangePassword && <Menu.Item key="changePassword"><SecurityScanOutlined /> <Link to="/change_password">Change Password</Link></Menu.Item>}
             {isGuest && <Menu.Item key="home"><HomeOutlined /> <HashLink to="/#home" onClick={onClose}>Home</HashLink></Menu.Item>}
             {isGuest && <Menu.Item key="services"><HeartOutlined /> <HashLink to="/#services" onClick={onClose}>Services</HashLink></Menu.Item>}

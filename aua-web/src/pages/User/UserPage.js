@@ -1,17 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Typography, Layout, Button, Table, Input, Modal, Form, Tooltip, Tag} from 'antd';
+import { Typography, Layout, Button, Table, Input, Modal, Form, Tooltip, Tag } from 'antd';
 import HomeHeader from 'components/HomeHeader';
 import {
-  DeleteOutlined, SafetyCertificateOutlined, UserAddOutlined, GoogleOutlined, SyncOutlined
+  DeleteOutlined, SafetyCertificateOutlined, UserAddOutlined, GoogleOutlined, SyncOutlined, QuestionOutlined
 } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
 import { Space } from 'antd';
 import { listAllUsers, deleteUser, setPasswordForUser } from 'services/userService';
-import { inviteUser } from 'services/authService';
+import { inviteUser, impersonate } from 'services/authService';
 import { TimeAgo } from 'components/TimeAgo';
+import { FaTheaterMasks } from 'react-icons/fa';
+import ImpersonatePage from 'pages/Impersonate/ImpersonatePage';
+import { reactLocalStorage } from 'reactjs-localstorage';
+import { GlobalContext } from 'contexts/GlobalContext';
 
-const { Title, Paragraph } = Typography;
+const { Title, Text, Paragraph } = Typography;
 
 const ContainerStyled = styled.div`
   margin: 6rem 1rem 2rem 1rem;
@@ -39,6 +43,7 @@ const UserPage = () => {
   const [currentUser, setCurrentUser] = React.useState();
   const [list, setList] = React.useState([]);
   const [inviteVisible, setInviteVisible] = React.useState(false);
+  const context = React.useContext(GlobalContext);
 
   const columnDef = [
     {
@@ -76,9 +81,14 @@ const UserPage = () => {
             <Tooltip placement="bottom" title="Reset password">
               <Button shape="circle" icon={<SafetyCertificateOutlined />} onClick={e => openSetPasswordModal(e, record)} />
             </Tooltip>
-            {record.email !== 'admin@auao.com.au' && <Tooltip placement="bottom" title="Delete user">
-              <Button shape="circle" danger icon={<DeleteOutlined />} onClick={e => handleDelete(e, record)} />
-            </Tooltip>}
+            <Tooltip placement="bottom" title="Impersonate">
+              <Button shape="circle" onClick={e => handleImpersonante(e, record)} disabled={context.user.email === record.email }>
+                <FaTheaterMasks style={{ position: 'relative', top: 1 }} size={20} />
+              </Button>
+            </Tooltip>
+            <Tooltip placement="bottom" title="Delete user">
+              <Button shape="circle" danger icon={<DeleteOutlined />} onClick={e => handleDelete(e, record)} disabled={record.email === 'admin@auao.com.au'}/>
+            </Tooltip>
           </Space>
         )
       },
@@ -115,6 +125,24 @@ const UserPage = () => {
     });
   }
 
+  const handleImpersonante = async (e, item) => {
+    e.stopPropagation();
+    // setSetPasswordVisible(true);
+    // setCurrentUser(item);
+    Modal.confirm({
+      title: 'Impersonate',
+      icon: <QuestionOutlined />,
+      content: <>To impersonate user <Text code>{item.email}</Text></>,
+      okText: 'Yes, impersonate',
+      maskClosable: true,
+      onOk: async () => {
+        await impersonate(item.email);
+        reactLocalStorage.clear();
+        window.location = '/';
+      }
+    })
+  }
+
   const openSetPasswordModal = async (e, item) => {
     e.stopPropagation();
     setSetPasswordVisible(true);
@@ -134,7 +162,7 @@ const UserPage = () => {
   }
 
   const handleInviteUser = async values => {
-    const {email} = values;
+    const { email } = values;
     await inviteUser(email);
     setInviteVisible(false);
   }
@@ -149,7 +177,7 @@ const UserPage = () => {
           </StyledTitleRow>
           <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
             <Button type="primary" ghost onClick={() => handleNewUser()} icon={<UserAddOutlined />}>Invite User</Button>
-            <Button type="primary" ghost onClick={() => loadList()} icon={<SyncOutlined/>}>Refresh</Button>
+            <Button type="primary" ghost onClick={() => loadList()} icon={<SyncOutlined />}>Refresh</Button>
           </Space>
           <Table columns={columnDef}
             dataSource={list}
@@ -187,7 +215,6 @@ const UserPage = () => {
           </Form.Item>
           <Form.Item>
             <Button block type="primary" htmlType="submit" disabled={loading}>Reset Password</Button>
-
           </Form.Item>
         </Form>
       </Modal>

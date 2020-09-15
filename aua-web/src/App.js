@@ -28,6 +28,7 @@ import { refreshNotificationUnreadCount as getNotificationUnreadCount} from 'ser
 import PortofolioForm from 'pages/Portofolio/PortofolioForm';
 import DisclaimerPage from 'pages/DisclaimerPage';
 import MyTaskViewPage from 'pages/MyTask/MyTaskViewPage';
+import ClientDashboardPage from 'pages/ClientDashboard/ClientDashboardPage';
 
 
 class App extends React.Component {
@@ -83,6 +84,7 @@ class App extends React.Component {
             <RoleRoute visible={isGuest} loading={loading} exact path="/login" component={LogInPage} />
             <RoleRoute visible={isGuest} loading={loading} exact path="/signin" component={SignInPage} />
             <RoleRoute visible={isGuest} loading={loading} exact path="/forgot_password" component={ForgotPasswordPage} />
+            <RoleRoute visible={isClient} loading={loading} exact path="/landing" component={ClientDashboardPage} />
             <RoleRoute visible={isClient} loading={loading} exact path="/portofolio" component={PortofolioPage} />
             <RoleRoute visible={isClient} loading={loading} exact path="/portofolio/:id" component={PortofolioForm} />
             <RoleRoute visible={isClient} loading={loading} exact path="/portofolio/new/:type" component={PortofolioForm} />

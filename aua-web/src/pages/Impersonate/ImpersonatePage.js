@@ -5,7 +5,7 @@ import { impersonate } from 'services/authService';
 import HomeHeader from 'components/HomeHeader';
 import { GlobalContext } from 'contexts/GlobalContext';
 import { listAllUsers } from 'services/userService';
-import {reactLocalStorage} from 'reactjs-localstorage';
+import { reactLocalStorage } from 'reactjs-localstorage';
 
 const ContainerStyled = styled.div`
   margin: 4rem auto 2rem auto;
@@ -54,48 +54,28 @@ const ImpersonatePage = props => {
       await impersonate(email);
       reactLocalStorage.clear();
 
-      // Go back to home page
-      Modal.success({
-        title: <>Successfully impersonated</>,
-        content: <>You will be impersonating user <Text code>{email}</Text>. Click to refresh the page.</>,
-        okText: 'Refresh Page',
-        onOk: () => {
-          window.location = '/';
-        }
-      });
+      window.location = '/';
     } catch (e) {
       setLoading(false);
     }
   }
 
   return (
-    <LayoutStyled>
-      <HomeHeader></HomeHeader>
-      <ContainerStyled>
-        <Title level={2}>Impersonate</Title>
-        {!isAdmin && <Alert
-          message="Error"
-          description="Only admin role can impersonate user"
-          type="error"
-          showIcon
-        ></Alert>}
-        {isAdmin && <Form layout="vertical" onFinish={handleSubmit} style={{ textAlign: 'left' }}>
-          <Space direction="vertical" style={{ width: '100%' }}>
-            <Form.Item label="User email" name="email" rules={[{ type: 'email', required: true, message: ' ' }]}>
-              <AutoComplete placeholder="User email" maxLength="100" disabled={loading} autoFocus={true}
-                options={userOptions}
-                filterOption={(inputValue, option) =>
-                  option.value.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1
-                }
-              />
-            </Form.Item>
-            <Form.Item>
-              <Button block type="primary" htmlType="submit" disabled={loading}>Impersonate</Button>
-            </Form.Item>
-          </Space>
-        </Form>}
-      </ContainerStyled>
-    </LayoutStyled>
+    <Form layout="vertical" onFinish={handleSubmit} style={{ textAlign: 'left' }}>
+      <Space direction="vertical" style={{ width: '100%' }}>
+        <Form.Item label="User email" name="email" rules={[{ type: 'email', required: true, message: ' ' }]}>
+          <AutoComplete placeholder="User email" maxLength="100" disabled={loading} autoFocus={true}
+            options={userOptions}
+            filterOption={(inputValue, option) =>
+              option.value.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1
+            }
+          />
+        </Form.Item>
+        <Form.Item>
+          <Button block type="primary" htmlType="submit" disabled={loading}>Impersonate</Button>
+        </Form.Item>
+      </Space>
+    </Form>
   )
 }
 

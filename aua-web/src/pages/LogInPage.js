@@ -58,7 +58,9 @@ const LogInPage = props => {
       const count = await refreshNotificationUnreadCount();
       setNotifyCount(count);
 
-      props.history.push('/task');
+      const isClient = user.role === 'client';
+
+      props.history.push(isClient ? '/landing' : '/task');
     } catch {
       setLoading(false);
     }
