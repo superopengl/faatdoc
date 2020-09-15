@@ -11,7 +11,6 @@ import { listAllUsers, deleteUser, setPasswordForUser } from 'services/userServi
 import { inviteUser, impersonate } from 'services/authService';
 import { TimeAgo } from 'components/TimeAgo';
 import { FaTheaterMasks } from 'react-icons/fa';
-import ImpersonatePage from 'pages/Impersonate/ImpersonatePage';
 import { reactLocalStorage } from 'reactjs-localstorage';
 import { GlobalContext } from 'contexts/GlobalContext';
 

@@ -1,10 +1,9 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import { Button, Form, Typography, Radio,Space } from 'antd';
+import { Button, Form, Radio,Space } from 'antd';
 import { DoubleRightOutlined } from '@ant-design/icons';
 import { PortofolioAvatar } from 'components/PortofolioAvatar';
-const { Text } = Typography;
 
 const Container = styled.div`
 .ant-radio-button-wrapper:not(:first-child)::before {

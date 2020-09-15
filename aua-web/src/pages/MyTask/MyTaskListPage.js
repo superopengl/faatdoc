@@ -1,17 +1,14 @@
-import { Alert, Badge, Button, Layout, List, Modal, Space, Tabs, Typography } from 'antd';
+import { Badge, Button, Layout, List, Modal, Space, Tabs, Typography } from 'antd';
 import Text from 'antd/lib/typography/Text';
 import HomeHeader from 'components/HomeHeader';
 import { TaskProgressBar } from 'components/TaskProgressBar';
 import { TimeAgo } from 'components/TimeAgo';
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { listJobTemplate } from 'services/jobTemplateService';
 import { listTask } from 'services/taskService';
 import { listPortofolio } from 'services/portofolioService';
 import { PlusOutlined, EditOutlined, ZoomInOutlined, SyncOutlined, HighlightOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
-import TaskForm from './MyTaskForm';
-import ReviewSignPage from './ReviewSignPage';
 
 const { Title } = Typography;
 const { TabPane } = Tabs;

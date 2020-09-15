@@ -1,10 +1,9 @@
 import { DeleteOutlined, EditOutlined, SearchOutlined, SyncOutlined } from '@ant-design/icons';
-import { Button, Input, Layout, Modal, Select, Space, Table, Tooltip, Typography, Checkbox } from 'antd';
+import { Button, Input, Layout, Modal, Select, Space, Table, Tooltip, Typography } from 'antd';
 import Text from 'antd/lib/typography/Text';
 import HomeHeader from 'components/HomeHeader';
 import { TaskProgressBar } from 'components/TaskProgressBar';
 import { TimeAgo } from 'components/TimeAgo';
-import * as moment from 'moment';
 import ReviewSignPage from 'pages/MyTask/ReviewSignPage';
 import React from 'react';
 import Highlighter from "react-highlight-words";
@@ -56,7 +55,7 @@ const AdminTaskListPage = (props) => {
       title: 'Task Name',
       dataIndex: 'name',
       // filteredValue: filteredInfo.name || null,
-      sorter: (a, b) => 0,
+      sorter: () => 0,
       // onFilter: (value, record) => record.name.includes(value),
       render: (text) => <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text || ''} />,
       ellipsis: false,
@@ -64,32 +63,32 @@ const AdminTaskListPage = (props) => {
     {
       title: 'Portofolio',
       dataIndex: 'forWhom',
-      sorter: (a, b) => 0,
+      sorter: () => 0,
       render: (text) => <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text || ''} />
     },
     {
       title: 'User',
       dataIndex: 'email',
-      sorter: (a, b) => 0,
+      sorter: () => 0,
       render: (text) => <Text code><small>{text}</small></Text>
     },
     {
       title: 'Created At',
       dataIndex: 'createdAt',
-      sorter: (a, b) => 0,
+      sorter: () => 0,
       render: (text) => <TimeAgo value={text} />
     },
     {
       title: 'Job',
       dataIndex: 'jobTemplateName',
-      sorter: (a, b) => 0,
+      sorter: () => 0,
       render: (text) => <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text || ''} />,
       ellipsis: false
     },
     {
       title: 'Status',
       dataIndex: 'status',
-      sorter: (a, b) => 0,
+      sorter: () => 0,
       render: (text) => <TaskProgressBar width={60} status={text}></TaskProgressBar>,
       ellipsis: false
     },
@@ -99,7 +98,7 @@ const AdminTaskListPage = (props) => {
       // filteredValue: filteredInfo.agentId || null,
       // filters: agentList.map(a => ({ text: `${a.givenName} ${a.surname}`, value: a.id })),
       // onFilter: (value, record) => record.agentId === value,
-      sorter: (a, b) => 0,
+      sorter: () => 0,
       render: (text, record) => <Select
         placeholder="Select an agent"
         style={{ width: 130 }}
@@ -113,7 +112,7 @@ const AdminTaskListPage = (props) => {
     {
       title: 'Last Update At',
       dataIndex: 'lastUpdatedAt',
-      sorter: (a, b) => 0, // Server end sorting. moment(a.createdAt).toDate() - moment(b.createdAt).toDate(),
+      sorter: () => 0, // Server end sorting. moment(a.createdAt).toDate() - moment(b.createdAt).toDate(),
       render: (text) => {
         return <TimeAgo value={text} />;
       }
@@ -121,7 +120,7 @@ const AdminTaskListPage = (props) => {
     {
       title: 'Signed At',
       dataIndex: 'signedAt',
-      sorter: (a, b) => 0, // Server end sorting. moment(a.createdAt).toDate() - moment(b.createdAt).toDate(),
+      sorter: () => 0, // Server end sorting. moment(a.createdAt).toDate() - moment(b.createdAt).toDate(),
       render: (text, record) => {
         return <Space size="small"><TimeAgo value={text} extra={<Button shape="circle" icon={<SearchOutlined />} onClick={() => handleShowSignDetail(record.id)} />} /></Space>;
       }

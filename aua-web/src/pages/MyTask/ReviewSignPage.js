@@ -21,7 +21,7 @@ const StyledListItem = styled(List.Item)`
 `;
 
 const ReviewSignPage = (props) => {
-  const { id, readonly } = props;
+  const { id } = props;
 
   const [, setLoading] = React.useState(true);
   const [task, setTask] = React.useState({});

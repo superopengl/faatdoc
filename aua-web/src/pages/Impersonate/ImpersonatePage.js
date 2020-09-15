@@ -1,34 +1,14 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Layout, Typography, AutoComplete, Button, Form, Alert, Space, Modal } from 'antd';
-import { impersonate } from 'services/authService';
-import HomeHeader from 'components/HomeHeader';
+import { AutoComplete, Button, Form, Space } from 'antd';
 import { GlobalContext } from 'contexts/GlobalContext';
-import { listAllUsers } from 'services/userService';
+import React from 'react';
 import { reactLocalStorage } from 'reactjs-localstorage';
+import { impersonate } from 'services/authService';
+import { listAllUsers } from 'services/userService';
 
-const ContainerStyled = styled.div`
-  margin: 4rem auto 2rem auto;
-  padding: 2rem 1rem;
-  text-align: center;
-  max-width: 300px;
-  width: 100%;
-`;
-
-
-const LayoutStyled = styled(Layout)`
-  margin: 0 auto 0 auto;
-  background-color: #ffffff;
-  height: 100%;
-`;
-
-const { Title, Text } = Typography;
-
-const ImpersonatePage = props => {
+const ImpersonatePage = () => {
   const context = React.useContext(GlobalContext);
   const [loading, setLoading] = React.useState(false);
   const [userOptions, setUserOptions] = React.useState([]);
-  const isAdmin = context.role === 'admin';
 
   const load = async () => {
     setLoading(true);

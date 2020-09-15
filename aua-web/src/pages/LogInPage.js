@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link, withRouter } from 'react-router-dom';
 import { Typography, Input, Button, Form, Layout, Divider } from 'antd';
-import { GoogleOutlined } from '@ant-design/icons';
 import { Logo } from 'components/Logo';
 import isEmail from 'validator/es/lib/isEmail';
 import { GlobalContext } from '../contexts/GlobalContext';

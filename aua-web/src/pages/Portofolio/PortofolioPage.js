@@ -5,8 +5,7 @@ import HomeHeader from 'components/HomeHeader';
 import { PortofolioAvatar } from 'components/PortofolioAvatar';
 import Text from 'antd/lib/typography/Text';
 import { EditOutlined, UserOutlined, PlusOutlined, TeamOutlined, DeleteOutlined } from '@ant-design/icons';
-import PortofolioForm from './PortofolioForm';
-import { listPortofolio, savePortofolio, deletePortofolio } from 'services/portofolioService';
+import { listPortofolio, deletePortofolio } from 'services/portofolioService';
 import { TimeAgo } from 'components/TimeAgo';
 import { Card } from 'antd';
 

@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Upload, Typography, Space } from 'antd';
+import { Upload, Typography } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
 import * as _ from 'lodash';
 import styled from 'styled-components';
-import { InboxOutlined } from '@ant-design/icons';
 import { searchFile } from 'services/fileService';
 import { FileIcon } from './FileIcon';
 import { saveAs } from 'file-saver';

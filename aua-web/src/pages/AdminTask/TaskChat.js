@@ -1,5 +1,5 @@
-import { SendOutlined, ArrowLeftOutlined } from '@ant-design/icons';
-import { Button, Divider, Drawer, Form, Input, Space, Typography } from 'antd';
+import { SendOutlined } from '@ant-design/icons';
+import { Button, Drawer, Form, Input } from 'antd';
 import { GlobalContext } from 'contexts/GlobalContext';
 import * as moment from 'moment';
 import PropTypes from 'prop-types';
@@ -7,12 +7,9 @@ import React from 'react';
 import { MessageBox } from 'react-chat-elements';
 import 'react-chat-elements/dist/main.css';
 import { withRouter } from 'react-router-dom';
-import { listTaskNotifies, notifyTask } from '../../services/taskService';
-import styled from 'styled-components';
 import { ChatService } from 'services/ChatService';
-import { set } from 'lodash';
-
-const { Text } = Typography;
+import styled from 'styled-components';
+import { listTaskNotifies, notifyTask } from '../../services/taskService';
 
 const StyledDrawer = styled(Drawer)`
 
@@ -123,9 +120,6 @@ const TaskChat = (props) => {
     textareaRef.current.focus();
   }
 
-  const handleGoBack = () => {
-    onClose();
-  }
 
   const handleAfterVisibleChange = visible => {
     if (visible) {

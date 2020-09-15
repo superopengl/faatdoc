@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link, withRouter } from 'react-router-dom';
-import { Typography, Button, Modal, Divider, Form, Input, Checkbox, Layout } from 'antd';
+import { Typography, Button, Modal, Form, Input, Checkbox, Layout } from 'antd';
 import { Logo } from 'components/Logo';
 import { signIn } from 'services/authService';
 import { GlobalContext } from 'contexts/GlobalContext';
@@ -37,9 +37,6 @@ const SignInPage = (props) => {
 
   const [sending, setSending] = React.useState(false);
 
-  const goBack = () => {
-    props.history.goBack();
-  }
 
   const handleSignIn = async (values) => {
     if (sending) {
@@ -94,7 +91,7 @@ const SignInPage = (props) => {
 
   return (
     <GlobalContext.Consumer>{
-      context => {
+      () => {
 
         return <LayoutStyled>
           <PageContainer>

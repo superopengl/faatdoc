@@ -1,23 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { Input, Button, Select, Checkbox, Table, Space, Typography, AutoComplete } from 'antd';
-import { UpOutlined, DownOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-import { BuiltInFieldLabelNames, BuiltInFieldType, getBuiltInFieldByLabelName, getBuiltInFieldByVarName } from 'components/FieldDef';
-import { varNameToLabelName } from 'util/varNameToLabelName';
+import { Input, Space } from 'antd';
 import { saveJobTemplate, getJobTemplate } from 'services/jobTemplateService';
 import { notify } from 'util/notify';
-import { labelNameToVarName } from 'util/labelNameToVarName';
 import FieldEditor from 'components/FieldEditor';
-
-const { Text } = Typography;
-
-const EMPTY_ROW = {
-  name: '',
-  required: true,
-  type: 'text'
-}
-
 
 const JobTemplateForm = (props) => {
 
@@ -47,7 +34,7 @@ const JobTemplateForm = (props) => {
     loadEntity();
   }, [])
 
-  const handleSave = async (fields) => {
+  const handleSave = async () => {
     const newEntity = {
       ...entity,
       name,

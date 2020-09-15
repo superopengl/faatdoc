@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Typography, Button, Space, Row, Col } from 'antd';
 import { withRouter } from 'react-router-dom';
-import { GoogleOutlined } from '@ant-design/icons';
 import { useWindowWidth } from '@react-hook/window-size'
 import { GlobalContext } from 'contexts/GlobalContext';
 import GoogleSsoButton from 'components/GoogleSsoButton';

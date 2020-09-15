@@ -1,19 +1,17 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-
-import styled from 'styled-components';
-import { withRouter } from 'react-router-dom';
-import { Input, Button, Form, Space, Typography, Radio, Affix } from 'antd';
-import { FileUploader } from '../../components/FileUploader';
-import { generateTask, getTask, saveTask } from 'services/taskService';
-import { TaskGenerator } from './TaskGenerator';
-import { varNameToLabelName } from 'util/varNameToLabelName';
+import { BellOutlined } from '@ant-design/icons';
+import { Affix, Button, Form, Input, Radio, Space, Typography } from 'antd';
 import { DateInput } from 'components/DateInput';
 import { RangePickerInput } from 'components/RangePickerInput';
 import TaskChat from 'pages/AdminTask/TaskChat';
-import {
-  BellOutlined,
-} from '@ant-design/icons';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { withRouter } from 'react-router-dom';
+import { generateTask, getTask, saveTask } from 'services/taskService';
+import styled from 'styled-components';
+import { varNameToLabelName } from 'util/varNameToLabelName';
+import { FileUploader } from '../../components/FileUploader';
+import { TaskGenerator } from './TaskGenerator';
+
 
 const { Text } = Typography;
 

@@ -1,11 +1,11 @@
 import {
-  BellOutlined, CalendarOutlined, HomeOutlined,
+  BellOutlined, CalendarOutlined,
+  DashboardOutlined, HeartOutlined, HomeOutlined,
   IdcardOutlined,
   LoginOutlined, LogoutOutlined, MenuOutlined,
-  HeartOutlined,
-  SecurityScanOutlined, SkinOutlined,
+  SecurityScanOutlined,
   SnippetsOutlined, TeamOutlined, ToolOutlined,
-  UserAddOutlined, UserOutlined, DashboardOutlined
+  UserAddOutlined, UserOutlined
 } from '@ant-design/icons';
 import { Avatar, Badge, Button, Drawer, Layout, Menu, Modal, Typography } from 'antd';
 import React from 'react';
@@ -15,8 +15,6 @@ import { HashLink } from 'react-router-hash-link';
 import { logout } from 'services/authService';
 import styled from 'styled-components';
 import { GlobalContext } from '../contexts/GlobalContext';
-import {MdNotificationsNone} from 'react-icons/md';
-import {RiServiceLine} from 'react-icons/ri';
 
 const { Header } = Layout;
 const { Text } = Typography;

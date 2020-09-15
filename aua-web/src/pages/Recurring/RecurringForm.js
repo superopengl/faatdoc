@@ -1,4 +1,4 @@
-import { Button, Form, Input, Select, Space, Typography, InputNumber } from 'antd';
+import { Button, Form, Select, Space, Typography, InputNumber } from 'antd';
 import { CronInput } from 'components/CronInput';
 import { PortofolioAvatar } from 'components/PortofolioAvatar';
 import PropTypes from 'prop-types';
