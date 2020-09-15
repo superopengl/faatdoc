@@ -24,7 +24,7 @@ import RecurringListPage from 'pages/Recurring/RecurringListPage';
 import NotificationPage from 'pages/Notification/NotificationPage';
 import UserPage from 'pages/User/UserPage';
 import ImpersonatePage from 'pages/Impersonate/ImpersonatePage';
-import { refreshNotificationUnreadCount as getNotificationUnreadCount} from 'services/notificationService';
+import { countUnreadNotification as getNotificationUnreadCount} from 'services/notificationService';
 import PortofolioForm from 'pages/Portofolio/PortofolioForm';
 import DisclaimerPage from 'pages/DisclaimerPage';
 import MyTaskViewPage from 'pages/MyTask/MyTaskViewPage';

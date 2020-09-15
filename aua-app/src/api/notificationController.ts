@@ -6,7 +6,7 @@ import { assert, assertRole } from '../utils/assert';
 import { handlerWrapper } from '../utils/asyncHandler';
 import { getUtcNow } from '../utils/getUtcNow';
 
-async function listNotificationForClient(clientId) {
+async function listNotificationForClient(clientId, pagenation) {
   const list = await getRepository(Notification)
     .createQueryBuilder('x')
     .where({ clientUserId: clientId, deleted: false })
@@ -17,11 +17,13 @@ async function listNotificationForClient(clientId) {
       'content',
       '"readAt"'
     ])
+    .skip(pagenation.skip)
+    .take(pagenation.limit)
     .execute();
   return list;
 }
 
-async function listNotificationForAgent(agentId) {
+async function listNotificationForAgent(agentId, pagenation) {
   const list = await getRepository(Notification)
     .createQueryBuilder('x')
     .where({ agentUserId: agentId, deleted: false })
@@ -36,11 +38,13 @@ async function listNotificationForAgent(agentId) {
       'content',
       '"readAt"'
     ])
+    .skip(pagenation.skip)
+    .take(pagenation.limit)
     .execute();
   return list;
 }
 
-async function listNotificationForAdmin() {
+async function listNotificationForAdmin(pagenation) {
   const list = await getRepository(Notification)
     .createQueryBuilder('x')
     .where({deleted: false})
@@ -55,6 +59,8 @@ async function listNotificationForAdmin() {
       'content',
       '"readAt"'
     ])
+    .skip(pagenation.skip)
+    .take(pagenation.limit)
     .execute();
   return list;
 }
@@ -62,16 +68,22 @@ async function listNotificationForAdmin() {
 export const listNotification = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent', 'client');
   const { user: { id, role } } = req as any;
+  const page = +req.query.page;
+  const size = 50;
+  const pagenation = {
+    skip: page * size,
+    limit: size,
+  }
   let list: Promise<any>;
   switch (role) {
     case 'client':
-      list = await listNotificationForClient(id);
+      list = await listNotificationForClient(id, pagenation);
       break;
     case 'agent':
-      list = await listNotificationForAgent(id);
+      list = await listNotificationForAgent(id, pagenation);
       break;
     case 'admin':
-      list = await listNotificationForAdmin();
+      list = await listNotificationForAdmin(pagenation);
       break;
     default:
       assert(false, 500, `Unsupported role ${role}`);

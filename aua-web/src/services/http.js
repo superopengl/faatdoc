@@ -16,7 +16,7 @@ function getFullBaseUrl() {
   const url = trimTrailingSlash(process.env.REACT_APP_AUA_API_ENDPOINT);
   if(url.charAt(0) === '/') {
     // Relative address
-    return window.location + url;
+    return window.location.origin + url;
   }else{
     // Absolute address
     return url;

@@ -8,12 +8,12 @@ export async function deleteNotification(id) {
   return httpDelete(`notification/${id}`);
 }
 
-export async function refreshNotificationUnreadCount() {
-  const count = await httpGet(`notification/count/unread`);
-  return count;
+export async function countUnreadNotification() {
+  return httpGet(`notification/count/unread`);
 }
 
-export async function listNotification() {
-  return httpGet('notification');
+export async function listNotification(page = 0) {
+  return httpGet('notification', { page });
 }
+
 
