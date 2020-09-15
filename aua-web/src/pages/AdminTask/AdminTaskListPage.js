@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined, SearchOutlined, SyncOutlined } from '@ant-design/icons';
-import { Button, Input, Layout, Modal, Select, Space, Table, Tooltip, Typography } from 'antd';
+import { Button, Input, Layout, Modal, Select, Space, Table, Tooltip, Typography, Checkbox } from 'antd';
 import Text from 'antd/lib/typography/Text';
 import HomeHeader from 'components/HomeHeader';
 import { TaskProgressBar } from 'components/TaskProgressBar';
@@ -245,7 +245,15 @@ const AdminTaskListPage = (props) => {
 
   React.useEffect(() => {
     loadList();
-  }, [])
+  }, []);
+
+  const StatusSelectOptions = [
+    { label: 'To Do', value: 'todo' },
+    { label: 'To Sign', value: 'to_sign' },
+    { label: 'Signed', value: 'signed' },
+    { label: 'Complete', value: 'complete' },
+    { label: 'Archive', value: 'archive' },
+  ]
 
   return (
     <LayoutStyled>
@@ -255,7 +263,7 @@ const AdminTaskListPage = (props) => {
           <StyledTitleRow>
             <Title level={2} style={{ margin: 'auto' }}>Task Management</Title>
           </StyledTitleRow>
-          <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
+          <Space style={{ width: '100%', justifyContent: 'flex-end', margin: '1rem auto 0.5rem' }}>
             <Input.Search
               placeholder="input search text"
               enterButton={<><SearchOutlined /> Search</>}
@@ -267,7 +275,6 @@ const AdminTaskListPage = (props) => {
               allowClear
             />
 
-            <Button onClick={() => loadList()} icon={<SyncOutlined />}></Button>
             <Select
               mode="multiple"
               allowClear
@@ -276,12 +283,11 @@ const AdminTaskListPage = (props) => {
               value={queryInfo?.status || []}
               onChange={handleStatusFilter}
             >
-              <Select.Option value='todo'>To Do</Select.Option>
-              <Select.Option value='to_sign'>To Sign</Select.Option>
-              <Select.Option value='signed'>Signed</Select.Option>
-              <Select.Option value='complete'>Complete</Select.Option>
-              <Select.Option value='archive'>Archive</Select.Option>
+              {StatusSelectOptions.map((x, i) => <Select.Option key={i} value={x.value}>
+                  {x.label}
+              </Select.Option>)}
             </Select>
+            <Button onClick={() => loadList()} icon={<SyncOutlined />}></Button>
             <Button onClick={() => clearAllFilters()}>Reset Filters</Button>
           </Space>
           <Table columns={columnDef}
