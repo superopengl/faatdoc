@@ -60,7 +60,6 @@ const MyTaskViewPage = (props) => {
   const {status} = task || {};
   const defaultActiveKey = status && status === 'to_sign' ? 'sign' : 'view';
 
-  debugger;
   return (
     <LayoutStyled>
       <HomeHeader></HomeHeader>

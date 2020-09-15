@@ -26,6 +26,7 @@ dependencies:
   swagger-routes-express: 3.2.1
   typeorm: 0.2.25
   uuid: 8.3.0
+  ws: 7.3.1
   yamljs: 0.3.0
 devDependencies:
   nodemon: 2.0.4
@@ -3413,6 +3414,20 @@ packages:
     dev: true
     resolution:
       integrity: sha512-AvHcyZ5JnSfq3ioSyjrBkH9yW4m7Ayk8/9My/DD9onKeu/94fwrMocemO2QAJFAlnnDN+ZDS+ZjAR5ua1/PV/Q==
+  /ws/7.3.1:
+    dev: false
+    engines:
+      node: '>=8.3.0'
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: ^5.0.2
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
+    resolution:
+      integrity: sha512-D3RuNkynyHmEJIpD2qrgVkc9DQ23OrN/moAwZX4L8DfvszsJxpjQuUq3LMx6HoYji9fbIOBY18XWBsAux1ZZUA==
   /xdg-basedir/4.0.0:
     dev: true
     engines:
@@ -3567,4 +3582,5 @@ specifiers:
   typeorm: ^0.2.25
   typescript: ^3.9.3
   uuid: ^8.3.0
+  ws: ^7.3.1
   yamljs: ^0.3.0

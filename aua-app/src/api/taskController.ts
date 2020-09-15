@@ -250,13 +250,14 @@ async function sendTaskMessage(task, senderId, content) {
       name: task.name
     },
     templateName: 'taskNotification'
-  }).catch(() => {});
+  }).catch(() => { });
 }
 
 export const notifyTask = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent', 'client');
   const { id } = req.params;
   const { content } = req.body;
+  assert(content, 404);
 
   const task = await getRepository(Task).findOne(id);
   assert(task, 404);
@@ -270,7 +271,7 @@ export const listTaskNotifies = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent', 'client');
   const { id } = req.params;
   const { from, size } = req.query;
-  const {user: {role, id: userId}} = req as any;
+  const { user: { role, id: userId } } = req as any;
 
   let query = getRepository(Notification).createQueryBuilder()
     .where(`"taskId" = :id`, { id });

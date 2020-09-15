@@ -84,7 +84,6 @@ export const CronInput = props => {
 
   const handleTimeChange = value => {
     if (!value) return;
-    debugger;
     const minute = value.format('m');
     const hour = value.format('H');
     setCron(cron.replace(pattern, `$1 ${minute} ${hour} $4 $5 $6`));

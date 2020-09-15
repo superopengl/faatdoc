@@ -4,6 +4,8 @@ import * as path from 'path';
 import { connectDatabase } from './db';
 import * as dotenv from 'dotenv';
 import { restartCronService } from './services/cronService';
+import {createWebsocketServer} from './ws';
+import * as WebSocket from 'ws';
 
 function validateEnvVars() {
   const requiredEnvVars = [
@@ -49,7 +51,7 @@ async function launchApp() {
   restartCronService(true);
 
   const httpPort = +process.env.AUA_HTTP_PORT || 80;
-  http.createServer(app).listen(httpPort);
+  const server = http.createServer(app);
 
   // const httpsPort = +process.env.AUA_HTTPS_PORT || 443;
   // // start https server
@@ -60,7 +62,12 @@ async function launchApp() {
 
   // https.createServer(sslOptions, app).listen(httpsPort);
 
-  console.log(`Starting on ${httpPort}`);
+  const wss = new WebSocket.Server({server});
+  createWebsocketServer(wss);
+
+  server.listen(httpPort);
+
+  console.log(`Started on ${httpPort}`);
 }
 
 try {

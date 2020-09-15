@@ -12,8 +12,20 @@ function trimTrailingSlash(str) {
   return str ? str.replace(/\/+$/, '') : str;
 }
 
-export const baseURL = trimTrailingSlash(process.env.REACT_APP_AUA_API_ENDPOINT);
+function getFullBaseUrl() {
+  const url = trimTrailingSlash(process.env.REACT_APP_AUA_API_ENDPOINT);
+  if(url.charAt(0) === '/') {
+    // Relative address
+    return window.location + url;
+  }else{
+    // Absolute address
+    return url;
+  }
+}
 
+export const API_BASE_URL = getFullBaseUrl();
+export const WEBSOCKET_URL = API_BASE_URL.replace(/^(http)(s?:\/\/[^\/]+)(.*)/i, 'ws$2');
+console.log('Backend API URL', API_BASE_URL, WEBSOCKET_URL);
 
 function getHeaders(responseType) {
   const headers = {
@@ -28,7 +40,7 @@ export async function request(method, path, queryParams, body, responseType = 'j
     const response = await axios({
       method,
       // baseURL,
-      url: `${baseURL}/${trimSlash(path)}`,
+      url: `${API_BASE_URL}/${trimSlash(path)}`,
       headers: getHeaders(responseType),
       params: queryParams,
       data: body,
