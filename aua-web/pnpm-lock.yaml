@@ -13,6 +13,7 @@ dependencies:
   history: 5.0.0
   javascript-time-ago: 2.0.13
   lodash: 4.17.19
+  markdown-it: 11.0.1
   moment: 2.27.0
   query-string: 6.13.1
   react: 16.13.1
@@ -24,6 +25,7 @@ dependencies:
   react-icons: 3.10.0_react@16.13.1
   react-image-lightbox: 5.1.1_react-dom@16.13.1+react@16.13.1
   react-infinite-scroller: 1.2.4_react@16.13.1
+  react-markdown-editor-lite: 1.2.2_react@16.13.1
   react-multi-carousel: 2.5.5
   react-responsive: 8.1.0_react@16.13.1
   react-router-dom: 5.2.0_react@16.13.1
@@ -7511,6 +7513,12 @@ packages:
     dev: false
     resolution:
       integrity: sha1-HADHQ7QzzQpOgHWPe2SldEDZ/wA=
+  /linkify-it/3.0.2:
+    dependencies:
+      uc.micro: 1.0.6
+    dev: false
+    resolution:
+      integrity: sha512-gDBO4aHNZS6coiZCKVhSNh43F9ioIL4JwRjLZPkoLIY4yZFwg264Y5lu2x6rb1Js42Gh6Yqm2f6L2AJcnkzinQ==
   /load-json-file/2.0.0:
     dependencies:
       graceful-fs: 4.2.4
@@ -7741,6 +7749,17 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-7Nyo8TFE5mDxtb1B8S80edmN+48=
+  /markdown-it/11.0.1:
+    dependencies:
+      argparse: 1.0.10
+      entities: 2.0.3
+      linkify-it: 3.0.2
+      mdurl: 1.0.1
+      uc.micro: 1.0.6
+    dev: false
+    hasBin: true
+    resolution:
+      integrity: sha512-aU1TzmBKcWNNYvH9pjq6u92BML+Hz3h5S/QpfTFwiQF852pLT+9qHsrhM9JYipkOXZxGn+sGH8oyJE9FD9WezQ==
   /matchmediaquery/0.3.1:
     dependencies:
       css-mediaquery: 0.1.2
@@ -7763,6 +7782,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-rQvjv71olwNHgiTbfPZFkJtjNMciWgswYeciZhtvWLO8bmX3TnhyA62I6sTWOyZssWHJJjY6/KiWwqQsWWsqOA==
+  /mdurl/1.0.1:
+    dev: false
+    resolution:
+      integrity: sha1-/oWy7HWlkDfyrf7BAP1sYBdhFS4=
   /media-typer/0.3.0:
     dev: false
     engines:
@@ -10608,6 +10631,14 @@ packages:
     dev: false
     resolution:
       integrity: sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
+  /react-markdown-editor-lite/1.2.2_react@16.13.1:
+    dependencies:
+      react: 16.13.1
+    dev: false
+    peerDependencies:
+      react: ^16.9.0
+    resolution:
+      integrity: sha512-yHWdwaSiqbR4kdQUBBTBTnpNcBZOwl+a5eL2BrSTr6S2L3dyENF571LglU4zhBPViMJmX8XYYoYJEQVa7+0c2g==
   /react-modal/3.11.2_react-dom@16.13.1+react@16.13.1:
     dependencies:
       exenv: 1.2.2
@@ -12491,6 +12522,10 @@ packages:
     dev: false
     resolution:
       integrity: sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
+  /uc.micro/1.0.6:
+    dev: false
+    resolution:
+      integrity: sha512-8Y75pvTYkLJW2hWQHXxoqRgV7qb9B+9vFEtidML+7koHUFapnVJAZ6cKs+Qjz5Aw3aZWHMC6u0wJE3At+nSGwA==
   /undefsafe/2.0.3:
     dependencies:
       debug: 2.6.9
@@ -13374,6 +13409,7 @@ specifiers:
   history: ^5.0.0
   javascript-time-ago: ^2.0.13
   lodash: ^4.17.15
+  markdown-it: ^11.0.1
   moment: ^2.25.3
   nodemon: ^2.0.4
   prop-types: ^15.7.2
@@ -13387,6 +13423,7 @@ specifiers:
   react-icons: ^3.10.0
   react-image-lightbox: ^5.1.1
   react-infinite-scroller: ^1.2.4
+  react-markdown-editor-lite: ^1.2.2
   react-multi-carousel: ^2.5.5
   react-responsive: ^8.1.0
   react-router-dom: ^5.2.0

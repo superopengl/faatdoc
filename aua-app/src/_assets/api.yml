@@ -253,6 +253,48 @@ paths:
       responses:
         200:
           description: OK
+  /doc_template:
+    post:
+      operationId: saveDocTemplate
+      # security:
+      #   - authAdmin: []
+      responses:
+        200:
+          description: OK
+    get:
+      operationId: listDocTemplates
+      # security:
+      #   - authLoggedInUser: []
+      responses:
+        200:
+          description: OK
+  /doc_template/{id}:
+    get:
+      operationId: getDocTemplate
+      # security:
+      #   - authLoggedInUser: []
+      parameters:
+        - name: id
+          in: path
+          type: string
+          format: uuid
+          required: true
+      responses:
+        200:
+          description: OK
+    delete:
+      operationId: deleteDocTemplate
+      # security:
+      #   - authAdmin: []
+      parameters:
+        - name: id
+          in: path
+          type: string
+          format: uuid
+          required: true
+      responses:
+        200:
+          description: OK          
   /portofolio:
     post:
       operationId: savePortofolio

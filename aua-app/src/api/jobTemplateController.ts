@@ -47,7 +47,7 @@ export const getJobTemplate = handlerWrapper(async (req, res) => {
 });
 
 export const deleteJobTemplate = handlerWrapper(async (req, res) => {
-  assertRole(req, 'admin', 'client', 'agent');
+  assertRole(req, 'admin');
   const { id } = req.params;
   const repo = getRepository(JobTemplate);
   await repo.delete({ id });

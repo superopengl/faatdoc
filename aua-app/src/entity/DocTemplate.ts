@@ -1,7 +1,8 @@
 import { Column, PrimaryColumn, Entity, Index } from 'typeorm';
 
+
 @Entity()
-export class JobTemplate {
+export class DocTemplate {
   @PrimaryColumn('uuid')
   id: string;
 
@@ -16,8 +17,14 @@ export class JobTemplate {
 
 
   @Column()
+  @Index()
   lastUpdatedAt: Date;
 
-  @Column({ type: 'json' })
-  fields: any;
+
+  @Column({ type: 'text' })
+  md: string;
+
+
+  @Column({ type: 'varchar', array: true, default: '{}' })
+  variables: string[];
 }

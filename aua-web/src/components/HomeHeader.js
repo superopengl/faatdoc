@@ -5,7 +5,7 @@ import {
   LoginOutlined, LogoutOutlined, MenuOutlined,
   SecurityScanOutlined,
   SnippetsOutlined, TeamOutlined, ToolOutlined,
-  UserAddOutlined, UserOutlined
+  UserAddOutlined, UserOutlined, ReconciliationOutlined
 } from '@ant-design/icons';
 import { Avatar, Badge, Button, Drawer, Layout, Menu, Modal, Typography } from 'antd';
 import React from 'react';
@@ -118,6 +118,7 @@ const HomeHeaderRaw = props => {
             {/* {isAdmin && <Menu.Item key="clients"><Link to="/clients">Users</Link></Menu.Item>} */}
             {/* {isAdmin && <Menu.Item key="admin"><Link to="/admin">Admin</Link></Menu.Item>} */}
             {isAdmin && <Menu.Item key="job_template"><Link to="/job_template">Job Template</Link></Menu.Item>}
+            {isAdmin && <Menu.Item key="doc_template"><Link to="/doc_template">Doc Template</Link></Menu.Item>}
             {isAdmin && <Menu.Item key="recurring"><Link to="/recurring">Recurring</Link></Menu.Item>}
             {isAdmin && <Menu.Item key="user"><Link to="/user">User</Link></Menu.Item>}
             {!isGuest && <Menu.Item key="notification"><Link to="/notification"><Badge count={notifyCount} showZero={false} offset={[10, 0]}>Notification</Badge></Link></Menu.Item>}
@@ -156,6 +157,7 @@ const HomeHeaderRaw = props => {
             {!isGuest && <Menu.Item key="task"><SnippetsOutlined /> <Link to="/task">Task</Link></Menu.Item>}
             {isClient && <Menu.Item key="portofolio"><IdcardOutlined /> <Link to="/portofolio">Portofolio</Link></Menu.Item>}
             {isAdmin && <Menu.Item key="job_template"><ToolOutlined /> <Link to="/job_template">Job Template</Link></Menu.Item>}
+            {isAdmin && <Menu.Item key="doc_template"><ReconciliationOutlined /> <Link to="/doc_template">Doc Template</Link></Menu.Item>}
             {isAdmin && <Menu.Item key="recurring"><CalendarOutlined /> <Link to="/recurring">Recurring</Link></Menu.Item>}
             {/* {isAdmin && <Menu.Item key="clients"><SettingOutlined /> <Link to="/clients">Users</Link></Menu.Item>} */}
             {isAdmin && <Menu.Item key="user"><TeamOutlined /> <Link to="/user">User</Link></Menu.Item>}

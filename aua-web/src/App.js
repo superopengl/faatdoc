@@ -14,6 +14,7 @@ import Error404 from 'pages/Error404';
 import PrivacyPolicyPage from 'pages/PrivacyPolicyPage';
 import MyTaskListPage from 'pages/MyTask/MyTaskListPage';
 import JobTemplatePage from 'pages/JobTemplate/JobTemplatePage';
+import DocTemplatePage from 'pages/DocTemplate/DocTemplatePage';
 import PortofolioPage from 'pages/Portofolio/PortofolioPage';
 import AdminTaskListPage from 'pages/AdminTask/AdminTaskListPage';
 import ProceedTaskPage from 'pages/AdminTask/ProceedTaskPage';
@@ -90,6 +91,7 @@ class App extends React.Component {
             <RoleRoute visible={isClient} loading={loading} exact path="/portofolio/new/:type" component={PortofolioForm} />
             <RoleRoute loading={loading} path="/reset_password" exact component={ResetPasswordPage} />
             <RoleRoute visible={isAdmin} loading={loading} exact path="/job_template" component={JobTemplatePage} />
+            <RoleRoute visible={isAdmin} loading={loading} exact path="/doc_template" component={DocTemplatePage} />
             <RoleRoute visible={isAdmin} loading={loading} exact path="/user" component={UserPage} />
             <RoleRoute visible={isAdmin} loading={loading} exact path="/recurring" component={RecurringListPage} />
             <RoleRoute visible={isAdmin} loading={loading} exact path="/impersonate" component={ImpersonatePage} />
