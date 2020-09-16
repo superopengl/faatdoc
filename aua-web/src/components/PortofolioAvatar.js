@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import toMaterialStyle from 'material-color-hash';
 import { Typography, Avatar } from 'antd';
 import * as abbreviate from 'abbreviate';
 import uniqolor from 'uniqolor';
