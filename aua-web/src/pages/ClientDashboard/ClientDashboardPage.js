@@ -1,7 +1,7 @@
 import { Alert, Badge, Button, Layout, List, Modal, Space, Tabs, Typography, Row, Col, Card } from 'antd';
 import Text from 'antd/lib/typography/Text';
 import HomeHeader from 'components/HomeHeader';
-import { TaskProgressBar } from 'components/TaskProgressBar';
+import { TaskStatus } from 'components/TaskStatus';
 import { TimeAgo } from 'components/TimeAgo';
 import React from 'react';
 import { withRouter } from 'react-router-dom';

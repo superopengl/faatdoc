@@ -2,18 +2,27 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import toMaterialStyle from 'material-color-hash';
 import { Typography, Avatar } from 'antd';
+import * as abbreviate from 'abbreviate';
+import uniqolor from 'uniqolor';
 
 const { Text } = Typography;
 
 function getLabel(name) {
-  const initials = name.split(/ +/g).map(w => w.charAt(0).toUpperCase());
-  return initials.length === 1 ? initials[0] : initials[0] + initials[1];
+  const maxLength = 6;
+  const words = name.split(/ +/g);
+  if(words.length === 1) {
+    return abbreviate(name, {length: maxLength}).toUpperCase();
+  }
+  const initials = words.map(w => w.charAt(0).toUpperCase()).join('');
+  return initials.substring(0, maxLength);
 }
 
 export const PortofolioAvatar = props => {
   const { value, size, style, ...other } = props;
   if(!value) return null;
-  const {backgroundColor, color} = toMaterialStyle(value, 800);
+  // const {backgroundColor, color} = toMaterialStyle(value, 800);
+  const {color: backgroundColor, isLight} = uniqolor(value);
+  const color = isLight ? 'rgba(0,0,0,0.85)' : 'rgba(255,255,255,0.85)';
   const name = getLabel(value);
   const fontSize = 28 * size / 64;
   return <div><Avatar

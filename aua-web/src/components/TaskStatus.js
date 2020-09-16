@@ -3,8 +3,9 @@ import { Typography } from 'antd';
 import { Progress } from 'antd';
 import PropTypes from 'prop-types';
 import { Tag } from 'antd';
+import { PortofolioAvatar } from './PortofolioAvatar';
 
-const {Text} = Typography;
+const { Text } = Typography;
 
 const percentage = {
   'todo': 25,
@@ -34,16 +35,22 @@ function getLabelFromStatus(status) {
   return <small>{(status || '').replace(/_/g, ' ')}</small>
 }
 
-export const TaskProgressBar = ({ status, shape, ...props }) => {
+export const TaskStatus = ({ status, shape, name, ...props }) => {
   const label = getLabelFromStatus(status);
   if (shape === 'circle') {
-    return <Progress 
-    type="circle"
+    return <Progress
+      type="circle"
       percent={percentage[status]}
       // steps={4}
       strokeWidth={3}
       status={progressStatus[status]}
-      format={() => <Text type="secondary"><small>{label}</small></Text>}
+      format={() => {
+        return (
+          // <Text type="secondary"><small>{label}</small></Text>
+          <PortofolioAvatar value={name} size={52} />
+        )
+      }
+      }
       {...props}
     />
   }
@@ -51,11 +58,12 @@ export const TaskProgressBar = ({ status, shape, ...props }) => {
   return <Tag color={tagColor[status]}>{label}</Tag>
 }
 
-TaskProgressBar.propTypes = {
+TaskStatus.propTypes = {
   status: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
   shape: PropTypes.string.isRequired
 };
 
-TaskProgressBar.defaultProps = {
+TaskStatus.defaultProps = {
   shape: 'circle',
 }

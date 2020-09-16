@@ -2,7 +2,7 @@ import { DeleteOutlined, EditOutlined, SearchOutlined, SyncOutlined } from '@ant
 import { Button, Input, Layout, Modal, Select, Space, Table, Tooltip, Typography } from 'antd';
 import Text from 'antd/lib/typography/Text';
 import HomeHeader from 'components/HomeHeader';
-import { TaskProgressBar } from 'components/TaskProgressBar';
+import { TaskStatus } from 'components/TaskStatus';
 import { TimeAgo } from 'components/TimeAgo';
 import ReviewSignPage from 'pages/MyTask/ReviewSignPage';
 import React from 'react';
@@ -51,6 +51,7 @@ const AdminTaskListPage = (props) => {
   const [queryInfo, setQueryInfo] = React.useState(reactLocalStorage.getObject('query', DEFAULT_QUERY_INFO, true))
 
   const columnDef = [
+
     {
       title: 'Task Name',
       dataIndex: 'name',
@@ -59,6 +60,20 @@ const AdminTaskListPage = (props) => {
       // onFilter: (value, record) => record.name.includes(value),
       render: (text) => <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text || ''} />,
       ellipsis: false,
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      sorter: () => 0,
+      render: (text, record) => <TaskStatus width={60} status={record.status} name={record.forWhom}></TaskStatus>,
+      ellipsis: false
+    },
+    {
+      title: 'Job',
+      dataIndex: 'jobTemplateName',
+      sorter: () => 0,
+      render: (text) => <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text || ''} />,
+      ellipsis: false
     },
     {
       title: 'Portofolio',
@@ -78,20 +93,7 @@ const AdminTaskListPage = (props) => {
       sorter: () => 0,
       render: (text) => <TimeAgo value={text} />
     },
-    {
-      title: 'Job',
-      dataIndex: 'jobTemplateName',
-      sorter: () => 0,
-      render: (text) => <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text || ''} />,
-      ellipsis: false
-    },
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      sorter: () => 0,
-      render: (text) => <TaskProgressBar width={60} status={text}></TaskProgressBar>,
-      ellipsis: false
-    },
+
     {
       title: 'Assignee',
       dataIndex: 'agentId',

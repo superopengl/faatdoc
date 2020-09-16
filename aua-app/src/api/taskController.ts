@@ -13,6 +13,7 @@ import { handlerWrapper } from '../utils/asyncHandler';
 import { generateTaskByJobTemplateAndPortofolio } from '../utils/generateTaskByJobTemplateAndPortofolio';
 import { getUtcNow } from '../utils/getUtcNow';
 import { guessDisplayNameFromFields } from '../utils/guessDisplayNameFromFields';
+import { Portofolio } from '../entity/Portofolio';
 
 export const generateTask = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
@@ -56,6 +57,9 @@ export const saveTask = handlerWrapper(async (req, res) => {
   const { id, name, jobTemplateId, portofolioId, fields, status } = req.body;
   assert(name, 400, 'name is empty');
 
+  const portofolio = await getRepository(Portofolio).findOne(portofolioId);
+  assert(name, 404, 'portofolio is not found');
+
   let task: Task;
   if (id) {
     // Existing lodgment save
@@ -72,8 +76,9 @@ export const saveTask = handlerWrapper(async (req, res) => {
     task.portofolioId = portofolioId;
   }
 
+
   task.name = name;
-  task.forWhom = guessDisplayNameFromFields(fields);
+  task.forWhom = guessDisplayNameFromFields(portofolio.fields);
   task.fields = fields;
   task.status = status;
   task.lastUpdatedAt = getUtcNow();

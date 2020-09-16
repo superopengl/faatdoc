@@ -27,6 +27,10 @@ const StyledDrawer = styled(Drawer)`
 .rce-mbox {
   padding-bottom: 2rem;
 
+  .rce-mbox-text {
+    white-space: pre-line;
+  }
+
   .rce-mbox-time {
     bottom: -1.5rem;
   }
@@ -36,7 +40,7 @@ const StyledDrawer = styled(Drawer)`
 const StyledSentMessageBox = styled(MessageBox)`
 .rce-mbox {
   margin-right: 5px;
-  background-color: #95de64;
+  background-color:#95de64;
   margin-left: 20px;
   // color: rgba(255,255,255,0.9);
 
@@ -117,6 +121,7 @@ const TaskChat = (props) => {
     setList([{ ...newMessage, status: 'sent' }, ...others]);
     // loadList();
 
+    form.resetFields();
     textareaRef.current.focus();
   }
 
@@ -142,7 +147,8 @@ const TaskChat = (props) => {
     width={500}
     bodyStyle={{ padding: '10px', verticalAlign: 'bottom' }}
     afterVisibleChange={handleAfterVisibleChange}
-    footer={readonly ? null : <Form onFinish={sendMessage} form={form}>
+    footer={readonly ? null : <Form onFinish={sendMessage} 
+    form={form}>
       <Form.Item name="content" style={{ marginBottom: 4 }}>
         <Input.TextArea
           autoSize={{ minRows: 3, maxRows: 20 }}

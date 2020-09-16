@@ -1,7 +1,7 @@
 import { Badge, Button, Layout, List, Modal, Space, Tabs, Typography } from 'antd';
 import Text from 'antd/lib/typography/Text';
 import HomeHeader from 'components/HomeHeader';
-import { TaskProgressBar } from 'components/TaskProgressBar';
+import { TaskStatus } from 'components/TaskStatus';
 import { TimeAgo } from 'components/TimeAgo';
 import React from 'react';
 import { withRouter } from 'react-router-dom';
@@ -122,7 +122,7 @@ const MyTaskListPage = (props) => {
           onClick={() => actionOnTask(item)}
         >
           <List.Item.Meta
-            avatar={<TaskProgressBar key="1" status={item.status} width={60} style={{ marginTop: 6 }} />}
+            avatar={<TaskStatus key="1" status={item.status} width={60} name={item.forWhom} style={{ marginTop: 6 }} />}
 
             title={<Text style={{ fontSize: '1rem' }}>{item.name}</Text>}
             description={<Space style={{ width: '100%', justifyContent: 'space-between' }}>

@@ -39,11 +39,11 @@ export const generateTaskByJobTemplateAndPortofolio = async (jobTemplateId, port
 
   const task = new Task();
 
-  const fields = prefillFieldsWithProtofolio(jobTemplate.fields, portofolio?.fields);
+  const fields = prefillFieldsWithProtofolio(jobTemplate.fields, portofolio.fields);
 
   task.id = uuidv4();
   task.name = genName(jobTemplate, portofolio);
-  task.forWhom = guessDisplayNameFromFields(fields);
+  task.forWhom = guessDisplayNameFromFields(portofolio.fields);
   task.userId = portofolio.userId;
   task.jobTemplateId = jobTemplateId;
   task.portofolioId = portofolioId;
