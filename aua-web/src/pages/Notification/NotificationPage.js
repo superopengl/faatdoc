@@ -73,7 +73,9 @@ const NotificationPage = (props) => {
 
   const handleRead = async (e, item) => {
     e.stopPropagation();
-    await readNotificationDetail(item.id)
+    await readNotificationDetail(item.id);
+    item.readAt = new Date();
+    setList([...list]);
   }
 
   const handleGoToTask = (e, taskId) => {
@@ -98,7 +100,7 @@ const NotificationPage = (props) => {
         <Paragraph style={{ whiteSpace: 'pre-line' }}>{content}</Paragraph>
       </>
     })
-    await initloadList();
+    // await initloadList();
   }
 
   return (
