@@ -65,7 +65,7 @@ const AdminTaskListPage = (props) => {
       title: 'Status',
       dataIndex: 'status',
       sorter: () => 0,
-      render: (text, record) => <TaskStatus width={60} status={record.status} name={record.forWhom}></TaskStatus>,
+      render: (text, record) => <TaskStatus width={60} status={record.status} name={record.forWhom} avatar={false}></TaskStatus>,
       ellipsis: false
     },
     {
