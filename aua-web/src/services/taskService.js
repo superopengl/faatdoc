@@ -16,6 +16,11 @@ export async function listTask() {
   return httpGet('task');
 }
 
+export async function listUnreadTask() {
+  return httpGet('task/unread');
+}
+
+
 export async function searchTask(query) {
   return httpPost('task/search', query);
 }

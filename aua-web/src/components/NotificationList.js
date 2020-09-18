@@ -20,8 +20,8 @@ display: flex;
 width: 100%;
 justify-content: space-between;
 margin-bottom: 0.5rem;
-padding-top: 0.5rem;
-border-top: 1px solid #f3f3f3;
+padding-bottom: 0.5rem;
+border-bottom: 1px solid #f3f3f3;
 `;
 
 const NotificationList = (props) => {

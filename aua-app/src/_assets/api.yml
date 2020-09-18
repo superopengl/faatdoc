@@ -352,6 +352,14 @@ paths:
       responses:
         200:
           description: OK
+  /task/unread:
+    get:
+      operationId: listUnreadTask
+      # security:
+      #   - authLoggedInUser: []
+      responses:
+        200:
+          description: OK
   /task/search:
     post:
       operationId: searchTask

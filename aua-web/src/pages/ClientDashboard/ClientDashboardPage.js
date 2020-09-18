@@ -6,7 +6,7 @@ import { TimeAgo } from 'components/TimeAgo';
 import React from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { listJobTemplate } from 'services/jobTemplateService';
-import { listTask } from 'services/taskService';
+import { listTask, listUnreadTask, searchTask } from 'services/taskService';
 import { listPortofolio } from 'services/portofolioService';
 import { PlusOutlined, EditOutlined, ZoomInOutlined, SyncOutlined, HighlightOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
@@ -14,6 +14,7 @@ import { listNotification } from 'services/notificationService';
 import NotificationList from 'components/NotificationList';
 import { GlobalContext } from 'contexts/GlobalContext';
 import { Divider } from 'antd';
+import MyTaskList from 'pages/MyTask/MyTaskList';
 
 
 const { Title } = Typography;
@@ -58,7 +59,8 @@ const span = {
 const ClientDashboardPage = (props) => {
 
   const [, setLoading] = React.useState(true);
-  const [taskList, setTaskList] = React.useState([]);
+  const [toSignTaskList, setToSignTaskList] = React.useState([]);
+  const [unreadTaskList, setUnreadTaskList] = React.useState([]);
   const [portofolioList, setPortofolioList] = React.useState([]);
   const context = React.useContext(GlobalContext);
   const { notifyCount } = context;
@@ -66,11 +68,12 @@ const ClientDashboardPage = (props) => {
   const loadList = async () => {
     setLoading(true);
     const portofolioList = await listPortofolio() || [];
+    const { data: toSignTaskList } = await searchTask({ status: ['to_sign'] });
+    const unreadTaskList = await listUnreadTask();
 
-    const list = await listTask();
-
-    setTaskList(list);
+    setToSignTaskList(toSignTaskList);
     setPortofolioList(portofolioList);
+    setUnreadTaskList(unreadTaskList);
     setLoading(false);
   }
 
@@ -131,24 +134,29 @@ const ClientDashboardPage = (props) => {
       <ContainerStyled>
         <Row gutter={80}>
           <Col {...span}>
-            <Space size="middle" direction="vertical" style={{ width: '100%'}}>
-              <Title level={4}>My Tasks</Title>
+            <Space size="small" direction="vertical" style={{ width: '100%' }}>
+              {/* <Title type="secondary" level={4}>My Tasks</Title> */}
+
+              {/* <Divider /> */}
+              {toSignTaskList.length > 0 && <>
+                <Title type="secondary" level={4}>Require Sign</Title>
+                <MyTaskList data={toSignTaskList} />
+                <Divider />
+              </>}
+              <Title type="secondary" level={4}>Latest 5 tasks with unread comments</Title>
               <Space style={{ width: '100%', justifyContent: 'space-between' }}>
                 <Link to="/task">All tasks</Link>
-                <Button type="primary" icon={<PlusOutlined />} onClick={() => createNewTask()}>New Task</Button>
+                {/* <Button type="link" icon={<PlusOutlined />} onClick={() => createNewTask()}>New Task</Button> */}
               </Space>
-              <Divider/>
-              <Title level={5}>Require Sign</Title>
-              <Divider/>
-              <Title level={5}>Require Action</Title>
+              <MyTaskList data={unreadTaskList.slice(0, 5)} />
             </Space>
           </Col>
           <Col {...span}>
-            <Space size="middle" direction="vertical" style={{ width: '100%' }}>
-              <Title level={4}>Top 10 Unread Notification</Title>
+            <Space size="small" direction="vertical" style={{ width: '100%' }}>
+              <Title type="secondary" level={4}>Top 10 Unread Notification</Title>
               <Space style={{ width: '100%', justifyContent: 'space-between' }}>
                 <Link to="/notification">All notifications ({notifyCount} unread)</Link>
-                <Button type="link" icon={<SyncOutlined />} onClick={() => window.location.reload(false)}></Button>
+                {/* <Button type="link" icon={<SyncOutlined />} onClick={() => window.location.reload(false)}></Button> */}
               </Space>
               <NotificationList
                 onFetchNextPage={handleFetchNextPage}

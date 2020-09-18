@@ -1,6 +1,6 @@
 
 import * as moment from 'moment';
-import { getConnection, getManager, getRepository } from 'typeorm';
+import { getConnection, getManager, getRepository, IsNull } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { JobTemplate } from '../entity/JobTemplate';
 import { Task } from '../entity/Task';
@@ -109,21 +109,26 @@ const defaultSearch: ISearchTaskQuery = {
 
 
 export const searchTask = handlerWrapper(async (req, res) => {
-  assertRole(req, 'admin', 'agent');
+  assertRole(req, 'admin', 'agent', 'client');
   const option: ISearchTaskQuery = { ...defaultSearch, ...req.body };
 
   const { text, status, page, assignee, orderDirection, orderField } = option;
   const size = option.size;
   const skip = (page - 1) * size;
+  const { role, id } = (req as any).user;
 
   let query = getManager()
     .createQueryBuilder()
-    .from(Task, 'x');
+    .from(Task, 'x')
+    .where(`1 = 1`);
+  if (role === 'client') {
+    query = query.andWhere(`x."userId" = :id`, { id });
+  }
   if (status?.length) {
-    query = query.where(`x.status IN (:...status)`, { status });
+    query = query.andWhere(`x.status IN (:...status)`, { status });
   }
   if (assignee) {
-    query = query.where('x."agentId" = :assignee', { assignee });
+    query = query.andWhere('x."agentId" = :assignee', { assignee });
   }
   query = query.innerJoin(q => q.from(JobTemplate, 'j').select('*'), 'j', 'j.id = x."jobTemplateId"')
     .innerJoin(q => q.from(User, 'u').select('*'), 'u', 'x."userId" = u.id')
@@ -140,13 +145,13 @@ export const searchTask = handlerWrapper(async (req, res) => {
       `x."signedAt" as "signedAt"`,
     ]);
   if (text) {
-    query = query.where('x.name ILIKE :text OR x."forWhom" ILIKE :text OR j.name ILIKE :text', { text: `%${text}%` });
+    query = query.andWhere('x.name ILIKE :text OR x."forWhom" ILIKE :text OR j.name ILIKE :text', { text: `%${text}%` });
   }
   const total = await query.getCount();
   const list = await query
     .orderBy(`"${orderField}"`, orderDirection)
-    .skip(skip)
-    .take(size)
+    .offset(skip)
+    .limit(size)
     .execute();
 
   res.json({ data: list, pagination: { page, size, total } });
@@ -164,6 +169,41 @@ export const listTask = handlerWrapper(async (req, res) => {
         userId: (req as any).user.id,
         status: TaskStatus.ARCHIVE
       })
+    .select([
+      `x.id as id`,
+      `x.name as name`,
+      `x."forWhom" as "forWhom"`,
+      `x."createdAt" as "createdAt"`,
+      `x."lastUpdatedAt" as "lastUpdatedAt"`,
+      `x.agentId as "agentId"`,
+      `x.status as status`,
+    ]);
+
+  const list = await query.execute();
+  res.json(list);
+});
+
+export const listUnreadTask = handlerWrapper(async (req, res) => {
+  assertRole(req, 'client');
+
+  const notifications = await getRepository(Notification)
+    .createQueryBuilder()
+    .where({
+      clientUserId: (req as any).user.id,
+      readAt: IsNull(),
+    })
+    // .orderBy('"createdAt"', 'DESC')
+    .select('"taskId"')
+    .distinct(true)
+    .getRawMany();
+
+  const ids = notifications.map(n => n.taskId);
+
+  const query = getConnection()
+    .createQueryBuilder()
+    .from(Task, 'x')
+    .where( 'x.id IN (:...ids)', {ids})
+    .orderBy('x."lastUpdatedAt"', 'DESC')
     .select([
       `x.id as id`,
       `x.name as name`,
