@@ -50,7 +50,7 @@ const LayoutStyled = styled(Layout)`
 export const JobTemplatePage = () => {
   const columnDef = [
     {
-      title: 'Name',
+      title: 'Job Template Name',
       dataIndex: 'name',
       render: (text) => text
     },

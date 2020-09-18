@@ -50,14 +50,14 @@ const LayoutStyled = styled(Layout)`
 export const DocTemplatePage = () => {
   const columnDef = [
     {
-      title: 'Name',
+      title: 'Doc Template Name',
       dataIndex: 'name',
       render: (text) => text
     },
     {
-      title: <>Variables <Text code>{`{{varName}}`}</Text></>,
+      title: <>Auto matched fields</>,
       dataIndex: 'variables',
-    render: (value) => <>{(value || []).map(x => <Text style={{display: 'inline-block'}} key={x} code>{x}</Text>)}</>
+    render: (value) => <>{(value || []).map(x => <Text style={{display: 'inline-block'}} key={x} code>{`{{${x}}}`}</Text>)}</>
     },
     {
       title: 'Created At',
