@@ -1,13 +1,10 @@
-import { Badge, Button, Layout, List, Modal, Space, Tabs, Typography } from 'antd';
-import Text from 'antd/lib/typography/Text';
+import { Badge, Button, Layout, Modal, Space, Tabs, Typography } from 'antd';
 import HomeHeader from 'components/HomeHeader';
-import { TaskStatus } from 'components/TaskStatus';
-import { TimeAgo } from 'components/TimeAgo';
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { listTask } from 'services/taskService';
 import { listPortofolio } from 'services/portofolioService';
-import { PlusOutlined, EditOutlined, ZoomInOutlined, SyncOutlined, HighlightOutlined } from '@ant-design/icons';
+import { PlusOutlined, SyncOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import MyTaskList from './MyTaskList';
 
@@ -69,9 +66,6 @@ const MyTaskListPage = (props) => {
     props.history.push(`/task/${id || 'new'}`);
   }
 
-  const goToViewTask = (id) => {
-    props.history.push(`/task/${id}/view`);
-  }
 
   const createNewTask = () => {
     if (!portofolioList.length) {
@@ -86,27 +80,7 @@ const MyTaskListPage = (props) => {
     goToEditTask();
   }
 
-  const actionOnTask = task => {
-    if (['to_sign', 'signed', 'complete'].includes(task.status)) {
-      goToViewTask(task.id);
-    } else {
-      goToEditTask(task.id);
-    }
-  }
 
-  const getActionIcon = status => {
-    switch (status) {
-      case 'todo':
-        return <EditOutlined />
-      case 'to_sign':
-        return <HighlightOutlined />
-      case 'signed':
-      case 'complete':
-      case 'archive':
-      default:
-        return <ZoomInOutlined />
-    }
-  }
 
 
   const RenderListFilteredByStatus = (statuses = []) => {

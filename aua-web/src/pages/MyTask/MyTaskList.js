@@ -1,51 +1,15 @@
-import { Badge, Button, Layout, List, Modal, Space, Tabs, Typography } from 'antd';
+import { Button, List, Space } from 'antd';
 import Text from 'antd/lib/typography/Text';
-import HomeHeader from 'components/HomeHeader';
 import { TaskStatus } from 'components/TaskStatus';
 import { TimeAgo } from 'components/TimeAgo';
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { listTask } from 'services/taskService';
-import { listPortofolio } from 'services/portofolioService';
-import { PlusOutlined, EditOutlined, ZoomInOutlined, SyncOutlined, HighlightOutlined } from '@ant-design/icons';
-import styled from 'styled-components';
-
-const { Title } = Typography;
-const { TabPane } = Tabs;
-
-
-const ContainerStyled = styled.div`
-  margin: 6rem auto 2rem auto;
-  padding: 0 1rem;
-  width: 100%;
-  max-width: 600px;
-`;
-
-const StyledTitleRow = styled.div`
- display: flex;
- justify-content: space-between;
- align-items: center;
- width: 100%;
-`
-
-const LayoutStyled = styled(Layout)`
-  margin: 0 auto 0 auto;
-  background-color: #ffffff;
-  height: 100%;
-
-  .task-count .ant-badge-count {
-    background-color: #143e86;
-    color: #eeeeee;
-    // box-shadow: 0 0 0 1px #143e86 inset;
-  }
-`;
+import { EditOutlined, ZoomInOutlined, HighlightOutlined } from '@ant-design/icons';
 
 
 const MyTaskList = (props) => {
 
   const { data, loading } = props;
-
-  const [portofolioList, setPortofolioList] = React.useState([]);
 
   const goToEditTask = (id) => {
     props.history.push(`/task/${id || 'new'}`);

@@ -1,19 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Typography, Layout, Button, Modal, Divider, List, Space, Spin } from 'antd';
+import { Typography, Layout, Space } from 'antd';
 import HomeHeader from 'components/HomeHeader';
-import { PortofolioAvatar } from 'components/PortofolioAvatar';
-import {
-  SyncOutlined
-} from '@ant-design/icons';
-import { TimeAgo } from 'components/TimeAgo';
-import { listNotification, getNotification, countUnreadNotification } from 'services/notificationService';
+import { listNotification } from 'services/notificationService';
 import { GlobalContext } from 'contexts/GlobalContext';
-import { RiExternalLinkLine } from 'react-icons/ri';
-import InfiniteScroll from 'react-infinite-scroller';
 import NotificationList from '../../components/NotificationList';
 
-const { Title, Paragraph, Link } = Typography;
+const { Title, Paragraph } = Typography;
 
 const ContainerStyled = styled.div`
 margin: 6rem auto 2rem auto;
@@ -41,7 +34,7 @@ const LayoutStyled = styled(Layout)`
 `;
 
 
-const NotificationPage = (props) => {
+const NotificationPage = () => {
 
   const context = React.useContext(GlobalContext);
 

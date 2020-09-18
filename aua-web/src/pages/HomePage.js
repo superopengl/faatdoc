@@ -103,6 +103,7 @@ class HomePage extends React.Component {
           onOk={this.handleContactOk}
           onCancel={this.handleContactCancel}
           footer={null}
+          destroyOnClose={true}
           centered={true}
         >
           <ContactForm ref={this.contactFormRef} onDone={this.handleContactCancel}></ContactForm>

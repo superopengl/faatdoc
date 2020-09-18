@@ -1,9 +1,12 @@
 
 // import 'App.css';
+import React from 'react';
 import { withRouter } from 'react-router-dom';
 
 const OtherPage = (props) => {
-  props.history.push('/');
+  React.useEffect(() => {
+    props.history.push('/');
+  });
   return null;
 };
 

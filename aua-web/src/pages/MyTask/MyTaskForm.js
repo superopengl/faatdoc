@@ -37,9 +37,6 @@ border: 2px solid white;
 const MyTaskForm = (props) => {
   const { id, jobTemplateList, portofolioList, showsAll } = props;
 
-  const isNew = !id;
-  // const { name, id, fields } = value || {};
-
   const [loading, setLoading] = React.useState(true);
   const [showsMessage, setShowsMessage] = React.useState(false);
   const [form] = Form.useForm();

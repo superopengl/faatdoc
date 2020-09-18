@@ -1,14 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Typography, Layout, Button, Modal, Divider, List, Space, Spin } from 'antd';
-import HomeHeader from 'components/HomeHeader';
+import { Typography, Modal, Divider, List, Space, Spin } from 'antd';
 import { PortofolioAvatar } from 'components/PortofolioAvatar';
-import {
-  SyncOutlined
-} from '@ant-design/icons';
 import { TimeAgo } from 'components/TimeAgo';
-import { listNotification, getNotification, countUnreadNotification } from 'services/notificationService';
+import { getNotification, countUnreadNotification } from 'services/notificationService';
 import { GlobalContext } from 'contexts/GlobalContext';
 import { RiExternalLinkLine } from 'react-icons/ri';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -134,7 +130,7 @@ NotificationList.propTypes = {
 
 NotificationList.defaultProps = {
   size: 20,
-  onItemRead: item => { },
+  onItemRead: () => { },
 };
 
 export default NotificationList;

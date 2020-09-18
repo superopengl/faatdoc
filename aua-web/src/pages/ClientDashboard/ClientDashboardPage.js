@@ -1,14 +1,10 @@
-import { Alert, Badge, Button, Layout, List, Modal, Space, Tabs, Typography, Row, Col, Card } from 'antd';
-import Text from 'antd/lib/typography/Text';
+import { Button, Layout, Modal, Space, Typography, Row, Col } from 'antd';
 import HomeHeader from 'components/HomeHeader';
-import { TaskStatus } from 'components/TaskStatus';
-import { TimeAgo } from 'components/TimeAgo';
 import React from 'react';
 import { withRouter, Link } from 'react-router-dom';
-import { listJobTemplate } from 'services/jobTemplateService';
-import { listTask, listUnreadTask, searchTask } from 'services/taskService';
+import { listUnreadTask, searchTask } from 'services/taskService';
 import { listPortofolio } from 'services/portofolioService';
-import { PlusOutlined, EditOutlined, ZoomInOutlined, SyncOutlined, HighlightOutlined } from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import { listNotification } from 'services/notificationService';
 import NotificationList from 'components/NotificationList';
@@ -18,7 +14,6 @@ import MyTaskList from 'pages/MyTask/MyTaskList';
 
 
 const { Title, Paragraph } = Typography;
-const { TabPane } = Tabs;
 
 
 const ContainerStyled = styled.div`
@@ -26,10 +21,14 @@ const ContainerStyled = styled.div`
   padding: 0 1rem;
   width: 100%;
   max-width: 1000px;
+
+  .ant-divider {
+    margin: 8px 0 24px;
+  }
 `;
 
 const StyledCol = styled(Col)`
-margin-bottom: 2rem;
+// margin-bottom: 2rem;
 `
 
 const LayoutStyled = styled(Layout)`
@@ -59,6 +58,7 @@ const ClientDashboardPage = (props) => {
   const [toSignTaskList, setToSignTaskList] = React.useState([]);
   const [unreadTaskList, setUnreadTaskList] = React.useState([]);
   const [portofolioList, setPortofolioList] = React.useState([]);
+  const [, setHasNotification] = React.useState(false);
   const context = React.useContext(GlobalContext);
   const { notifyCount } = context;
 
@@ -86,9 +86,6 @@ const ClientDashboardPage = (props) => {
     props.history.push(`/task/${id || 'new'}`);
   }
 
-  const goToViewTask = (id) => {
-    props.history.push(`/task/${id}/view`);
-  }
 
   const showNoPortofolioWarn = () => {
     Modal.confirm({
@@ -100,31 +97,21 @@ const ClientDashboardPage = (props) => {
     });
   }
 
-  const createNewTask = () => {
-    showNoPortofolioWarn();
+  const createNewTask = e => {
+    e.stopPropagation();
     if (portofolioList.length) {
       goToEditTask();
+    } else {
+      showNoPortofolioWarn();
     }
   }
 
-  const getActionIcon = status => {
-    switch (status) {
-      case 'todo':
-        return <EditOutlined />
-      case 'to_sign':
-        return <HighlightOutlined />
-      case 'signed':
-      case 'complete':
-      case 'archive':
-      default:
-        return <ZoomInOutlined />
-    }
-  }
   const handleFetchNextPage = async (page, size) => {
-    return await listNotification({ page, size, unreadOnly: true });
+    const data = await listNotification({ page, size, unreadOnly: true });
+    setHasNotification(!!data.length);
+    return data;
   }
 
-  const hasTask = !!(toSignTaskList.length || unreadTaskList.length);
   const hasPortofolio = !!portofolioList.length;
 
   return (
@@ -132,17 +119,19 @@ const ClientDashboardPage = (props) => {
       <HomeHeader></HomeHeader>
       <ContainerStyled>
         <Row gutter={80}>
-
           <StyledCol {...span}>
             <Space size="small" direction="vertical" style={{ width: '100%' }}>
-              {(!hasTask && hasPortofolio) && <>
-                <Title type="secondary" level={4}>My Tasks</Title>
-                <Button size="large" type="primary" ghost block icon={<PlusOutlined />} onClick={() => createNewTask()}>New Task</Button>
-              </>}
+              <Title type="secondary" level={4}>My Tasks</Title>
+              <Space style={{ width: '100%', justifyContent: 'space-between' }}>
+                <Link to="/task">All tasks</Link>
+                <Button type="link" onClick={createNewTask} style={{ padding: 0 }}><PlusOutlined /> Create New Task</Button>
+              </Space>
+              <Divider />
               {!hasPortofolio && <>
                 <Title type="secondary" level={4}>My Portofolio</Title>
                 <Paragraph >Portofolios are predefined information that can be used to automatically fill in your task application. You can save the information like name, phone, address, TFN, and etc. for future usage.</Paragraph>
                 <Link to="/portofolio"><Button size="large" type="primary" ghost block icon={<PlusOutlined />}>New Portofolio</Button></Link>
+                <Divider />
               </>}
               {toSignTaskList.length > 0 && <>
                 <Title type="secondary" level={4}>Require Sign</Title>
@@ -150,18 +139,18 @@ const ClientDashboardPage = (props) => {
                 <Divider />
               </>}
               {unreadTaskList.length > 0 && <>
-                <Title type="secondary" level={4}>Latest 5 tasks with unread comments</Title>
-                <Link to="/task">All tasks</Link>
+                <Title type="secondary" level={4}>Latest 5 tasks with new notifications</Title>
                 <MyTaskList data={unreadTaskList.slice(0, 5)} />
+                <Divider />
               </>}
             </Space>
           </StyledCol>
 
           <StyledCol {...span}>
             <Space size="small" direction="vertical" style={{ width: '100%' }}>
-              <Title type="secondary" level={4}>Top 10 Unread Notification</Title>
+              <Title type="secondary" level={4}>Latest 10 Unread Notification</Title>
               <Space style={{ width: '100%', justifyContent: 'space-between' }}>
-                <Link to="/notification">All notifications ({notifyCount} unread)</Link>
+                <Link to="/notification"><Button type="link" style={{ padding: 0 }}>All notifications ({notifyCount} unread)</Button></Link>
                 {/* <Button type="link" icon={<SyncOutlined />} onClick={() => window.location.reload(false)}></Button> */}
               </Space>
               <NotificationList

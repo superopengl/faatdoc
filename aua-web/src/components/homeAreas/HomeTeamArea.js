@@ -20,9 +20,10 @@ p {
 
 
 const StyledAvatar = (props) => <Avatar
-  style={{ marginBottom: '1rem',
-  border: '1px solid #dddddd'
-}}
+  style={{
+    marginBottom: '1rem',
+    border: '1px solid #dddddd'
+  }}
   size={240} src={props.src} />
 
 
@@ -79,14 +80,20 @@ class HomeTeamArea extends React.Component {
         </InfoCard>
 
         <InfoCard >
-          <StyledAvatar src="https://static.wixstatic.com/media/8a7fac_7da39a404f4946b3ae589ee1f68d5bdc~mv2.png/v1/fill/w_294,h_374,al_c,q_85,usm_0.66_1.00_0.01/%E9%80%8F%E6%98%8E%20%E5%B0%8F.webp" />
+          <StyledAvatar src="/images/avatar-pei.jpg" />
           <section>
             <Title level={3}>Pei Zhang</Title>
             <p>
-              Hi, I am Pei. I have been working in our firm for more than 1 year. Expert on bookkeeping, corporate accounting, and taxation. I love what I am doing.
+              Hi, my name is Pei. I have been in Sydney for nearly 6 years, but I am originally from China. I studied
+              at the University of Sydney majoring in accounting and commercial law.
+            </p>
+            <p>I have been working as an
+            accountant since I graduated and I have been in our team for almost one year. I am responsible for
+            the bookkeeping, corporate accounting, and taxation matters.
             </p>
             <p>
-              First of all, I am still learning during my journey of accounting. My passion and enthusiastic drives me through and the destination won't be too far away!
+              I am into the work-life balance style
+              of our firm. When not in the office, you can find me spending time with my family.
             </p>
           </section>
         </InfoCard>
