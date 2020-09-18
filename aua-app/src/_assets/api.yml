@@ -527,7 +527,7 @@ paths:
         200:
           description: OK
   /notification:
-    get:
+    post:
       operationId: listNotification
       # security:
       #   - authClient: []

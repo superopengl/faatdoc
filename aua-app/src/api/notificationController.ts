@@ -6,29 +6,37 @@ import { assert, assertRole } from '../utils/assert';
 import { handlerWrapper } from '../utils/asyncHandler';
 import { getUtcNow } from '../utils/getUtcNow';
 
-async function listNotificationForClient(clientId, pagenation) {
-  const list = await getRepository(Notification)
+async function listNotificationForClient(clientId, pagenation, unreadOnly) {
+  let query = getRepository(Notification)
     .createQueryBuilder('x')
-    .where({ clientUserId: clientId, deleted: false })
-    .orderBy('"createdAt"', 'DESC')
+    .where({ clientUserId: clientId, deleted: false });
+  if (unreadOnly) {
+    query = query.andWhere(`"readAt" IS NULL`);
+  }
+  query = query.orderBy('"createdAt"', 'DESC')
+    .offset(pagenation.skip)
+    .limit(pagenation.limit)
     .select([
       'id',
       '"createdAt"',
       'content',
       '"readAt"'
-    ])
-    .skip(pagenation.skip)
-    .take(pagenation.limit)
-    .execute();
+    ]);
+  const list = await query.execute();
   return list;
 }
 
-async function listNotificationForAgent(agentId, pagenation) {
-  const list = await getRepository(Notification)
+async function listNotificationForAgent(agentId, pagenation, unreadOnly) {
+  let query = getRepository(Notification)
     .createQueryBuilder('x')
-    .where({ agentUserId: agentId, deleted: false })
-    .innerJoin(q => q.from(Task, 'l').select('*'), 'l', `l.id = x."taskId"`)
+    .where({ agentUserId: agentId, deleted: false });
+  if (unreadOnly) {
+    query = query.andWhere(`"readAt" IS NULL`);
+  }
+  query = query.innerJoin(q => q.from(Task, 'l').select('*'), 'l', `l.id = x."taskId"`)
     .orderBy('"createdAt"', 'DESC')
+    .offset(pagenation.skip)
+    .limit(pagenation.limit)
     .select([
       'x.id as id',
       'x."createdAt" as "createdAt"',
@@ -37,19 +45,22 @@ async function listNotificationForAgent(agentId, pagenation) {
       'l.name as name',
       'content',
       '"readAt"'
-    ])
-    .skip(pagenation.skip)
-    .take(pagenation.limit)
-    .execute();
+    ]);
+  const list = await query.execute();
   return list;
 }
 
-async function listNotificationForAdmin(pagenation) {
-  const list = await getRepository(Notification)
+async function listNotificationForAdmin(pagenation, unreadOnly) {
+  let query = getRepository(Notification)
     .createQueryBuilder('x')
-    .where({deleted: false})
-    .innerJoin(q => q.from(Task, 'l').select('*'), 'l', `l.id = x."taskId"`)
+    .where({ deleted: false });
+  if (unreadOnly) {
+    query = query.andWhere(`"readAt" IS NULL`);
+  }
+  query = query.innerJoin(q => q.from(Task, 'l').select('*'), 'l', `l.id = x."taskId"`)
     .orderBy('"createdAt"', 'DESC')
+    .offset(pagenation.skip)
+    .limit(pagenation.limit)
     .select([
       'x.id as id',
       'x."createdAt" as "createdAt"',
@@ -58,32 +69,32 @@ async function listNotificationForAdmin(pagenation) {
       'l.name as name',
       'content',
       '"readAt"'
-    ])
-    .skip(pagenation.skip)
-    .take(pagenation.limit)
-    .execute();
+    ]);
+  const list = await query.execute();
   return list;
 }
 
 export const listNotification = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent', 'client');
   const { user: { id, role } } = req as any;
-  const page = +req.query.page;
-  const size = 50;
+  const { page, size, unreadOnly } = req.body;
+  assert(page >= 0 && size > 0, 400, 'Invalid page and size parameter');
+
   const pagenation = {
     skip: page * size,
     limit: size,
-  }
+  };
+
   let list: Promise<any>;
   switch (role) {
     case 'client':
-      list = await listNotificationForClient(id, pagenation);
+      list = await listNotificationForClient(id, pagenation, unreadOnly);
       break;
     case 'agent':
-      list = await listNotificationForAgent(id, pagenation);
+      list = await listNotificationForAgent(id, pagenation, unreadOnly);
       break;
     case 'admin':
-      list = await listNotificationForAdmin(pagenation);
+      list = await listNotificationForAdmin(pagenation, unreadOnly);
       break;
     default:
       assert(false, 500, `Unsupported role ${role}`);
@@ -130,7 +141,7 @@ export const getNotification = handlerWrapper(async (req, res) => {
 export const getNotificationUnreadCount = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent', 'client');
   const repo = getRepository(Notification);
-  const {user: {role, id}} = req as any;
+  const { user: { role, id } } = req as any;
   const query: any = {
     deleted: false,
     readAt: IsNull()
@@ -150,7 +161,7 @@ export const deleteNotification = handlerWrapper(async (req, res) => {
   const { user: { id: userId } } = req as any;
   const repo = getRepository(Notification);
 
-  await repo.update({id, clientUserId: userId}, {deleted: true});
+  await repo.update({ id, clientUserId: userId }, { deleted: true });
 
   res.json();
 });

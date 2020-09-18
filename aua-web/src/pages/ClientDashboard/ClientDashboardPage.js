@@ -4,12 +4,16 @@ import HomeHeader from 'components/HomeHeader';
 import { TaskStatus } from 'components/TaskStatus';
 import { TimeAgo } from 'components/TimeAgo';
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { listJobTemplate } from 'services/jobTemplateService';
 import { listTask } from 'services/taskService';
 import { listPortofolio } from 'services/portofolioService';
 import { PlusOutlined, EditOutlined, ZoomInOutlined, SyncOutlined, HighlightOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
+import { listNotification } from 'services/notificationService';
+import NotificationList from 'components/NotificationList';
+import { GlobalContext } from 'contexts/GlobalContext';
+import { Divider } from 'antd';
 
 
 const { Title } = Typography;
@@ -20,7 +24,7 @@ const ContainerStyled = styled.div`
   margin: 6rem auto 2rem auto;
   padding: 0 1rem;
   width: 100%;
-  max-width: 600px;
+  max-width: 1000px;
 `;
 
 const StyledTitleRow = styled.div`
@@ -42,13 +46,22 @@ const LayoutStyled = styled(Layout)`
   }
 `;
 
+const span = {
+  xs: 24,
+  sm: 24,
+  md: 12,
+  lg: 12,
+  xl: 12,
+  xxl: 12
+}
 
 const ClientDashboardPage = (props) => {
 
   const [, setLoading] = React.useState(true);
   const [taskList, setTaskList] = React.useState([]);
   const [portofolioList, setPortofolioList] = React.useState([]);
-
+  const context = React.useContext(GlobalContext);
+  const { notifyCount } = context;
 
   const loadList = async () => {
     setLoading(true);
@@ -108,21 +121,48 @@ const ClientDashboardPage = (props) => {
         return <ZoomInOutlined />
     }
   }
+  const handleFetchNextPage = async (page, size) => {
+    return await listNotification({ page, size, unreadOnly: true });
+  }
 
   return (
     <LayoutStyled>
       <HomeHeader></HomeHeader>
       <ContainerStyled>
-        <Row>
-<Col>
+        <Row gutter={80}>
+          <Col {...span}>
+            <Space size="middle" direction="vertical" style={{ width: '100%'}}>
+              <Title level={4}>My Tasks</Title>
+              <Space style={{ width: '100%', justifyContent: 'space-between' }}>
+                <Link to="/task">All tasks</Link>
+                <Button type="primary" icon={<PlusOutlined />} onClick={() => createNewTask()}>New Task</Button>
+              </Space>
+              <Divider/>
+              <Title level={5}>Require Sign</Title>
+              <Divider/>
+              <Title level={5}>Require Action</Title>
+            </Space>
+          </Col>
+          <Col {...span}>
+            <Space size="middle" direction="vertical" style={{ width: '100%' }}>
+              <Title level={4}>Top 10 Unread Notification</Title>
+              <Space style={{ width: '100%', justifyContent: 'space-between' }}>
+                <Link to="/notification">All notifications ({notifyCount} unread)</Link>
+                <Button type="link" icon={<SyncOutlined />} onClick={() => window.location.reload(false)}></Button>
+              </Space>
+              <NotificationList
+                onFetchNextPage={handleFetchNextPage}
+                // onItemRead={}
+                max={10}
+                size={10}
+              />
 
-</Col>
-
+            </Space>
+          </Col>
         </Row>
         <Space size="large" direction="vertical" style={{ width: '100%' }}>
           <Space style={{ width: '100%', justifyContent: 'flex-end' }} >
             {/* <Button type="link" onClick={() => loadList()} icon={<SyncOutlined />}></Button> */}
-            <Button type="primary" icon={<PlusOutlined />} onClick={() => createNewTask()}>New Task</Button>
           </Space>
 
         </Space>

@@ -9,6 +9,7 @@ import { listTask } from 'services/taskService';
 import { listPortofolio } from 'services/portofolioService';
 import { PlusOutlined, EditOutlined, ZoomInOutlined, SyncOutlined, HighlightOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
+import MyTaskList from './MyTaskList';
 
 const { Title } = Typography;
 const { TabPane } = Tabs;
@@ -111,34 +112,7 @@ const MyTaskListPage = (props) => {
   const RenderListFilteredByStatus = (statuses = []) => {
     const data = taskList.filter(x => statuses.includes(x.status));
 
-    return <List
-      itemLayout="horizontal"
-      dataSource={data}
-      size="large"
-      renderItem={item => (
-        <List.Item
-          style={{ paddingLeft: 0, paddingRight: 0 }}
-          key={item.id}
-          onClick={() => actionOnTask(item)}
-        >
-          <List.Item.Meta
-            avatar={<TaskStatus key="1" status={item.status} width={60} name={item.forWhom} style={{ marginTop: 6 }} />}
-
-            title={<Text style={{ fontSize: '1rem' }}>{item.name}</Text>}
-            description={<Space style={{ width: '100%', justifyContent: 'space-between' }}>
-              <TimeAgo value={item.lastUpdatedAt} surfix="Last Updated" />
-              <Space>
-                <Button shape="circle" key="action" onClick={() => actionOnTask(item)} icon={getActionIcon(item.status)}></Button>
-                {/* {item.status === 'draft' && <>
-                  <Button key="delete" shape="circle" danger disabled={loading} onClick={e => handleDelete(e, item)} icon={<DeleteOutlined />}></Button>
-                </>} */}
-              </Space>
-            </Space>
-            }
-          />
-        </List.Item>
-      )}
-    />
+    return <MyTaskList data={data} />
   }
 
   return (
