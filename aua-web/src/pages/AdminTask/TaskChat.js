@@ -9,7 +9,7 @@ import 'react-chat-elements/dist/main.css';
 import { withRouter } from 'react-router-dom';
 import { ChatService } from 'services/ChatService';
 import styled from 'styled-components';
-import { listTaskNotifies, notifyTask } from '../../services/taskService';
+import { listTaskNotifies, notifyTask, markTaskNotifyRead } from '../../services/taskService';
 
 const StyledDrawer = styled(Drawer)`
 
@@ -101,6 +101,9 @@ const TaskChat = (props) => {
 
   React.useEffect(() => {
     loadList();
+    if (visible && context.user.role === 'client') {
+      markTaskNotifyRead(taskId);
+    }
   }, [taskId, visible]);
 
   const sendMessage = async (values) => {
@@ -147,8 +150,8 @@ const TaskChat = (props) => {
     width={500}
     bodyStyle={{ padding: '10px', verticalAlign: 'bottom' }}
     afterVisibleChange={handleAfterVisibleChange}
-    footer={readonly ? null : <Form onFinish={sendMessage} 
-    form={form}>
+    footer={readonly ? null : <Form onFinish={sendMessage}
+      form={form}>
       <Form.Item name="content" style={{ marginBottom: 4 }}>
         <Input.TextArea
           autoSize={{ minRows: 3, maxRows: 20 }}

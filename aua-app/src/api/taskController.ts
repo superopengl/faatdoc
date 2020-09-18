@@ -198,11 +198,15 @@ export const listUnreadTask = handlerWrapper(async (req, res) => {
     .getRawMany();
 
   const ids = notifications.map(n => n.taskId);
+  if (!ids.length) {
+    res.json([]);
+    return;
+  }
 
   const query = getConnection()
     .createQueryBuilder()
     .from(Task, 'x')
-    .where( 'x.id IN (:...ids)', {ids})
+    .where('x.id IN (:...ids)', { ids })
     .orderBy('x."lastUpdatedAt"', 'DESC')
     .select([
       `x.id as id`,
@@ -317,14 +321,15 @@ export const listTaskNotifies = handlerWrapper(async (req, res) => {
   const { id } = req.params;
   const { from, size } = req.query;
   const { user: { role, id: userId } } = req as any;
+  const isClient = role === 'client';
 
   let query = getRepository(Notification).createQueryBuilder()
     .where(`"taskId" = :id`, { id });
-  if (role === 'client') {
-    query = query.where(`"clientUserId" = :userId`, { userId });
+  if (isClient) {
+    query = query.andWhere(`"clientUserId" = :userId`, { userId });
   }
   if (from) {
-    query = query.where(`"createdAt" >= :from`, { from: moment(`${from}`).toDate() });
+    query = query.andWhere(`"createdAt" >= :from`, { from: moment(`${from}`).toDate() });
   }
 
   query = query.orderBy('"createdAt"', 'DESC')
@@ -333,4 +338,16 @@ export const listTaskNotifies = handlerWrapper(async (req, res) => {
   const list = await query.getMany();
 
   res.json(list);
+});
+
+
+export const markTaskNotifyRead = handlerWrapper(async (req, res) => {
+  assertRole(req, 'client');
+  const { id } = req.params;
+  const { user: { role, id: userId } } = req as any;
+
+  // Mark notification read
+  await getRepository(Notification).update({ taskId: id, clientUserId: userId }, { readAt: getUtcNow() });
+
+  res.json();
 });

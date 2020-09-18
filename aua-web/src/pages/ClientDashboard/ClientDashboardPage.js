@@ -17,7 +17,7 @@ import { Divider } from 'antd';
 import MyTaskList from 'pages/MyTask/MyTaskList';
 
 
-const { Title } = Typography;
+const { Title, Paragraph } = Typography;
 const { TabPane } = Tabs;
 
 
@@ -28,11 +28,8 @@ const ContainerStyled = styled.div`
   max-width: 1000px;
 `;
 
-const StyledTitleRow = styled.div`
- display: flex;
- justify-content: space-between;
- align-items: center;
- width: 100%;
+const StyledCol = styled(Col)`
+margin-bottom: 2rem;
 `
 
 const LayoutStyled = styled(Layout)`
@@ -75,6 +72,9 @@ const ClientDashboardPage = (props) => {
     setPortofolioList(portofolioList);
     setUnreadTaskList(unreadTaskList);
     setLoading(false);
+    if (!portofolioList.length) {
+      showNoPortofolioWarn();
+    }
   }
 
 
@@ -90,24 +90,20 @@ const ClientDashboardPage = (props) => {
     props.history.push(`/task/${id}/view`);
   }
 
-  const createNewTask = () => {
-    if (!portofolioList.length) {
-      Modal.confirm({
-        title: 'No portofolio',
-        content: 'Please create portofolio before creating task. Go to create protofolio now?',
-        okText: 'Yes, go to create portofolio',
-        onOk: () => props.history.push('/portofolio')
-      });
-      return;
-    }
-    goToEditTask();
+  const showNoPortofolioWarn = () => {
+    Modal.confirm({
+      title: 'No portofolio',
+      content: 'Please create portofolio before creating task. Go to create protofolio now?',
+      okText: 'Yes, go to create portofolio',
+      maskClosable: true,
+      onOk: () => props.history.push('/portofolio')
+    });
   }
 
-  const actionOnTask = task => {
-    if (['to_sign', 'signed', 'complete'].includes(task.status)) {
-      goToViewTask(task.id);
-    } else {
-      goToEditTask(task.id);
+  const createNewTask = () => {
+    showNoPortofolioWarn();
+    if (portofolioList.length) {
+      goToEditTask();
     }
   }
 
@@ -128,30 +124,40 @@ const ClientDashboardPage = (props) => {
     return await listNotification({ page, size, unreadOnly: true });
   }
 
+  const hasTask = !!(toSignTaskList.length || unreadTaskList.length);
+  const hasPortofolio = !!portofolioList.length;
+
   return (
     <LayoutStyled>
       <HomeHeader></HomeHeader>
       <ContainerStyled>
         <Row gutter={80}>
-          <Col {...span}>
-            <Space size="small" direction="vertical" style={{ width: '100%' }}>
-              {/* <Title type="secondary" level={4}>My Tasks</Title> */}
 
-              {/* <Divider /> */}
+          <StyledCol {...span}>
+            <Space size="small" direction="vertical" style={{ width: '100%' }}>
+              {(!hasTask && hasPortofolio) && <>
+                <Title type="secondary" level={4}>My Tasks</Title>
+                <Button size="large" type="primary" ghost block icon={<PlusOutlined />} onClick={() => createNewTask()}>New Task</Button>
+              </>}
+              {!hasPortofolio && <>
+                <Title type="secondary" level={4}>My Portofolio</Title>
+                <Paragraph >Portofolios are predefined information that can be used to automatically fill in your task application. You can save the information like name, phone, address, TFN, and etc. for future usage.</Paragraph>
+                <Link to="/portofolio"><Button size="large" type="primary" ghost block icon={<PlusOutlined />}>New Portofolio</Button></Link>
+              </>}
               {toSignTaskList.length > 0 && <>
                 <Title type="secondary" level={4}>Require Sign</Title>
                 <MyTaskList data={toSignTaskList} />
                 <Divider />
               </>}
-              <Title type="secondary" level={4}>Latest 5 tasks with unread comments</Title>
-              <Space style={{ width: '100%', justifyContent: 'space-between' }}>
+              {unreadTaskList.length > 0 && <>
+                <Title type="secondary" level={4}>Latest 5 tasks with unread comments</Title>
                 <Link to="/task">All tasks</Link>
-                {/* <Button type="link" icon={<PlusOutlined />} onClick={() => createNewTask()}>New Task</Button> */}
-              </Space>
-              <MyTaskList data={unreadTaskList.slice(0, 5)} />
+                <MyTaskList data={unreadTaskList.slice(0, 5)} />
+              </>}
             </Space>
-          </Col>
-          <Col {...span}>
+          </StyledCol>
+
+          <StyledCol {...span}>
             <Space size="small" direction="vertical" style={{ width: '100%' }}>
               <Title type="secondary" level={4}>Top 10 Unread Notification</Title>
               <Space style={{ width: '100%', justifyContent: 'space-between' }}>
@@ -166,7 +172,7 @@ const ClientDashboardPage = (props) => {
               />
 
             </Space>
-          </Col>
+          </StyledCol>
         </Row>
         <Space size="large" direction="vertical" style={{ width: '100%' }}>
           <Space style={{ width: '100%', justifyContent: 'flex-end' }} >

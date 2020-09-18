@@ -22,6 +22,7 @@ async function listNotificationForClient(clientId, pagenation, unreadOnly) {
       'content',
       '"readAt"'
     ]);
+  
   const list = await query.execute();
   return list;
 }

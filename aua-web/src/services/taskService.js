@@ -41,6 +41,10 @@ export async function listTaskNotifies(taskId, from, size = 20) {
   return httpGet(`task/${taskId}/notify`, { from, size });
 }
 
+export async function markTaskNotifyRead(taskId) {
+  return httpPost(`task/${taskId}/notify/read`);
+}
+
 export async function notifyTask(taskId, msg) {
   const content = msg?.trim();
   if (!content) return;
