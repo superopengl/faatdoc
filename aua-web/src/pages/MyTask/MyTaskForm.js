@@ -11,6 +11,7 @@ import styled from 'styled-components';
 import { varNameToLabelName } from 'util/varNameToLabelName';
 import { FileUploader } from '../../components/FileUploader';
 import { TaskGenerator } from './TaskGenerator';
+import * as queryString from 'query-string';
 
 
 const { Text } = Typography;
@@ -37,8 +38,10 @@ border: 2px solid white;
 const MyTaskForm = (props) => {
   const { id, jobTemplateList, portofolioList, showsAll } = props;
 
+  const { chat } = queryString.parse(props.location.search);
+
   const [loading, setLoading] = React.useState(true);
-  const [showsMessage, setShowsMessage] = React.useState(false);
+  const [chatVisible, setChatVisible] = React.useState(Boolean(chat));
   const [form] = Form.useForm();
 
   const [task, setTask] = React.useState();
@@ -162,10 +165,10 @@ const MyTaskForm = (props) => {
         </Form>
       </>}
     </Space>
-    {task && <TaskChat visible={showsMessage} onClose={() => setShowsMessage(false)} taskId={task?.id} />}
+    {task && <TaskChat visible={chatVisible} onClose={() => setChatVisible(false)} taskId={task?.id} />}
     <Affix style={{ position: 'fixed', bottom: 30, right: 30 }}>
       <AffixContactButton type="primary" shape="circle" size="large" 
-      onClick={() => setShowsMessage(true)}
+      onClick={() => setChatVisible(true)}
       style={{fontSize: 24}}
       >
         <BellOutlined />

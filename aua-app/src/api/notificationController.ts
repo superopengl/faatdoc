@@ -13,11 +13,16 @@ async function listNotificationForClient(clientId, pagenation, unreadOnly) {
   if (unreadOnly) {
     query = query.andWhere(`"readAt" IS NULL`);
   }
-  query = query.orderBy('"createdAt"', 'DESC')
+  query = query
+    .innerJoin(q => q.from(Task, 't').select(['id', 'name', '"forWhom"']), 't', `t.id = x."taskId"`)
+    .orderBy('"createdAt"', 'DESC')
     .offset(pagenation.skip)
     .limit(pagenation.limit)
     .select([
-      'id',
+      'x.id',
+      'name',
+      '"forWhom"',
+      '"taskId"',
       '"createdAt"',
       'content',
       '"readAt"'
@@ -40,6 +45,7 @@ async function listNotificationForAgent(agentId, pagenation, unreadOnly) {
     .limit(pagenation.limit)
     .select([
       'x.id as id',
+      '"taskId"',
       'x."createdAt" as "createdAt"',
       'l.id as "taskId"',
       'l."forWhom" as "forWhom"',
@@ -64,6 +70,7 @@ async function listNotificationForAdmin(pagenation, unreadOnly) {
     .limit(pagenation.limit)
     .select([
       'x.id as id',
+      '"taskId"',
       'x."createdAt" as "createdAt"',
       'l.id as "taskId"',
       'l."forWhom" as "forWhom"',
