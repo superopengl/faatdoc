@@ -37,9 +37,9 @@ const LayoutStyled = styled(Layout)`
 `;
 
 const MyTaskViewPage = (props) => {
-  const {id} = props.match.params;
+  const { id } = props.match.params;
 
-  const [, setLoading] = React.useState(true);
+  const [loading, setLoading] = React.useState(true);
   const [task, setTask] = React.useState({});
 
   const loadEntity = async () => {
@@ -57,7 +57,7 @@ const MyTaskViewPage = (props) => {
     props.history.push(`/task`);
   }
 
-  const {status} = task || {};
+  const { status } = task || {};
   const defaultActiveKey = status && status === 'to_sign' ? 'sign' : 'view';
 
   return (
@@ -68,17 +68,27 @@ const MyTaskViewPage = (props) => {
           <StyledTitleRow>
             <Title level={2} style={{ margin: 'auto' }}>Review Task</Title>
           </StyledTitleRow>
-          {status === 'signed' ? <Alert message="The task has been signed." description="Please wait for the task to be completed by us." type="success" showIcon /> : null}
-          {status === 'to_sign' ? <Alert message="The task requires signature." description="All above documents have been viewed and the task is ready to e-sign." type="warning" showIcon /> : null}
-          <Tabs defaultActiveKey={defaultActiveKey}>
-            <Tabs.TabPane tab="Task" key="view">
+          {status === 'signed' && <Alert
+            message="The task has been signed."
+            description="Please wait for the task to be completed by us."
+            type="success"
+            showIcon
+          />}
+          {status === 'to_sign' && <Alert
+            message="The task requires signature."
+            description="All below documents have been viewed and the task is ready to e-sign."
+            type="warning"
+            showIcon
+          />}
+          {!loading && <Tabs defaultActiveKey={defaultActiveKey}>
+            <Tabs.TabPane tab="Application" key="view">
               <TaskForm showsAll={status === 'complete'} id={id} onFinish={() => goToTaskList()} />
             </Tabs.TabPane>
             <Tabs.TabPane tab="Sign" key="sign">
               <ReviewSignPage id={id} onFinish={() => goToTaskList()} />
             </Tabs.TabPane>
-          </Tabs>
-          <Button block type="link" onClick={() => props.history.goBack()}>Cancel</Button>
+          </Tabs>}
+          {/* <Button block type="link" onClick={() => props.history.goBack()}>Cancel</Button> */}
         </Space>
       </ContainerStyled>
     </LayoutStyled >
