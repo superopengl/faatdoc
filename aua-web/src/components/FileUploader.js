@@ -60,9 +60,7 @@ export const FileUploader = (props) => {
     }
   }
 
-  React.useEffect(() => {
-    loadFileList();
-  }, []);
+  React.useEffect(loadFileList, []);
 
   const handleChange = (info) => {
     const { fileList } = info;

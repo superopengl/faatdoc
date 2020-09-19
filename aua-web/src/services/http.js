@@ -24,7 +24,7 @@ function getFullBaseUrl() {
 }
 
 export const API_BASE_URL = getFullBaseUrl();
-export const WEBSOCKET_URL = API_BASE_URL.replace(/^(http)(s?:\/\/[^\/]+)(.*)/i, 'ws$2');
+export const WEBSOCKET_URL = API_BASE_URL.replace(/^(http)(s?:\/\/[^/]+)(.*)/i, 'ws$2');
 console.log('Backend API URL', API_BASE_URL, WEBSOCKET_URL);
 
 function getHeaders(responseType) {

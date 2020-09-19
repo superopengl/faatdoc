@@ -1,4 +1,4 @@
-import { Alert, Button, Layout, Space, Tabs, Typography } from 'antd';
+import { Alert, Layout, Space, Tabs, Typography } from 'antd';
 import HomeHeader from 'components/HomeHeader';
 import React from 'react';
 import { withRouter } from 'react-router-dom';

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { Input, Space, Button, Form, Typography } from 'antd';
+import { Input, Button, Form, Typography } from 'antd';
 import { saveDocTemplate, getDocTemplate } from 'services/docTemplateService';
 import { notify } from 'util/notify';
 import MarkdownIt from 'markdown-it'

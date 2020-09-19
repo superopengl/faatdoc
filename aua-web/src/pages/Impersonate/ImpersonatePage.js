@@ -18,9 +18,7 @@ const ImpersonatePage = () => {
     setLoading(false);
   }
 
-  React.useEffect(() => {
-    load();
-  }, []);
+  React.useEffect(load, []);
 
   const handleSubmit = async values => {
     if (loading) {

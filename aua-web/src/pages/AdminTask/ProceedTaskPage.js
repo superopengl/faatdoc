@@ -99,8 +99,10 @@ const ProceedTaskPage = (props) => {
     setLoading(false);
   }
 
+  const initialLoadEntity = React.useCallback(() => loadEntity());
+
   React.useEffect(() => {
-    loadEntity();
+    initialLoadEntity();
   }, [])
 
   const updateLodgmentWithFormValues = values => {

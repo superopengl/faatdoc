@@ -244,8 +244,9 @@ const AdminTaskListPage = (props) => {
     // await loadTaskWithQuery(newQueryInfo);
   }
 
+  const initialLoadList = React.useCallback(() => loadList());
   React.useEffect(() => {
-    loadList();
+    initialLoadList();
   }, []);
 
   const StatusSelectOptions = [

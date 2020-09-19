@@ -55,9 +55,7 @@ const PortofolioForm = (props) => {
     setLoading(false);
   }
 
-  React.useEffect(() => {
-    loadEntity()
-  }, [id]);
+  React.useEffect(loadEntity, [id]);
 
   const getFormInitialValues = (portofolio) => {
     if (!portofolio) return undefined;
