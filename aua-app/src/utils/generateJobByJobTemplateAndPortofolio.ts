@@ -41,7 +41,7 @@ export const generateJobByJobTemplateAndPortofolio = async (jobTemplateId, porto
 
   const fields = prefillFieldsWithProtofolio(jobTemplate.fields, portofolio.fields);
 
-  job.id = uuidv4();
+  // job.id = uuidv4();
   job.name = genName(jobTemplate, portofolio);
   job.forWhom = guessDisplayNameFromFields(portofolio.fields);
   job.userId = portofolio.userId;
