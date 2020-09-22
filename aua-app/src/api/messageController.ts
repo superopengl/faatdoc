@@ -12,7 +12,6 @@ async function listMessageForClient(clientId, pagenation, unreadOnly) {
     .select('*')
     .from(q => q.from(Message, 'x')
       .where(`"clientUserId" = :id`, { id: clientId })
-      .andWhere(`deleted = false`)
       .andWhere(unreadOnly ? `"readAt" IS NULL` : '1 = 1')
       .orderBy('"jobId"')
       .addOrderBy('"createdAt"', 'DESC')
@@ -42,7 +41,6 @@ async function listMessageForAgent(agentId, pagenation, unreadOnly) {
   .select('*')
   .from(q => q.from(Message, 'x')
     .where(`"agentUserId" = :id`, { id: agentId })
-    .andWhere(`deleted = false`)
     .andWhere(unreadOnly ? `"readAt" IS NULL` : '1 = 1')
     .orderBy('"jobId"')
     .addOrderBy('"createdAt"', 'DESC')
@@ -70,7 +68,6 @@ async function listMessageForAdmin(pagenation, unreadOnly) {
     .createQueryBuilder()
     .select('*')
     .from(q => q.from(Message, 'x')
-      .where(`deleted = false`)
       .andWhere(unreadOnly ? `"readAt" IS NULL` : '1 = 1')
       .orderBy('"jobId"')
       .addOrderBy('"createdAt"', 'DESC')
@@ -172,15 +169,4 @@ export const getMessageUnreadCount = handlerWrapper(async (req, res) => {
   const count = await repo.count(query);
 
   res.json(count);
-});
-
-export const deleteMessage = handlerWrapper(async (req, res) => {
-  assertRole(req, 'client');
-  const { id } = req.params;
-  const { user: { id: userId } } = req as any;
-  const repo = getRepository(Message);
-
-  await repo.update({ id, clientUserId: userId }, { deleted: true });
-
-  res.json();
 });

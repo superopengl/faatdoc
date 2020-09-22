@@ -4,10 +4,6 @@ export async function getMessage(id) {
   return httpGet(`message/${id}`);
 }
 
-export async function deleteMessage(id) {
-  return httpDelete(`message/${id}`);
-}
-
 export async function countUnreadMessage() {
   return httpGet(`message/count/unread`);
 }

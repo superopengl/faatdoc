@@ -576,16 +576,3 @@ paths:
       responses:
         200:
           description: OK
-    delete:
-      operationId: deleteMessage
-      # security:
-      #   - authClient: []
-      parameters:
-        - name: id
-          in: path
-          type: string
-          format: uuid
-          required: true
-      responses:
-        200:
-          description: OK

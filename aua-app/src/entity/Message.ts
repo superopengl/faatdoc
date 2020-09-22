@@ -29,7 +29,4 @@ export class Message {
 
   @Column({nullable: true})
   readAt?: Date;
-
-  @Column({default: false})
-  deleted: boolean;
 }
