@@ -1,20 +1,20 @@
 
 import { getRepository, IsNull } from 'typeorm';
-import { Task } from '../entity/Task';
-import { Notification } from '../entity/Notification';
+import { Job } from '../entity/Job';
+import { Message } from '../entity/Message';
 import { assert, assertRole } from '../utils/assert';
 import { handlerWrapper } from '../utils/asyncHandler';
 import { getUtcNow } from '../utils/getUtcNow';
 
-async function listNotificationForClient(clientId, pagenation, unreadOnly) {
-  let query = getRepository(Notification)
+async function listMessageForClient(clientId, pagenation, unreadOnly) {
+  let query = getRepository(Message)
     .createQueryBuilder('x')
     .where({ clientUserId: clientId, deleted: false });
   if (unreadOnly) {
     query = query.andWhere(`"readAt" IS NULL`);
   }
   query = query
-    .innerJoin(q => q.from(Task, 't').select(['id', 'name', '"forWhom"']), 't', `t.id = x."taskId"`)
+    .innerJoin(q => q.from(Job, 't').select(['id', 'name', '"forWhom"']), 't', `t.id = x."taskId"`)
     .orderBy('"createdAt"', 'DESC')
     .offset(pagenation.skip)
     .limit(pagenation.limit)
@@ -32,14 +32,14 @@ async function listNotificationForClient(clientId, pagenation, unreadOnly) {
   return list;
 }
 
-async function listNotificationForAgent(agentId, pagenation, unreadOnly) {
-  let query = getRepository(Notification)
+async function listMessageForAgent(agentId, pagenation, unreadOnly) {
+  let query = getRepository(Message)
     .createQueryBuilder('x')
     .where({ agentUserId: agentId, deleted: false });
   if (unreadOnly) {
     query = query.andWhere(`"readAt" IS NULL`);
   }
-  query = query.innerJoin(q => q.from(Task, 'l').select('*'), 'l', `l.id = x."taskId"`)
+  query = query.innerJoin(q => q.from(Job, 'l').select('*'), 'l', `l.id = x."taskId"`)
     .orderBy('"createdAt"', 'DESC')
     .offset(pagenation.skip)
     .limit(pagenation.limit)
@@ -57,14 +57,14 @@ async function listNotificationForAgent(agentId, pagenation, unreadOnly) {
   return list;
 }
 
-async function listNotificationForAdmin(pagenation, unreadOnly) {
-  let query = getRepository(Notification)
+async function listMessageForAdmin(pagenation, unreadOnly) {
+  let query = getRepository(Message)
     .createQueryBuilder('x')
     .where({ deleted: false });
   if (unreadOnly) {
     query = query.andWhere(`"readAt" IS NULL`);
   }
-  query = query.innerJoin(q => q.from(Task, 'l').select('*'), 'l', `l.id = x."taskId"`)
+  query = query.innerJoin(q => q.from(Job, 'l').select('*'), 'l', `l.id = x."taskId"`)
     .orderBy('"createdAt"', 'DESC')
     .offset(pagenation.skip)
     .limit(pagenation.limit)
@@ -82,7 +82,7 @@ async function listNotificationForAdmin(pagenation, unreadOnly) {
   return list;
 }
 
-export const listNotification = handlerWrapper(async (req, res) => {
+export const listMessage = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent', 'client');
   const { user: { id, role } } = req as any;
   const { page, size, unreadOnly } = req.body;
@@ -96,13 +96,13 @@ export const listNotification = handlerWrapper(async (req, res) => {
   let list: Promise<any>;
   switch (role) {
     case 'client':
-      list = await listNotificationForClient(id, pagenation, unreadOnly);
+      list = await listMessageForClient(id, pagenation, unreadOnly);
       break;
     case 'agent':
-      list = await listNotificationForAgent(id, pagenation, unreadOnly);
+      list = await listMessageForAgent(id, pagenation, unreadOnly);
       break;
     case 'admin':
-      list = await listNotificationForAdmin(pagenation, unreadOnly);
+      list = await listMessageForAdmin(pagenation, unreadOnly);
       break;
     default:
       assert(false, 500, `Unsupported role ${role}`);
@@ -111,11 +111,11 @@ export const listNotification = handlerWrapper(async (req, res) => {
   res.json(list);
 });
 
-export const getNotification = handlerWrapper(async (req, res) => {
+export const getMessage = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent', 'client');
   const { id } = req.params;
   const { user: { id: userId, role } } = req as any;
-  const repo = getRepository(Notification);
+  const repo = getRepository(Message);
   const query: any = { id, deleted: false };
   const isClient = role === 'client';
   if (isClient) {
@@ -124,7 +124,7 @@ export const getNotification = handlerWrapper(async (req, res) => {
 
   const result = await repo.createQueryBuilder('x')
     .where(query)
-    .innerJoin(q => q.from(Task, 'l').select('*'), 'l', `l.id = x.taskId`)
+    .innerJoin(q => q.from(Job, 'l').select('*'), 'l', `l.id = x.taskId`)
     .select([
       `x.id as id`,
       `x.content as content`,
@@ -146,9 +146,9 @@ export const getNotification = handlerWrapper(async (req, res) => {
   res.json(item);
 });
 
-export const getNotificationUnreadCount = handlerWrapper(async (req, res) => {
+export const getMessageUnreadCount = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent', 'client');
-  const repo = getRepository(Notification);
+  const repo = getRepository(Message);
   const { user: { role, id } } = req as any;
   const query: any = {
     deleted: false,
@@ -163,11 +163,11 @@ export const getNotificationUnreadCount = handlerWrapper(async (req, res) => {
   res.json(count);
 });
 
-export const deleteNotification = handlerWrapper(async (req, res) => {
+export const deleteMessage = handlerWrapper(async (req, res) => {
   assertRole(req, 'client');
   const { id } = req.params;
   const { user: { id: userId } } = req as any;
-  const repo = getRepository(Notification);
+  const repo = getRepository(Message);
 
   await repo.update({ id, clientUserId: userId }, { deleted: true });
 

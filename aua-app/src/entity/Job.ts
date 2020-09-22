@@ -1,8 +1,8 @@
 import { Column, PrimaryColumn, Entity } from 'typeorm';
-import { TaskStatus } from '../enums/TaskStatus';
+import { JobStatus } from '../enums/JobStatus';
 
 @Entity()
-export class Task {
+export class Job {
   @PrimaryColumn('uuid')
   id?: string;
 
@@ -18,8 +18,8 @@ export class Task {
   @Column()
   forWhom: string;
 
-  @Column({ default: TaskStatus.TODO })
-  status: TaskStatus;
+  @Column({ default: JobStatus.TODO })
+  status: JobStatus;
 
   @Column('uuid')
   jobTemplateId: string;

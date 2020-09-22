@@ -3,35 +3,35 @@ import * as moment from 'moment';
 import { getConnection, getManager, getRepository, IsNull } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { JobTemplate } from '../entity/JobTemplate';
-import { Task } from '../entity/Task';
-import { Notification } from '../entity/Notification';
+import { Job } from '../entity/Job';
+import { Message } from '../entity/Message';
 import { User } from '../entity/User';
-import { TaskStatus } from '../enums/TaskStatus';
+import { JobStatus } from '../enums/JobStatus';
 import { sendEmail } from '../services/emailService';
 import { assert, assertRole } from '../utils/assert';
 import { handlerWrapper } from '../utils/asyncHandler';
-import { generateTaskByJobTemplateAndPortofolio } from '../utils/generateTaskByJobTemplateAndPortofolio';
+import { generateJobByJobTemplateAndPortofolio } from '../utils/generateJobByJobTemplateAndPortofolio';
 import { getUtcNow } from '../utils/getUtcNow';
 import { guessDisplayNameFromFields } from '../utils/guessDisplayNameFromFields';
 import { Portofolio } from '../entity/Portofolio';
 
-export const generateTask = handlerWrapper(async (req, res) => {
+export const generateJob = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
   const { jobTemplateId, portofolioId, name } = req.body;
 
-  const task = await generateTaskByJobTemplateAndPortofolio(
+  const Job = await generateJobByJobTemplateAndPortofolio(
     jobTemplateId,
     portofolioId,
     (j, p) => `${j.name} for ${p.name}`
   );
 
-  await getRepository(Task).save(task);
+  // await getRepository(Job).save(Job);
 
-  res.json(task);
+  res.json(Job);
 });
 
-function validateTaskStatusChange(oldStatus, newStatus) {
-  const s = TaskStatus;
+function validateJobStatusChange(oldStatus, newStatus) {
+  const s = JobStatus;
   let nextStatii = [];
   switch (oldStatus) {
     case null:
@@ -49,7 +49,7 @@ function validateTaskStatusChange(oldStatus, newStatus) {
 }
 
 
-export const saveTask = handlerWrapper(async (req, res) => {
+export const saveJob = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
 
   const { user: { id: userId } } = req as any;
@@ -60,57 +60,57 @@ export const saveTask = handlerWrapper(async (req, res) => {
   const portofolio = await getRepository(Portofolio).findOne(portofolioId);
   assert(name, 404, 'portofolio is not found');
 
-  let task: Task;
+  const repo = getRepository(Job);
+  let job: Job;
   if (id) {
     // Existing lodgment save
-    task = await getRepository(Task).findOne(id);
-    assert(task, 404, 'Lodgment is not found');
-    validateTaskStatusChange(task.status, status);
+    job = await repo.findOne(id);
+    assert(job, 404, 'Lodgment is not found');
+    validateJobStatusChange(job.status, status);
   } else {
     // New lodgment
-    validateTaskStatusChange(null, status);
-    task = new Task();
-    task.id = uuidv4();
-    task.userId = userId;
-    task.jobTemplateId = jobTemplateId;
-    task.portofolioId = portofolioId;
+    validateJobStatusChange(null, status);
+    job = new Job();
+    job.id = uuidv4();
+    job.userId = userId;
+    job.jobTemplateId = jobTemplateId;
+    job.portofolioId = portofolioId;
   }
 
 
-  task.name = name;
-  task.forWhom = guessDisplayNameFromFields(portofolio.fields);
-  task.fields = fields;
-  task.status = status;
-  task.lastUpdatedAt = getUtcNow();
+  job.name = name;
+  job.forWhom = guessDisplayNameFromFields(portofolio.fields);
+  job.fields = fields;
+  job.status = status;
+  job.lastUpdatedAt = getUtcNow();
 
-  const repo = getRepository(Task);
-  await repo.save(task);
+  await repo.save(job);
 
   res.json();
 });
 
-interface ISearchTaskQuery {
+interface ISearchJobQuery {
   text?: string;
   page?: number;
   size?: number;
-  status?: TaskStatus[];
+  status?: JobStatus[];
   assignee?: string;
   orderField?: string;
   orderDirection?: 'ASC' | 'DESC';
 }
 
-const defaultSearch: ISearchTaskQuery = {
+const defaultSearch: ISearchJobQuery = {
   page: 1,
   size: 50,
-  status: [TaskStatus.TODO, TaskStatus.TO_SIGN],
+  status: [JobStatus.TODO, JobStatus.TO_SIGN],
   orderField: 'lastUpdatedAt',
   orderDirection: 'DESC'
 };
 
 
-export const searchTask = handlerWrapper(async (req, res) => {
+export const searchJob = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent', 'client');
-  const option: ISearchTaskQuery = { ...defaultSearch, ...req.body };
+  const option: ISearchJobQuery = { ...defaultSearch, ...req.body };
 
   const { text, status, page, assignee, orderDirection, orderField } = option;
   const size = option.size;
@@ -119,7 +119,7 @@ export const searchTask = handlerWrapper(async (req, res) => {
 
   let query = getManager()
     .createQueryBuilder()
-    .from(Task, 'x')
+    .from(Job, 'x')
     .where(`1 = 1`);
   if (role === 'client') {
     query = query.andWhere(`x."userId" = :id`, { id });
@@ -157,17 +157,17 @@ export const searchTask = handlerWrapper(async (req, res) => {
   res.json({ data: list, pagination: { page, size, total } });
 });
 
-export const listTask = handlerWrapper(async (req, res) => {
+export const listJob = handlerWrapper(async (req, res) => {
   assertRole(req, 'client');
   const query = getConnection()
     .createQueryBuilder()
-    .from(Task, 'x')
+    .from(Job, 'x')
     .orderBy('x.createdAt', 'DESC')
     .where(
       'x.userId = :userId AND x.status != :status',
       {
         userId: (req as any).user.id,
-        status: TaskStatus.ARCHIVE
+        status: JobStatus.ARCHIVE
       })
     .select([
       `x.id as id`,
@@ -183,21 +183,21 @@ export const listTask = handlerWrapper(async (req, res) => {
   res.json(list);
 });
 
-export const listUnreadTask = handlerWrapper(async (req, res) => {
+export const listUnreadJob = handlerWrapper(async (req, res) => {
   assertRole(req, 'client');
 
-  const notifications = await getRepository(Notification)
+  const notifications = await getRepository(Message)
     .createQueryBuilder()
     .where({
       clientUserId: (req as any).user.id,
       readAt: IsNull(),
     })
     // .orderBy('"createdAt"', 'DESC')
-    .select('"taskId"')
+    .select('"JobId"')
     .distinct(true)
     .getRawMany();
 
-  const ids = notifications.map(n => n.taskId);
+  const ids = notifications.map(n => n.JobId);
   if (!ids.length) {
     res.json([]);
     return;
@@ -205,7 +205,7 @@ export const listUnreadTask = handlerWrapper(async (req, res) => {
 
   const query = getConnection()
     .createQueryBuilder()
-    .from(Task, 'x')
+    .from(Job, 'x')
     .where('x.id IN (:...ids)', { ids })
     .orderBy('x."lastUpdatedAt"', 'DESC')
     .select([
@@ -222,109 +222,109 @@ export const listUnreadTask = handlerWrapper(async (req, res) => {
   res.json(list);
 });
 
-export const getTask = handlerWrapper(async (req, res) => {
+export const getJob = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
   const { id } = req.params;
-  const repo = getRepository(Task);
-  const task = await repo.findOne(id);
-  assert(task, 404);
+  const repo = getRepository(Job);
+  const job = await repo.findOne(id);
+  assert(job, 404);
 
-  res.json(task);
+  res.json(job);
 });
 
-export const deleteTask = handlerWrapper(async (req, res) => {
+export const deleteJob = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin');
   const { id } = req.params;
-  const repo = getRepository(Task);
+  const repo = getRepository(Job);
 
-  await repo.update(id, { status: TaskStatus.ARCHIVE });
+  await repo.update(id, { status: JobStatus.ARCHIVE });
 
   res.json();
 });
 
 
-export const assignTask = handlerWrapper(async (req, res) => {
+export const assignJob = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin');
   const { id } = req.params;
   const { agentId } = req.body;
 
-  await getRepository(Task).update(id, { agentId });
+  await getRepository(Job).update(id, { agentId });
 
   res.json();
 });
 
-export const signTask = handlerWrapper(async (req, res) => {
+export const signJob = handlerWrapper(async (req, res) => {
   assertRole(req, 'client');
   const { id } = req.params;
 
   const now = getUtcNow();
-  await getRepository(Task).update(id, {
+  await getRepository(Job).update(id, {
     signedAt: now,
     lastUpdatedAt: now,
-    status: TaskStatus.SIGNED
+    status: JobStatus.SIGNED
   });
 
   res.json();
 });
 
-export const completeTask = handlerWrapper(async (req, res) => {
+export const completeJob = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent');
   const { id } = req.params;
-  const repo = getRepository(Task);
-  const task = await repo.findOne(id);
-  assert(task, 404);
-  assert(['todo', 'to_sign', 'signed'].includes(task.status), 400, 'Status invalid');
+  const repo = getRepository(Job);
+  const job = await repo.findOne(id);
+  assert(job, 404);
+  assert(['todo', 'to_sign', 'signed'].includes(job.status), 400, 'Status invalid');
 
-  await repo.update(id, { status: TaskStatus.COMPLETE });
+  await repo.update(id, { status: JobStatus.COMPLETE });
 
   res.json();
 });
 
-async function sendTaskMessage(task, senderId, content) {
-  const user = await getRepository(User).findOne(task.userId);
+async function sendJobMessage(Job, senderId, content) {
+  const user = await getRepository(User).findOne(Job.userId);
   assert(user, 404);
 
-  const message = new Notification();
+  const message = new Message();
   message.sender = senderId;
-  message.taskId = task.id;
-  message.clientUserId = task.userId;
-  message.agentUserId = task.agentId;
+  message.jobId = Job.id;
+  message.clientUserId = Job.userId;
+  message.agentUserId = Job.agentId;
   message.content = content;
 
-  await getRepository(Notification).save(message);
+  await getRepository(Message).save(message);
 
   sendEmail({
     to: user.email,
     vars: {
-      name: task.name
+      name: Job.name
     },
-    templateName: 'taskNotification'
+    templateName: 'JobNotification'
   }).catch(() => { });
 }
 
-export const notifyTask = handlerWrapper(async (req, res) => {
+export const notifyJob = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent', 'client');
   const { id } = req.params;
   const { content } = req.body;
   assert(content, 404);
 
-  const task = await getRepository(Task).findOne(id);
-  assert(task, 404);
+  const job = await getRepository(Job).findOne(id);
+  assert(job, 404);
 
-  await sendTaskMessage(task, (req as any).user.id, content);
+  await sendJobMessage(job, (req as any).user.id, content);
 
   res.json();
 });
 
-export const listTaskNotifies = handlerWrapper(async (req, res) => {
+export const listJobNotifies = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent', 'client');
   const { id } = req.params;
   const { from, size } = req.query;
   const { user: { role, id: userId } } = req as any;
   const isClient = role === 'client';
 
-  let query = getRepository(Notification).createQueryBuilder()
-    .where(`"taskId" = :id`, { id });
+  let query = getRepository(Message).createQueryBuilder()
+    .where(`"JobId" = :id`, { id });
   if (isClient) {
     query = query.andWhere(`"clientUserId" = :userId`, { userId });
   }
@@ -341,13 +341,13 @@ export const listTaskNotifies = handlerWrapper(async (req, res) => {
 });
 
 
-export const markTaskNotifyRead = handlerWrapper(async (req, res) => {
+export const markJobNotifyRead = handlerWrapper(async (req, res) => {
   assertRole(req, 'client');
   const { id } = req.params;
   const { user: { role, id: userId } } = req as any;
 
   // Mark notification read
-  await getRepository(Notification).update({ taskId: id, clientUserId: userId }, { readAt: getUtcNow() });
+  await getRepository(Message).update({ jobId: id, clientUserId: userId }, { readAt: getUtcNow() });
 
   res.json();
 });

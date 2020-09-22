@@ -2,11 +2,11 @@ import { getRepository, Not, Equal } from 'typeorm';
 import { Recurring } from '../entity/Recurring';
 import { CronJob } from 'cron';
 import { SysLog } from '../entity/SysLog';
-import { generateTaskByJobTemplateAndPortofolio } from '../utils/generateTaskByJobTemplateAndPortofolio';
+import { generateJobByJobTemplateAndPortofolio } from '../utils/generateJobByJobTemplateAndPortofolio';
 import { assert } from '../utils/assert';
 import { v4 as uuidv4 } from 'uuid';
-import { TaskStatus } from '../enums/TaskStatus';
-import { Task } from '../entity/Task';
+import { JobStatus } from '../enums/JobStatus';
+import { Job } from '../entity/Job';
 import errorToJSON from 'error-to-json';
 import * as moment from 'moment';
 import { getUtcNow } from '../utils/getUtcNow';
@@ -63,17 +63,17 @@ export async function executeRecurring(recurringId) {
   assert(recurring, 404);
   const { jobTemplateId, portofolioId, nameTemplate } = recurring;
 
-  const task = await generateTaskByJobTemplateAndPortofolio(
+  const task = await generateJobByJobTemplateAndPortofolio(
     jobTemplateId,
     portofolioId,
     (j, p) => nameTemplate.replace('{{createdDate}}', moment().format('DD MMM YYYY'))
   );
 
-  task.status = TaskStatus.TODO;
+  task.status = JobStatus.TODO;
 
   trySetTaskDueDateField(task, recurring.dueDay);
 
-  await getRepository(Task).save(task);
+  await getRepository(Job).save(task);
 
   return task;
 }

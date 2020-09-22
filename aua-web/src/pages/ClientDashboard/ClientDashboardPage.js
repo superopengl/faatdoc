@@ -78,7 +78,9 @@ const ClientDashboardPage = (props) => {
   }
 
 
-  React.useEffect(loadList, [])
+  React.useEffect(() => {
+    loadList()
+  }, []);
 
   const goToEditTask = (id) => {
     props.history.push(`/task/${id || 'new'}`);

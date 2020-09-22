@@ -1,9 +1,9 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { TaskStatus } from '../enums/TaskStatus';
+import { JobStatus as JobStatus } from '../enums/JobStatus';
 
 
 @Entity()
-export class TaskHistory {
+export class JobHistory {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -17,7 +17,7 @@ export class TaskHistory {
   name: string;
 
   @Column()
-  status: TaskStatus;
+  status: JobStatus;
 
   @Column('uuid', { nullable: true })
   agentId?: string;

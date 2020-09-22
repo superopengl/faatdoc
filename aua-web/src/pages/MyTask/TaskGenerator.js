@@ -1,9 +1,14 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import { Button, Form, Radio,Space } from 'antd';
+import { Button, Form, Radio, Space, Steps, Typography } from 'antd';
 import { DoubleRightOutlined } from '@ant-design/icons';
 import { PortofolioAvatar } from 'components/PortofolioAvatar';
+import { Spin } from 'antd';
+import { listJobTemplate } from 'services/jobTemplateService';
+import { listPortofolio } from 'services/portofolioService';
+
+const { Title, Text, Paragraph } = Typography;
 
 const Container = styled.div`
 .ant-radio-button-wrapper:not(:first-child)::before {
@@ -21,38 +26,88 @@ const Container = styled.div`
     padding-top: 10px;
   }
 }
-
 `;
 
-export const TaskGenerator = props => {
-  const { jobTemplateList, portofolioList } = props;
+const StyledTitleRow = styled.div`
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ width: 100%;
+`
+
+const TaskGenerator = props => {
+  const [currentStep, setCurrentStep] = React.useState(0);
+  const [loading, setLoading] = React.useState(true);
+  const [jobTemplateList, setJobTemplateList] = React.useState([]);
+  const [portofolioList, setPortofolioList] = React.useState([]);
+  const [jobTemplateId, setJobTemplateId] = React.useState();
+
+  const loadData = async () => {
+    setLoading(true);
+    const jobTemplateList = await listJobTemplate() || [];
+    const portofolioList = await listPortofolio() || [];
+
+    setJobTemplateList(jobTemplateList);
+    setPortofolioList(portofolioList);
+    setLoading(false);
+  }
+
+  React.useEffect(() => {
+    loadData();
+  }, []);
 
   const handleChange = (values) => {
     props.onChange(values);
   }
 
+  const handleTaskTypeChange = e => {
+    setCurrentStep(1);
+    setJobTemplateId(e.target.value);
+  }
+
+  const handlePortofolioChange = e => {
+    const data = {
+      jobTemplateId,
+      portofolioId: e.target.value
+    };
+    props.onChange(data);
+  }
+
+  if (loading) {
+    return <Spin />
+  }
+
   return (
     <Container>
-    <Form layout="vertical" onFinish={handleChange}>
-      <Form.Item label="Choose task type" name="jobTemplateId" rules={[{ required: true, message: 'Please choose which type task to proceed' }]}>
-        <Radio.Group buttonStyle="outline" style={{ width: '100%' }}>
+      <StyledTitleRow>
+        <Title level={2} style={{ margin: 'auto' }}>Tasks</Title>
+      </StyledTitleRow>
+      {/* <Steps progressDot current={currentStep}>
+        <Steps.Step title="Choose task type" />
+        <Steps.Step title="Choose portofolio" />
+      </Steps> */}
+      <Space size="middle" direction="vertical" style={{width:'100%'}}>
+      {currentStep === 0 && <>
+      <Text type="secondary">Choose task type</Text>
+        <Radio.Group buttonStyle="outline" style={{ width: '100%' }} onChange={handleTaskTypeChange}>
           {jobTemplateList.map((item, i) => <Radio.Button key={i} value={item.id}>{item.name}</Radio.Button>)}
         </Radio.Group>
-      </Form.Item>
-      <Form.Item label="Choose portofolio to fill the task automatically" name="portofolioId" rules={[{ required: true, message: 'Please choose how to fill the task form' }]}>
-        <Radio.Group buttonStyle="outline" style={{ width: '100%' }}>
+      </>}
+      {currentStep === 1 && <>
+        <Text type="secondary">Choose portofolio to fill the task automatically</Text>
+        <Radio.Group buttonStyle="outline" style={{ width: '100%' }} onChange={handlePortofolioChange}>
           {portofolioList.map((item, i) => <Radio.Button className="portofolio" key={i} value={item.id}>
             <Space>
-              <PortofolioAvatar value={item.name} size={40}/>
+              <PortofolioAvatar value={item.name} size={40} />
               {item.name}
             </Space>
           </Radio.Button>)}
         </Radio.Group>
-      </Form.Item>
-      <Form.Item>
-        <Button block type="primary" htmlType="submit" icon={<DoubleRightOutlined />}>Next</Button>
-      </Form.Item>
-    </Form>
+      </>}
+      </Space>
+
     </Container>
   );
 };
+
+export default TaskGenerator;

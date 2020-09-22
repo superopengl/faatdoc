@@ -47,8 +47,9 @@ const ReviewSignPage = (props) => {
     setLoading(false);
   }
 
-  const initialLoadEntity = React.useCallback(() => loadEntity(), []);
-  React.useEffect(initialLoadEntity, []);
+  React.useEffect(() => {
+    loadEntity()
+  }, []);
 
   const handleSign = async () => {
     await signTask(task.id);

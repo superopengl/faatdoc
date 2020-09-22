@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, Index } from 'typeorm';
 
 @Entity()
-export class Notification {
+export class Message {
   @PrimaryGeneratedColumn('uuid')
   id?: string;
 
@@ -11,7 +11,7 @@ export class Notification {
 
   @Column('uuid')
   @Index()
-  taskId: string;
+  jobId: string;
 
   @Column('uuid')
   sender: string;

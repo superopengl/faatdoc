@@ -1,14 +1,14 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class TaskHistoryTrigger1599197181037 implements MigrationInterface {
+export class JobHistoryTrigger1599197181037 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
-        CREATE OR REPLACE FUNCTION function_task_history()
+        CREATE OR REPLACE FUNCTION function_job_history()
         RETURNS trigger AS
         $BODY$
         BEGIN
-            INSERT INTO task_history ("taskId", "lastUpdatedAt", name, status, "agentId",  "signedAt", fields)
+            INSERT INTO job_history ("jobId", "lastUpdatedAt", name, status, "agentId",  "signedAt", fields)
             VALUES (NEW.id, NEW."lastUpdatedAt", NEW.name, NEW.status, NEW."agentId", NEW."signedAt", NEW.fields);
             RETURN NULL;
         END;
@@ -16,8 +16,8 @@ export class TaskHistoryTrigger1599197181037 implements MigrationInterface {
         LANGUAGE plpgsql;
         `);
         await queryRunner.query(`
-        CREATE TRIGGER task_history_trigger AFTER INSERT OR UPDATE ON task
-        FOR EACH ROW EXECUTE PROCEDURE function_task_history();
+        CREATE TRIGGER job_history_trigger AFTER INSERT OR UPDATE ON job
+        FOR EACH ROW EXECUTE PROCEDURE function_job_history();
         `);
     }
 

@@ -28,18 +28,6 @@ const MyTaskCard = (props) => {
   const isNew = id === 'new';
 
   const [, setLoading] = React.useState(true);
-  const [jobTemplateList, setJobTemplateList] = React.useState([]);
-  const [portofolioList, setPortofolioList] = React.useState([]);
-
-  const loadData = async () => {
-    setLoading(true);
-    const jobTemplateList = await listJobTemplate() || [];
-    const portofolioList = await listPortofolio() || [];
-
-    setJobTemplateList(jobTemplateList);
-    setPortofolioList(portofolioList);
-    setLoading(false);
-  }
 
   const onOk = () => {
     props.history.push('/task');
@@ -47,15 +35,6 @@ const MyTaskCard = (props) => {
   const onCancel = () => {
     props.history.goBack();
   }
-
-
-  React.useEffect(() => {
-    loadData();
-  }, [])
-
-
-
-
 
   return (<>
     <LayoutStyled>
@@ -66,8 +45,6 @@ const MyTaskCard = (props) => {
         <MyTaskForm
           onChange={() => onOk()}
           onCancel={() => onCancel()}
-          jobTemplateList={jobTemplateList}
-          portofolioList={portofolioList}
           id={isNew ? null : id} />
       </ContainerStyled>
     </LayoutStyled>

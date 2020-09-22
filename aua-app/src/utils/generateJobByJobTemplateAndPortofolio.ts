@@ -2,11 +2,11 @@
 import { getRepository } from 'typeorm';
 import { assert } from './assert';
 import * as _ from 'lodash';
-import { Task } from '../entity/Task';
+import { Job } from '../entity/Job';
 import { getUtcNow } from './getUtcNow';
 import { JobTemplate } from '../entity/JobTemplate';
 import { Portofolio } from '../entity/Portofolio';
-import { TaskStatus } from '../enums/TaskStatus';
+import { JobStatus } from '../enums/JobStatus';
 import { guessDisplayNameFromFields } from './guessDisplayNameFromFields';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -25,7 +25,7 @@ function prefillFieldsWithProtofolio(jobTemplateFields, portofolioFields) {
   return fields;
 }
 
-export const generateTaskByJobTemplateAndPortofolio = async (jobTemplateId, portofolioId, genName: (job: JobTemplate, porto: Portofolio) => string) => {
+export const generateJobByJobTemplateAndPortofolio = async (jobTemplateId, portofolioId, genName: (job: JobTemplate, porto: Portofolio) => string) => {
   assert(jobTemplateId, 400, 'jobTemplateId is not specified');
   assert(portofolioId, 400, 'jobTemplateId is not specified');
 
@@ -37,19 +37,19 @@ export const generateTaskByJobTemplateAndPortofolio = async (jobTemplateId, port
   const portofolio = await portofolioRepo.findOne(portofolioId);
   assert(portofolio, 404, 'portofolio is not found');
 
-  const task = new Task();
+  const job = new Job();
 
   const fields = prefillFieldsWithProtofolio(jobTemplate.fields, portofolio.fields);
 
-  task.id = uuidv4();
-  task.name = genName(jobTemplate, portofolio);
-  task.forWhom = guessDisplayNameFromFields(portofolio.fields);
-  task.userId = portofolio.userId;
-  task.jobTemplateId = jobTemplateId;
-  task.portofolioId = portofolioId;
-  task.fields = fields;
-  task.lastUpdatedAt = getUtcNow();
-  task.status = TaskStatus.TODO;
+  job.id = uuidv4();
+  job.name = genName(jobTemplate, portofolio);
+  job.forWhom = guessDisplayNameFromFields(portofolio.fields);
+  job.userId = portofolio.userId;
+  job.jobTemplateId = jobTemplateId;
+  job.portofolioId = portofolioId;
+  job.fields = fields;
+  job.lastUpdatedAt = getUtcNow();
+  job.status = JobStatus.TODO;
 
-  return task;
+  return job;
 }

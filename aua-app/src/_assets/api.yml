@@ -337,48 +337,48 @@ paths:
       responses:
         200:
           description: OK
-  /task:
+  /job:
     post:
-      operationId: saveTask
+      operationId: saveJob
       # security:
       #   - authClient: []
       responses:
         200:
           description: OK
     get:
-      operationId: listTask
+      operationId: listJob
       # security:
       #   - authLoggedInUser: []
       responses:
         200:
           description: OK
-  /task/unread:
+  /job/unread:
     get:
-      operationId: listUnreadTask
+      operationId: listUnreadJob
       # security:
       #   - authLoggedInUser: []
       responses:
         200:
           description: OK
-  /task/search:
+  /job/search:
     post:
-      operationId: searchTask
+      operationId: searchJob
       # security:
       #   - authLoggedInUser: []
       responses:
         200:
           description: OK
-  /task/generate:
+  /job/generate:
     post:
-      operationId: generateTask
+      operationId: generateJob
       # security:
       #   - authClient: []
       responses:
         200:
           description: OK
-  /task/{id}:
+  /job/{id}:
     get:
-      operationId: getTask
+      operationId: getJob
       # security:
       #   - authLoggedInUser: []
       parameters:
@@ -391,7 +391,7 @@ paths:
         200:
           description: OK
     delete:
-      operationId: deleteTask
+      operationId: deleteJob
       # security:
       #   - authLoggedInUser: []
       parameters:
@@ -403,9 +403,9 @@ paths:
       responses:
         200:
           description: OK
-  /task/{id}/sign:
+  /job/{id}/sign:
     post:
-      operationId: signTask
+      operationId: signJob
       # security:
       #   - authClient: []
       parameters:
@@ -417,9 +417,9 @@ paths:
       responses:
         200:
           description: OK
-  /task/{id}/assign:
+  /job/{id}/assign:
     post:
-      operationId: assignTask
+      operationId: assignJob
       # security:
       #   - authClient: []
       parameters:
@@ -431,9 +431,9 @@ paths:
       responses:
         200:
           description: OK
-  /task/{id}/notify:
+  /job/{id}/notify:
     get:
-      operationId: listTaskNotifies
+      operationId: listJobNotifies
       # security:
       #   - authClient: []
       parameters:
@@ -446,7 +446,7 @@ paths:
         200:
           description: OK
     post:
-      operationId: notifyTask
+      operationId: notifyJob
       # security:
       #   - authClient: []
       parameters:
@@ -458,9 +458,9 @@ paths:
       responses:
         200:
           description: OK
-  /task/{id}/notify/read:
+  /job/{id}/notify/read:
     post:
-      operationId: markTaskNotifyRead
+      operationId: markJobNotifyRead
       # security:
       #   - authClient: []
       parameters:
@@ -472,9 +472,9 @@ paths:
       responses:
         200:
           description: OK
-  /task/{id}/complete:
+  /job/{id}/complete:
     post:
-      operationId: completeTask
+      operationId: completeJob
       # security:
       #   - authClient: []
       parameters:
@@ -548,23 +548,23 @@ paths:
       responses:
         200:
           description: OK
-  /notification:
+  /message:
     post:
-      operationId: listNotification
+      operationId: listMessage
       # security:
       #   - authClient: []
       responses:
         200:
           description: OK
-  /notification/count/unread:
+  /message/count/unread:
     get:
-      operationId: getNotificationUnreadCount
+      operationId: getMessageUnreadCount
       responses:
         200:
           description: OK
-  /notification/:id:
+  /message/:id:
     get:
-      operationId: getNotification
+      operationId: getMessage
       # security:
       #   - authClient: []
       parameters:
@@ -577,7 +577,7 @@ paths:
         200:
           description: OK
     delete:
-      operationId: deleteNotification
+      operationId: deleteMessage
       # security:
       #   - authClient: []
       parameters:

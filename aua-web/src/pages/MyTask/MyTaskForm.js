@@ -10,7 +10,7 @@ import { generateTask, getTask, saveTask } from 'services/taskService';
 import styled from 'styled-components';
 import { varNameToLabelName } from 'util/varNameToLabelName';
 import { FileUploader } from '../../components/FileUploader';
-import { TaskGenerator } from './TaskGenerator';
+import TaskGenerator from './TaskGenerator';
 import * as queryString from 'query-string';
 
 
@@ -36,7 +36,7 @@ border: 2px solid white;
 `;
 
 const MyTaskForm = (props) => {
-  const { id, jobTemplateList, portofolioList, showsAll } = props;
+  const { id, showsAll } = props;
 
   const { chat } = queryString.parse(props.location.search);
 
@@ -118,11 +118,11 @@ const MyTaskForm = (props) => {
   const disabled = !canEdit || loading;
 
   // console.log('value', formInitValues);
-  const showsGenerator = !loading && !task && jobTemplateList && portofolioList;
+  const showsGenerator = !loading && !task;
 
   return (<>
     <Space direction="vertical" size="large" style={{ width: '100%' }}>
-      {showsGenerator && <TaskGenerator onChange={handleSelectedTemplate} jobTemplateList={jobTemplateList} portofolioList={portofolioList} />}
+      {showsGenerator && <TaskGenerator onChange={handleSelectedTemplate} />}
 
       {task && <>
         <Form form={form} layout="vertical"
