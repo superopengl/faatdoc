@@ -207,7 +207,7 @@ const ProceedJobPage = (props) => {
           extra={[
             <Space key="1" style={{ width: '100%', justifyContent: 'flex-end' }}>
               <Button type="primary" ghost disabled={loading} icon={<SyncOutlined />} onClick={() => loadEntity()}></Button>
-              <Button type="primary" ghost disabled={loading} onClick={() => handleMessage()}>Notify</Button>
+              <Button type="primary" ghost disabled={loading} onClick={() => handleMessage()}>Message</Button>
               <Button type="primary" ghost disabled={loading} onClick={() => handleModifyFields()}>Modify Fields</Button>
               <Button type="primary" htmlType="submit" disabled={loading}>Save</Button>
               <StatusSelect defaultValue={{ value: defaultStatus }}

@@ -159,63 +159,29 @@ export const searchJob = handlerWrapper(async (req, res) => {
 
 export const listJob = handlerWrapper(async (req, res) => {
   assertRole(req, 'client');
-  const query = getConnection()
+  const clientId = (req as any).user.id;
+
+  const query = getManager()
     .createQueryBuilder()
-    .from(Job, 'x')
-    .orderBy('x.createdAt', 'DESC')
-    .where(
-      'x.userId = :userId AND x.status != :status',
-      {
-        userId: (req as any).user.id,
-        status: JobStatus.ARCHIVE
-      })
+    .from(Job, 'j')
+    .where({ userId: clientId })
+    .leftJoin(q => q.from(Message, 'x')
+      .where(`"clientUserId" = :id`, { id: clientId })
+      .andWhere(`"readAt" IS NULL`)
+      .orderBy('"jobId"')
+      .addOrderBy('"createdAt"', 'DESC')
+      .distinctOn(['"jobId"'])
+      , 'x', `j.id = x."jobId"`)
+    .orderBy('j."lastUpdatedAt"', 'DESC')
     .select([
-      `x.id as id`,
-      `x.name as name`,
-      `x."forWhom" as "forWhom"`,
-      `x."createdAt" as "createdAt"`,
-      `x."lastUpdatedAt" as "lastUpdatedAt"`,
-      `x.agentId as "agentId"`,
-      `x.status as status`,
-    ]);
-
-  const list = await query.execute();
-  res.json(list);
-});
-
-export const listUnreadJob = handlerWrapper(async (req, res) => {
-  assertRole(req, 'client');
-
-  const messages = await getRepository(Message)
-    .createQueryBuilder()
-    .where({
-      clientUserId: (req as any).user.id,
-      readAt: IsNull(),
-    })
-    // .orderBy('"createdAt"', 'DESC')
-    .select('"jobId"')
-    .distinct(true)
-    .getRawMany();
-
-  const ids = messages.map(n => n.JobId);
-  if (!ids.length) {
-    res.json([]);
-    return;
-  }
-
-  const query = getConnection()
-    .createQueryBuilder()
-    .from(Job, 'x')
-    .where('x.id IN (:...ids)', { ids })
-    .orderBy('x."lastUpdatedAt"', 'DESC')
-    .select([
-      `x.id as id`,
-      `x.name as name`,
-      `x."forWhom" as "forWhom"`,
-      `x."createdAt" as "createdAt"`,
-      `x."lastUpdatedAt" as "lastUpdatedAt"`,
-      `x.agentId as "agentId"`,
-      `x.status as status`,
+      `j.id as id`,
+      `j.name as name`,
+      `j."forWhom" as "forWhom"`,
+      `j."createdAt" as "createdAt"`,
+      `j."lastUpdatedAt" as "lastUpdatedAt"`,
+      `j."agentId" as "agentId"`,
+      `j.status as status`,
+      `x."createdAt" as "lastUnreadMessageAt"`
     ]);
 
   const list = await query.execute();

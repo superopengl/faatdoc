@@ -5,11 +5,12 @@ import { TimeAgo } from 'components/TimeAgo';
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { EditOutlined, ZoomInOutlined, HighlightOutlined } from '@ant-design/icons';
+import { Badge } from 'antd';
 
 
 const MyJobList = (props) => {
 
-  const { data, loading } = props;
+  const { data, loading, onItemClick } = props;
 
   const goToEditJob = (id) => {
     props.history.push(`/job/${id || 'new'}`);
@@ -20,11 +21,12 @@ const MyJobList = (props) => {
   }
 
   const actionOnJob = job => {
-    if (['to_sign', 'signed', 'complete'].includes(job.status)) {
-      goToViewJob(job.id);
-    } else {
-      goToEditJob(job.id);
-    }
+    onItemClick(job);
+    // if (['to_sign', 'signed', 'complete'].includes(job.status)) {
+    //   goToViewJob(job.id);
+    // } else {
+    //   goToEditJob(job.id);
+    // }
   }
 
   const getActionIcon = status => {
@@ -41,6 +43,12 @@ const MyJobList = (props) => {
     }
   }
 
+  const getDotComponent = (item) => {
+    const color = item.status === 'to_sign' ? 'red' : item.lastUnreadMessageAt ? 'blue' : null;
+    if (!color) return null;
+    return <Badge color={color} style={{ position: 'absolute', top: -5, left: 0 }} />
+  }
+
   return <List
     itemLayout="horizontal"
     dataSource={data}
@@ -53,13 +61,16 @@ const MyJobList = (props) => {
         onClick={() => actionOnJob(item)}
       >
         <List.Item.Meta
-          avatar={<JobStatus key="1" status={item.status} width={60} name={item.forWhom} style={{ marginTop: 6 }} />}
+          avatar={<div style={{ position: 'relative' }}>
+            {getDotComponent(item)}
+            <JobStatus key="1" status={item.status} width={60} name={item.forWhom} style={{ marginTop: 6 }} />
+          </div>}
 
           title={<Text style={{ fontSize: '1rem' }}>{item.name}</Text>}
           description={<Space style={{ width: '100%', justifyContent: 'space-between' }}>
-            <TimeAgo value={item.lastUpdatedAt} surfix="Last Updated" />
+            <TimeAgo value={item.lastUpdatedAt} surfix="Last Updated" accurate={true} />
             <Space>
-              <Button shape="circle" key="action" onClick={() => actionOnJob(item)} icon={getActionIcon(item.status)}></Button>
+              <Button shape="circle" key="action" type="link" onClick={() => actionOnJob(item)} icon={getActionIcon(item.status)}></Button>
               {/* {item.status === 'draft' && <>
                   <Button key="delete" shape="circle" danger disabled={loading} onClick={e => handleDelete(e, item)} icon={<DeleteOutlined />}></Button>
                 </>} */}

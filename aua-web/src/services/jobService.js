@@ -16,11 +16,6 @@ export async function listJob() {
   return httpGet('job');
 }
 
-export async function listUnreadJob() {
-  return httpGet('job/unread');
-}
-
-
 export async function searchJob(query) {
   return httpPost('job/search', query);
 }

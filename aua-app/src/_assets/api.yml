@@ -352,14 +352,6 @@ paths:
       responses:
         200:
           description: OK
-  /job/unread:
-    get:
-      operationId: listUnreadJob
-      # security:
-      #   - authLoggedInUser: []
-      responses:
-        200:
-          description: OK
   /job/search:
     post:
       operationId: searchJob

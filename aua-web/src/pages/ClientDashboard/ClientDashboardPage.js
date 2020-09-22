@@ -2,7 +2,7 @@ import { Button, Layout, Modal, Space, Typography, Row, Col } from 'antd';
 import HomeHeader from 'components/HomeHeader';
 import React from 'react';
 import { withRouter, Link } from 'react-router-dom';
-import { listUnreadJob, searchJob } from 'services/jobService';
+import { listJob, searchJob } from 'services/jobService';
 import { listPortofolio } from 'services/portofolioService';
 import { PlusOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
@@ -57,6 +57,7 @@ const ClientDashboardPage = (props) => {
   const [, setLoading] = React.useState(true);
   const [toSignJobList, setToSignJobList] = React.useState([]);
   const [unreadJobList, setUnreadJobList] = React.useState([]);
+  const [completeList, setCompleteList] = React.useState([]);
   const [portofolioList, setPortofolioList] = React.useState([]);
   const [, setHasMessage] = React.useState(false);
   const context = React.useContext(GlobalContext);
@@ -65,12 +66,13 @@ const ClientDashboardPage = (props) => {
   const loadList = async () => {
     setLoading(true);
     const portofolioList = await listPortofolio() || [];
-    const { data: toSignJobList } = await searchJob({ status: ['to_sign'] });
-    const unreadJobList = await listUnreadJob();
+    // const { data: toSignJobList } = await searchJob({ status: ['to_sign'] });
+    const list = await listJob();
 
-    setToSignJobList(toSignJobList);
     setPortofolioList(portofolioList);
-    setUnreadJobList(unreadJobList);
+    setToSignJobList(list.filter(x => x.status === 'to_sign'));
+    setUnreadJobList(list.filter(x => x.lastUnreadMessageAt));
+    setCompleteList(list.filter(x => x.status === 'complete'));
     setLoading(false);
     if (!portofolioList.length) {
       showNoPortofolioWarn();
@@ -112,6 +114,14 @@ const ClientDashboardPage = (props) => {
     return data;
   }
 
+  const handleGoToJobWithMessage = job => {
+    props.history.push(`/job/${job.id}?chat=true`)
+  }
+
+  const handleGoToJobSign = job => {
+    props.history.push(`/job/${job.id}/view`)
+  }
+
   const hasPortofolio = !!portofolioList.length;
 
   return (
@@ -135,12 +145,17 @@ const ClientDashboardPage = (props) => {
               </>}
               {toSignJobList.length > 0 && <>
                 <Title type="secondary" level={4}>Require Sign</Title>
-                <MyJobList data={toSignJobList} />
+                <MyJobList data={toSignJobList} onItemClick={handleGoToJobSign}/>
                 <Divider />
               </>}
               {unreadJobList.length > 0 && <>
-                <Title type="secondary" level={4}>Latest 5 jobs with new messages</Title>
-                <MyJobList data={unreadJobList.slice(0, 5)} />
+                <Title type="secondary" level={4}>Jobs with Unread Messages</Title>
+                <MyJobList data={unreadJobList} onItemClick={handleGoToJobWithMessage}/>
+                <Divider />
+              </>}
+              {completeList.length > 0 && <>
+                <Title type="secondary" level={4}>Recent Complete Jobs</Title>
+                <MyJobList data={completeList} onItemClick={handleGoToJobWithMessage}/>
                 <Divider />
               </>}
             </Space>
@@ -148,11 +163,12 @@ const ClientDashboardPage = (props) => {
 
           <StyledCol {...span}>
             <Space size="small" direction="vertical" style={{ width: '100%' }}>
-              <Title type="secondary" level={4}>Latest 10 Unread Message</Title>
+              <Title type="secondary" level={4}>Jobs with Unread Messages</Title>
               <Space style={{ width: '100%', justifyContent: 'space-between' }}>
                 <Link to="/message"><Button type="link" style={{ padding: 0 }}>All messages ({notifyCount} unread)</Button></Link>
                 {/* <Button type="link" icon={<SyncOutlined />} onClick={() => window.location.reload(false)}></Button> */}
               </Space>
+              <Divider />
               <MessageList
                 onFetchNextPage={handleFetchNextPage}
                 // onItemRead={}

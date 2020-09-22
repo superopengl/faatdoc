@@ -159,7 +159,6 @@ export const getMessageUnreadCount = handlerWrapper(async (req, res) => {
   const repo = getRepository(Message);
   const { user: { role, id } } = req as any;
   const query: any = {
-    deleted: false,
     readAt: IsNull()
   };
   if (role === 'client') {

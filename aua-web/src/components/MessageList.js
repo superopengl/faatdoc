@@ -126,7 +126,7 @@ const MessageList = (props) => {
         itemLayout="horizontal"
         dataSource={list}
         size="small"
-        style={{ marginTop: '1rem' }}
+        // style={{ marginTop: '1rem' }}
         renderItem={item => (<StyledListItem
           onClick={e => handleItemClick(item)}
         >

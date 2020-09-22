@@ -16,6 +16,7 @@ font-size: 0.8rem;
 
 .ant-space-item {
   margin-bottom: 0 !important;
+  line-height: 15px;
 }
 `
 
@@ -28,7 +29,7 @@ export const TimeAgo = props => {
   const realSurfix = surfix?.trim() ? `${surfix.trim()} ` : null;
   return <StyledSpace size="small" direction="horizontal">
     <Space direction={direction} size="small">
-      <Text strong={strong}>{realSurfix}<ReactTimeAgo date={m.toDate()} /></Text>
+      <Text strong={strong} type="secondary">{realSurfix}<ReactTimeAgo date={m.toDate()} /></Text>
       {accurate && <Text strong={strong} type="secondary"><small>{m.format('DD MMM YYYY HH:mm')}</small></Text>}
     </Space>
     {extra}
