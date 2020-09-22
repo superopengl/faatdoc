@@ -1,5 +1,5 @@
 
-import { getRepository, IsNull } from 'typeorm';
+import { getRepository, IsNull, getManager } from 'typeorm';
 import { Job } from '../entity/Job';
 import { Message } from '../entity/Message';
 import { assert, assertRole } from '../utils/assert';
@@ -7,45 +7,23 @@ import { handlerWrapper } from '../utils/asyncHandler';
 import { getUtcNow } from '../utils/getUtcNow';
 
 async function listMessageForClient(clientId, pagenation, unreadOnly) {
-  let query = getRepository(Message)
-    .createQueryBuilder('x')
-    .where({ clientUserId: clientId, deleted: false });
-  if (unreadOnly) {
-    query = query.andWhere(`"readAt" IS NULL`);
-  }
-  query = query
-    .innerJoin(q => q.from(Job, 't').select(['id', 'name', '"forWhom"']), 't', `t.id = x."jobId"`)
-    .orderBy('"createdAt"', 'DESC')
-    .offset(pagenation.skip)
-    .limit(pagenation.limit)
-    .select([
-      'x.id',
-      'name',
-      '"forWhom"',
-      '"jobId"',
-      '"createdAt"',
-      'content',
-      '"readAt"'
-    ]);
-  
-  const list = await query.execute();
-  return list;
-}
-
-async function listMessageForAgent(agentId, pagenation, unreadOnly) {
-  let query = getRepository(Message)
-    .createQueryBuilder('x')
-    .where({ agentUserId: agentId, deleted: false });
-  if (unreadOnly) {
-    query = query.andWhere(`"readAt" IS NULL`);
-  }
-  query = query.innerJoin(q => q.from(Job, 'l').select('*'), 'l', `l.id = x."jobId"`)
-    .orderBy('"createdAt"', 'DESC')
+   const query =  getManager()
+    .createQueryBuilder()
+    .select('*')
+    .from(q => q.from(Message, 'x')
+      .where(`"clientUserId" = :id`, { id: clientId })
+      .andWhere(`deleted = false`)
+      .andWhere(unreadOnly ? `"readAt" IS NULL` : '1 = 1')
+      .orderBy('"jobId"')
+      .addOrderBy('"createdAt"', 'DESC')
+      .distinctOn(['"jobId"'])
+    , 'x')
+    .innerJoin(q => q.from(Job, 'l').select('*'), 'l', `l.id = x."jobId"`)
     .offset(pagenation.skip)
     .limit(pagenation.limit)
     .select([
       'x.id as id',
-      '"jobId"',
+      'x."jobId" as "jobId"',
       'x."createdAt" as "createdAt"',
       'l.id as "jobId"',
       'l."forWhom" as "forWhom"',
@@ -53,24 +31,57 @@ async function listMessageForAgent(agentId, pagenation, unreadOnly) {
       'content',
       '"readAt"'
     ]);
+
+  const list = await query.execute();
+  return list;
+}
+
+async function listMessageForAgent(agentId, pagenation, unreadOnly) {
+  const query =  getManager()
+  .createQueryBuilder()
+  .select('*')
+  .from(q => q.from(Message, 'x')
+    .where(`"agentUserId" = :id`, { id: agentId })
+    .andWhere(`deleted = false`)
+    .andWhere(unreadOnly ? `"readAt" IS NULL` : '1 = 1')
+    .orderBy('"jobId"')
+    .addOrderBy('"createdAt"', 'DESC')
+    .distinctOn(['"jobId"'])
+  , 'x')
+  .innerJoin(q => q.from(Job, 'l').select('*'), 'l', `l.id = x."jobId"`)
+  .offset(pagenation.skip)
+  .limit(pagenation.limit)
+  .select([
+    'x.id as id',
+    'x."jobId" as "jobId"',
+    'x."createdAt" as "createdAt"',
+    'l.id as "jobId"',
+    'l."forWhom" as "forWhom"',
+    'l.name as name',
+    'content',
+    '"readAt"'
+  ]);
   const list = await query.execute();
   return list;
 }
 
 async function listMessageForAdmin(pagenation, unreadOnly) {
-  let query = getRepository(Message)
-    .createQueryBuilder('x')
-    .where({ deleted: false });
-  if (unreadOnly) {
-    query = query.andWhere(`"readAt" IS NULL`);
-  }
-  query = query.innerJoin(q => q.from(Job, 'l').select('*'), 'l', `l.id = x."jobId"`)
-    .orderBy('"createdAt"', 'DESC')
+  const query = getManager()
+    .createQueryBuilder()
+    .select('*')
+    .from(q => q.from(Message, 'x')
+      .where(`deleted = false`)
+      .andWhere(unreadOnly ? `"readAt" IS NULL` : '1 = 1')
+      .orderBy('"jobId"')
+      .addOrderBy('"createdAt"', 'DESC')
+      .distinctOn(['"jobId"'])
+    , 'x')
+    .innerJoin(q => q.from(Job, 'l').select('*'), 'l', `l.id = x."jobId"`)
     .offset(pagenation.skip)
     .limit(pagenation.limit)
     .select([
       'x.id as id',
-      '"jobId"',
+      'x."jobId" as "jobId"',
       'x."createdAt" as "createdAt"',
       'l.id as "jobId"',
       'l."forWhom" as "forWhom"',

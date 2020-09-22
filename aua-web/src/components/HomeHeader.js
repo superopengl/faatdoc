@@ -121,7 +121,7 @@ const HomeHeaderRaw = props => {
             {isAdmin && <Menu.Item key="doc_template"><Link to="/doc_template">Doc Template</Link></Menu.Item>}
             {isAdmin && <Menu.Item key="recurring"><Link to="/recurring">Recurring</Link></Menu.Item>}
             {isAdmin && <Menu.Item key="user"><Link to="/user">User</Link></Menu.Item>}
-            {(isAdmin && isAgent) && <Menu.Item key="message"><Link to="/message"><Badge count={notifyCount} showZero={false} offset={[10, 0]}>Message</Badge></Link></Menu.Item>}
+            {!isGuest && <Menu.Item key="message"><Link to="/message"><Badge count={notifyCount} showZero={false} offset={[10, 0]}>Message</Badge></Link></Menu.Item>}
             {!isGuest && <Menu.SubMenu key="me" title={<Avatar size={40} icon={<UserOutlined style={{ fontSize: 20 }} />} style={{ backgroundColor: isAdmin ? '#FF4D4F' : isAgent ? '#000000' : '#143e86' }} />}>
               {/* {isAdmin && <Menu.Item key="impersonate"><Link to="/impersonate">Impersonate</Link></Menu.Item>} */}
               {canChangePassword && <Menu.Item key="changePassword"><Link to="/change_password">Change Password</Link></Menu.Item>}
@@ -161,7 +161,7 @@ const HomeHeaderRaw = props => {
             {isAdmin && <Menu.Item key="recurring"><CalendarOutlined /> <Link to="/recurring">Recurring</Link></Menu.Item>}
             {/* {isAdmin && <Menu.Item key="clients"><SettingOutlined /> <Link to="/clients">Users</Link></Menu.Item>} */}
             {isAdmin && <Menu.Item key="user"><TeamOutlined /> <Link to="/user">User</Link></Menu.Item>}
-            {(isAdmin && isAgent) && <Menu.Item key="message"><BellOutlined /> <Link to="/message">Message <Badge count={notifyCount} showZero={false} /></Link></Menu.Item>}
+            {!isGuest && <Menu.Item key="message"><BellOutlined /> <Link to="/message">Message <Badge count={notifyCount} showZero={false} /></Link></Menu.Item>}
             {/* {isAdmin && <Menu.Item key="impersonate"><SkinOutlined /> <Link to="/impersonate">Impersonate</Link></Menu.Item>} */}
             {canChangePassword && <Menu.Item key="changePassword"><SecurityScanOutlined /> <Link to="/change_password">Change Password</Link></Menu.Item>}
             {isGuest && <Menu.Item key="home"><HomeOutlined /> <HashLink to="/#home" onClick={onClose}>Home</HashLink></Menu.Item>}

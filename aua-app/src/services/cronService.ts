@@ -50,9 +50,9 @@ function logging(log: SysLog) {
   getRepository(SysLog).save(log).catch(() => { });
 }
 
-function trySetTaskDueDateField(task, dueDay) {
+function trySetJobDueDateField(job, dueDay) {
   if (!dueDay) return;
-  const dueDateField = task.fields.find(x => x.name === 'dueDate');
+  const dueDateField = job.fields.find(x => x.name === 'dueDate');
   if (!dueDateField) return;
   dueDateField.value = moment().add(dueDay, 'day').toDate();
 }
@@ -63,19 +63,19 @@ export async function executeRecurring(recurringId) {
   assert(recurring, 404);
   const { jobTemplateId, portofolioId, nameTemplate } = recurring;
 
-  const task = await generateJobByJobTemplateAndPortofolio(
+  const job = await generateJobByJobTemplateAndPortofolio(
     jobTemplateId,
     portofolioId,
     (j, p) => nameTemplate.replace('{{createdDate}}', moment().format('DD MMM YYYY'))
   );
 
-  task.status = JobStatus.TODO;
+  job.status = JobStatus.TODO;
 
-  trySetTaskDueDateField(task, recurring.dueDay);
+  trySetJobDueDateField(job, recurring.dueDay);
 
-  await getRepository(Job).save(task);
+  await getRepository(Job).save(job);
 
-  return task;
+  return job;
 }
 
 function createCronJob(cron, onRunFn) {
@@ -108,7 +108,7 @@ function startSingleRecurring(recurring: Recurring): CronJob {
   const job = createCronJob(
     cron,
     async () => {
-      const task = await executeRecurring(id);
+      const job = await executeRecurring(id);
 
       const log = new SysLog();
       log.level = 'info';
@@ -117,7 +117,7 @@ function startSingleRecurring(recurring: Recurring): CronJob {
         recurringId: id,
         jobTemplateId,
         portofolioId,
-        createdTaskId: task.id
+        createdJobId: job.id
       };
 
       logging(log);

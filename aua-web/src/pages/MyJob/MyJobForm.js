@@ -80,8 +80,9 @@ const MyJobForm = (props) => {
     try {
       await saveJob({ ...job, ...values, status: 'todo' });
       // form.resetFields();
-      await props.onChange();
-    } finally {
+      setLoading(false);
+      props.onChange();
+    } catch {
       setLoading(false);
     }
   }

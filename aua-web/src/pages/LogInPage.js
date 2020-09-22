@@ -59,7 +59,7 @@ const LogInPage = props => {
 
       const isClient = user.role === 'client';
 
-      props.history.push(isClient ? '/landing' : '/task');
+      props.history.push(isClient ? '/landing' : '/job');
     } catch {
       setLoading(false);
     }
