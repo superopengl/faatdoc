@@ -1,4 +1,4 @@
-import { BellOutlined } from '@ant-design/icons';
+import { BellOutlined, MessageOutlined } from '@ant-design/icons';
 import { Affix, Button, Form, Input, Radio, Space, Typography } from 'antd';
 import { DateInput } from 'components/DateInput';
 import { RangePickerInput } from 'components/RangePickerInput';
@@ -165,15 +165,17 @@ const MyJobForm = (props) => {
         </Form>
       </>}
     </Space>
-    {job && <JobChat visible={chatVisible} onClose={() => setChatVisible(false)} jobId={job?.id} />}
-    <Affix style={{ position: 'fixed', bottom: 30, right: 30 }}>
-      <AffixContactButton type="primary" shape="circle" size="large" 
-      onClick={() => setChatVisible(true)}
-      style={{fontSize: 24}}
-      >
-        <BellOutlined />
-      </AffixContactButton>
-    </Affix>
+    {!!job?.id && <>
+      <JobChat visible={chatVisible} onClose={() => setChatVisible(false)} jobId={job.id} />
+      <Affix style={{ position: 'fixed', bottom: 30, right: 30 }}>
+        <AffixContactButton type="primary" shape="circle" size="large"
+          onClick={() => setChatVisible(true)}
+          style={{ fontSize: 24 }}
+        >
+          <MessageOutlined />
+        </AffixContactButton>
+      </Affix>
+    </>}
   </>
   );
 };

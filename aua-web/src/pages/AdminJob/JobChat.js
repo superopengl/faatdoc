@@ -120,9 +120,8 @@ const JobChat = (props) => {
     const others = [...list];
     setList([{ ...newMessage, status: 'waiting' }, ...others]);
     ws.current.send(newMessage);
-    await notifyJob(jobId, content);
     setList([{ ...newMessage, status: 'sent' }, ...others]);
-    // loadList();
+    await notifyJob(jobId, content);
 
     form.resetFields();
     textareaRef.current.focus();

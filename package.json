@@ -14,8 +14,5 @@
     "release": "npm run docker:build && npm run docker:push && npm run ecs:update"
   },
   "author": "mr.shaojun@gmail.com",
-  "license": "MIT",
-  "dependencies": {
-    "@types/body-parser": "^1.19.0"
-  }
+  "license": "MIT"
 }
