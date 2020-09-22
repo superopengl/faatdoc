@@ -2,14 +2,14 @@ import { DeleteOutlined, EditOutlined, SearchOutlined, SyncOutlined } from '@ant
 import { Button, Input, Layout, Modal, Select, Space, Table, Tooltip, Typography } from 'antd';
 import Text from 'antd/lib/typography/Text';
 import HomeHeader from 'components/HomeHeader';
-import { TaskStatus } from 'components/TaskStatus';
+import { JobStatus } from 'components/JobStatus';
 import { TimeAgo } from 'components/TimeAgo';
-import ReviewSignPage from 'pages/MyTask/ReviewSignPage';
+import ReviewSignPage from 'pages/MyJob/ReviewSignPage';
 import React from 'react';
 import Highlighter from "react-highlight-words";
 import { Link } from 'react-router-dom';
 import { reactLocalStorage } from 'reactjs-localstorage';
-import { assignTask, deleteTask, searchTask } from '../../services/taskService';
+import { assignJob, deleteJob, searchJob } from '../../services/jobService';
 import { listAgents } from 'services/userService';
 import styled from 'styled-components';
 
@@ -42,10 +42,10 @@ const DEFAULT_QUERY_INFO = {
   orderDirection: 'DESC'
 };
 
-const AdminTaskListPage = (props) => {
+const AdminJobListPage = (props) => {
 
   const [loading, setLoading] = React.useState(true);
-  const [taskList, setTaskList] = React.useState([]);
+  const [jobList, setJobList] = React.useState([]);
   const [agentList, setAgentList] = React.useState([]);
 
   const [queryInfo, setQueryInfo] = React.useState(reactLocalStorage.getObject('query', DEFAULT_QUERY_INFO, true))
@@ -53,7 +53,7 @@ const AdminTaskListPage = (props) => {
   const columnDef = [
 
     {
-      title: 'Task Name',
+      title: 'Job Name',
       dataIndex: 'name',
       // filteredValue: filteredInfo.name || null,
       sorter: () => 0,
@@ -65,7 +65,7 @@ const AdminTaskListPage = (props) => {
       title: 'Status',
       dataIndex: 'status',
       sorter: () => 0,
-      render: (text, record) => <TaskStatus width={60} status={record.status} name={record.forWhom} avatar={false}></TaskStatus>,
+      render: (text, record) => <JobStatus width={60} status={record.status} name={record.forWhom} avatar={false}></JobStatus>,
       ellipsis: false
     },
     {
@@ -104,7 +104,7 @@ const AdminTaskListPage = (props) => {
       render: (text, record) => <Select
         placeholder="Select an agent"
         style={{ width: 130 }}
-        onChange={value => assignTaskToAgent(record, value)}
+        onChange={value => assignJobToAgent(record, value)}
         value={text}
       >
         <Select.Option key={-1} value={null}>{' '}</Select.Option>
@@ -133,10 +133,10 @@ const AdminTaskListPage = (props) => {
       // width: 200,
       render: (text, record) => (
         <Space size="small">
-          <Tooltip placement="bottom" title="Proceed task">
-            <Link to={`/task/${record.id}/proceed`}><Button shape="circle" icon={<EditOutlined />}></Button></Link>
+          <Tooltip placement="bottom" title="Proceed job">
+            <Link to={`/job/${record.id}/proceed`}><Button shape="circle" icon={<EditOutlined />}></Button></Link>
           </Tooltip>
-          <Tooltip placement="bottom" title="Delete task">
+          <Tooltip placement="bottom" title="Delete job">
             <Button shape="circle" danger onClick={e => handleDelete(e, record)} icon={<DeleteOutlined />}></Button>
           </Tooltip>
         </Space>
@@ -160,30 +160,30 @@ const AdminTaskListPage = (props) => {
 
     console.log('queryInfo', newQueryInfo);
 
-    await loadTaskWithQuery(newQueryInfo);
+    await loadJobWithQuery(newQueryInfo);
   }
 
   const clearAllFilters = () => {
-    loadTaskWithQuery({ ...DEFAULT_QUERY_INFO });
+    loadJobWithQuery({ ...DEFAULT_QUERY_INFO });
   }
 
-  const assignTaskToAgent = async (task, agentId) => {
-    await assignTask(task.id, agentId);
+  const assignJobToAgent = async (job, agentId) => {
+    await assignJob(job.id, agentId);
     await loadList();
   }
 
-  const loadTaskWithQuery = async (queryInfo) => {
+  const loadJobWithQuery = async (queryInfo) => {
     setLoading(true);
-    const { data, pagination: { total } } = await searchTask(queryInfo);
+    const { data, pagination: { total } } = await searchJob(queryInfo);
 
-    setTaskList(data);
+    setJobList(data);
     updateQueryInfo({ ...queryInfo, total })
     setLoading(false);
   }
 
   const loadList = async () => {
     setLoading(true);
-    await loadTaskWithQuery(queryInfo);
+    await loadJobWithQuery(queryInfo);
     const agentList = await listAgents();
     setAgentList(agentList);
     setLoading(false);
@@ -193,10 +193,10 @@ const AdminTaskListPage = (props) => {
     e.stopPropagation();
     const { id, name } = item;
     Modal.confirm({
-      title: <>Archive task <Text strong>{name}</Text>?</>,
+      title: <>Archive job <Text strong>{name}</Text>?</>,
       okText: 'Yes, Archive it',
       onOk: async () => {
-        await deleteTask(id);
+        await deleteJob(id);
         await loadList();
       },
       maskClosable: true,
@@ -214,13 +214,13 @@ const AdminTaskListPage = (props) => {
       text
     }
 
-    await loadTaskWithQuery(newQueryInfo);
+    await loadJobWithQuery(newQueryInfo);
   }
 
-  const handleShowSignDetail = async (taskId) => {
+  const handleShowSignDetail = async (jobId) => {
     Modal.info({
       title: 'Client Review And Sign Details',
-      content: <ReviewSignPage id={taskId} readonly={true} />,
+      content: <ReviewSignPage id={jobId} readonly={true} />,
       width: 700,
       icon: null,
       maskClosable: true,
@@ -232,7 +232,7 @@ const AdminTaskListPage = (props) => {
       ...queryInfo,
       status
     }
-    await loadTaskWithQuery(newQueryInfo);
+    await loadJobWithQuery(newQueryInfo);
   }
 
   const handleSearchTextChange = text => {
@@ -241,7 +241,7 @@ const AdminTaskListPage = (props) => {
       text
     }
     updateQueryInfo(newQueryInfo);
-    // await loadTaskWithQuery(newQueryInfo);
+    // await loadJobWithQuery(newQueryInfo);
   }
 
   const initialLoadList = React.useCallback(() => loadList());
@@ -263,7 +263,7 @@ const AdminTaskListPage = (props) => {
       <ContainerStyled>
         <Space direction="vertical" style={{ width: '100%' }}>
           <StyledTitleRow>
-            <Title level={2} style={{ margin: 'auto' }}>Task Management</Title>
+            <Title level={2} style={{ margin: 'auto' }}>Job Management</Title>
           </StyledTitleRow>
           <Space style={{ width: '100%', justifyContent: 'flex-end', margin: '1rem auto 0.5rem' }}>
             <Input.Search
@@ -293,7 +293,7 @@ const AdminTaskListPage = (props) => {
             <Button onClick={() => clearAllFilters()}>Reset Filters</Button>
           </Space>
           <Table columns={columnDef}
-            dataSource={taskList}
+            dataSource={jobList}
             // scroll={{x: 1000}}
             rowKey="id"
             loading={loading}
@@ -301,7 +301,7 @@ const AdminTaskListPage = (props) => {
             onChange={handleTableChange}
             onRow={(record) => ({
               onDoubleClick: () => {
-                props.history.push(`/task/${record.id}/proceed`);
+                props.history.push(`/job/${record.id}/proceed`);
               }
             })}
           ></Table>
@@ -312,8 +312,8 @@ const AdminTaskListPage = (props) => {
   );
 };
 
-AdminTaskListPage.propTypes = {};
+AdminJobListPage.propTypes = {};
 
-AdminTaskListPage.defaultProps = {};
+AdminJobListPage.defaultProps = {};
 
-export default AdminTaskListPage;
+export default AdminJobListPage;

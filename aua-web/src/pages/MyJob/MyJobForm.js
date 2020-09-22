@@ -2,15 +2,15 @@ import { BellOutlined } from '@ant-design/icons';
 import { Affix, Button, Form, Input, Radio, Space, Typography } from 'antd';
 import { DateInput } from 'components/DateInput';
 import { RangePickerInput } from 'components/RangePickerInput';
-import TaskChat from 'pages/AdminTask/TaskChat';
+import JobChat from 'pages/AdminJob/JobChat';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { generateTask, getTask, saveTask } from 'services/taskService';
+import { generateJob, getJob, saveJob } from 'services/jobService';
 import styled from 'styled-components';
 import { varNameToLabelName } from 'util/varNameToLabelName';
 import { FileUploader } from '../../components/FileUploader';
-import TaskGenerator from './TaskGenerator';
+import JobGenerator from './JobGenerator';
 import * as queryString from 'query-string';
 
 
@@ -35,7 +35,7 @@ border: 2px solid white;
 }
 `;
 
-const MyTaskForm = (props) => {
+const MyJobForm = (props) => {
   const { id, showsAll } = props;
 
   const { chat } = queryString.parse(props.location.search);
@@ -44,13 +44,13 @@ const MyTaskForm = (props) => {
   const [chatVisible, setChatVisible] = React.useState(Boolean(chat));
   const [form] = Form.useForm();
 
-  const [task, setTask] = React.useState();
+  const [job, setJob] = React.useState();
 
   const loadEntity = async () => {
     setLoading(true);
     if (id) {
-      const task = await getTask(id);
-      setTask(task);
+      const job = await getJob(id);
+      setJob(job);
     }
     setLoading(false);
   }
@@ -60,25 +60,25 @@ const MyTaskForm = (props) => {
   }, [])
 
   const updateLodgmentWithFormValues = values => {
-    task.name = values.name;
+    job.name = values.name;
 
-    task.fields.forEach(field => {
+    job.fields.forEach(field => {
       field.value = values[field.name];
     })
 
-    return task;
+    return job;
   }
 
   const handleValuesChange = (changedValues, allValues) => {
     const lodgment = updateLodgmentWithFormValues(allValues);
-    setTask({ ...lodgment });
+    setJob({ ...lodgment });
   }
 
   const handleSubmit = async (values) => {
     // debugger;
     setLoading(true);
     try {
-      await saveTask({ ...task, ...values, status: 'todo' });
+      await saveJob({ ...job, ...values, status: 'todo' });
       // form.resetFields();
       await props.onChange();
     } finally {
@@ -89,51 +89,51 @@ const MyTaskForm = (props) => {
   const handleSelectedTemplate = async (values) => {
     setLoading(true);
     const { jobTemplateId, portofolioId } = values;
-    const task = await generateTask(jobTemplateId, portofolioId);
-    setTask(task);
+    const job = await generateJob(jobTemplateId, portofolioId);
+    setJob(job);
     setLoading(false);
   }
 
   const getFormInitialValues = () => {
     const values = {
-      name: task?.name || 'New Task',
-      status: task?.status || 'todo'
+      name: job?.name || 'New Job',
+      status: job?.status || 'todo'
     };
-    if (task && task.fields) {
-      for (const f of task.fields) {
+    if (job && job.fields) {
+      for (const f of job.fields) {
         values[f.name] = f.value;
       }
     }
     return values;
   }
 
-  const checkIfCanEdit = (task) => {
+  const checkIfCanEdit = (job) => {
     if (loading) return false;
-    if (!task) return false;
-    const { status } = task;
+    if (!job) return false;
+    const { status } = job;
     return status === 'todo';
   }
 
-  const canEdit = checkIfCanEdit(task);
+  const canEdit = checkIfCanEdit(job);
   const disabled = !canEdit || loading;
 
   // console.log('value', formInitValues);
-  const showsGenerator = !loading && !task;
+  const showsGenerator = !loading && !job;
 
   return (<>
     <Space direction="vertical" size="large" style={{ width: '100%' }}>
-      {showsGenerator && <TaskGenerator onChange={handleSelectedTemplate} />}
+      {showsGenerator && <JobGenerator onChange={handleSelectedTemplate} />}
 
-      {task && <>
+      {job && <>
         <Form form={form} layout="vertical"
           onValuesChange={handleValuesChange}
           onFinish={handleSubmit}
           style={{ textAlign: 'left' }} initialValues={getFormInitialValues()}>
-          <Form.Item label="Task Name" name="name" rules={[{ required: true }]}>
+          <Form.Item label="Job Name" name="name" rules={[{ required: true }]}>
             <Input disabled={disabled} />
           </Form.Item>
 
-          {task.fields.filter(field => showsAll || !field.officialOnly).map((field, i) => {
+          {job.fields.filter(field => showsAll || !field.officialOnly).map((field, i) => {
             const { name, description, type, required } = field;
             const formItemProps = {
               label: <>{varNameToLabelName(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
@@ -165,7 +165,7 @@ const MyTaskForm = (props) => {
         </Form>
       </>}
     </Space>
-    {task && <TaskChat visible={chatVisible} onClose={() => setChatVisible(false)} taskId={task?.id} />}
+    {job && <JobChat visible={chatVisible} onClose={() => setChatVisible(false)} jobId={job?.id} />}
     <Affix style={{ position: 'fixed', bottom: 30, right: 30 }}>
       <AffixContactButton type="primary" shape="circle" size="large" 
       onClick={() => setChatVisible(true)}
@@ -178,13 +178,13 @@ const MyTaskForm = (props) => {
   );
 };
 
-MyTaskForm.propTypes = {
+MyJobForm.propTypes = {
   id: PropTypes.string,
   showsAll: PropTypes.bool.isRequired
 };
 
-MyTaskForm.defaultProps = {
+MyJobForm.defaultProps = {
   showsAll: false
 };
 
-export default withRouter(MyTaskForm);
+export default withRouter(MyJobForm);

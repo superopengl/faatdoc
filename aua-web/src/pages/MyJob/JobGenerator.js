@@ -35,7 +35,7 @@ const StyledTitleRow = styled.div`
  width: 100%;
 `
 
-const TaskGenerator = props => {
+const JobGenerator = props => {
   const [currentStep, setCurrentStep] = React.useState(0);
   const [loading, setLoading] = React.useState(true);
   const [jobTemplateList, setJobTemplateList] = React.useState([]);
@@ -60,7 +60,7 @@ const TaskGenerator = props => {
     props.onChange(values);
   }
 
-  const handleTaskTypeChange = e => {
+  const handleJobTypeChange = e => {
     setCurrentStep(1);
     setJobTemplateId(e.target.value);
   }
@@ -80,21 +80,21 @@ const TaskGenerator = props => {
   return (
     <Container>
       <StyledTitleRow>
-        <Title level={2} style={{ margin: 'auto' }}>Tasks</Title>
+        <Title level={2} style={{ margin: 'auto' }}>Jobs</Title>
       </StyledTitleRow>
       {/* <Steps progressDot current={currentStep}>
-        <Steps.Step title="Choose task type" />
+        <Steps.Step title="Choose job type" />
         <Steps.Step title="Choose portofolio" />
       </Steps> */}
       <Space size="middle" direction="vertical" style={{width:'100%'}}>
       {currentStep === 0 && <>
-      <Text type="secondary">Choose task type</Text>
-        <Radio.Group buttonStyle="outline" style={{ width: '100%' }} onChange={handleTaskTypeChange}>
+      <Text type="secondary">Choose job type</Text>
+        <Radio.Group buttonStyle="outline" style={{ width: '100%' }} onChange={handleJobTypeChange}>
           {jobTemplateList.map((item, i) => <Radio.Button key={i} value={item.id}>{item.name}</Radio.Button>)}
         </Radio.Group>
       </>}
       {currentStep === 1 && <>
-        <Text type="secondary">Choose portofolio to fill the task automatically</Text>
+        <Text type="secondary">Choose portofolio to fill the job automatically</Text>
         <Radio.Group buttonStyle="outline" style={{ width: '100%' }} onChange={handlePortofolioChange}>
           {portofolioList.map((item, i) => <Radio.Button className="portofolio" key={i} value={item.id}>
             <Space>
@@ -110,4 +110,4 @@ const TaskGenerator = props => {
   );
 };
 
-export default TaskGenerator;
+export default JobGenerator;

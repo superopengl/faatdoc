@@ -103,6 +103,7 @@ const HomeCarouselAreaRaw = props => {
                         icon={<GoogleLogoSvg />}
                         onClick={renderProps.onClick}
                         disabled={renderProps.disabled}
+                        style={{paddingTop: 6}}
                       >Sign In with Google</SignInButton>
                     )}
                 />

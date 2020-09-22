@@ -2,7 +2,7 @@ import { Button, Layout, Modal, Space, Typography, Row, Col } from 'antd';
 import HomeHeader from 'components/HomeHeader';
 import React from 'react';
 import { withRouter, Link } from 'react-router-dom';
-import { listUnreadTask, searchTask } from 'services/taskService';
+import { listUnreadJob, searchJob } from 'services/jobService';
 import { listPortofolio } from 'services/portofolioService';
 import { PlusOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
@@ -10,7 +10,7 @@ import { listNotification } from 'services/notificationService';
 import NotificationList from 'components/NotificationList';
 import { GlobalContext } from 'contexts/GlobalContext';
 import { Divider } from 'antd';
-import MyTaskList from 'pages/MyTask/MyTaskList';
+import MyJobList from 'pages/MyJob/MyJobList';
 
 
 const { Title, Paragraph } = Typography;
@@ -36,7 +36,7 @@ const LayoutStyled = styled(Layout)`
   background-color: #ffffff;
   height: 100%;
 
-  .task-count .ant-badge-count {
+  .job-count .ant-badge-count {
     background-color: #143e86;
     color: #eeeeee;
     // box-shadow: 0 0 0 1px #143e86 inset;
@@ -55,8 +55,8 @@ const span = {
 const ClientDashboardPage = (props) => {
 
   const [, setLoading] = React.useState(true);
-  const [toSignTaskList, setToSignTaskList] = React.useState([]);
-  const [unreadTaskList, setUnreadTaskList] = React.useState([]);
+  const [toSignJobList, setToSignJobList] = React.useState([]);
+  const [unreadJobList, setUnreadJobList] = React.useState([]);
   const [portofolioList, setPortofolioList] = React.useState([]);
   const [, setHasNotification] = React.useState(false);
   const context = React.useContext(GlobalContext);
@@ -65,12 +65,12 @@ const ClientDashboardPage = (props) => {
   const loadList = async () => {
     setLoading(true);
     const portofolioList = await listPortofolio() || [];
-    const { data: toSignTaskList } = await searchTask({ status: ['to_sign'] });
-    const unreadTaskList = await listUnreadTask();
+    const { data: toSignJobList } = await searchJob({ status: ['to_sign'] });
+    const unreadJobList = await listUnreadJob();
 
-    setToSignTaskList(toSignTaskList);
+    setToSignJobList(toSignJobList);
     setPortofolioList(portofolioList);
-    setUnreadTaskList(unreadTaskList);
+    setUnreadJobList(unreadJobList);
     setLoading(false);
     if (!portofolioList.length) {
       showNoPortofolioWarn();
@@ -82,25 +82,25 @@ const ClientDashboardPage = (props) => {
     loadList()
   }, []);
 
-  const goToEditTask = (id) => {
-    props.history.push(`/task/${id || 'new'}`);
+  const goToEditJob = (id) => {
+    props.history.push(`/job/${id || 'new'}`);
   }
 
 
   const showNoPortofolioWarn = () => {
     Modal.confirm({
       title: 'No portofolio',
-      content: 'Please create portofolio before creating task. Go to create protofolio now?',
+      content: 'Please create portofolio before creating job. Go to create protofolio now?',
       okText: 'Yes, go to create portofolio',
       maskClosable: true,
       onOk: () => props.history.push('/portofolio')
     });
   }
 
-  const createNewTask = e => {
+  const createNewJob = e => {
     e.stopPropagation();
     if (portofolioList.length) {
-      goToEditTask();
+      goToEditJob();
     } else {
       showNoPortofolioWarn();
     }
@@ -121,26 +121,26 @@ const ClientDashboardPage = (props) => {
         <Row gutter={80}>
           <StyledCol {...span}>
             <Space size="small" direction="vertical" style={{ width: '100%' }}>
-              <Title type="secondary" level={4}>My Tasks</Title>
+              <Title type="secondary" level={4}>My Jobs</Title>
               <Space style={{ width: '100%', justifyContent: 'space-between' }}>
-                <Link to="/task">All tasks</Link>
-                <Button type="link" onClick={createNewTask} style={{ padding: 0 }}><PlusOutlined /> Create New Task</Button>
+                <Link to="/job">All jobs</Link>
+                <Button type="link" onClick={createNewJob} style={{ padding: 0 }}><PlusOutlined /> Create New Job</Button>
               </Space>
               <Divider />
               {!hasPortofolio && <>
                 <Title type="secondary" level={4}>My Portofolio</Title>
-                <Paragraph >Portofolios are predefined information that can be used to automatically fill in your task application. You can save the information like name, phone, address, TFN, and etc. for future usage.</Paragraph>
+                <Paragraph >Portofolios are predefined information that can be used to automatically fill in your job application. You can save the information like name, phone, address, TFN, and etc. for future usage.</Paragraph>
                 <Link to="/portofolio"><Button size="large" type="primary" ghost block icon={<PlusOutlined />}>New Portofolio</Button></Link>
                 <Divider />
               </>}
-              {toSignTaskList.length > 0 && <>
+              {toSignJobList.length > 0 && <>
                 <Title type="secondary" level={4}>Require Sign</Title>
-                <MyTaskList data={toSignTaskList} />
+                <MyJobList data={toSignJobList} />
                 <Divider />
               </>}
-              {unreadTaskList.length > 0 && <>
-                <Title type="secondary" level={4}>Latest 5 tasks with new notifications</Title>
-                <MyTaskList data={unreadTaskList.slice(0, 5)} />
+              {unreadJobList.length > 0 && <>
+                <Title type="secondary" level={4}>Latest 5 jobs with new notifications</Title>
+                <MyJobList data={unreadJobList.slice(0, 5)} />
                 <Divider />
               </>}
             </Space>

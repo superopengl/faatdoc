@@ -1,29 +1,29 @@
 import { Button, List, Space } from 'antd';
 import Text from 'antd/lib/typography/Text';
-import { TaskStatus } from 'components/TaskStatus';
+import { JobStatus } from 'components/JobStatus';
 import { TimeAgo } from 'components/TimeAgo';
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { EditOutlined, ZoomInOutlined, HighlightOutlined } from '@ant-design/icons';
 
 
-const MyTaskList = (props) => {
+const MyJobList = (props) => {
 
   const { data, loading } = props;
 
-  const goToEditTask = (id) => {
-    props.history.push(`/task/${id || 'new'}`);
+  const goToEditJob = (id) => {
+    props.history.push(`/job/${id || 'new'}`);
   }
 
-  const goToViewTask = (id) => {
-    props.history.push(`/task/${id}/view`);
+  const goToViewJob = (id) => {
+    props.history.push(`/job/${id}/view`);
   }
 
-  const actionOnTask = task => {
-    if (['to_sign', 'signed', 'complete'].includes(task.status)) {
-      goToViewTask(task.id);
+  const actionOnJob = job => {
+    if (['to_sign', 'signed', 'complete'].includes(job.status)) {
+      goToViewJob(job.id);
     } else {
-      goToEditTask(task.id);
+      goToEditJob(job.id);
     }
   }
 
@@ -50,16 +50,16 @@ const MyTaskList = (props) => {
       <List.Item
         style={{ paddingLeft: 0, paddingRight: 0 }}
         key={item.id}
-        onClick={() => actionOnTask(item)}
+        onClick={() => actionOnJob(item)}
       >
         <List.Item.Meta
-          avatar={<TaskStatus key="1" status={item.status} width={60} name={item.forWhom} style={{ marginTop: 6 }} />}
+          avatar={<JobStatus key="1" status={item.status} width={60} name={item.forWhom} style={{ marginTop: 6 }} />}
 
           title={<Text style={{ fontSize: '1rem' }}>{item.name}</Text>}
           description={<Space style={{ width: '100%', justifyContent: 'space-between' }}>
             <TimeAgo value={item.lastUpdatedAt} surfix="Last Updated" />
             <Space>
-              <Button shape="circle" key="action" onClick={() => actionOnTask(item)} icon={getActionIcon(item.status)}></Button>
+              <Button shape="circle" key="action" onClick={() => actionOnJob(item)} icon={getActionIcon(item.status)}></Button>
               {/* {item.status === 'draft' && <>
                   <Button key="delete" shape="circle" danger disabled={loading} onClick={e => handleDelete(e, item)} icon={<DeleteOutlined />}></Button>
                 </>} */}
@@ -72,8 +72,8 @@ const MyTaskList = (props) => {
   />
 };
 
-MyTaskList.propTypes = {};
+MyJobList.propTypes = {};
 
-MyTaskList.defaultProps = {};
+MyJobList.defaultProps = {};
 
-export default withRouter(MyTaskList);
+export default withRouter(MyJobList);

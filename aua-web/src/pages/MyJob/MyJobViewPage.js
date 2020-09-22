@@ -2,9 +2,9 @@ import { Alert, Layout, Space, Tabs, Typography } from 'antd';
 import HomeHeader from 'components/HomeHeader';
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { getTask } from 'services/taskService';
+import { getJob } from 'services/jobService';
 import styled from 'styled-components';
-import TaskForm from './MyTaskForm';
+import JobForm from './MyJobForm';
 import ReviewSignPage from './ReviewSignPage';
 
 const { Title } = Typography;
@@ -29,23 +29,23 @@ const LayoutStyled = styled(Layout)`
   background-color: #ffffff;
   height: 100%;
 
-  .task-count .ant-badge-count {
+  .job-count .ant-badge-count {
     background-color: #143e86;
     color: #eeeeee;
     // box-shadow: 0 0 0 1px #143e86 inset;
   }
 `;
 
-const MyTaskViewPage = (props) => {
+const MyJobViewPage = (props) => {
   const { id } = props.match.params;
 
   const [loading, setLoading] = React.useState(true);
-  const [task, setTask] = React.useState({});
+  const [job, setJob] = React.useState({});
 
   const loadEntity = async () => {
     setLoading(true);
-    const entity = await getTask(id);
-    setTask(entity);
+    const entity = await getJob(id);
+    setJob(entity);
     setLoading(false);
   }
 
@@ -53,11 +53,11 @@ const MyTaskViewPage = (props) => {
     loadEntity();
   }, [])
 
-  const goToTaskList = () => {
-    props.history.push(`/task`);
+  const goToJobList = () => {
+    props.history.push(`/job`);
   }
 
-  const { status } = task || {};
+  const { status } = job || {};
   const defaultActiveKey = status && status === 'to_sign' ? 'sign' : 'view';
 
   return (
@@ -66,26 +66,26 @@ const MyTaskViewPage = (props) => {
       <ContainerStyled>
         <Space size="large" direction="vertical" style={{ width: '100%' }}>
           <StyledTitleRow>
-            <Title level={2} style={{ margin: 'auto' }}>Review Task</Title>
+            <Title level={2} style={{ margin: 'auto' }}>Review Job</Title>
           </StyledTitleRow>
           {status === 'signed' && <Alert
-            message="The task has been signed."
-            description="Please wait for the task to be completed by us."
+            message="The job has been signed."
+            description="Please wait for the job to be completed by us."
             type="success"
             showIcon
           />}
           {status === 'to_sign' && <Alert
-            message="The task requires signature."
-            description="All below documents have been viewed and the task is ready to e-sign."
+            message="The job requires signature."
+            description="All below documents have been viewed and the job is ready to e-sign."
             type="warning"
             showIcon
           />}
           {!loading && <Tabs defaultActiveKey={defaultActiveKey}>
             <Tabs.TabPane tab="Application" key="view">
-              <TaskForm showsAll={status === 'complete'} id={id} onFinish={() => goToTaskList()} />
+              <JobForm showsAll={status === 'complete'} id={id} onFinish={() => goToJobList()} />
             </Tabs.TabPane>
             <Tabs.TabPane tab="Sign" key="sign">
-              <ReviewSignPage id={id} onFinish={() => goToTaskList()} />
+              <ReviewSignPage id={id} onFinish={() => goToJobList()} />
             </Tabs.TabPane>
           </Tabs>}
           {/* <Button block type="link" onClick={() => props.history.goBack()}>Cancel</Button> */}
@@ -95,10 +95,10 @@ const MyTaskViewPage = (props) => {
   );
 };
 
-MyTaskViewPage.propTypes = {
+MyJobViewPage.propTypes = {
   // id: PropTypes.string.isRequired
 };
 
-MyTaskViewPage.defaultProps = {};
+MyJobViewPage.defaultProps = {};
 
-export default withRouter(MyTaskViewPage);
+export default withRouter(MyJobViewPage);

@@ -35,7 +35,7 @@ function getLabelFromStatus(status) {
   return <small>{(status || '').replace(/_/g, ' ')}</small>
 }
 
-export const TaskStatus = ({ status, shape, name, avatar, ...props }) => {
+export const JobStatus = ({ status, shape, name, avatar, ...props }) => {
   const label = getLabelFromStatus(status);
   if (shape === 'circle') {
     return <Progress
@@ -52,14 +52,14 @@ export const TaskStatus = ({ status, shape, name, avatar, ...props }) => {
   return <Tag color={tagColor[status]}>{label}</Tag>
 }
 
-TaskStatus.propTypes = {
+JobStatus.propTypes = {
   status: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   shape: PropTypes.string.isRequired,
   avatar: PropTypes.bool.isRequired,
 };
 
-TaskStatus.defaultProps = {
+JobStatus.defaultProps = {
   shape: 'circle',
   avatar: true,
 }

@@ -2,11 +2,11 @@ import { Badge, Button, Layout, Modal, Space, Tabs, Typography } from 'antd';
 import HomeHeader from 'components/HomeHeader';
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { listTask } from 'services/taskService';
+import { listJob } from 'services/jobService';
 import { listPortofolio } from 'services/portofolioService';
 import { PlusOutlined, SyncOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
-import MyTaskList from './MyTaskList';
+import MyJobList from './MyJobList';
 
 const { Title } = Typography;
 const { TabPane } = Tabs;
@@ -31,7 +31,7 @@ const LayoutStyled = styled(Layout)`
   background-color: #ffffff;
   height: 100%;
 
-  .task-count .ant-badge-count {
+  .job-count .ant-badge-count {
     background-color: #143e86;
     color: #eeeeee;
     // box-shadow: 0 0 0 1px #143e86 inset;
@@ -39,10 +39,10 @@ const LayoutStyled = styled(Layout)`
 `;
 
 
-const MyTaskListPage = (props) => {
+const MyJobListPage = (props) => {
 
   const [, setLoading] = React.useState(true);
-  const [taskList, setTaskList] = React.useState([]);
+  const [jobList, setJobList] = React.useState([]);
   const [portofolioList, setPortofolioList] = React.useState([]);
 
 
@@ -50,9 +50,9 @@ const MyTaskListPage = (props) => {
     setLoading(true);
     const portofolioList = await listPortofolio() || [];
 
-    const list = await listTask();
+    const list = await listJob();
 
-    setTaskList(list);
+    setJobList(list);
     setPortofolioList(portofolioList);
     setLoading(false);
   }
@@ -62,31 +62,31 @@ const MyTaskListPage = (props) => {
     loadList();
   }, [])
 
-  const goToEditTask = (id) => {
-    props.history.push(`/task/${id || 'new'}`);
+  const goToEditJob = (id) => {
+    props.history.push(`/job/${id || 'new'}`);
   }
 
 
-  const createNewTask = () => {
+  const createNewJob = () => {
     if (!portofolioList.length) {
       Modal.confirm({
         title: 'No portofolio',
-        content: 'Please create portofolio before creating task. Go to create protofolio now?',
+        content: 'Please create portofolio before creating job. Go to create protofolio now?',
         okText: 'Yes, go to create portofolio',
         onOk: () => props.history.push('/portofolio')
       });
       return;
     }
-    goToEditTask();
+    goToEditJob();
   }
 
 
 
 
   const RenderListFilteredByStatus = (statuses = []) => {
-    const data = taskList.filter(x => statuses.includes(x.status));
+    const data = jobList.filter(x => statuses.includes(x.status));
 
-    return <MyTaskList data={data} />
+    return <MyJobList data={data} />
   }
 
   return (
@@ -95,18 +95,18 @@ const MyTaskListPage = (props) => {
       <ContainerStyled>
         <Space size="large" direction="vertical" style={{ width: '100%' }}>
           <StyledTitleRow>
-            <Title level={2} style={{ margin: 'auto' }}>Tasks</Title>
+            <Title level={2} style={{ margin: 'auto' }}>Jobs</Title>
           </StyledTitleRow>
           <Space style={{ width: '100%', justifyContent: 'flex-end' }} >
             {/* <Button type="link" onClick={() => loadList()} icon={<SyncOutlined />}></Button> */}
-            <Button type="primary" icon={<PlusOutlined />} onClick={() => createNewTask()}>New Task</Button>
+            <Button type="primary" icon={<PlusOutlined />} onClick={() => createNewJob()}>New Job</Button>
           </Space>
 
           <Tabs defaultActiveKey="todo" type="card" tabBarExtraContent={{ right: <Button type="link" onClick={() => loadList()} icon={<SyncOutlined />}></Button> }}>
             <TabPane tab={"To Do"} key="todo">
               {RenderListFilteredByStatus(['todo'])}
             </TabPane>
-            <TabPane tab={<>To Sign <Badge count={taskList.filter(x => ['to_sign'].includes(x.status)).length} showZero={false} /></>} key="ongoing">
+            <TabPane tab={<>To Sign <Badge count={jobList.filter(x => ['to_sign'].includes(x.status)).length} showZero={false} /></>} key="ongoing">
               {RenderListFilteredByStatus(['to_sign', 'signed'])}
             </TabPane>
             <TabPane tab={"Completed"} key="complete">
@@ -119,8 +119,8 @@ const MyTaskListPage = (props) => {
   );
 };
 
-MyTaskListPage.propTypes = {};
+MyJobListPage.propTypes = {};
 
-MyTaskListPage.defaultProps = {};
+MyJobListPage.defaultProps = {};
 
-export default withRouter(MyTaskListPage);
+export default withRouter(MyJobListPage);

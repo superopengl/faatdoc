@@ -9,7 +9,7 @@ import 'react-chat-elements/dist/main.css';
 import { withRouter } from 'react-router-dom';
 import { ChatService } from 'services/ChatService';
 import styled from 'styled-components';
-import { listTaskNotifies, notifyTask, markTaskNotifyRead } from '../../services/taskService';
+import { listJobNotifies, notifyJob, markJobNotifyRead } from '../../services/jobService';
 
 const StyledDrawer = styled(Drawer)`
 
@@ -63,8 +63,8 @@ const SentMessage = (props) => <StyledSentMessageBox {...props} position="right"
 
 const ReceivedMessage = (props) => <StyledReceivedMessageBox {...props} position="left" />
 
-const TaskChat = (props) => {
-  const { taskId, visible, onClose, readonly } = props;
+const JobChat = (props) => {
+  const { jobId, visible, onClose, readonly } = props;
   // const { name, id, fields } = value || {};
 
   const context = React.useContext(GlobalContext);
@@ -75,7 +75,7 @@ const TaskChat = (props) => {
   const ws = React.useRef(null);
 
   React.useEffect(() => {
-    ws.current = new ChatService(taskId);
+    ws.current = new ChatService(jobId);
 
     return () => {
       ws.current.close();
@@ -93,7 +93,7 @@ const TaskChat = (props) => {
 
   const loadList = async () => {
     setLoading(true);
-    const list = await listTaskNotifies(taskId);
+    const list = await listJobNotifies(jobId);
     setList(list);
     setLoading(false);
   }
@@ -102,9 +102,9 @@ const TaskChat = (props) => {
   React.useEffect(() => {
     loadList();
     if (visible && context.user.role === 'client') {
-      markTaskNotifyRead(taskId);
+      markJobNotifyRead(jobId);
     }
-  }, [taskId, visible]);
+  }, [jobId, visible]);
 
   const sendMessage = async (values) => {
     const { content } = values;
@@ -120,7 +120,7 @@ const TaskChat = (props) => {
     const others = [...list];
     setList([{ ...newMessage, status: 'waiting' }, ...others]);
     ws.current.send(newMessage);
-    await notifyTask(taskId, content);
+    await notifyJob(jobId, content);
     setList([{ ...newMessage, status: 'sent' }, ...others]);
     // loadList();
 
@@ -141,7 +141,7 @@ const TaskChat = (props) => {
   }
 
   return <StyledDrawer
-    title="Task Notification"
+    title="Job Notification"
     placement="right"
     closable={true}
     visible={visible}
@@ -184,15 +184,15 @@ const TaskChat = (props) => {
   </StyledDrawer>
 };
 
-TaskChat.propTypes = {
-  taskId: PropTypes.string.isRequired,
+JobChat.propTypes = {
+  jobId: PropTypes.string.isRequired,
   visible: PropTypes.bool.isRequired,
   readonly: PropTypes.bool.isRequired,
 };
 
-TaskChat.defaultProps = {
+JobChat.defaultProps = {
   visible: false,
   readonly: false
 };
 
-export default withRouter(TaskChat);
+export default withRouter(JobChat);

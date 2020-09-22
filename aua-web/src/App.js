@@ -12,15 +12,15 @@ import SignInPage from 'pages/SignInPage';
 import TermAndConditionPage from 'pages/TermAndConditionPage';
 import Error404 from 'pages/Error404';
 import PrivacyPolicyPage from 'pages/PrivacyPolicyPage';
-import MyTaskListPage from 'pages/MyTask/MyTaskListPage';
+import MyJobListPage from 'pages/MyJob/MyJobListPage';
 import JobTemplatePage from 'pages/JobTemplate/JobTemplatePage';
 import DocTemplatePage from 'pages/DocTemplate/DocTemplatePage';
 import PortofolioPage from 'pages/Portofolio/PortofolioPage';
-import AdminTaskListPage from 'pages/AdminTask/AdminTaskListPage';
-import ProceedTaskPage from 'pages/AdminTask/ProceedTaskPage';
+import AdminJobListPage from 'pages/AdminJob/AdminJobListPage';
+import ProceedJobPage from 'pages/AdminJob/ProceedJobPage';
 import { getAuthUser } from 'services/authService';
 import {RoleRoute} from 'components/RoleRoute';
-import MyTaskPage from 'pages/MyTask/MyTaskPage';
+import MyJobPage from 'pages/MyJob/MyJobPage';
 import RecurringListPage from 'pages/Recurring/RecurringListPage';
 import NotificationPage from 'pages/Notification/NotificationPage';
 import UserPage from 'pages/User/UserPage';
@@ -28,7 +28,7 @@ import ImpersonatePage from 'pages/Impersonate/ImpersonatePage';
 import { countUnreadNotification as getNotificationUnreadCount} from 'services/notificationService';
 import PortofolioForm from 'pages/Portofolio/PortofolioForm';
 import DisclaimerPage from 'pages/DisclaimerPage';
-import MyTaskViewPage from 'pages/MyTask/MyTaskViewPage';
+import MyJobViewPage from 'pages/MyJob/MyJobViewPage';
 import ClientDashboardPage from 'pages/ClientDashboard/ClientDashboardPage';
 
 
@@ -96,10 +96,10 @@ class App extends React.Component {
             <RoleRoute visible={isAdmin} loading={loading} exact path="/recurring" component={RecurringListPage} />
             <RoleRoute visible={isAdmin} loading={loading} exact path="/impersonate" component={ImpersonatePage} />
             <RoleRoute visible={!isGuest} loading={loading} path="/notification" exact component={NotificationPage} />
-            <RoleRoute visible={isClient} loading={loading} path="/task/:id" exact component={MyTaskPage} />
-            <RoleRoute visible={isClient} loading={loading} path="/task/:id/view" exact component={MyTaskViewPage} />
-            <RoleRoute visible={isAdmin || isAgent || isClient} loading={loading} path="/task" exact component={isClient ? MyTaskListPage : AdminTaskListPage} />
-            <RoleRoute visible={isAdmin || isAgent} loading={loading} path="/task/:id/proceed" exact component={ProceedTaskPage} />
+            <RoleRoute visible={isClient} loading={loading} path="/job/:id" exact component={MyJobPage} />
+            <RoleRoute visible={isClient} loading={loading} path="/job/:id/view" exact component={MyJobViewPage} />
+            <RoleRoute visible={isAdmin || isAgent || isClient} loading={loading} path="/job" exact component={isClient ? MyJobListPage : AdminJobListPage} />
+            <RoleRoute visible={isAdmin || isAgent} loading={loading} path="/job/:id/proceed" exact component={ProceedJobPage} />
             <RoleRoute visible={!isGuest} loading={loading} path="/change_password" exact component={ChangePasswordPage} />
             <RoleRoute loading={loading} path="/terms_and_conditions" exact component={TermAndConditionPage} />
             <RoleRoute loading={loading} path="/privacy_policy" exact component={PrivacyPolicyPage} />

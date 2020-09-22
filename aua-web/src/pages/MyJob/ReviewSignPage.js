@@ -5,7 +5,7 @@ import { TimeAgo } from 'components/TimeAgo';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { searchFile } from 'services/fileService';
-import { getTask, signTask } from 'services/taskService';
+import { getJob, signJob } from 'services/jobService';
 import styled from 'styled-components';
 import { getFileUrl } from 'util/getFileUrl';
 
@@ -24,12 +24,12 @@ const ReviewSignPage = (props) => {
   const { id } = props;
 
   const [, setLoading] = React.useState(true);
-  const [task, setTask] = React.useState({});
+  const [job, setJob] = React.useState({});
   const [files, setFiles] = React.useState([]);
 
 
-  const getSignFiles = async (task) => {
-    const fileids = task?.fields?.find(x => x.name === 'requireSign')?.value || [];
+  const getSignFiles = async (job) => {
+    const fileids = job?.fields?.find(x => x.name === 'requireSign')?.value || [];
     if (!fileids.length) return [];
 
     const files = await searchFile(fileids);
@@ -39,10 +39,10 @@ const ReviewSignPage = (props) => {
   const loadEntity = async () => {
     setLoading(true);
     if (id) {
-      const task = await getTask(id);
-      const files = await getSignFiles(task);
+      const job = await getJob(id);
+      const files = await getSignFiles(job);
       setFiles(files);
-      setTask(task);
+      setJob(job);
     }
     setLoading(false);
   }
@@ -52,11 +52,11 @@ const ReviewSignPage = (props) => {
   }, []);
 
   const handleSign = async () => {
-    await signTask(task.id);
+    await signJob(job.id);
     props.onFinish();
   }
   
-  const { status } = task || {};
+  const { status } = job || {};
 
   const isSigned = status === 'signed';
   const canSign = status === 'to_sign' && files.every(f => !!f.lastReadAt) && !isSigned;
