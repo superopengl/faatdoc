@@ -2,9 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { Typography, Layout, Space } from 'antd';
 import HomeHeader from 'components/HomeHeader';
-import { listNotification } from 'services/notificationService';
+import { listMessages } from 'services/messageService';
 import { GlobalContext } from 'contexts/GlobalContext';
-import NotificationList from '../../components/NotificationList';
+import MessageList from '../../components/MessageList';
 
 const { Title, Paragraph } = Typography;
 
@@ -34,7 +34,7 @@ const LayoutStyled = styled(Layout)`
 `;
 
 
-const NotificationPage = () => {
+const MessagePage = () => {
 
   const context = React.useContext(GlobalContext);
 
@@ -43,7 +43,7 @@ const NotificationPage = () => {
 
 
   const handleFetchNextPage = async (page, size) => {
-    return await listNotification({page, size, unreadOnly: false});
+    return await listMessages({page, size, unreadOnly: false});
   }
 
   return (
@@ -59,7 +59,7 @@ const NotificationPage = () => {
           {!isClient && <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
             {/* <Button type="primary" ghost onClick={() => initloadList()} icon={<SyncOutlined />}>Refresh</Button> */}
           </Space>}
-          <NotificationList
+          <MessageList
             onFetchNextPage={handleFetchNextPage}
           />
         </Space>
@@ -68,8 +68,8 @@ const NotificationPage = () => {
   );
 };
 
-NotificationPage.propTypes = {};
+MessagePage.propTypes = {};
 
-NotificationPage.defaultProps = {};
+MessagePage.defaultProps = {};
 
-export default NotificationPage;
+export default MessagePage;

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Typography, Modal, Badge, List, Space, Spin } from 'antd';
 import { PortofolioAvatar } from 'components/PortofolioAvatar';
 import { TimeAgo } from 'components/TimeAgo';
-import { getNotification, countUnreadNotification } from 'services/notificationService';
+import { getMessage, countUnreadMessage } from 'services/messageService';
 import { GlobalContext } from 'contexts/GlobalContext';
 import { RiExternalLinkLine } from 'react-icons/ri';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -37,7 +37,7 @@ cursor: pointer;
 }
 `;
 
-const NotificationList = (props) => {
+const MessageList = (props) => {
 
   const { onItemRead, onFetchNextPage, size, max } = props;
 
@@ -53,7 +53,7 @@ const NotificationList = (props) => {
   const initloadList = async () => {
     setLoading(true);
     await handleFetchNextPageData(size);
-    const count = await countUnreadNotification();
+    const count = await countUnreadMessage();
     context.setNotifyCount(count);
     setLoading(false);
   }
@@ -75,8 +75,8 @@ const NotificationList = (props) => {
   }
 
   const handleItemClick = (item) => {
-    const { taskId } = item;
-    const url = isClient ? `/task/${taskId}?chat=true` : `/task/${taskId}/proceed`;
+    const { jobId } = item;
+    const url = isClient ? `/job/${jobId}?chat=true` : `/job/${jobId}/proceed`;
     props.history.push(url);
   }
   // const handleRead = async (e, item) => {
@@ -88,20 +88,20 @@ const NotificationList = (props) => {
   //   onItemRead(item);
   // }
 
-  // const handleGoToTask = (e, taskId) => {
+  // const handleGoToJob = (e, jobId) => {
   //   e.stopPropagation();
-  //   const url = isClient ? `/task/${taskId}?chat=true` : `/task/${taskId}/proceed`;
+  //   const url = isClient ? `/job/${jobId}?chat=true` : `/job/${jobId}/proceed`;
   //   props.history.push(url);
   //   Modal.destroyAll();
   // }
 
   // const readNotificationDetail = async (notificationId) => {
   //   const item = await getNotification(notificationId);
-  //   const { content, createdAt, readAt, taskId, name, forWhom } = item;
+  //   const { content, createdAt, readAt, jobId, name, forWhom } = item;
   //   Modal.destroyAll();
   //   Modal.info({
   //     icon: null,
-  //     title: <Space style={{ alignItems: 'flex-start' }}><PortofolioAvatar value={forWhom} size={32} /><Link onClick={e => handleGoToTask(e, taskId)}>{name} for {forWhom}<RiExternalLinkLine style={{ marginLeft: '0.5rem' }} /></Link></Space>,
+  //     title: <Space style={{ alignItems: 'flex-start' }}><PortofolioAvatar value={forWhom} size={32} /><Link onClick={e => handleGoToJob(e, jobId)}>{name} for {forWhom}<RiExternalLinkLine style={{ marginLeft: '0.5rem' }} /></Link></Space>,
   //     width: 600,
   //     maskClosable: true,
   //     content: <>
@@ -147,16 +147,16 @@ const NotificationList = (props) => {
   );
 };
 
-NotificationList.propTypes = {
+MessageList.propTypes = {
   size: PropTypes.number.isRequired,
   onItemRead: PropTypes.func.isRequired,
   onFetchNextPage: PropTypes.func.isRequired,
   max: PropTypes.number,
 };
 
-NotificationList.defaultProps = {
+MessageList.defaultProps = {
   size: 20,
   onItemRead: () => { },
 };
 
-export default withRouter(NotificationList);
+export default withRouter(MessageList);

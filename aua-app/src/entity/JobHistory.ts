@@ -8,7 +8,7 @@ export class JobHistory {
   id: number;
 
   @Column('uuid')
-  taskId: string;
+  jobId: string;
 
   @Column()
   lastUpdatedAt: Date;

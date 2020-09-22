@@ -141,7 +141,7 @@ const JobChat = (props) => {
   }
 
   return <StyledDrawer
-    title="Job Notification"
+    title="Job Message"
     placement="right"
     closable={true}
     visible={visible}

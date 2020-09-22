@@ -4,7 +4,7 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { GlobalContext } from '../contexts/GlobalContext';
 import { ssoGoogle } from 'services/authService';
-import { countUnreadNotification } from 'services/notificationService';
+import { countUnreadMessage } from 'services/messageService';
 import { GoogleLogin } from 'react-google-login';
 import { notify } from 'util/notify';
 
@@ -23,7 +23,7 @@ const GoogleSsoButton = props => {
     if (user) {
       setUser(user);
 
-      const count = await countUnreadNotification();
+      const count = await countUnreadMessage();
       setNotifyCount(count);
       
       const isClient = user.role === 'client';

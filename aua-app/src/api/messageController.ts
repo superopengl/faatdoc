@@ -14,7 +14,7 @@ async function listMessageForClient(clientId, pagenation, unreadOnly) {
     query = query.andWhere(`"readAt" IS NULL`);
   }
   query = query
-    .innerJoin(q => q.from(Job, 't').select(['id', 'name', '"forWhom"']), 't', `t.id = x."taskId"`)
+    .innerJoin(q => q.from(Job, 't').select(['id', 'name', '"forWhom"']), 't', `t.id = x."jobId"`)
     .orderBy('"createdAt"', 'DESC')
     .offset(pagenation.skip)
     .limit(pagenation.limit)
@@ -22,7 +22,7 @@ async function listMessageForClient(clientId, pagenation, unreadOnly) {
       'x.id',
       'name',
       '"forWhom"',
-      '"taskId"',
+      '"jobId"',
       '"createdAt"',
       'content',
       '"readAt"'
@@ -39,15 +39,15 @@ async function listMessageForAgent(agentId, pagenation, unreadOnly) {
   if (unreadOnly) {
     query = query.andWhere(`"readAt" IS NULL`);
   }
-  query = query.innerJoin(q => q.from(Job, 'l').select('*'), 'l', `l.id = x."taskId"`)
+  query = query.innerJoin(q => q.from(Job, 'l').select('*'), 'l', `l.id = x."jobId"`)
     .orderBy('"createdAt"', 'DESC')
     .offset(pagenation.skip)
     .limit(pagenation.limit)
     .select([
       'x.id as id',
-      '"taskId"',
+      '"jobId"',
       'x."createdAt" as "createdAt"',
-      'l.id as "taskId"',
+      'l.id as "jobId"',
       'l."forWhom" as "forWhom"',
       'l.name as name',
       'content',
@@ -64,15 +64,15 @@ async function listMessageForAdmin(pagenation, unreadOnly) {
   if (unreadOnly) {
     query = query.andWhere(`"readAt" IS NULL`);
   }
-  query = query.innerJoin(q => q.from(Job, 'l').select('*'), 'l', `l.id = x."taskId"`)
+  query = query.innerJoin(q => q.from(Job, 'l').select('*'), 'l', `l.id = x."jobId"`)
     .orderBy('"createdAt"', 'DESC')
     .offset(pagenation.skip)
     .limit(pagenation.limit)
     .select([
       'x.id as id',
-      '"taskId"',
+      '"jobId"',
       'x."createdAt" as "createdAt"',
-      'l.id as "taskId"',
+      'l.id as "jobId"',
       'l."forWhom" as "forWhom"',
       'l.name as name',
       'content',
@@ -124,13 +124,13 @@ export const getMessage = handlerWrapper(async (req, res) => {
 
   const result = await repo.createQueryBuilder('x')
     .where(query)
-    .innerJoin(q => q.from(Job, 'l').select('*'), 'l', `l.id = x.taskId`)
+    .innerJoin(q => q.from(Job, 'l').select('*'), 'l', `l.id = x.jobId`)
     .select([
       `x.id as id`,
       `x.content as content`,
       `x."createdAt" as "createdAt"`,
       `x."readAt" as "readAt"`,
-      `x."taskId" as "taskId"`,
+      `x."jobId" as "jobId"`,
       `l."name" as name`,
       `l."forWhom" as "forWhom"`,
     ])

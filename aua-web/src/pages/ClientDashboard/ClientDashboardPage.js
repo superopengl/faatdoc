@@ -6,8 +6,8 @@ import { listUnreadJob, searchJob } from 'services/jobService';
 import { listPortofolio } from 'services/portofolioService';
 import { PlusOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
-import { listNotification } from 'services/notificationService';
-import NotificationList from 'components/NotificationList';
+import { listMessages } from 'services/messageService';
+import MessageList from 'components/MessageList';
 import { GlobalContext } from 'contexts/GlobalContext';
 import { Divider } from 'antd';
 import MyJobList from 'pages/MyJob/MyJobList';
@@ -58,7 +58,7 @@ const ClientDashboardPage = (props) => {
   const [toSignJobList, setToSignJobList] = React.useState([]);
   const [unreadJobList, setUnreadJobList] = React.useState([]);
   const [portofolioList, setPortofolioList] = React.useState([]);
-  const [, setHasNotification] = React.useState(false);
+  const [, setHasMessage] = React.useState(false);
   const context = React.useContext(GlobalContext);
   const { notifyCount } = context;
 
@@ -107,8 +107,8 @@ const ClientDashboardPage = (props) => {
   }
 
   const handleFetchNextPage = async (page, size) => {
-    const data = await listNotification({ page, size, unreadOnly: true });
-    setHasNotification(!!data.length);
+    const data = await listMessages({ page, size, unreadOnly: true });
+    setHasMessage(!!data.length);
     return data;
   }
 
@@ -139,7 +139,7 @@ const ClientDashboardPage = (props) => {
                 <Divider />
               </>}
               {unreadJobList.length > 0 && <>
-                <Title type="secondary" level={4}>Latest 5 jobs with new notifications</Title>
+                <Title type="secondary" level={4}>Latest 5 jobs with new messages</Title>
                 <MyJobList data={unreadJobList.slice(0, 5)} />
                 <Divider />
               </>}
@@ -148,12 +148,12 @@ const ClientDashboardPage = (props) => {
 
           <StyledCol {...span}>
             <Space size="small" direction="vertical" style={{ width: '100%' }}>
-              <Title type="secondary" level={4}>Latest 10 Unread Notification</Title>
+              <Title type="secondary" level={4}>Latest 10 Unread Message</Title>
               <Space style={{ width: '100%', justifyContent: 'space-between' }}>
-                <Link to="/notification"><Button type="link" style={{ padding: 0 }}>All notifications ({notifyCount} unread)</Button></Link>
+                <Link to="/message"><Button type="link" style={{ padding: 0 }}>All messages ({notifyCount} unread)</Button></Link>
                 {/* <Button type="link" icon={<SyncOutlined />} onClick={() => window.location.reload(false)}></Button> */}
               </Space>
-              <NotificationList
+              <MessageList
                 onFetchNextPage={handleFetchNextPage}
                 // onItemRead={}
                 max={10}

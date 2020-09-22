@@ -6,7 +6,7 @@ import { Logo } from 'components/Logo';
 import isEmail from 'validator/es/lib/isEmail';
 import { GlobalContext } from '../contexts/GlobalContext';
 import { login } from 'services/authService';
-import { countUnreadNotification } from 'services/notificationService';
+import { countUnreadMessage } from 'services/messageService';
 import GoogleSsoButton from 'components/GoogleSsoButton';
 import GoogleLogoSvg from 'components/GoogleLogoSvg';
 
@@ -54,7 +54,7 @@ const LogInPage = props => {
       const user = await login(values.name, values.password);
       setUser(user);
 
-      const count = await countUnreadNotification();
+      const count = await countUnreadMessage();
       setNotifyCount(count);
 
       const isClient = user.role === 'client';

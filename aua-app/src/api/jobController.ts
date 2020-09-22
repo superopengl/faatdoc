@@ -186,18 +186,18 @@ export const listJob = handlerWrapper(async (req, res) => {
 export const listUnreadJob = handlerWrapper(async (req, res) => {
   assertRole(req, 'client');
 
-  const notifications = await getRepository(Message)
+  const messages = await getRepository(Message)
     .createQueryBuilder()
     .where({
       clientUserId: (req as any).user.id,
       readAt: IsNull(),
     })
     // .orderBy('"createdAt"', 'DESC')
-    .select('"JobId"')
+    .select('"jobId"')
     .distinct(true)
     .getRawMany();
 
-  const ids = notifications.map(n => n.JobId);
+  const ids = messages.map(n => n.JobId);
   if (!ids.length) {
     res.json([]);
     return;
@@ -298,7 +298,7 @@ async function sendJobMessage(Job, senderId, content) {
     vars: {
       name: Job.name
     },
-    templateName: 'JobNotification'
+    templateName: 'jobMessage'
   }).catch(() => { });
 }
 
@@ -324,7 +324,7 @@ export const listJobNotifies = handlerWrapper(async (req, res) => {
   const isClient = role === 'client';
 
   let query = getRepository(Message).createQueryBuilder()
-    .where(`"JobId" = :id`, { id });
+    .where(`"jobId" = :id`, { id });
   if (isClient) {
     query = query.andWhere(`"clientUserId" = :userId`, { userId });
   }
