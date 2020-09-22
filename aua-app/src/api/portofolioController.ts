@@ -79,7 +79,7 @@ export const deletePortofolio = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
   const { id } = req.params;
   const repo = getRepository(Portofolio);
-  await repo.update({ id }, { deleted: false });
+  await repo.update({ id }, { deleted: true });
 
   res.json();
 });

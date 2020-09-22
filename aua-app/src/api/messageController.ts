@@ -124,7 +124,7 @@ export const getMessage = handlerWrapper(async (req, res) => {
   const { id } = req.params;
   const { user: { id: userId, role } } = req as any;
   const repo = getRepository(Message);
-  const query: any = { id, deleted: false };
+  const query: any = { id };
   const isClient = role === 'client';
   if (isClient) {
     query.clientUserId = userId;
