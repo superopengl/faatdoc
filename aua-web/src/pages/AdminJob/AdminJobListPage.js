@@ -1,4 +1,4 @@
-import { DeleteOutlined, EditOutlined, SearchOutlined, SyncOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, SearchOutlined, SyncOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Input, Layout, Modal, Select, Space, Table, Tooltip, Typography } from 'antd';
 import Text from 'antd/lib/typography/Text';
 import HomeHeader from 'components/HomeHeader';
@@ -293,9 +293,9 @@ const AdminJobListPage = (props) => {
                   {x.label}
               </Select.Option>)}
             </Select>
-            <Button onClick={() => loadList()} icon={<SyncOutlined />}></Button>
             <Button onClick={() => clearAllFilters()}>Reset Filters</Button>
-            <Button onClick={() => handleCreateJob()}>Create Job</Button>
+            <Button onClick={() => loadList()} icon={<SyncOutlined />}></Button>
+            <Button onClick={() => handleCreateJob()} type="primary" ghost icon={<PlusOutlined />}></Button>
           </Space>
           <Table columns={columnDef}
             dataSource={jobList}

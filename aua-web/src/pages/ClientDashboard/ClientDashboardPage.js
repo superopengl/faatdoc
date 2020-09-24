@@ -1,4 +1,4 @@
-import { Button, Layout, Modal, Space, Typography, Row, Col } from 'antd';
+import { Button, Layout, Modal, Space, Typography, Row, Col, Spin } from 'antd';
 import HomeHeader from 'components/HomeHeader';
 import React from 'react';
 import { withRouter, Link } from 'react-router-dom';
@@ -54,7 +54,7 @@ const span = {
 
 const ClientDashboardPage = (props) => {
 
-  const [, setLoading] = React.useState(true);
+  const [loading, setLoading] = React.useState(true);
   const [toSignJobList, setToSignJobList] = React.useState([]);
   const [unreadJobList, setUnreadJobList] = React.useState([]);
   const [completeList, setCompleteList] = React.useState([]);
@@ -134,29 +134,31 @@ const ClientDashboardPage = (props) => {
               {/* <Title type="secondary" level={4}>My Jobs</Title> */}
               <Space style={{ width: '100%', justifyContent: 'space-between' }}>
                 <Link to="/job">All jobs</Link>
-                <Button type="link" onClick={createNewJob} style={{ padding: 0 }}><PlusOutlined /> Create New Job</Button>
+                <Button type="link" onClick={createNewJob} style={{ padding: 0 }} icon={<PlusOutlined />}>Create New Job</Button>
               </Space>
               <Divider />
-              {!hasPortfolio && <>
-                <Title type="secondary" level={4}>My Portfolio</Title>
-                <Paragraph >Portfolios are predefined information that can be used to automatically fill in your job application. You can save the information like name, phone, address, TFN, and etc. for future usage.</Paragraph>
-                <Link to="/portfolio"><Button size="large" type="primary" ghost block icon={<PlusOutlined />}>New Portfolio</Button></Link>
-                <Divider />
-              </>}
-              {toSignJobList.length > 0 && <>
-                <Title type="secondary" level={4}>Require Sign</Title>
-                <MyJobList data={toSignJobList} onItemClick={handleGoToJobSign}/>
-                <Divider />
-              </>}
-              {unreadJobList.length > 0 && <>
-                <Title type="secondary" level={4}>Jobs with Unread Messages</Title>
-                <MyJobList data={unreadJobList} onItemClick={handleGoToJobWithMessage}/>
-                <Divider />
-              </>}
-              {completeList.length > 0 && <>
-                <Title type="secondary" level={4}>Recent Completed Jobs</Title>
-                <MyJobList data={completeList} onItemClick={handleGoToJobWithMessage}/>
-                <Divider />
+              {loading ? <Spin style={{ width: '100%', margin: '2rem auto' }} /> : <>
+                {!hasPortfolio && <>
+                  <Title type="secondary" level={4}>My Portfolio</Title>
+                  <Paragraph >Portfolios are predefined information that can be used to automatically fill in your job application. You can save the information like name, phone, address, TFN, and etc. for future usage.</Paragraph>
+                  <Link to="/portfolio"><Button size="large" type="primary" ghost block icon={<PlusOutlined />}>New Portfolio</Button></Link>
+                  <Divider />
+                </>}
+                {toSignJobList.length > 0 && <>
+                  <Title type="secondary" level={4}>Require Sign</Title>
+                  <MyJobList data={toSignJobList} onItemClick={handleGoToJobSign} />
+                  <Divider />
+                </>}
+                {unreadJobList.length > 0 && <>
+                  <Title type="secondary" level={4}>Jobs with Unread Messages</Title>
+                  <MyJobList data={unreadJobList} onItemClick={handleGoToJobWithMessage} />
+                  <Divider />
+                </>}
+                {completeList.length > 0 && <>
+                  <Title type="secondary" level={4}>Recent Completed Jobs</Title>
+                  <MyJobList data={completeList} onItemClick={handleGoToJobWithMessage} />
+                  <Divider />
+                </>}
               </>}
             </Space>
           </StyledCol>
