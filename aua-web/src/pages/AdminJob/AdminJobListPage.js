@@ -244,6 +244,10 @@ const AdminJobListPage = (props) => {
     // await loadJobWithQuery(newQueryInfo);
   }
 
+  const handleCreateJob = () => {
+    props.history.push('/job/new');
+  }
+
   const initialLoadList = React.useCallback(() => loadList());
   React.useEffect(() => {
     initialLoadList();
@@ -291,6 +295,7 @@ const AdminJobListPage = (props) => {
             </Select>
             <Button onClick={() => loadList()} icon={<SyncOutlined />}></Button>
             <Button onClick={() => clearAllFilters()}>Reset Filters</Button>
+            <Button onClick={() => handleCreateJob()}>Create Job</Button>
           </Space>
           <Table columns={columnDef}
             dataSource={jobList}

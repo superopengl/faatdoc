@@ -86,24 +86,27 @@ const JobGenerator = props => {
         <Steps.Step title="Choose job type" />
         <Steps.Step title="Choose portfolio" />
       </Steps> */}
-      <Space size="middle" direction="vertical" style={{width:'100%'}}>
-      {currentStep === 0 && <>
-      <Text type="secondary">Choose job type</Text>
-        <Radio.Group buttonStyle="outline" style={{ width: '100%' }} onChange={handleJobTypeChange}>
-          {jobTemplateList.map((item, i) => <Radio.Button key={i} value={item.id}>{item.name}</Radio.Button>)}
-        </Radio.Group>
-      </>}
-      {currentStep === 1 && <>
-        <Text type="secondary">Choose portfolio to fill the job automatically</Text>
-        <Radio.Group buttonStyle="outline" style={{ width: '100%' }} onChange={handlePortfolioChange}>
-          {portfolioList.map((item, i) => <Radio.Button className="portfolio" key={i} value={item.id}>
-            <Space>
-              <PortfolioAvatar value={item.name} size={40} />
-              {item.name}
-            </Space>
-          </Radio.Button>)}
-        </Radio.Group>
-      </>}
+      <Space size="middle" direction="vertical" style={{ width: '100%' }}>
+        {currentStep === 0 && <>
+          <Text type="secondary">Choose job type</Text>
+          <Radio.Group buttonStyle="outline" style={{ width: '100%' }} onChange={handleJobTypeChange}>
+            {jobTemplateList.map((item, i) => <Radio.Button key={i} value={item.id}>{item.name}</Radio.Button>)}
+          </Radio.Group>
+        </>}
+        {currentStep === 1 && <>
+          <Text type="secondary">Choose portfolio to fill the job automatically</Text>
+          <Radio.Group buttonStyle="outline" style={{ width: '100%' }} onChange={handlePortfolioChange}>
+            {portfolioList.map((item, i) => <Radio.Button className="portfolio" key={i} value={item.id}>
+              <Space>
+                <PortfolioAvatar value={item.name} size={40} />
+                <div style={{display: 'flex', flexDirection: 'column', lineHeight: 1.2}}>
+                  <div>{item.name}</div>
+                  {item.email && <Text type="secondary"><small>{item.email}</small></Text>}
+                </div>
+              </Space>
+            </Radio.Button>)}
+          </Radio.Group>
+        </>}
       </Space>
 
     </Container>
