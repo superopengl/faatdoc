@@ -3,10 +3,10 @@ import React from 'react';
 import styled from 'styled-components';
 import { Button, Form, Radio, Space, Steps, Typography } from 'antd';
 import { DoubleRightOutlined } from '@ant-design/icons';
-import { PortofolioAvatar } from 'components/PortofolioAvatar';
+import { PortfolioAvatar } from 'components/PortfolioAvatar';
 import { Spin } from 'antd';
 import { listJobTemplate } from 'services/jobTemplateService';
-import { listPortofolio } from 'services/portofolioService';
+import { listPortfolio } from 'services/portfolioService';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -21,7 +21,7 @@ const Container = styled.div`
   margin-bottom: 1rem;
   border-radius: 6px;
 
-  &.portofolio {
+  &.portfolio {
     height: 60px;
     padding-top: 10px;
   }
@@ -39,16 +39,16 @@ const JobGenerator = props => {
   const [currentStep, setCurrentStep] = React.useState(0);
   const [loading, setLoading] = React.useState(true);
   const [jobTemplateList, setJobTemplateList] = React.useState([]);
-  const [portofolioList, setPortofolioList] = React.useState([]);
+  const [portfolioList, setPortfolioList] = React.useState([]);
   const [jobTemplateId, setJobTemplateId] = React.useState();
 
   const loadData = async () => {
     setLoading(true);
     const jobTemplateList = await listJobTemplate() || [];
-    const portofolioList = await listPortofolio() || [];
+    const portfolioList = await listPortfolio() || [];
 
     setJobTemplateList(jobTemplateList);
-    setPortofolioList(portofolioList);
+    setPortfolioList(portfolioList);
     setLoading(false);
   }
 
@@ -65,10 +65,10 @@ const JobGenerator = props => {
     setJobTemplateId(e.target.value);
   }
 
-  const handlePortofolioChange = e => {
+  const handlePortfolioChange = e => {
     const data = {
       jobTemplateId,
-      portofolioId: e.target.value
+      portfolioId: e.target.value
     };
     props.onChange(data);
   }
@@ -84,7 +84,7 @@ const JobGenerator = props => {
       </StyledTitleRow>
       {/* <Steps progressDot current={currentStep}>
         <Steps.Step title="Choose job type" />
-        <Steps.Step title="Choose portofolio" />
+        <Steps.Step title="Choose portfolio" />
       </Steps> */}
       <Space size="middle" direction="vertical" style={{width:'100%'}}>
       {currentStep === 0 && <>
@@ -94,11 +94,11 @@ const JobGenerator = props => {
         </Radio.Group>
       </>}
       {currentStep === 1 && <>
-        <Text type="secondary">Choose portofolio to fill the job automatically</Text>
-        <Radio.Group buttonStyle="outline" style={{ width: '100%' }} onChange={handlePortofolioChange}>
-          {portofolioList.map((item, i) => <Radio.Button className="portofolio" key={i} value={item.id}>
+        <Text type="secondary">Choose portfolio to fill the job automatically</Text>
+        <Radio.Group buttonStyle="outline" style={{ width: '100%' }} onChange={handlePortfolioChange}>
+          {portfolioList.map((item, i) => <Radio.Button className="portfolio" key={i} value={item.id}>
             <Space>
-              <PortofolioAvatar value={item.name} size={40} />
+              <PortfolioAvatar value={item.name} size={40} />
               {item.name}
             </Space>
           </Radio.Button>)}

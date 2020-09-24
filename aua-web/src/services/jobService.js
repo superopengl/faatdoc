@@ -24,8 +24,8 @@ export async function signJob(id) {
   return httpPost(`job/${id}/sign`);
 }
 
-export async function generateJob(jobTemplateId, portofolioId) {
-  return httpPost('job/generate', {jobTemplateId, portofolioId});
+export async function generateJob(jobTemplateId, portfolioId) {
+  return httpPost('job/generate', {jobTemplateId, portfolioId});
 }
 
 export async function assignJob(jobId, agentId) {

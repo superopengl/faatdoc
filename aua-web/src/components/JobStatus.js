@@ -3,7 +3,7 @@ import { Typography } from 'antd';
 import { Progress } from 'antd';
 import PropTypes from 'prop-types';
 import { Tag } from 'antd';
-import { PortofolioAvatar } from './PortofolioAvatar';
+import { PortfolioAvatar } from './PortfolioAvatar';
 
 const { Text } = Typography;
 
@@ -44,7 +44,7 @@ export const JobStatus = ({ status, shape, name, avatar, ...props }) => {
       // steps={4}
       strokeWidth={3}
       status={progressStatus[status]}
-      format={() => avatar ? <PortofolioAvatar value={name} size={52} /> : <Text type="secondary"><small>{label}</small></Text>}
+      format={() => avatar ? <PortfolioAvatar value={name} size={52} /> : <Text type="secondary"><small>{label}</small></Text>}
       {...props}
     />
   }

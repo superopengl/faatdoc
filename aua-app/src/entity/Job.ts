@@ -25,7 +25,7 @@ export class Job {
   jobTemplateId: string;
 
   @Column('uuid')
-  portofolioId: string;
+  portfolioId: string;
 
   @Column('uuid', {nullable: true})
   agentId?: string;

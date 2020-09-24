@@ -6,7 +6,7 @@ import { Layout } from 'antd';
 import HomeHeader from 'components/HomeHeader';
 import MyJobForm from './MyJobForm';
 import { listJobTemplate } from 'services/jobTemplateService';
-import { listPortofolio } from 'services/portofolioService';
+import { listPortfolio } from 'services/portfolioService';
 
 const ContainerStyled = styled.div`
 margin: 4rem auto 0 auto;

@@ -13,7 +13,7 @@ export const BuiltInFieldDef = [
       allowClear: true,
       placeholder: ''
     },
-    portofolioType: ['individual'],
+    portfolioType: ['individual'],
   },
   {
     name: 'surname',
@@ -25,7 +25,7 @@ export const BuiltInFieldDef = [
       allowClear: true,
       placeholder: ''
     },
-    portofolioType: ['individual'],
+    portfolioType: ['individual'],
   },
   {
     name: 'company',
@@ -37,7 +37,7 @@ export const BuiltInFieldDef = [
       allowClear: true,
       placeholder: ''
     },
-    portofolioType: ['business'],
+    portfolioType: ['business'],
   },
   {
     name: 'phone',
@@ -51,7 +51,7 @@ export const BuiltInFieldDef = [
       placeholder: '',
       type: 'tel',
     },
-    portofolioType: ['individual', 'business'],
+    portfolioType: ['individual', 'business'],
   },
   {
     name: 'wechat',
@@ -62,7 +62,7 @@ export const BuiltInFieldDef = [
       allowClear: true,
       placeholder: '',
     },
-    portofolioType: ['individual', 'business'],
+    portfolioType: ['individual', 'business'],
   },
   {
     name: 'address',
@@ -73,7 +73,7 @@ export const BuiltInFieldDef = [
       allowClear: true,
       placeholder: '',
     },
-    portofolioType: ['individual', 'business'],
+    portfolioType: ['individual', 'business'],
   },
   {
     name: 'dateOfBirth',
@@ -91,7 +91,7 @@ export const BuiltInFieldDef = [
     inputProps: {
       autoComplete: 'bday'
     },
-    portofolioType: ['individual'],
+    portfolioType: ['individual'],
   },
   {
     name: 'dueDate',
@@ -106,7 +106,7 @@ export const BuiltInFieldDef = [
       },
       message: 'Invalid date or not a furture date'
     }],
-    portofolioType: [],
+    portfolioType: [],
   },
   {
     name: 'gender',
@@ -126,7 +126,7 @@ export const BuiltInFieldDef = [
         value: 'other',
       }
     ],
-    portofolioType: ['individual'],
+    portfolioType: ['individual'],
   },
   {
     name: 'tfn',
@@ -137,7 +137,7 @@ export const BuiltInFieldDef = [
       allowClear: true,
       placeholder: '',
     },
-    portofolioType: ['individual'],
+    portfolioType: ['individual'],
   },
   {
     name: 'abn',
@@ -148,7 +148,7 @@ export const BuiltInFieldDef = [
       allowClear: true,
       placeholder: '',
     },
-    portofolioType: ['business'],
+    portfolioType: ['business'],
   },
   {
     name: 'acn',
@@ -159,7 +159,7 @@ export const BuiltInFieldDef = [
       allowClear: true,
       placeholder: '',
     },
-    portofolioType: ['business'],
+    portfolioType: ['business'],
   },
   {
     name: 'occupation',
@@ -170,7 +170,7 @@ export const BuiltInFieldDef = [
       allowClear: true,
       placeholder: '',
     },
-    portofolioType: ['individual'],
+    portfolioType: ['individual'],
   },
   {
     name: 'industry',
@@ -181,7 +181,7 @@ export const BuiltInFieldDef = [
       allowClear: true,
       placeholder: '',
     },
-    portofolioType: ['business'],
+    portfolioType: ['business'],
   },
   {
     name: 'remark',
@@ -192,31 +192,31 @@ export const BuiltInFieldDef = [
       allowClear: true,
       placeholder: '',
     },
-    portofolioType: ['individual', 'business'],
+    portfolioType: ['individual', 'business'],
   },
   {
     name: 'year',
     inputType: 'year',
     rules: [{ required: true, message: 'Please choose a financial year' }],
-    portofolioType: [],
+    portfolioType: [],
   },
   {
     name: 'monthRange',
     inputType: 'monthRange',
     rules: [{ required: true, message: 'Please choose start/end months' }],
-    portofolioType: [],
+    portfolioType: [],
   },
   {
     name: 'uploadFiles',
     inputType: 'upload',
     rules: [{ required: true, message: 'Please upload files' }],
-    portofolioType: [],
+    portfolioType: [],
   },
   {
     name: 'requireSign',
     inputType: 'upload',
     rules: [{ required: false, message: 'Please upload files' }],
-    portofolioType: [],
+    portfolioType: [],
   }
 ];
 

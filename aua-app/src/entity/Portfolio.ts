@@ -1,8 +1,8 @@
 import { Entity, Column, PrimaryColumn, Index, ManyToMany, JoinTable, Unique } from 'typeorm';
 
 @Entity()
-// @Unique('user_portofolio_name_unique', ['userId', 'name'])
-export class Portofolio {
+// @Unique('user_portfolio_name_unique', ['userId', 'name'])
+export class Portfolio {
   @PrimaryColumn('uuid')
   id: string;
 

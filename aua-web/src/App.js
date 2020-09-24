@@ -15,7 +15,7 @@ import PrivacyPolicyPage from 'pages/PrivacyPolicyPage';
 import MyJobListPage from 'pages/MyJob/MyJobListPage';
 import JobTemplatePage from 'pages/JobTemplate/JobTemplatePage';
 import DocTemplatePage from 'pages/DocTemplate/DocTemplatePage';
-import PortofolioPage from 'pages/Portofolio/PortofolioPage';
+import PortfolioPage from 'pages/Portfolio/PortfolioPage';
 import AdminJobListPage from 'pages/AdminJob/AdminJobListPage';
 import ProceedJobPage from 'pages/AdminJob/ProceedJobPage';
 import { getAuthUser } from 'services/authService';
@@ -26,7 +26,7 @@ import MessagePage from 'pages/Message/MessagePage';
 import UserPage from 'pages/User/UserPage';
 import ImpersonatePage from 'pages/Impersonate/ImpersonatePage';
 import { countUnreadMessage } from 'services/messageService';
-import PortofolioForm from 'pages/Portofolio/PortofolioForm';
+import PortfolioForm from 'pages/Portfolio/PortfolioForm';
 import DisclaimerPage from 'pages/DisclaimerPage';
 import MyJobViewPage from 'pages/MyJob/MyJobViewPage';
 import ClientDashboardPage from 'pages/ClientDashboard/ClientDashboardPage';
@@ -86,9 +86,9 @@ class App extends React.Component {
             <RoleRoute visible={isGuest} loading={loading} exact path="/signin" component={SignInPage} />
             <RoleRoute visible={isGuest} loading={loading} exact path="/forgot_password" component={ForgotPasswordPage} />
             <RoleRoute visible={isClient} loading={loading} exact path="/landing" component={ClientDashboardPage} />
-            <RoleRoute visible={isClient} loading={loading} exact path="/portofolio" component={PortofolioPage} />
-            <RoleRoute visible={isClient} loading={loading} exact path="/portofolio/:id" component={PortofolioForm} />
-            <RoleRoute visible={isClient} loading={loading} exact path="/portofolio/new/:type" component={PortofolioForm} />
+            <RoleRoute visible={isClient} loading={loading} exact path="/portfolio" component={PortfolioPage} />
+            <RoleRoute visible={isClient} loading={loading} exact path="/portfolio/:id" component={PortfolioForm} />
+            <RoleRoute visible={isClient} loading={loading} exact path="/portfolio/new/:type" component={PortfolioForm} />
             <RoleRoute loading={loading} path="/reset_password" exact component={ResetPasswordPage} />
             <RoleRoute visible={isAdmin} loading={loading} exact path="/job_template" component={JobTemplatePage} />
             <RoleRoute visible={isAdmin} loading={loading} exact path="/doc_template" component={DocTemplatePage} />

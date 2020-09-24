@@ -5,16 +5,16 @@ import * as _ from 'lodash';
 import { Job } from '../entity/Job';
 import { getUtcNow } from './getUtcNow';
 import { JobTemplate } from '../entity/JobTemplate';
-import { Portofolio } from '../entity/Portofolio';
+import { Portfolio } from '../entity/Portfolio';
 import { JobStatus } from '../enums/JobStatus';
 import { guessDisplayNameFromFields } from './guessDisplayNameFromFields';
 import { v4 as uuidv4 } from 'uuid';
 
 
-function prefillFieldsWithProtofolio(jobTemplateFields, portofolioFields) {
-  if (!portofolioFields) return jobTemplateFields;
+function prefillFieldsWithProtofolio(jobTemplateFields, portfolioFields) {
+  if (!portfolioFields) return jobTemplateFields;
 
-  const map = new Map(portofolioFields.map(({ name, value }) => [name, value]));
+  const map = new Map(portfolioFields.map(({ name, value }) => [name, value]));
   const fields = jobTemplateFields.map(jf => (
     {
       ...jf,
@@ -25,31 +25,31 @@ function prefillFieldsWithProtofolio(jobTemplateFields, portofolioFields) {
   return fields;
 }
 
-export const generateJobByJobTemplateAndPortofolio = async (jobTemplateId, portofolioId, genName: (job: JobTemplate, porto: Portofolio) => string) => {
+export const generateJobByJobTemplateAndPortfolio = async (jobTemplateId, portfolioId, genName: (job: JobTemplate, porto: Portfolio) => string) => {
   assert(jobTemplateId, 400, 'jobTemplateId is not specified');
-  assert(portofolioId, 400, 'jobTemplateId is not specified');
+  assert(portfolioId, 400, 'jobTemplateId is not specified');
 
   const jobTemplateRepo = getRepository(JobTemplate);
   const jobTemplate = await jobTemplateRepo.findOne(jobTemplateId);
   assert(jobTemplate, 404, 'jobTemplate is not found');
 
-  const portofolioRepo = getRepository(Portofolio);
-  const portofolio = await portofolioRepo.findOne(portofolioId);
-  assert(portofolio, 404, 'portofolio is not found');
+  const portfolioRepo = getRepository(Portfolio);
+  const portfolio = await portfolioRepo.findOne(portfolioId);
+  assert(portfolio, 404, 'portfolio is not found');
 
   const job = new Job();
 
-  const fields = prefillFieldsWithProtofolio(jobTemplate.fields, portofolio.fields);
+  const fields = prefillFieldsWithProtofolio(jobTemplate.fields, portfolio.fields);
 
   // job.id = uuidv4();
-  job.name = genName(jobTemplate, portofolio);
-  job.forWhom = guessDisplayNameFromFields(portofolio.fields);
-  job.userId = portofolio.userId;
+  job.name = genName(jobTemplate, portfolio);
+  job.forWhom = guessDisplayNameFromFields(portfolio.fields);
+  job.userId = portfolio.userId;
   job.jobTemplateId = jobTemplateId;
-  job.portofolioId = portofolioId;
+  job.portfolioId = portfolioId;
   job.fields = fields;
   job.lastUpdatedAt = getUtcNow();
   job.status = JobStatus.TODO;
 
   return job;
-}
+};

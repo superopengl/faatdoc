@@ -3,7 +3,7 @@ import HomeHeader from 'components/HomeHeader';
 import React from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { listJob, searchJob } from 'services/jobService';
-import { listPortofolio } from 'services/portofolioService';
+import { listPortfolio } from 'services/portfolioService';
 import { PlusOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import { listMessages } from 'services/messageService';
@@ -58,24 +58,24 @@ const ClientDashboardPage = (props) => {
   const [toSignJobList, setToSignJobList] = React.useState([]);
   const [unreadJobList, setUnreadJobList] = React.useState([]);
   const [completeList, setCompleteList] = React.useState([]);
-  const [portofolioList, setPortofolioList] = React.useState([]);
+  const [portfolioList, setPortfolioList] = React.useState([]);
   const [, setHasMessage] = React.useState(false);
   const context = React.useContext(GlobalContext);
   const { notifyCount } = context;
 
   const loadList = async () => {
     setLoading(true);
-    const portofolioList = await listPortofolio() || [];
+    const portfolioList = await listPortfolio() || [];
     // const { data: toSignJobList } = await searchJob({ status: ['to_sign'] });
     const list = await listJob();
 
-    setPortofolioList(portofolioList);
+    setPortfolioList(portfolioList);
     setToSignJobList(list.filter(x => x.status === 'to_sign'));
     setUnreadJobList(list.filter(x => x.lastUnreadMessageAt));
     setCompleteList(list.filter(x => x.status === 'complete'));
     setLoading(false);
-    if (!portofolioList.length) {
-      showNoPortofolioWarn();
+    if (!portfolioList.length) {
+      showNoPortfolioWarn();
     }
   }
 
@@ -89,22 +89,22 @@ const ClientDashboardPage = (props) => {
   }
 
 
-  const showNoPortofolioWarn = () => {
+  const showNoPortfolioWarn = () => {
     Modal.confirm({
-      title: 'No portofolio',
-      content: 'Please create portofolio before creating job. Go to create protofolio now?',
-      okText: 'Yes, go to create portofolio',
+      title: 'No portfolio',
+      content: 'Please create portfolio before creating job. Go to create protofolio now?',
+      okText: 'Yes, go to create portfolio',
       maskClosable: true,
-      onOk: () => props.history.push('/portofolio')
+      onOk: () => props.history.push('/portfolio')
     });
   }
 
   const createNewJob = e => {
     e.stopPropagation();
-    if (portofolioList.length) {
+    if (portfolioList.length) {
       goToEditJob();
     } else {
-      showNoPortofolioWarn();
+      showNoPortfolioWarn();
     }
   }
 
@@ -122,7 +122,7 @@ const ClientDashboardPage = (props) => {
     props.history.push(`/job/${job.id}/view`)
   }
 
-  const hasPortofolio = !!portofolioList.length;
+  const hasPortfolio = !!portfolioList.length;
 
   return (
     <LayoutStyled>
@@ -137,10 +137,10 @@ const ClientDashboardPage = (props) => {
                 <Button type="link" onClick={createNewJob} style={{ padding: 0 }}><PlusOutlined /> Create New Job</Button>
               </Space>
               <Divider />
-              {!hasPortofolio && <>
-                <Title type="secondary" level={4}>My Portofolio</Title>
-                <Paragraph >Portofolios are predefined information that can be used to automatically fill in your job application. You can save the information like name, phone, address, TFN, and etc. for future usage.</Paragraph>
-                <Link to="/portofolio"><Button size="large" type="primary" ghost block icon={<PlusOutlined />}>New Portofolio</Button></Link>
+              {!hasPortfolio && <>
+                <Title type="secondary" level={4}>My Portfolio</Title>
+                <Paragraph >Portfolios are predefined information that can be used to automatically fill in your job application. You can save the information like name, phone, address, TFN, and etc. for future usage.</Paragraph>
+                <Link to="/portfolio"><Button size="large" type="primary" ghost block icon={<PlusOutlined />}>New Portfolio</Button></Link>
                 <Divider />
               </>}
               {toSignJobList.length > 0 && <>

@@ -4,7 +4,7 @@ import { User } from '../entity/User';
 import { assert, assertRole } from '../utils/assert';
 import * as _ from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
-import { Portofolio } from '../entity/Portofolio';
+import { Portfolio } from '../entity/Portfolio';
 import { handlerWrapper } from '../utils/asyncHandler';
 import { getUtcNow } from '../utils/getUtcNow';
 import { JobTemplate } from '../entity/JobTemplate';
@@ -14,17 +14,17 @@ import { CronLock } from '../entity/CronLock';
 
 export const saveRecurring = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin');
-  const { id, nameTemplate, portofolioId, jobTemplateId, cron, dueDay } = req.body;
+  const { id, nameTemplate, portfolioId, jobTemplateId, cron, dueDay } = req.body;
 
-  const portofolio = await getRepository(Portofolio).findOne(portofolioId);
-  assert(portofolio, 404, 'Porotofolio is not found');
+  const portfolio = await getRepository(Portfolio).findOne(portfolioId);
+  assert(portfolio, 404, 'Porotofolio is not found');
   const jobTemplate = await getRepository(JobTemplate).findOne(jobTemplateId);
   assert(jobTemplate, 404, 'JobTemplate is not found');
 
   const recurring = new Recurring();
   recurring.id = id || uuidv4();
-  recurring.nameTemplate = `${portofolio.name} ${jobTemplate.name} {{createdDate}}`;
-  recurring.portofolioId = portofolioId;
+  recurring.nameTemplate = `${portfolio.name} ${jobTemplate.name} {{createdDate}}`;
+  recurring.portfolioId = portfolioId;
   recurring.jobTemplateId = jobTemplateId;
   recurring.cron = cron;
   recurring.dueDay = dueDay;
@@ -45,7 +45,7 @@ export const listRecurring = handlerWrapper(async (req, res) => {
   const list = await getRepository(Recurring)
     .createQueryBuilder('x')
     .leftJoin(q => q.from(JobTemplate, 'j'), 'j', 'j.id = x."jobTemplateId"')
-    .leftJoin(q => q.from(Portofolio, 'p'), 'p', 'p.id = x."portofolioId"')
+    .leftJoin(q => q.from(Portfolio, 'p'), 'p', 'p.id = x."portfolioId"')
     .leftJoin(q => q.from(User, 'u'), 'u', 'u.id = p."userId"')
     .orderBy('x.lastUpdatedAt', 'DESC')
     .select([
@@ -55,7 +55,7 @@ export const listRecurring = handlerWrapper(async (req, res) => {
       'u.email as email',
       'j.name as "jobTemplateName"',
       `j.id as "jobTemplateId"`,
-      'p.name as "portofolioName"',
+      'p.name as "portfolioName"',
       'x.cron as cron',
       'x."lastUpdatedAt" as "lastUpdatedAt"'
     ])

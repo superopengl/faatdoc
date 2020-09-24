@@ -15,7 +15,7 @@ export class Recurring {
   jobTemplateId: string;
 
   @Column('uuid')
-  portofolioId: string;
+  portfolioId: string;
 
   @Column()
   cron: string;

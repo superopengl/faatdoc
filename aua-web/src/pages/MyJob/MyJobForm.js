@@ -89,8 +89,8 @@ const MyJobForm = (props) => {
 
   const handleSelectedTemplate = async (values) => {
     setLoading(true);
-    const { jobTemplateId, portofolioId } = values;
-    const job = await generateJob(jobTemplateId, portofolioId);
+    const { jobTemplateId, portfolioId } = values;
+    const job = await generateJob(jobTemplateId, portfolioId);
     setJob(job);
     setLoading(false);
   }

@@ -16,7 +16,7 @@ function getLabel(name) {
   return initials.substring(0, maxLength);
 }
 
-export const PortofolioAvatar = props => {
+export const PortfolioAvatar = props => {
   const { value, size, style, ...other } = props;
   if(!value) return null;
   // const {backgroundColor, color} = toMaterialStyle(value, 800);
@@ -33,10 +33,10 @@ export const PortofolioAvatar = props => {
   </Avatar></div>
 }
 
-PortofolioAvatar.propTypes = {
+PortfolioAvatar.propTypes = {
   value: PropTypes.string.isRequired,
 };
 
-PortofolioAvatar.defaultProps = {
+PortfolioAvatar.defaultProps = {
   size: 60
 };

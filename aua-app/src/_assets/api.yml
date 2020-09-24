@@ -295,24 +295,24 @@ paths:
       responses:
         200:
           description: OK
-  /portofolio:
+  /portfolio:
     post:
-      operationId: savePortofolio
+      operationId: savePortfolio
       # security:
       #   - authClient: []
       responses:
         200:
           description: OK
     get:
-      operationId: listPortofolio
+      operationId: listPortfolio
       # security:
       #   - authClient: []
       responses:
         200:
           description: OK
-  /portofolio/{id}:
+  /portfolio/{id}:
     get:
-      operationId: getPortofolio
+      operationId: getPortfolio
       # security:
       #   - authClient: []
       parameters:
@@ -325,7 +325,7 @@ paths:
         200:
           description: OK
     delete:
-      operationId: deletePortofolio
+      operationId: deletePortfolio
       # security:
       #   - authClient: []
       parameters:

@@ -6,7 +6,7 @@ import { Input, Button, Form, Checkbox, Space, Typography, Radio, Layout } from 
 import HomeHeader from 'components/HomeHeader';
 import { BuiltInFieldDef } from "components/FieldDef";
 import { varNameToLabelName } from 'util/varNameToLabelName';
-import { getPortofolio, savePortofolio } from 'services/portofolioService';
+import { getPortfolio, savePortfolio } from 'services/portfolioService';
 import { DateInput } from 'components/DateInput';
 
 const { Text, Title } = Typography;
@@ -32,22 +32,22 @@ const LayoutStyled = styled(Layout)`
 `;
 
 
-const PortofolioForm = (props) => {
+const PortfolioForm = (props) => {
   const {id, type: newType} = props.match.params;
   const isNew = !id;
 
   const [loading, setLoading] = React.useState(true);
-  // const [name, setName] = React.useState('New Portofolio');
+  // const [name, setName] = React.useState('New Portfolio');
   // const [fields, setFields] = React.useState([]);
   const [form] = Form.useForm();
-  const [portofolio, setPortofolio] = React.useState();
+  const [portfolio, setPortfolio] = React.useState();
   const [initialValues, setInitialValues] = React.useState();
-  const type = portofolio?.type || newType;
+  const type = portfolio?.type || newType;
 
   const loadEntity = async () => {
     if (!isNew) {
-      const entity = await getPortofolio(id);
-      setPortofolio(entity);
+      const entity = await getPortfolio(id);
+      setPortfolio(entity);
 
       const initialValues = getFormInitialValues(entity);
       setInitialValues(initialValues);
@@ -59,10 +59,10 @@ const PortofolioForm = (props) => {
     loadEntity()
   }, [id]);
 
-  const getFormInitialValues = (portofolio) => {
-    if (!portofolio) return undefined;
-    const name = portofolio.name || '';
-    const fields = portofolio.fields || [];
+  const getFormInitialValues = (portfolio) => {
+    if (!portfolio) return undefined;
+    const name = portfolio.name || '';
+    const fields = portfolio.fields || [];
     const formInitValues = {
       id,
       name,
@@ -83,16 +83,16 @@ const PortofolioForm = (props) => {
     }
 
     setLoading(true);
-    await savePortofolio(payload);
+    await savePortfolio(payload);
     setLoading(false);
-    props.history.push(`/portofolio`);
+    props.history.push(`/portfolio`);
   }
 
   const handleCancel = () => {
     props.history.goBack();
   }
 
-  const fieldDefs = BuiltInFieldDef.filter(x => x.portofolioType?.includes(type));
+  const fieldDefs = BuiltInFieldDef.filter(x => x.portfolioType?.includes(type));
 
   // console.log('value', initialValues);
 
@@ -102,7 +102,7 @@ const PortofolioForm = (props) => {
       <ContainerStyled>
         <Space size="small" direction="vertical" style={{ width: '100%' }}>
           <StyledTitleRow>
-            <Title level={2} style={{ margin: 'auto' }}>{`${isNew ? 'New' : 'Edit'} Portofolio`}</Title>
+            <Title level={2} style={{ margin: 'auto' }}>{`${isNew ? 'New' : 'Edit'} Portfolio`}</Title>
           </StyledTitleRow>
           {loading && 'loading...'}
           {!loading && <Form form={form} layout="vertical" onFinish={handleSubmit} style={{ textAlign: 'left' }} initialValues={initialValues}>
@@ -146,11 +146,11 @@ const PortofolioForm = (props) => {
   );
 };
 
-PortofolioForm.propTypes = {
+PortfolioForm.propTypes = {
   id: PropTypes.string,
   defaultType: PropTypes.string,
 };
 
-PortofolioForm.defaultProps = {};
+PortfolioForm.defaultProps = {};
 
-export default withRouter(PortofolioForm);
+export default withRouter(PortfolioForm);

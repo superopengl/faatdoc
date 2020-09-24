@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Typography, Modal, Badge, List, Space, Spin } from 'antd';
-import { PortofolioAvatar } from 'components/PortofolioAvatar';
+import { PortfolioAvatar } from 'components/PortfolioAvatar';
 import { TimeAgo } from 'components/TimeAgo';
 import { getMessage, countUnreadMessage } from 'services/messageService';
 import { GlobalContext } from 'contexts/GlobalContext';
@@ -101,7 +101,7 @@ const MessageList = (props) => {
   //   Modal.destroyAll();
   //   Modal.info({
   //     icon: null,
-  //     title: <Space style={{ alignItems: 'flex-start' }}><PortofolioAvatar value={forWhom} size={32} /><Link onClick={e => handleGoToJob(e, jobId)}>{name} for {forWhom}<RiExternalLinkLine style={{ marginLeft: '0.5rem' }} /></Link></Space>,
+  //     title: <Space style={{ alignItems: 'flex-start' }}><PortfolioAvatar value={forWhom} size={32} /><Link onClick={e => handleGoToJob(e, jobId)}>{name} for {forWhom}<RiExternalLinkLine style={{ marginLeft: '0.5rem' }} /></Link></Space>,
   //     width: 600,
   //     maskClosable: true,
   //     content: <>

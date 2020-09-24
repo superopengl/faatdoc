@@ -2,7 +2,7 @@
 import { getConnection, getRepository, Not } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { Agent } from '../entity/Agent';
-import { Portofolio } from '../entity/Portofolio';
+import { Portfolio } from '../entity/Portfolio';
 import { User } from '../entity/User';
 import { UserStatus } from '../enums/UserStatus';
 import { assert, assertRole } from '../utils/assert';
@@ -14,7 +14,7 @@ export const getProfile = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
   const { id } = (req as any).user as User;
 
-  const profileRepo = getRepository(Portofolio);
+  const profileRepo = getRepository(Portfolio);
   const profile = await profileRepo.findOne(id);
 
   res.json(profile);

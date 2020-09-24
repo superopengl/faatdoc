@@ -13,7 +13,7 @@ import { Space } from 'antd';
 import { TimeAgo } from 'components/TimeAgo';
 import { listRecurring, deleteRecurring, runRecurring, healthCheckRecurring } from 'services/recurringService';
 import RecurringForm from './RecurringForm';
-import { PortofolioAvatar } from 'components/PortofolioAvatar';
+import { PortfolioAvatar } from 'components/PortfolioAvatar';
 import { notify } from 'util/notify';
 import cronstrue from 'cronstrue';
 import * as cronParser from 'cron-parser';
@@ -61,7 +61,7 @@ const RecurringListPage = (props) => {
   const [currentId, setCurrentId] = React.useState();
   const [healthCheckResult, setHealthCheckResult] = React.useState();
 
-  const isRecurringDeprecated = item => !item.email || !item.jobTemplateId || !item.portofolioName;
+  const isRecurringDeprecated = item => !item.email || !item.jobTemplateId || !item.portfolioName;
 
   const getNextRunDateString = cron => {
     try {
@@ -94,17 +94,17 @@ const RecurringListPage = (props) => {
     },
     {
       title: 'Portfolio',
-      dataIndex: 'portofolioName',
+      dataIndex: 'portfolioName',
       onFilter: (value, record) => record.agentId === value,
-      render: (text, record) => record.portofolioName ? <>
+      render: (text, record) => record.portfolioName ? <>
         <Space>
-          <PortofolioAvatar value={text} size={40} />
+          <PortfolioAvatar value={text} size={40} />
           <div direction="vertical" style={{display: 'flex', flexDirection: 'column', justifyContent: 'flex-start'}}>
             {text}
             <Text type="secondary"><small>{record.email || <Text type="danger">deleted user</Text>}</small></Text>
           </div>
         </Space>
-      </> : <Text type="danger">deleted portofolio</Text>
+      </> : <Text type="danger">deleted portfolio</Text>
     },
     {
       title: 'Name Template',
@@ -176,9 +176,9 @@ const RecurringListPage = (props) => {
 
   const handleDelete = async (e, item) => {
     e.stopPropagation();
-    const { id, jobTemplateName, portofolioName } = item;
+    const { id, jobTemplateName, portfolioName } = item;
     Modal.confirm({
-      title: <>To delete Recurring <strong>{jobTemplateName}</strong> for <strong>{portofolioName}</strong>?</>,
+      title: <>To delete Recurring <strong>{jobTemplateName}</strong> for <strong>{portfolioName}</strong>?</>,
       onOk: async () => {
         setLoading(true);
         await deleteRecurring(id);

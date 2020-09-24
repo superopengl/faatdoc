@@ -3,7 +3,7 @@ import HomeHeader from 'components/HomeHeader';
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { listJob } from 'services/jobService';
-import { listPortofolio } from 'services/portofolioService';
+import { listPortfolio } from 'services/portfolioService';
 import { PlusOutlined, SyncOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import MyJobList from './MyJobList';
@@ -43,17 +43,17 @@ const MyJobListPage = (props) => {
 
   const [, setLoading] = React.useState(true);
   const [jobList, setJobList] = React.useState([]);
-  const [portofolioList, setPortofolioList] = React.useState([]);
+  const [portfolioList, setPortfolioList] = React.useState([]);
 
 
   const loadList = async () => {
     setLoading(true);
-    const portofolioList = await listPortofolio() || [];
+    const portfolioList = await listPortfolio() || [];
 
     const list = await listJob();
 
     setJobList(list);
-    setPortofolioList(portofolioList);
+    setPortfolioList(portfolioList);
     setLoading(false);
   }
 
@@ -68,12 +68,12 @@ const MyJobListPage = (props) => {
 
 
   const createNewJob = () => {
-    if (!portofolioList.length) {
+    if (!portfolioList.length) {
       Modal.confirm({
-        title: 'No portofolio',
-        content: 'Please create portofolio before creating job. Go to create protofolio now?',
-        okText: 'Yes, go to create portofolio',
-        onOk: () => props.history.push('/portofolio')
+        title: 'No portfolio',
+        content: 'Please create portfolio before creating job. Go to create protofolio now?',
+        okText: 'Yes, go to create portfolio',
+        onOk: () => props.history.push('/portfolio')
       });
       return;
     }
@@ -103,11 +103,11 @@ const MyJobListPage = (props) => {
           </Space>
 
           <Tabs defaultActiveKey="todo" type="card" tabBarExtraContent={{ right: <Button type="link" onClick={() => loadList()} icon={<SyncOutlined />}></Button> }}>
-            <TabPane tab={"To Do"} key="todo">
-              {RenderListFilteredByStatus(['todo'])}
+            <TabPane tab={<>To Do <Badge count={jobList.filter(x => ['todo', 'signed'].includes(x.status) && !x.lastUnreadMessageAt).length} showZero={false} /></>} key="todo">
+              {RenderListFilteredByStatus(['todo', 'signed'])}
             </TabPane>
             <TabPane tab={<>To Sign <Badge count={jobList.filter(x => ['to_sign'].includes(x.status)).length} showZero={false} /></>} key="ongoing">
-              {RenderListFilteredByStatus(['to_sign', 'signed'])}
+              {RenderListFilteredByStatus(['to_sign'])}
             </TabPane>
             <TabPane tab={"Completed"} key="complete">
               {RenderListFilteredByStatus(['complete'])}

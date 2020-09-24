@@ -2,7 +2,7 @@ import { getRepository, Not, Equal } from 'typeorm';
 import { Recurring } from '../entity/Recurring';
 import { CronJob } from 'cron';
 import { SysLog } from '../entity/SysLog';
-import { generateJobByJobTemplateAndPortofolio } from '../utils/generateJobByJobTemplateAndPortofolio';
+import { generateJobByJobTemplateAndPortfolio } from '../utils/generateJobByJobTemplateAndPortfolio';
 import { assert } from '../utils/assert';
 import { v4 as uuidv4 } from 'uuid';
 import { JobStatus } from '../enums/JobStatus';
@@ -12,7 +12,7 @@ import * as moment from 'moment';
 import { getUtcNow } from '../utils/getUtcNow';
 import { CronLock } from '../entity/CronLock';
 import { JobTemplate } from '../entity/JobTemplate';
-import { Portofolio } from '../entity/Portofolio';
+import { Portfolio } from '../entity/Portfolio';
 import { User } from '../entity/User';
 import * as os from 'os';
 
@@ -33,7 +33,7 @@ async function startRecurrings() {
   const list = await getRepository(Recurring)
     .createQueryBuilder('x')
     .innerJoin(q => q.from(JobTemplate, 'j'), 'j', 'j.id = x."jobTemplateId"')
-    .innerJoin(q => q.from(Portofolio, 'p'), 'p', 'p.id = x."portofolioId"')
+    .innerJoin(q => q.from(Portfolio, 'p'), 'p', 'p.id = x."portfolioId"')
     .innerJoin(q => q.from(User, 'u'), 'u', 'u.id = p."userId"')
     .select([
       'x.*',
@@ -61,11 +61,11 @@ export async function executeRecurring(recurringId) {
   assert(recurringId, 400);
   const recurring = await getRepository(Recurring).findOne({ id: recurringId });
   assert(recurring, 404);
-  const { jobTemplateId, portofolioId, nameTemplate } = recurring;
+  const { jobTemplateId, portfolioId, nameTemplate } = recurring;
 
-  const job = await generateJobByJobTemplateAndPortofolio(
+  const job = await generateJobByJobTemplateAndPortfolio(
     jobTemplateId,
-    portofolioId,
+    portfolioId,
     (j, p) => nameTemplate.replace('{{createdDate}}', moment().format('DD MMM YYYY'))
   );
 
@@ -104,7 +104,7 @@ function createCronJob(cron, onRunFn) {
 
 
 function startSingleRecurring(recurring: Recurring): CronJob {
-  const { id, cron, jobTemplateId, portofolioId } = recurring;
+  const { id, cron, jobTemplateId, portfolioId } = recurring;
   const job = createCronJob(
     cron,
     async () => {
@@ -116,7 +116,7 @@ function startSingleRecurring(recurring: Recurring): CronJob {
       log.data = {
         recurringId: id,
         jobTemplateId,
-        portofolioId,
+        portfolioId,
         createdJobId: job.id
       };
 

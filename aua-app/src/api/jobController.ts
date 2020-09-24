@@ -10,18 +10,18 @@ import { JobStatus } from '../enums/JobStatus';
 import { sendEmail } from '../services/emailService';
 import { assert, assertRole } from '../utils/assert';
 import { handlerWrapper } from '../utils/asyncHandler';
-import { generateJobByJobTemplateAndPortofolio } from '../utils/generateJobByJobTemplateAndPortofolio';
+import { generateJobByJobTemplateAndPortfolio } from '../utils/generateJobByJobTemplateAndPortfolio';
 import { getUtcNow } from '../utils/getUtcNow';
 import { guessDisplayNameFromFields } from '../utils/guessDisplayNameFromFields';
-import { Portofolio } from '../entity/Portofolio';
+import { Portfolio } from '../entity/Portfolio';
 
 export const generateJob = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
-  const { jobTemplateId, portofolioId, name } = req.body;
+  const { jobTemplateId, portfolioId, name } = req.body;
 
-  const Job = await generateJobByJobTemplateAndPortofolio(
+  const Job = await generateJobByJobTemplateAndPortfolio(
     jobTemplateId,
-    portofolioId,
+    portfolioId,
     (j, p) => `${j.name} for ${p.name}`
   );
 
@@ -54,11 +54,11 @@ export const saveJob = handlerWrapper(async (req, res) => {
 
   const { user: { id: userId } } = req as any;
 
-  const { id, name, jobTemplateId, portofolioId, fields, status } = req.body;
+  const { id, name, jobTemplateId, portfolioId, fields, status } = req.body;
   assert(name, 400, 'name is empty');
 
-  const portofolio = await getRepository(Portofolio).findOne(portofolioId);
-  assert(name, 404, 'portofolio is not found');
+  const portfolio = await getRepository(Portfolio).findOne(portfolioId);
+  assert(name, 404, 'portfolio is not found');
 
   const repo = getRepository(Job);
   let job: Job;
@@ -74,12 +74,12 @@ export const saveJob = handlerWrapper(async (req, res) => {
     job.id = uuidv4();
     job.userId = userId;
     job.jobTemplateId = jobTemplateId;
-    job.portofolioId = portofolioId;
+    job.portfolioId = portfolioId;
   }
 
 
   job.name = name;
-  job.forWhom = guessDisplayNameFromFields(portofolio.fields);
+  job.forWhom = guessDisplayNameFromFields(portfolio.fields);
   job.fields = fields;
   job.status = status;
   job.lastUpdatedAt = getUtcNow();

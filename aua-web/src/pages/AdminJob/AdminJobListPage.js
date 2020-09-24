@@ -76,7 +76,7 @@ const AdminJobListPage = (props) => {
       ellipsis: false
     },
     {
-      title: 'Portofolio',
+      title: 'Portfolio',
       dataIndex: 'forWhom',
       sorter: () => 0,
       render: (text) => <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text || ''} />
