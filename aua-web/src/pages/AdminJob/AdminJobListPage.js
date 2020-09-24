@@ -69,7 +69,7 @@ const AdminJobListPage = (props) => {
       ellipsis: false
     },
     {
-      title: 'Job',
+      title: 'Job Template',
       dataIndex: 'jobTemplateName',
       sorter: () => 0,
       render: (text) => <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text || ''} />,

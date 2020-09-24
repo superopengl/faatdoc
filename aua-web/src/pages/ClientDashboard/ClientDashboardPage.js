@@ -20,7 +20,7 @@ const ContainerStyled = styled.div`
   margin: 6rem auto 2rem auto;
   padding: 0 1rem;
   width: 100%;
-  max-width: 1000px;
+  max-width: 600px;
 
   .ant-divider {
     margin: 8px 0 24px;
@@ -129,9 +129,9 @@ const ClientDashboardPage = (props) => {
       <HomeHeader></HomeHeader>
       <ContainerStyled>
         <Row gutter={80}>
-          <StyledCol {...span}>
+          <StyledCol span={24}>
             <Space size="small" direction="vertical" style={{ width: '100%' }}>
-              <Title type="secondary" level={4}>My Jobs</Title>
+              {/* <Title type="secondary" level={4}>My Jobs</Title> */}
               <Space style={{ width: '100%', justifyContent: 'space-between' }}>
                 <Link to="/job">All jobs</Link>
                 <Button type="link" onClick={createNewJob} style={{ padding: 0 }}><PlusOutlined /> Create New Job</Button>
@@ -154,30 +154,27 @@ const ClientDashboardPage = (props) => {
                 <Divider />
               </>}
               {completeList.length > 0 && <>
-                <Title type="secondary" level={4}>Recent Complete Jobs</Title>
+                <Title type="secondary" level={4}>Recent Completed Jobs</Title>
                 <MyJobList data={completeList} onItemClick={handleGoToJobWithMessage}/>
                 <Divider />
               </>}
             </Space>
           </StyledCol>
 
-          <StyledCol {...span}>
+          {/* <StyledCol {...span}>
             <Space size="small" direction="vertical" style={{ width: '100%' }}>
               <Title type="secondary" level={4}>Jobs with Unread Messages</Title>
               <Space style={{ width: '100%', justifyContent: 'space-between' }}>
                 <Link to="/message"><Button type="link" style={{ padding: 0 }}>All messages ({notifyCount} unread)</Button></Link>
-                {/* <Button type="link" icon={<SyncOutlined />} onClick={() => window.location.reload(false)}></Button> */}
               </Space>
               <Divider />
               <MessageList
                 onFetchNextPage={handleFetchNextPage}
-                // onItemRead={}
                 max={10}
                 size={10}
               />
-
             </Space>
-          </StyledCol>
+          </StyledCol> */}
         </Row>
         <Space size="large" direction="vertical" style={{ width: '100%' }}>
           <Space style={{ width: '100%', justifyContent: 'flex-end' }} >
