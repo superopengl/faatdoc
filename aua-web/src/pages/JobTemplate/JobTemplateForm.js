@@ -44,7 +44,7 @@ const JobTemplateForm = (props) => {
     initialLoadEntity();
   }, [])
 
-  const handleSave = async () => {
+  const handleSave = async (fields) => {
     const newEntity = {
       ...entity,
       name,

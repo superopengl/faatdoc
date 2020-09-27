@@ -80,13 +80,15 @@ const MyJobListPage = (props) => {
     goToEditJob();
   }
 
-
+  const handleItemClick = job => {
+    goToEditJob(job.id);
+  }
 
 
   const RenderListFilteredByStatus = (statuses = []) => {
     const data = jobList.filter(x => statuses.includes(x.status));
 
-    return <MyJobList data={data} />
+    return <MyJobList data={data} onItemClick={handleItemClick}/>
   }
 
   return (
