@@ -28,7 +28,7 @@ import ImpersonatePage from 'pages/Impersonate/ImpersonatePage';
 import { countUnreadMessage } from 'services/messageService';
 import PortfolioForm from 'pages/Portfolio/PortfolioForm';
 import DisclaimerPage from 'pages/DisclaimerPage';
-import MyJobViewPage from 'pages/MyJob/MyJobViewPage';
+import MyJobSign from 'pages/MyJob/MyJobSign';
 import ClientDashboardPage from 'pages/ClientDashboard/ClientDashboardPage';
 
 
@@ -97,7 +97,6 @@ class App extends React.Component {
             <RoleRoute visible={isAdmin} loading={loading} exact path="/impersonate" component={ImpersonatePage} />
             <RoleRoute visible={!isGuest} loading={loading} path="/message" exact component={MessagePage} />
             <RoleRoute visible={!isGuest} loading={loading} path="/job/:id" exact component={MyJobPage} />
-            <RoleRoute visible={isClient} loading={loading} path="/job/:id/view" exact component={MyJobViewPage} />
             <RoleRoute visible={isAdmin || isAgent || isClient} loading={loading} path="/job" exact component={isClient ? MyJobListPage : AdminJobListPage} />
             <RoleRoute visible={isAdmin || isAgent} loading={loading} path="/job/:id/proceed" exact component={ProceedJobPage} />
             <RoleRoute visible={!isGuest} loading={loading} path="/change_password" exact component={ChangePasswordPage} />

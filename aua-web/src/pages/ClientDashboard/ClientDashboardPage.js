@@ -118,8 +118,8 @@ const ClientDashboardPage = (props) => {
     props.history.push(`/job/${job.id}?chat=true`)
   }
 
-  const handleGoToJobSign = job => {
-    props.history.push(`/job/${job.id}/view`)
+  const handleGoToJob = job => {
+    props.history.push(`/job/${job.id}`)
   }
 
   const hasPortfolio = !!portfolioList.length;
@@ -146,7 +146,7 @@ const ClientDashboardPage = (props) => {
                 </>}
                 {toSignJobList.length > 0 && <>
                   <Title type="secondary" level={4}>Require Sign</Title>
-                  <MyJobList data={toSignJobList} onItemClick={handleGoToJobSign} />
+                  <MyJobList data={toSignJobList} onItemClick={handleGoToJob} />
                   <Divider />
                 </>}
                 {unreadJobList.length > 0 && <>

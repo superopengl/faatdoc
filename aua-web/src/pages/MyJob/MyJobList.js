@@ -12,13 +12,13 @@ const MyJobList = (props) => {
 
   const { data, loading, onItemClick } = props;
 
-  const goToEditJob = (id) => {
-    props.history.push(`/job/${id || 'new'}`);
-  }
+  // const goToEditJob = (id) => {
+  //   props.history.push(`/job/${id || 'new'}`);
+  // }
 
-  const goToViewJob = (id) => {
-    props.history.push(`/job/${id}/view`);
-  }
+  // const goToViewJob = (id) => {
+  //   props.history.push(`/job/${id}/view`);
+  // }
 
   const actionOnJob = job => {
     onItemClick(job);

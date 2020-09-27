@@ -36,30 +36,18 @@ border: 2px solid white;
 `;
 
 const MyJobForm = (props) => {
-  const { id, showsAll } = props;
+  const { value, showsAll, onOk } = props;
 
   const { chat } = queryString.parse(props.location.search);
 
-  const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = React.useState(false);
   const [chatVisible, setChatVisible] = React.useState(Boolean(chat));
   const [form] = Form.useForm();
 
-  const [job, setJob] = React.useState();
+  const [job, setJob] = React.useState(value);
+  const isNew = !job;
 
-  const loadEntity = async () => {
-    setLoading(true);
-    if (id) {
-      const job = await getJob(id);
-      setJob(job);
-    }
-    setLoading(false);
-  }
-
-  React.useEffect(() => {
-    loadEntity();
-  }, [])
-
-  const updateLodgmentWithFormValues = values => {
+  const updateJobWithFormValues = values => {
     job.name = values.name;
 
     job.fields.forEach(field => {
@@ -70,8 +58,8 @@ const MyJobForm = (props) => {
   }
 
   const handleValuesChange = (changedValues, allValues) => {
-    const lodgment = updateLodgmentWithFormValues(allValues);
-    setJob({ ...lodgment });
+    const job = updateJobWithFormValues(allValues);
+    setJob({ ...job });
   }
 
   const handleSubmit = async (values) => {
@@ -81,7 +69,7 @@ const MyJobForm = (props) => {
       await saveJob({ ...job, ...values, status: 'todo' });
       // form.resetFields();
       setLoading(false);
-      props.onChange();
+      onOk();
     } catch {
       setLoading(false);
     }
@@ -108,22 +96,13 @@ const MyJobForm = (props) => {
     return values;
   }
 
-  const checkIfCanEdit = (job) => {
-    if (loading) return false;
-    if (!job) return false;
-    const { status } = job;
-    return status === 'todo';
-  }
 
-  const canEdit = checkIfCanEdit(job);
-  const disabled = !canEdit || loading;
-
-  // console.log('value', formInitValues);
-  const showsGenerator = !loading && !job;
+  const canEdit = !loading && (!job || job.status === 'todo');
+  const disabled = !canEdit;
 
   return (<>
     <Space direction="vertical" size="large" style={{ width: '100%' }}>
-      {showsGenerator && <JobGenerator onChange={handleSelectedTemplate} />}
+      {isNew && <JobGenerator onChange={handleSelectedTemplate} />}
 
       {job && <>
         <Form form={form} layout="vertical"

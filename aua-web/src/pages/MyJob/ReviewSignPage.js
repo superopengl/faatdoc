@@ -21,10 +21,10 @@ const StyledListItem = styled(List.Item)`
 `;
 
 const ReviewSignPage = (props) => {
-  const { id } = props;
+  const { value, onOk } = props;
 
-  const [, setLoading] = React.useState(true);
-  const [job, setJob] = React.useState({});
+  const job = value;
+  const [loading, setLoading] = React.useState(true);
   const [files, setFiles] = React.useState([]);
 
 
@@ -38,12 +38,8 @@ const ReviewSignPage = (props) => {
 
   const loadEntity = async () => {
     setLoading(true);
-    if (id) {
-      const job = await getJob(id);
-      const files = await getSignFiles(job);
-      setFiles(files);
-      setJob(job);
-    }
+    const files = await getSignFiles(job);
+    setFiles(files);
     setLoading(false);
   }
 
@@ -53,9 +49,9 @@ const ReviewSignPage = (props) => {
 
   const handleSign = async () => {
     await signJob(job.id);
-    props.onFinish();
+    onOk();
   }
-  
+
   const { status } = job || {};
 
   const isSigned = status === 'signed';

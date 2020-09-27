@@ -2,11 +2,13 @@ import React from 'react';
 
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
-import { Layout } from 'antd';
+import { Layout, Spin } from 'antd';
 import HomeHeader from 'components/HomeHeader';
 import MyJobForm from './MyJobForm';
 import { listJobTemplate } from 'services/jobTemplateService';
 import { listPortfolio } from 'services/portfolioService';
+import { generateJob, getJob, saveJob } from 'services/jobService';
+import MyJobSign from './MyJobSign';
 
 const ContainerStyled = styled.div`
 margin: 4rem auto 0 auto;
@@ -23,11 +25,25 @@ const LayoutStyled = styled(Layout)`
   height: 100%;
 `;
 
-const MyJobCard = (props) => {
+const MyJobPage = (props) => {
   const id = props.match.params.id;
   const isNew = id === 'new';
 
-  const [, setLoading] = React.useState(true);
+  const [loading, setLoading] = React.useState(true);
+  const [job, setJob] = React.useState();
+
+  const loadEntity = async () => {
+    setLoading(true);
+    if (id && !isNew) {
+      const job = await getJob(id);
+      setJob(job);
+    }
+    setLoading(false);
+  }
+
+  React.useEffect(() => {
+    loadEntity();
+  }, [])
 
   const onOk = () => {
     props.history.push('/job');
@@ -36,28 +52,33 @@ const MyJobCard = (props) => {
     props.history.goBack();
   }
 
+  const showsEditableForm = isNew || job?.status === 'todo';
+  const showsSign = job?.status === 'to_sign';
+
   return (<>
     <LayoutStyled>
       <HomeHeader />
       <ContainerStyled>
-        {/* <Title level={2} style={{ margin: 'auto' }}>{isNew ? 'New Job' : 'Edit Job'}</Title> */}
+        {loading ? <Spin /> : <>
 
-        <MyJobForm
-          onChange={() => onOk()}
-          onCancel={() => onCancel()}
-          id={isNew ? null : id} />
+          {showsEditableForm && <MyJobForm
+            onOk={onOk}
+            onCancel={() => onCancel()}
+            value={job} />}
+          {showsSign && <MyJobSign value={job} />}
+        </>}
       </ContainerStyled>
     </LayoutStyled>
   </>
   );
 };
 
-MyJobCard.propTypes = {
+MyJobPage.propTypes = {
   // id: PropTypes.string.isRequired
 };
 
-MyJobCard.defaultProps = {
+MyJobPage.defaultProps = {
   // id: 'new'
 };
 
-export default withRouter(MyJobCard);
+export default withRouter(MyJobPage);

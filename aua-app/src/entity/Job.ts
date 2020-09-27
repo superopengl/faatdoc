@@ -38,4 +38,7 @@ export class Job {
 
   @Column({type: 'json'})
   fields: any;
+
+  @Column({type: 'varchar', array: true, default: '{}'})
+  docTemplates: string[];
 }
