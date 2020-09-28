@@ -11,12 +11,12 @@ export const saveJobTemplate = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin');
   const jobTemplate = new JobTemplate();
 
-  const { id, name, docTemplates, fields } = req.body;
+  const { id, name, docTemplateIds, fields } = req.body;
   assert(name, 400, 'name is empty');
   jobTemplate.id = id || uuidv4();
   jobTemplate.name = name;
-  jobTemplate.docTemplates = docTemplates;
-  jobTemplate.fields = fields;
+  jobTemplate.docTemplateIds = docTemplateIds;
+  jobTemplate.fields = fields.filter(f => f.name?.trim() && f.type?.trim());
   jobTemplate.lastUpdatedAt = getUtcNow();
 
   const repo = getRepository(JobTemplate);
@@ -31,7 +31,7 @@ export const listJobTemplates = handlerWrapper(async (req, res) => {
   const list = await getRepository(JobTemplate)
     .createQueryBuilder('x')
     .orderBy('x.createdAt', 'ASC')
-    .select(['id', 'name', `"createdAt"`, '"lastUpdatedAt"', `"docTemplates"`])
+    .select(['id', 'name', `"createdAt"`, '"lastUpdatedAt"', `"docTemplateIds"`])
     .execute();
 
   res.json(list);

@@ -48,7 +48,10 @@ export const generateJobByJobTemplateAndPortfolio = async (jobTemplateId, portfo
   job.jobTemplateId = jobTemplateId;
   job.portfolioId = portfolioId;
   job.fields = fields;
-  job.docTemplates = jobTemplate.docTemplates;
+  job.docTemplateIds = jobTemplate.docTemplateIds;
+  job.uploadDocs = jobTemplate.hasUploadDocs ? [] : null;
+  job.signDocs = jobTemplate.hasSignDocs ? [] : null;
+  job.feedbackDocs = jobTemplate.hasFeedbackDocs ? [] : null;
   job.lastUpdatedAt = getUtcNow();
   job.status = JobStatus.TODO;
 

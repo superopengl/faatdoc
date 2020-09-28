@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { Input, Space, Select, Typography } from 'antd';
+import { Input, Space, Select, Typography, Checkbox, Form, Button, Spin } from 'antd';
 import { saveJobTemplate, getJobTemplate } from 'services/jobTemplateService';
 import { notify } from 'util/notify';
 import FieldEditor from 'components/FieldEditor';
@@ -11,15 +11,19 @@ import { BuiltInFieldDef } from 'components/FieldDef';
 
 const { Text } = Typography;
 
+
+const DEFAULT_ENTITY = {
+  docTemplateIds: [],
+  fields: []
+}
+
 const JobTemplateForm = (props) => {
 
   const { id } = props;
 
-  const [entity, setEntity] = React.useState();
-  const [name, setName] = React.useState('');
-  const [fields, setFields] = React.useState([]);
-  const [docTemplates, setDocTemplates] = React.useState([]);
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
+  const [entity, setEntity] = React.useState(DEFAULT_ENTITY);
+  const [form] = Form.useForm();
   const [docTemplateOptions, setDocTemplateOptions] = React.useState([]);
 
   const loadEntity = async () => {
@@ -27,9 +31,6 @@ const JobTemplateForm = (props) => {
     if (id) {
       const entity = await getJobTemplate(id);
       setEntity(entity);
-      setName(entity.name);
-      setDocTemplates(entity.docTemplates);
-      setFields(entity.fields);
     }
 
     const docTemps = await listDocTemplate();
@@ -44,17 +45,15 @@ const JobTemplateForm = (props) => {
     initialLoadEntity();
   }, [])
 
-  const handleSave = async (fields) => {
-    const newEntity = {
+  const handleSave = async values => {
+    const entityToSave = {
       ...entity,
-      name,
-      docTemplates,
-      fields
+      ...values,
     }
-    await saveJobTemplate(newEntity);
+    await saveJobTemplate(entityToSave);
     await loadEntity();
     props.onOk();
-    notify.success(<>Successfully saved job template <strong>{name}</strong></>)
+    notify.success(<>Successfully saved job template <strong>{values.name}</strong></>)
   }
 
   const handleClose = () => {
@@ -66,51 +65,77 @@ const JobTemplateForm = (props) => {
     return builtInField?.inputType || 'text';
   }
 
-  const applyDocTemplateChangesToFields = (docTemplateIds) => {
-    const uniqueVariables = _.chain(docTemplateOptions)
-      .filter(x => docTemplateIds.includes(x.id))
-      .map(x => x.variables)
-      .flatten()
-      .filter(x => x !== 'now')
-      .uniq()
-      .value();
-    const fieldsToAdd = uniqueVariables
-      .filter(v => !fields.find(f => f.name === v))
-      .map(v => ({
-        name: v,
-        required: true,
-        type: getFieldTypeByVarName(v)
-      }));
-    setFields([...fields, ...fieldsToAdd]);
-  }
+  // const handleFormValueChange = (changed, values) => {
+  //   const { docTemplateIds, fields } = values;
 
-  const handleDocTemplatesChange = (docTemplateIds) => {
-    setDocTemplates(docTemplateIds);
-    applyDocTemplateChangesToFields(docTemplateIds);
+  //   const uniqueVariables = _.chain(docTemplateOptions)
+  //     .filter(x => docTemplateIds.includes(x.id))
+  //     .map(x => x.variables)
+  //     .flatten()
+  //     .filter(x => x !== 'now')
+  //     .uniq()
+  //     .value();
+  //   const fieldsToAdd = uniqueVariables
+  //     .filter(v => !fields.find(f => f.name === v))
+  //     .map(v => ({
+  //       name: v,
+  //       required: true,
+  //       type: getFieldTypeByVarName(v)
+  //     }));
+
+  //   if (fieldsToAdd.length) {
+  //     form.setFieldsValue({
+  //       fields: [...fields, ...fieldsToAdd]
+  //     });
+  //   }
+  // }
+
+  if (loading) {
+    return <Spin />
   }
 
   return (
     <Space direction="vertical" size="small" style={{ width: '100%' }}>
-      <Text>Job Template Name</Text>
-      <Input style={{ flex: '1' }} placeholder="Job Template Name" value={name} onChange={e => setName(e.target.value)} />
-      <Text>Doc Templates to Apply</Text>
-      <Select
-        mode="multiple"
-        allowClear
-        style={{ width: '100%' }}
-        placeholder="Doc Templates to apply"
-        value={docTemplates}
-        onChange={handleDocTemplatesChange}
+      <Form
+        layout="vertical"
+        onFinish={handleSave}
+        // onValuesChange={handleFormValueChange}
+        initialValues={entity}
+        form={form}
       >
-        {docTemplateOptions.map((x, i) => (<Select.Option key={i} value={x.id}>{x.name}</Select.Option>))}
+        <Form.Item label="Job Template Name" name="name" rules={[{ required: true, message: ' ', whitespace: true, max: 100 }]}>
+          <Input placeholder="Job Template Name" />
+        </Form.Item>
+        <Form.Item label="Upload documents is required?" name="hasUploadDocs" valuePropName="checked">
+          <Checkbox>Upload documents is required?</Checkbox>
+        </Form.Item>
+        <Form.Item label="Has documents to sign?" name="hasSignDocs" valuePropName="checked">
+          <Checkbox>Has documents to sign?</Checkbox>
+        </Form.Item>
+        <Form.Item label="Has feedback documents?" name="hasFeedbackDocs" valuePropName="checked">
+          <Checkbox>Has feedback documents?</Checkbox>
+        </Form.Item>
+        <Form.Item label="Doc Templates to Apply" name="docTemplateIds">
+          <Select
+            mode="multiple"
+            allowClear
+            style={{ width: '100%' }}
+            placeholder="Doc Templates to apply"
+          >
+            {docTemplateOptions.map((x, i) => (<Select.Option key={i} value={x.id}>{x.name}</Select.Option>))}
+          </Select>
+        </Form.Item>
+        <Form.Item label="Fields" name="fields">
+          <FieldEditor loading={loading} />
+        </Form.Item>
+        <Form.Item>
+          <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
 
-      </Select>
-      <FieldEditor
-        onChange={handleSave}
-        value={fields}
-        loading={loading}
-        onCancel={() => handleClose()}
-      />
+            <Button type="link" onClick={handleClose}>Cancel</Button>
+            <Button type="primary" htmlType="submit">Save</Button>
+          </Space>
+        </Form.Item>
+      </Form>
     </Space>
   );
 };

@@ -71,7 +71,7 @@ const MyJobSign = (props) => {
           <MyJobForm showsAll={status === 'complete'} value={job} onOk={() => goToJobList()} />
         </Tabs.TabPane>
         <Tabs.TabPane tab="Sign" key="sign">
-          <ReviewSignPage value={job} onOkß={() => goToJobList()} />
+          <ReviewSignPage value={job} onOk={() => goToJobList()} />
         </Tabs.TabPane>
       </Tabs>}
       {/* <Button block type="link" onClick={() => props.history.goBack()}>Cancel</Button> */}

@@ -53,7 +53,7 @@ const MyJobPage = (props) => {
   }
 
   const showsEditableForm = isNew || job?.status === 'todo';
-  const showsSign = job?.status === 'to_sign';
+  const showsSign = !showsEditableForm || job?.status === 'to_sign';
 
   return (<>
     <LayoutStyled>

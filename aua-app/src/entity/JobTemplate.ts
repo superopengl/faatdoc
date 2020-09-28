@@ -16,8 +16,17 @@ export class JobTemplate {
   lastUpdatedAt: Date;
 
   @Column({type: 'varchar', array: true, default: '{}'})
-  docTemplates: string[];
+  docTemplateIds: string[];
 
   @Column({ type: 'json' })
   fields: any;
+
+  @Column({default: true})
+  hasUploadDocs: boolean;
+
+  @Column({default: true})
+  hasSignDocs: boolean;
+
+  @Column({default: true})
+  hasFeedbackDocs: boolean;
 }

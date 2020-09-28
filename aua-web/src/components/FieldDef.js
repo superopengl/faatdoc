@@ -206,18 +206,6 @@ export const BuiltInFieldDef = [
     rules: [{ required: true, message: 'Please choose start/end months' }],
     portfolioType: [],
   },
-  {
-    name: 'uploadFiles',
-    inputType: 'upload',
-    rules: [{ required: true, message: 'Please upload files' }],
-    portfolioType: [],
-  },
-  {
-    name: 'requireSign',
-    inputType: 'upload',
-    rules: [{ required: false, message: 'Please upload files' }],
-    portfolioType: [],
-  }
 ];
 
 export const BuiltInFieldType = Array.from(new Set(BuiltInFieldDef.map(x => x.inputType))).filter(x => x !== 'select');

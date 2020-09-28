@@ -23,15 +23,13 @@ const FieldEditor = (props) => {
   const [fields, setFields] = React.useState(value);
 
   React.useEffect(() => {
+    if(value === fields) return;
     setFields(value);
   }, [value]);
 
-  const handleClose = () => {
-    props.onCancel();
-  }
-
-  const handleSave = () => {
-    const value = fields.filter(f => groomField(f)).map(f => {
+  React.useEffect(() => {
+    if (value === fields) return;
+    const newValue = fields.map(f => {
       const varName = labelNameToVarName(f.name);
       const builtInField = getBuiltInFieldByVarName(varName);
       const type = builtInField?.inputType || f.type;
@@ -42,8 +40,8 @@ const FieldEditor = (props) => {
       };
     });
 
-    onChange(value);
-  }
+    onChange(newValue);
+  }, [fields]);
 
   const addNewRow = () => {
     fields.push({ ...EMPTY_ROW });
@@ -74,10 +72,6 @@ const FieldEditor = (props) => {
   const changeValue = (index, name, v) => {
     fields[index][name] = v;
     setFields([...fields]);
-  }
-
-  function groomField(field) {
-    return field && field.name?.trim() && field.type?.trim();
   }
 
   const nameOptions = BuiltInFieldLabelNames.map(x => ({
@@ -150,6 +144,7 @@ const FieldEditor = (props) => {
     },
   ];
 
+  const canAddNewField = fields.every(f => !!f.name);
 
   return (
     <Space direction="vertical" size="large" style={{ width: '100%' }}>
@@ -164,11 +159,11 @@ const FieldEditor = (props) => {
         footer={null}
       />
       <Space style={{ width: '100%', justifyContent: 'space-between' }}>
-        <Button icon={<PlusOutlined />} onClick={addNewRow}>Add New Field</Button>
-        <Space>
+        <Button icon={<PlusOutlined />} onClick={addNewRow} disabled={!canAddNewField}>Add New Field</Button>
+        {/* <Space>
           <Button key="cancel" onClick={() => handleClose()}>Cancel</Button>
           <Button key="save" type="primary" onClick={() => handleSave()}>Save</Button>
-        </Space>
+        </Space> */}
       </Space>
 
     </Space>

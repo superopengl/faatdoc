@@ -39,6 +39,15 @@ export class Job {
   @Column({type: 'json'})
   fields: any;
 
+  @Column({type: 'json', nullable: true})
+  uploadDocs: any;
+
   @Column({type: 'varchar', array: true, default: '{}'})
-  docTemplates: string[];
+  docTemplateIds: string[];
+
+  @Column({type: 'json', nullable: true})
+  signDocs: any;
+
+  @Column({type: 'json', nullable: true})
+  feedbackDocs: any;
 }

@@ -50,11 +50,11 @@ function validateJobStatusChange(oldStatus, newStatus) {
 
 
 export const saveJob = handlerWrapper(async (req, res) => {
-  assertRole(req, 'admin', 'client');
+  assertRole(req, 'admin', 'agent', 'client');
 
   const { user: { id: userId } } = req as any;
 
-  const { id, name, jobTemplateId, portfolioId, fields, status } = req.body;
+  const { id, name, jobTemplateId, portfolioId, fields, status, docTemplateIds, uploadDocs, signDocs, feedbackDocs } = req.body;
   assert(name, 400, 'name is empty');
 
   const portfolio = await getRepository(Portfolio).findOne(portfolioId);
@@ -77,10 +77,13 @@ export const saveJob = handlerWrapper(async (req, res) => {
     job.portfolioId = portfolioId;
   }
 
-
   job.name = name;
   job.forWhom = guessDisplayNameFromFields(portfolio.fields);
   job.fields = fields;
+  job.docTemplateIds = docTemplateIds;
+  job.uploadDocs = uploadDocs;
+  job.signDocs = signDocs;
+  job.feedbackDocs = feedbackDocs;
   job.status = status;
   job.lastUpdatedAt = getUtcNow();
 

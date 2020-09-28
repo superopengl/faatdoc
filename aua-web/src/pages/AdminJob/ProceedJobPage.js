@@ -137,18 +137,18 @@ const ProceedJobPage = (props) => {
     props.history.push('/job');
   }
 
-  const getFormInitialValues = () => {
-    const values = {
-      name: job?.name || 'New Job',
-      status: job?.status || 'todo'
-    };
-    if (job && job.fields) {
-      for (const f of job.fields) {
-        values[f.name] = f.value;
-      }
-    }
-    return values;
-  }
+  // const getFormInitialValues = () => {
+  //   const values = {
+  //     name: job?.name || 'New Job',
+  //     status: job?.status || 'todo'
+  //   };
+  //   if (job && job.fields) {
+  //     for (const f of job.fields) {
+  //       values[f.name] = f.value;
+  //     }
+  //   }
+  //   return values;
+  // }
 
   const handleMessage = () => {
     setShowsNotify(true);
@@ -199,7 +199,9 @@ const ProceedJobPage = (props) => {
       {job && <Form form={form} layout="vertical"
         onValuesChange={handleValuesChange}
         onFinish={handleSubmit}
-        style={{ textAlign: 'left', width: '100%' }} initialValues={getFormInitialValues()}>
+        style={{ textAlign: 'left', width: '100%' }}
+        initialValues={job}
+      >
         <PageHeader
           onBack={() => handleCancel()}
           title={job.name}
@@ -228,11 +230,11 @@ const ProceedJobPage = (props) => {
         <Divider />
         <Row gutter={32}>
           <Col span={12}>
-            {job.fields.filter(f => f.type !== 'upload').map((field, i) => {
+            {job.fields.map((field, i) => {
               const { name, description, type } = field;
               const formItemProps = {
                 label: <>{varNameToLabelName(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
-                name,
+                name: ['fields', i, 'value']
                 // rules: [{ required }]
               }
               return (
@@ -252,19 +254,27 @@ const ProceedJobPage = (props) => {
             })}
           </Col>
           <Col span={12}>
-            {job.fields.filter(f => f.type === 'upload').map((field, i) => {
-              const { name, description } = field;
-              const formItemProps = {
-                label: <>{varNameToLabelName(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
-                name,
-                // rules: [{ required }]
-              }
-              return (
-                <Form.Item key={i} {...formItemProps} >
-                  <FileUploader disabled={loading} />
-                </Form.Item>
-              );
-            })}
+            {job.uploadDocs && <Form.Item
+              label="Client Uploaded Docs"
+              name="uploadDocs"
+              // rules={[{ required: true, message: 'Please upload files' }]}
+            >
+              <FileUploader disabled={loading} />
+            </Form.Item>}
+            {job.signDocs && <Form.Item
+              label="Docs To Sign"
+              name="signDocs"
+              // rules={[{ required: true, message: 'Please upload files' }]}
+            >
+              <FileUploader disabled={loading} />
+            </Form.Item>}
+            {job.feedbackDocs && <Form.Item
+              label="Feedback Docs"
+              name="feedbackDocs"
+              // rules={[{ required: true, message: 'Please upload files' }]}
+            >
+              <FileUploader disabled={loading} />
+            </Form.Item>}
           </Col>
         </Row>
 
