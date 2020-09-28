@@ -15,3 +15,7 @@ export async function deleteDocTemplate(id) {
 export async function listDocTemplate() {
   return httpGet('doc_template');
 }
+
+export async function applyDocTemplate(id, variables) {
+  return httpPost(`doc_template/${id}/use`, {variables});
+}

@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { varNameToLabelName } from 'util/varNameToLabelName';
+import { merge } from 'lodash';
 
 const { Text } = Typography;
 
@@ -12,10 +13,8 @@ const FieldsEditor = (props) => {
   const { job, onChange, disabled } = props;
 
   const handleSubmit = async (values) => {
-    onChange({
-      ...job,
-      ...values,
-    });
+    const changedJob = merge({}, job, values);
+    onChange(changedJob);
   }
 
   if (!job) {

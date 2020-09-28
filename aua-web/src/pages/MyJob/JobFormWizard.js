@@ -4,12 +4,15 @@ import { generateJob } from 'services/jobService';
 import JobGenerator from './JobGenerator';
 import StepWizard from 'react-step-wizard';
 import FieldsEditor from './FieldsEditor';
+import AutoDocEditor from './AutoDocEditor';
+import { merge } from 'lodash';
 
 const JobFormWizard = props => {
   const { value } = props;
 
   const [, setLoading] = React.useState(false);
   const [job, setJob] = React.useState(value);
+  const [variables, setVariables] = React.useState({});
   const wizardRef = React.useRef(null);
 
   const handleSelectedTemplate = async (values) => {
@@ -26,14 +29,28 @@ const JobFormWizard = props => {
     wizardRef.current.nextStep();
   }
 
-  return <Form>
-    <StepWizard
+  const handleStepCancel = () => {
+    wizardRef.current.previousStep();
+
+  }
+
+  const handleDocTemplateChange = (usedVariables) => {
+    setVariables(merge({}, variables, usedVariables));
+  }
+
+  return <StepWizard
       ref={wizardRef}
     >
       <JobGenerator onChange={handleSelectedTemplate} />
-      <FieldsEditor job={job} onChange={handleFieldsChange} />
+      {job && <FieldsEditor job={job} onChange={handleFieldsChange} />}
+      {job?.docTemplateIds.map((docTempId, i) => <AutoDocEditor
+        key={i}
+        docTemplateId={docTempId}
+        variables={variables}
+        onChange={handleDocTemplateChange}
+        onCancel={handleStepCancel}
+      />)}
       <div>2</div>
     </StepWizard>
-  </Form>
 }
 export default JobFormWizard;

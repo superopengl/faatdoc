@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { handlerWrapper } from '../utils/asyncHandler';
 import { getUtcNow } from '../utils/getUtcNow';
 import { DocTemplate } from '../entity/DocTemplate';
+import * as moment from 'moment';
 
 function extractVariables(md: string) {
   const pattern = /\{\{[a-zA-Z]+\}\}/ig;
@@ -63,3 +64,27 @@ export const deleteDocTemplate = handlerWrapper(async (req, res) => {
   res.json();
 });
 
+export const useDocTemplate = handlerWrapper(async (req, res) => {
+  assertRole(req, 'admin', 'agent', 'client');
+  const { id } = req.params;
+  const { variables: inboundVariables } = req.body;
+  const repo = getRepository(DocTemplate);
+  const docTemplate = await repo.findOne(id);
+  assert(docTemplate, 404);
+
+  const { md, variables } = docTemplate;
+
+  const usedVars = {};
+  const content = variables.reduce((pre, cur) => {
+    const pattern = `{{${cur}}}`;
+    const replacement = pattern === `{{now}}` ? moment(getUtcNow()).format('D MMM YYYY') : _.get(inboundVariables, cur, '');
+    usedVars[cur] = replacement;
+
+    return pre.replace(pattern, replacement);
+  }, md);
+
+  res.json({
+    content,
+    usedVars,
+  });
+});
