@@ -7,6 +7,9 @@ import { handlerWrapper } from '../utils/asyncHandler';
 import { getUtcNow } from '../utils/getUtcNow';
 import { DocTemplate } from '../entity/DocTemplate';
 import * as moment from 'moment';
+import * as markdownpdf from 'markdown-pdf';
+import * as fs from 'fs';
+import * as stringToStream from 'string-to-stream';
 
 function extractVariables(md: string) {
   const pattern = /\{\{[a-zA-Z]+\}\}/ig;
@@ -64,7 +67,7 @@ export const deleteDocTemplate = handlerWrapper(async (req, res) => {
   res.json();
 });
 
-export const useDocTemplate = handlerWrapper(async (req, res) => {
+export const applyDocTemplate = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent', 'client');
   const { id } = req.params;
   const { variables: inboundVariables } = req.body;
@@ -72,19 +75,43 @@ export const useDocTemplate = handlerWrapper(async (req, res) => {
   const docTemplate = await repo.findOne(id);
   assert(docTemplate, 404);
 
-  const { md, variables } = docTemplate;
+  const { variables } = docTemplate;
 
-  const usedVars = {};
-  const content = variables.reduce((pre, cur) => {
+  const usedVars = variables.reduce((pre, cur) => {
     const pattern = `{{${cur}}}`;
     const replacement = pattern === `{{now}}` ? moment(getUtcNow()).format('D MMM YYYY') : _.get(inboundVariables, cur, '');
-    usedVars[cur] = replacement;
+    pre[cur] = replacement;
+    return pre;
+  }, {});
+
+  res.json({
+    usedVars,
+  });
+});
+
+export const renderPdfFromDocTemplate = handlerWrapper(async (req, res) => {
+  assertRole(req, 'admin', 'agent', 'client');
+  const { id } = req.params;
+  const { variables: inboundVariables } = req.body;
+  const repo = getRepository(DocTemplate);
+  const docTemplate = await repo.findOne(id);
+  assert(docTemplate, 404);
+
+  const { name, md, variables } = docTemplate;
+
+  const renderedMarkdown = variables.reduce((pre, cur) => {
+    const pattern = `{{${cur}}}`;
+    const replacement = pattern === `{{now}}` ? moment(getUtcNow()).format('D MMM YYYY') : _.get(inboundVariables, cur, '');
 
     return pre.replace(pattern, replacement);
   }, md);
 
-  res.json({
-    content,
-    usedVars,
-  });
+
+  res.setHeader('Content-Type', 'application/pdf');
+  res.setHeader('Content-Disposition', `attachment; filename=${name}.pdf`);
+
+  stringToStream(renderedMarkdown)
+    .pipe(markdownpdf())
+    .pipe(res);
 });
+

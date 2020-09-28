@@ -13,10 +13,11 @@ import { FileUploader } from '../../components/FileUploader';
 import JobGenerator from './JobGenerator';
 import * as queryString from 'query-string';
 import { Spin } from 'antd';
-import { applyDocTemplate } from 'services/docTemplateService';
+import { applyDocTemplate , pdfDocTemplate} from 'services/docTemplateService';
 import MarkdownIt from 'markdown-it'
 import MdEditor from 'react-markdown-editor-lite'
 import 'react-markdown-editor-lite/lib/index.css';
+import { saveAs } from 'file-saver';
 
 const mdParser = new MarkdownIt(/* Markdown-it options */);
 
@@ -40,13 +41,25 @@ const AutoDocEditor = props => {
   const [content, setContent] = React.useState();
   const [usedVariables, setUsedVariables] = React.useState({});
 
+  const downloadPdf = async () => {
+    const data = await pdfDocTemplate(docTemplateId, variables);
+    // console.log(data);
+    const file = new Blob([data], { type: 'application/pdf' });
+    const fileURL = URL.createObjectURL(file);
+//Open the URL on new Window
+    window.open(fileURL);
+    // saveAs(blob);
+
+  }
   const loadEntity = async () => {
     setLoading(true);
     const { content, usedVariables } = await applyDocTemplate(docTemplateId, variables);
+    await downloadPdf();
     setContent(content);
     setUsedVariables(usedVariables);
     setLoading(false);
   };
+
 
   React.useEffect(() => {
     loadEntity();
