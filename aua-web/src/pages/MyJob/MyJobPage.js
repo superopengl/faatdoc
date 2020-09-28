@@ -9,6 +9,7 @@ import { listJobTemplate } from 'services/jobTemplateService';
 import { listPortfolio } from 'services/portfolioService';
 import { generateJob, getJob, saveJob } from 'services/jobService';
 import MyJobSign from './MyJobSign';
+import JobFormWizard from './JobFormWizard';
 
 const ContainerStyled = styled.div`
 margin: 4rem auto 0 auto;
@@ -61,9 +62,13 @@ const MyJobPage = (props) => {
       <ContainerStyled>
         {loading ? <Spin /> : <>
 
-          {showsEditableForm && <MyJobForm
+          {/* {showsEditableForm && <MyJobForm
             onOk={onOk}
             onCancel={() => onCancel()}
+            value={job} />} */}
+          {showsEditableForm && <JobFormWizard
+            onOk={onOk}
+            onCancel={onCancel}
             value={job} />}
           {showsSign && <MyJobSign value={job} />}
         </>}

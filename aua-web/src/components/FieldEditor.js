@@ -41,7 +41,7 @@ const FieldEditor = (props) => {
     });
 
     onChange(newValue);
-  }, [fields]);
+  }, [fields]); 
 
   const addNewRow = () => {
     fields.push({ ...EMPTY_ROW });
