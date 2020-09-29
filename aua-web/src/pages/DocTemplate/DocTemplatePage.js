@@ -55,6 +55,11 @@ export const DocTemplatePage = () => {
       render: (text) => text
     },
     {
+      title: 'Description & Help',
+      dataIndex: 'description',
+      render: (text) => text
+    },
+    {
       title: <>Auto matched fields</>,
       dataIndex: 'variables',
     render: (value) => <>{(value || []).map(x => <Text style={{display: 'inline-block'}} key={x} code>{`{{${x}}}`}</Text>)}</>

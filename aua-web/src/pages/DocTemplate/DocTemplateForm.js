@@ -57,11 +57,10 @@ const DocTemplateForm = (props) => {
   }, [])
 
   const handleSave = async (values) => {
-    const { name, md } = values;
+    const { name } = values;
     const newEntity = {
       ...entity,
-      name,
-      md,
+      ...values
     }
     await saveDocTemplate(newEntity);
     props.onOk();
@@ -80,6 +79,9 @@ const DocTemplateForm = (props) => {
         <Input style={{ marginRight: '1rem' }} placeholder="Doc Template Name" />
       </Form.Item>
       <Button style={{ position: 'absolute', right: 0, top: 0, width: 100 }} htmlType="submit" type="primary">Save</Button>
+      <Form.Item name="description" rules={[{ required: true, message: ' ' }]}>
+        <Input.TextArea allowClear autoSize={{minRows: 3}}/>
+      </Form.Item>
       <Paragraph type="secondary">
         Refer to <a href="https://www.markdownguide.org/basic-syntax/" target="_blank" rel="noopener noreferrer">https://www.markdownguide.org/basic-syntax/</a> for Markdown basic syntax. Use double curly braces to express the field variables like <Text code>{'{{givenName}}'}</Text>, <Text code>{'{{now}}'}</Text>.
         </Paragraph>

@@ -6,11 +6,12 @@ import StepWizard from 'react-step-wizard';
 import FieldsEditor from './FieldsEditor';
 import AutoDocEditor from './AutoDocEditor';
 import { merge } from 'lodash';
+import { Button, Divider, Skeleton, Radio, Space, Typography } from 'antd';
 
 const JobFormWizard = props => {
   const { value } = props;
 
-  const [, setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
   const [job, setJob] = React.useState(value);
   const [variables, setVariables] = React.useState({});
   const wizardRef = React.useRef(null);
@@ -36,6 +37,11 @@ const JobFormWizard = props => {
 
   const handleDocTemplateChange = (usedVariables) => {
     setVariables(merge({}, variables, usedVariables));
+    wizardRef.current.nextStep();
+  }
+
+  if (loading) {
+    return <Skeleton active />
   }
 
   return <StepWizard

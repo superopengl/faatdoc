@@ -1,5 +1,5 @@
 import { BellOutlined, MessageOutlined } from '@ant-design/icons';
-import { Button, Divider, Input, Radio, Space, Typography } from 'antd';
+import { Button, Divider, Skeleton, Radio, Space, Typography } from 'antd';
 import { DateInput } from 'components/DateInput';
 import { RangePickerInput } from 'components/RangePickerInput';
 import JobChat from 'pages/AdminJob/JobChat';
@@ -13,13 +13,16 @@ import { FileUploader } from '../../components/FileUploader';
 import JobGenerator from './JobGenerator';
 import * as queryString from 'query-string';
 import { Spin } from 'antd';
-import { applyDocTemplate , pdfDocTemplate} from 'services/docTemplateService';
+import { applyDocTemplate, pdfDocTemplate } from 'services/docTemplateService';
 import MarkdownIt from 'markdown-it'
 import MdEditor from 'react-markdown-editor-lite'
 import 'react-markdown-editor-lite/lib/index.css';
 import { saveAs } from 'file-saver';
 import PDFViewer from 'mgr-pdf-viewer-react';
+import { Alert } from 'antd';
+import PdfViewer from 'components/PdfViewer';
 
+const { Paragraph } = Typography;
 
 const mdParser = new MarkdownIt(/* Markdown-it options */);
 
@@ -42,9 +45,14 @@ const AutoDocEditor = props => {
   const [loading, setLoading] = React.useState(true);
   const [usedVariables, setUsedVariables] = React.useState({});
   const [file, setFile] = React.useState();
+  const [name, setName] = React.useState();
+  const [fileUrl, setFileUrl] = React.useState();
+  const [description, setDescription] = React.useState();
 
   const downloadPdf = async () => {
     const data = await pdfDocTemplate(docTemplateId, variables);
+    const fileUrl = URL.createObjectURL(data);
+    setFileUrl(fileUrl);
     // const blob = new Blob([data], { type: 'application/pdf' });
     const reader = new FileReader();
     reader.readAsDataURL(data);
@@ -56,11 +64,17 @@ const AutoDocEditor = props => {
 
   const loadEntity = async () => {
     setLoading(true);
-    const { content, usedVariables } = await applyDocTemplate(docTemplateId, variables);
+    const { name, description, usedVariables } = await applyDocTemplate(docTemplateId, variables);
     await downloadPdf();
+    setName(name);
     setUsedVariables(usedVariables);
+    setDescription(description);
     setLoading(false);
   };
+
+  const handlePdfLinkView = () => {
+
+  }
 
 
   React.useEffect(() => {
@@ -72,7 +86,7 @@ const AutoDocEditor = props => {
   }
 
   if (loading) {
-    return <Spin />
+    return <Skeleton active />
   }
 
   return <Space direction="vertical" style={{ width: '100%' }}>
@@ -80,9 +94,12 @@ const AutoDocEditor = props => {
       <Button type="link" onClick={onCancel}>Cancel</Button>
       <Button type="primary" onClick={handleConfirmAndSign}>Confirm and Sign</Button>
     </Space>
+    <Button type="link" href={fileUrl} target="_blank">{name}.pdf</Button>
+    <Alert message="Notes" description={description} type="info" showIcon closable />
     <Divider />
+
     {/* {file && <PdfViewer file={file} width={500}/>} */}
-    {file && <PDFViewer document={{base64: file}} width={500}/>}
+    {/* {file && <PdfViewer data={file} width={500} />} */}
   </Space>
 }
 

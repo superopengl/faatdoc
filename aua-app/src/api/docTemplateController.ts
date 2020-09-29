@@ -8,7 +8,6 @@ import { getUtcNow } from '../utils/getUtcNow';
 import { DocTemplate } from '../entity/DocTemplate';
 import * as moment from 'moment';
 import * as markdownpdf from 'markdown-pdf';
-import * as fs from 'fs';
 import * as stringToStream from 'string-to-stream';
 
 function extractVariables(md: string) {
@@ -22,10 +21,11 @@ export const saveDocTemplate = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin');
   const docTemplate = new DocTemplate();
 
-  const { id, name, md } = req.body;
+  const { id, name, description, md } = req.body;
   assert(name, 400, 'name is empty');
   docTemplate.id = id || uuidv4();
   docTemplate.name = name;
+  docTemplate.description = description;
   docTemplate.md = md;
   docTemplate.variables = extractVariables(md);
   docTemplate.lastUpdatedAt = getUtcNow();
@@ -42,7 +42,7 @@ export const listDocTemplates = handlerWrapper(async (req, res) => {
   const list = await getRepository(DocTemplate)
     .createQueryBuilder('x')
     .orderBy('x.createdAt', 'ASC')
-    .select(['id', 'name', 'variables', `"createdAt"`, '"lastUpdatedAt"'])
+    .select(['id', 'name', 'description', 'variables', `"createdAt"`, '"lastUpdatedAt"'])
     .execute();
 
   res.json(list);
@@ -75,7 +75,7 @@ export const applyDocTemplate = handlerWrapper(async (req, res) => {
   const docTemplate = await repo.findOne(id);
   assert(docTemplate, 404);
 
-  const { variables } = docTemplate;
+  const { variables, description, name } = docTemplate;
 
   const usedVars = variables.reduce((pre, cur) => {
     const pattern = `{{${cur}}}`;
@@ -85,6 +85,8 @@ export const applyDocTemplate = handlerWrapper(async (req, res) => {
   }, {});
 
   res.json({
+    name,
+    description,
     usedVars,
   });
 });
