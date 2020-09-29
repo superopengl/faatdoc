@@ -19,6 +19,8 @@ dependencies:
   http-assert: 1.4.1
   jsonwebtoken: 8.5.1
   lodash: 4.17.19
+  markdown-it: 11.0.1
+  markdown-it-pdf: 1.1.0
   markdown-pdf: 10.0.0
   moment: 2.27.0
   pg: 8.3.3_pg@8.3.3
@@ -2096,6 +2098,12 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-weT+r0kTkRQdCdYCNtkMwWXQTMEswKrFBkm4ckQOMVhhqhIMI1UT2hMj+1iigIhgSZm5gTmrRXBNoGUgaTY1xA==
+  /linkify-it/3.0.2:
+    dependencies:
+      uc.micro: 1.0.6
+    dev: false
+    resolution:
+      integrity: sha512-gDBO4aHNZS6coiZCKVhSNh43F9ioIL4JwRjLZPkoLIY4yZFwg264Y5lu2x6rb1Js42Gh6Yqm2f6L2AJcnkzinQ==
   /load-json-file/4.0.0:
     dependencies:
       graceful-fs: 4.2.4
@@ -2224,6 +2232,21 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-7Nyo8TFE5mDxtb1B8S80edmN+48=
+  /markdown-it-pdf/1.1.0:
+    dev: false
+    resolution:
+      integrity: sha512-zdSFcsuiQaJhTaNuCbAEaT6ViS2i8OdChBpizw112DuUV8u0N0xxlJFZKsSg8G3O+gFvhoKUVx9M+s1tYt7TCA==
+  /markdown-it/11.0.1:
+    dependencies:
+      argparse: 1.0.10
+      entities: 2.0.3
+      linkify-it: 3.0.2
+      mdurl: 1.0.1
+      uc.micro: 1.0.6
+    dev: false
+    hasBin: true
+    resolution:
+      integrity: sha512-aU1TzmBKcWNNYvH9pjq6u92BML+Hz3h5S/QpfTFwiQF852pLT+9qHsrhM9JYipkOXZxGn+sGH8oyJE9FD9WezQ==
   /markdown-pdf/10.0.0:
     dependencies:
       commander: 3.0.2
@@ -2241,6 +2264,10 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-o3lFfAOTpCgCXEXpNN86RaCVGE1YlxjWuAJ79XevAPoTyCBsl06BWhnFogYedg+JZxPjB3LWsA8JxZiCjsPPLA==
+  /mdurl/1.0.1:
+    dev: false
+    resolution:
+      integrity: sha1-/oWy7HWlkDfyrf7BAP1sYBdhFS4=
   /media-typer/0.3.0:
     dev: false
     engines:
@@ -3764,6 +3791,10 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-BLbiRkiBzAwsjut4x/dsibSTB6yWpwT5qWmC2OfuCg3GgVQCSgMs4vEctYPhsaGtd0AeuuHMkjZ2h2WG8MSzRw==
+  /uc.micro/1.0.6:
+    dev: false
+    resolution:
+      integrity: sha512-8Y75pvTYkLJW2hWQHXxoqRgV7qb9B+9vFEtidML+7koHUFapnVJAZ6cKs+Qjz5Aw3aZWHMC6u0wJE3At+nSGwA==
   /undefsafe/2.0.3:
     dependencies:
       debug: 2.6.9
@@ -4124,6 +4155,8 @@ specifiers:
   http-assert: ^1.4.1
   jsonwebtoken: ^8.5.1
   lodash: ^4.17.15
+  markdown-it: ^11.0.1
+  markdown-it-pdf: ^1.1.0
   markdown-pdf: ^10.0.0
   moment: ^2.27.0
   nodemon: ^2.0.4

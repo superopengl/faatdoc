@@ -298,7 +298,7 @@ paths:
           description: OK
   /doc_template/{id}/pdf:
     post:
-      operationId: renderPdfFromDocTemplate
+      operationId: createPdfFromDocTemplate
       # security:
       #   - authLoggedInUser: []
       parameters:

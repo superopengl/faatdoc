@@ -1,10 +1,8 @@
 
-import * as aws from 'aws-sdk';
 import { getRepository } from 'typeorm';
 import { File } from '../entity/File';
 import { assert } from '../utils';
 import { handlerWrapper } from '../utils/asyncHandler';
-import { awsConfig } from '../utils/awsConfig';
 import * as path from 'path';
 import * as fse from 'fs-extra';
 import * as fs from 'fs';
@@ -12,33 +10,7 @@ import { uuidToRelativePath } from '../utils/uuidToRelativePath';
 import { assertRole } from '../utils';
 import { getUtcNow } from '../utils/getUtcNow';
 import { Job } from '../entity/Job';
-
-function getS3Service() {
-  awsConfig();
-  return new aws.S3();
-}
-
-// Upload your image to S3
-async function uploadToS3(id, name, data): Promise<string> {
-  const bucketName = process.env.AUA_S3_BUCKET;
-  const prefix = process.env.AUA_FILE_PREFIX;
-
-  const key = `${prefix}/${id}/${name}`;
-  assert(prefix && id, 404, `image path cannot be composed '${bucketName}/${key}'`);
-
-  const s3 = getS3Service();
-
-  const opt = {
-    Bucket: bucketName,
-    Key: key,
-    Body: data
-  };
-  const resp = await s3.upload(opt).promise();
-
-  // return the S3's path to the image
-  return resp.Location;
-}
-
+import { uploadToS3 } from '../utils/uploadToS3';
 
 export const downloadFile = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client', 'agent');

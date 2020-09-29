@@ -9,6 +9,11 @@ import { DocTemplate } from '../entity/DocTemplate';
 import * as moment from 'moment';
 import * as markdownpdf from 'markdown-pdf';
 import * as stringToStream from 'string-to-stream';
+import { uploadToS3 } from '../utils/uploadToS3';
+import * as MarkdownIt from 'markdown-it';
+import * as markdownItPdf from 'markdown-it-pdf';
+
+const mdParser = new MarkdownIt().use(markdownItPdf);
 
 function extractVariables(md: string) {
   const pattern = /\{\{[a-zA-Z]+\}\}/ig;
@@ -91,7 +96,19 @@ export const applyDocTemplate = handlerWrapper(async (req, res) => {
   });
 });
 
-export const renderPdfFromDocTemplate = handlerWrapper(async (req, res) => {
+async function mdToPdfBuffer(md) {
+  return new Promise((resolve, reject) => {
+    markdownpdf().from.string(md).to.buffer(null, function (err, PdfBuffer) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(PdfBuffer);
+      }
+    });
+  });
+}
+
+export const createPdfFromDocTemplate = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent', 'client');
   const { id } = req.params;
   const { variables: inboundVariables } = req.body;
@@ -101,19 +118,28 @@ export const renderPdfFromDocTemplate = handlerWrapper(async (req, res) => {
 
   const { name, md, variables } = docTemplate;
 
-  const renderedMarkdown = variables.reduce((pre, cur) => {
+  const filledMarkdown = variables.reduce((pre, cur) => {
     const pattern = `{{${cur}}}`;
-    const replacement = pattern === `{{now}}` ? moment(getUtcNow()).format('D MMM YYYY') : _.get(inboundVariables, cur, '');
+    const replacement = pattern === `{{now}}` ? moment(getUtcNow()).format('D MMM YYYY') : inboundVariables[cur];
 
+    assert(replacement !== undefined, 400, `Variable '${cur}' is missing`);
     return pre.replace(pattern, replacement);
   }, md);
 
 
-  res.setHeader('Content-Type', 'application/pdf');
-  res.setHeader('Content-Disposition', `attachment; filename=${name}.pdf`);
+  const pdfFileId = uuidv4();
+  const pdfFileName = `${name}.pdf`;
 
-  stringToStream(renderedMarkdown)
-    .pipe(markdownpdf())
-    .pipe(res);
+  const data = await mdToPdfBuffer(filledMarkdown);
+
+  const location = await uploadToS3(pdfFileId, pdfFileName, data);
+
+  const result = {
+    id: pdfFileId,
+    name: pdfFileName,
+    location,
+  };
+
+  res.json(result);
 });
 

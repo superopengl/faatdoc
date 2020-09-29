@@ -54,12 +54,12 @@ const AutoDocEditor = props => {
     const fileUrl = URL.createObjectURL(data);
     setFileUrl(fileUrl);
     // const blob = new Blob([data], { type: 'application/pdf' });
-    const reader = new FileReader();
-    reader.readAsDataURL(data);
-    reader.onload = () => {
-      const pureBase64 = reader.result.split(';base64,')[1];
-      setFile(pureBase64);
-    }
+    // const reader = new FileReader();
+    // reader.readAsDataURL(data);
+    // reader.onload = () => {
+    //   const pureBase64 = reader.result.split(';base64,')[1];
+    //   setFile(pureBase64);
+    // }
   }
 
   const loadEntity = async () => {
@@ -71,10 +71,6 @@ const AutoDocEditor = props => {
     setDescription(description);
     setLoading(false);
   };
-
-  const handlePdfLinkView = () => {
-
-  }
 
 
   React.useEffect(() => {
@@ -95,7 +91,7 @@ const AutoDocEditor = props => {
       <Button type="primary" onClick={handleConfirmAndSign}>Confirm and Sign</Button>
     </Space>
     <Button type="link" href={fileUrl} target="_blank">{name}.pdf</Button>
-    <Alert message="Notes" description={description} type="info" showIcon closable />
+    <Alert message="Notes" description={description} type="warning" showIcon closable />
     <Divider />
 
     {/* {file && <PdfViewer file={file} width={500}/>} */}
