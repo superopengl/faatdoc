@@ -18,7 +18,8 @@ import MarkdownIt from 'markdown-it'
 import MdEditor from 'react-markdown-editor-lite'
 import 'react-markdown-editor-lite/lib/index.css';
 import { saveAs } from 'file-saver';
-import PdfViewer from 'components/PdfViewer';
+import PDFViewer from 'mgr-pdf-viewer-react';
+
 
 const mdParser = new MarkdownIt(/* Markdown-it options */);
 
@@ -39,27 +40,24 @@ const DocViewerInner = styled.div`
 const AutoDocEditor = props => {
   const { docTemplateId, variables, onChange, onCancel } = props;
   const [loading, setLoading] = React.useState(true);
-  const [content, setContent] = React.useState();
   const [usedVariables, setUsedVariables] = React.useState({});
-  const [fileUrl, setFileUrl] = React.useState();
   const [file, setFile] = React.useState();
-  const [base64, setBase64] = React.useState();
 
   const downloadPdf = async () => {
     const data = await pdfDocTemplate(docTemplateId, variables);
-    // setFileUrl(fileUrl);
-
-    setFile(data);
-//Open the URL on new Window
-    // window.open(fileURL);
-    // saveAs(blob);
-
+    // const blob = new Blob([data], { type: 'application/pdf' });
+    const reader = new FileReader();
+    reader.readAsDataURL(data);
+    reader.onload = () => {
+      const pureBase64 = reader.result.split(';base64,')[1];
+      setFile(pureBase64);
+    }
   }
+
   const loadEntity = async () => {
     setLoading(true);
     const { content, usedVariables } = await applyDocTemplate(docTemplateId, variables);
     await downloadPdf();
-    setContent(content);
     setUsedVariables(usedVariables);
     setLoading(false);
   };
@@ -77,29 +75,14 @@ const AutoDocEditor = props => {
     return <Spin />
   }
 
-  const config = {
-    view: {
-      menu: false, 
-      md: false, 
-      html: true, 
-    },
-    canView: {
-      menu: false, 
-      md: false, 
-      html: true, 
-      fullScreen: true,
-      hideMenu: false,
-    }
-  };
-
   return <Space direction="vertical" style={{ width: '100%' }}>
     <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
       <Button type="link" onClick={onCancel}>Cancel</Button>
       <Button type="primary" onClick={handleConfirmAndSign}>Confirm and Sign</Button>
     </Space>
     <Divider />
-    {fileUrl}
-    {file && <PdfViewer file={file} width={500}/>}
+    {/* {file && <PdfViewer file={file} width={500}/>} */}
+    {file && <PDFViewer document={{base64: file}} width={500}/>}
   </Space>
 }
 
