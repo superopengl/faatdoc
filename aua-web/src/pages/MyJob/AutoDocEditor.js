@@ -18,6 +18,7 @@ import MarkdownIt from 'markdown-it'
 import MdEditor from 'react-markdown-editor-lite'
 import 'react-markdown-editor-lite/lib/index.css';
 import { saveAs } from 'file-saver';
+import PdfViewer from 'components/PdfViewer';
 
 const mdParser = new MarkdownIt(/* Markdown-it options */);
 
@@ -40,14 +41,17 @@ const AutoDocEditor = props => {
   const [loading, setLoading] = React.useState(true);
   const [content, setContent] = React.useState();
   const [usedVariables, setUsedVariables] = React.useState({});
+  const [fileUrl, setFileUrl] = React.useState();
+  const [file, setFile] = React.useState();
+  const [base64, setBase64] = React.useState();
 
   const downloadPdf = async () => {
     const data = await pdfDocTemplate(docTemplateId, variables);
-    // console.log(data);
-    const file = new Blob([data], { type: 'application/pdf' });
-    const fileURL = URL.createObjectURL(file);
+    // setFileUrl(fileUrl);
+
+    setFile(data);
 //Open the URL on new Window
-    window.open(fileURL);
+    // window.open(fileURL);
     // saveAs(blob);
 
   }
@@ -94,15 +98,8 @@ const AutoDocEditor = props => {
       <Button type="primary" onClick={handleConfirmAndSign}>Confirm and Sign</Button>
     </Space>
     <Divider />
-    <DocViewerContainer>
-      {/* <DocViewerInner dangerouslySetInnerHTML={{__html:md.render(content)}}></DocViewerInner> */}
-      <MdEditor
-        value={content}
-        renderHTML={(text) => mdParser.render(text)}
-        readonly={true}
-        config={config}
-      />
-    </DocViewerContainer>
+    {fileUrl}
+    {file && <PdfViewer file={file} width={500}/>}
   </Space>
 }
 
