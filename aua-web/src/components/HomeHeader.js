@@ -19,6 +19,7 @@ import { GlobalContext } from '../contexts/GlobalContext';
 const { Header } = Layout;
 const { Text } = Typography;
 const HeaderStyled = styled(Header)`
+z-index: 100 !important;
 position: fixed;
 z-index: 1;
 width: 100%;
