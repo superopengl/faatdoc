@@ -96,6 +96,7 @@ class App extends React.Component {
             <RoleRoute visible={isAdmin} loading={loading} exact path="/recurring" component={RecurringListPage} />
             <RoleRoute visible={isAdmin} loading={loading} exact path="/impersonate" component={ImpersonatePage} />
             <RoleRoute visible={!isGuest} loading={loading} path="/message" exact component={MessagePage} />
+            <RoleRoute visible={!isGuest} loading={loading} path="/job/new" exact component={MyJobPage} />
             <RoleRoute visible={!isGuest} loading={loading} path="/job/:id" exact component={MyJobPage} />
             <RoleRoute visible={isAdmin || isAgent || isClient} loading={loading} path="/job" exact component={isClient ? MyJobListPage : AdminJobListPage} />
             <RoleRoute visible={isAdmin || isAgent} loading={loading} path="/job/:id/proceed" exact component={ProceedJobPage} />

@@ -28,7 +28,7 @@ const LayoutStyled = styled(Layout)`
 
 const MyJobPage = (props) => {
   const id = props.match.params.id;
-  const isNew = id === 'new';
+  const isNew = !id || id === 'new';
 
   const [loading, setLoading] = React.useState(true);
   const [job, setJob] = React.useState();

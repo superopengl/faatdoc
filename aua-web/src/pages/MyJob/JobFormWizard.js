@@ -16,7 +16,7 @@ const JobFormWizard = props => {
   const [variables, setVariables] = React.useState({});
   const wizardRef = React.useRef(null);
 
-  const handleSelectedTemplate = async (values) => {
+  const handleJobGenerated = async (values) => {
     setLoading(true);
     const { jobTemplateId, portfolioId } = values;
     const job = await generateJob(jobTemplateId, portfolioId);
@@ -26,8 +26,14 @@ const JobFormWizard = props => {
   }
 
   const handleFieldsChange = job => {
+    const variables = job.fields.map(f => ({name: f.name, value: f.value}));
     setJob(job);
+    setVariables(variables);
     wizardRef.current.nextStep();
+  }
+
+  const handleVariablesChange = variables => {
+    setVariables(variables);
   }
 
   const handleStepCancel = () => {
@@ -35,8 +41,9 @@ const JobFormWizard = props => {
 
   }
 
-  const handleDocTemplateChange = (usedVariables) => {
+  const handleDocFinish = (signDoc, usedVariables) => {
     setVariables(merge({}, variables, usedVariables));
+    job.signDocs = [...job.signDocs, signDoc];
     wizardRef.current.nextStep();
   }
 
@@ -45,18 +52,20 @@ const JobFormWizard = props => {
   }
 
   return <StepWizard
-      ref={wizardRef}
-    >
-      <JobGenerator onChange={handleSelectedTemplate} />
-      {job && <FieldsEditor job={job} onChange={handleFieldsChange} />}
-      {job?.docTemplateIds.map((docTempId, i) => <AutoDocEditor
+    ref={wizardRef}
+  >
+    {!job && <JobGenerator onChange={handleJobGenerated} />}
+    {job && <>
+      <FieldsEditor job={job} onChange={handleFieldsChange} />
+      {job.docTemplateIds.map((docTempId, i) => <AutoDocEditor
         key={i}
         docTemplateId={docTempId}
         variables={variables}
-        onChange={handleDocTemplateChange}
+        onVariablesChange={handleVariablesChange}
+        onFinish={handleDocFinish}
         onCancel={handleStepCancel}
       />)}
-      <div>2</div>
-    </StepWizard>
+    </>}
+  </StepWizard>
 }
 export default JobFormWizard;

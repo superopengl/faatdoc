@@ -1,5 +1,5 @@
 import { BellOutlined, MessageOutlined } from '@ant-design/icons';
-import { Button, Divider, Skeleton, Radio, Space, Typography } from 'antd';
+import { Button, Divider, Skeleton, Alert, Space, Typography, Input, Form } from 'antd';
 import { DateInput } from 'components/DateInput';
 import { RangePickerInput } from 'components/RangePickerInput';
 import JobChat from 'pages/AdminJob/JobChat';
@@ -13,16 +13,17 @@ import { FileUploader } from '../../components/FileUploader';
 import JobGenerator from './JobGenerator';
 import * as queryString from 'query-string';
 import { Spin } from 'antd';
-import { applyDocTemplate, pdfDocTemplate } from 'services/docTemplateService';
+import { applyDocTemplate, pdfDocTemplate, getDocTemplate } from 'services/docTemplateService';
 import MarkdownIt from 'markdown-it'
 import MdEditor from 'react-markdown-editor-lite'
 import 'react-markdown-editor-lite/lib/index.css';
 import { saveAs } from 'file-saver';
 import PDFViewer from 'mgr-pdf-viewer-react';
-import { Alert } from 'antd';
 import PdfViewer from 'components/PdfViewer';
+import StepWizard from 'react-step-wizard';
 
-const { Paragraph } = Typography;
+
+const { Paragraph, Title } = Typography;
 
 const mdParser = new MarkdownIt(/* Markdown-it options */);
 
@@ -41,18 +42,18 @@ const DocViewerInner = styled.div`
 `;
 
 const AutoDocEditor = props => {
-  const { docTemplateId, variables, onChange, onCancel } = props;
+  const { docTemplateId, variables, onVariablesChange, onFinish, onCancel } = props;
+  const wizardRef = React.useRef(null);
   const [loading, setLoading] = React.useState(true);
-  const [usedVariables, setUsedVariables] = React.useState({});
+  const [docVariables, setDocVariables] = React.useState({});
   const [file, setFile] = React.useState();
   const [name, setName] = React.useState();
   const [fileUrl, setFileUrl] = React.useState();
   const [description, setDescription] = React.useState();
+  const [pdfData, setPdfData] = React.useState();
 
   const downloadPdf = async () => {
-    const data = await pdfDocTemplate(docTemplateId, variables);
-    const fileUrl = URL.createObjectURL(data);
-    setFileUrl(fileUrl);
+
     // const blob = new Blob([data], { type: 'application/pdf' });
     // const reader = new FileReader();
     // reader.readAsDataURL(data);
@@ -64,39 +65,73 @@ const AutoDocEditor = props => {
 
   const loadEntity = async () => {
     setLoading(true);
-    const { name, description, usedVariables } = await applyDocTemplate(docTemplateId, variables);
-    await downloadPdf();
+    const { name, description, variables: variableDefs } = await getDocTemplate(docTemplateId);
+    // await downloadPdf();
     setName(name);
-    setUsedVariables(usedVariables);
+    setDocVariables(variableDefs.filter(x => x !== 'now').map(name => ({ name, value: variables[name] })));
     setDescription(description);
     setLoading(false);
   };
+
+  const handleVariableDone = async values => {
+    const newVariables = {
+      ...variables,
+      ...values
+    };
+    onVariablesChange(newVariables);
+    wizardRef.current.nextStep();
+    const pdfData = await pdfDocTemplate(docTemplateId, newVariables);
+    setPdfData(pdfData);
+  }
 
 
   React.useEffect(() => {
     loadEntity();
   }, []);
 
-  const handleConfirmAndSign = async () => {
-    onChange(usedVariables);
+  const handleBackToVariables = () => {
+    wizardRef.current.previousStep();
+  }
+
+  const handleFinish = () => {
+    onFinish(pdfData.id);
   }
 
   if (loading) {
     return <Skeleton active />
   }
 
-  return <Space direction="vertical" style={{ width: '100%' }}>
-    <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
-      <Button type="link" onClick={onCancel}>Cancel</Button>
-      <Button type="primary" onClick={handleConfirmAndSign}>Confirm and Sign</Button>
+  return <>
+    <Space direction="vertical" style={{ width: '100%' }}>
+      <Title level={4}>{name}</Title>
+      <Alert message="Notes" description={description} type="warning" showIcon closable />
+      <StepWizard ref={wizardRef}>
+        <div>
+          <Form
+            labelCol={{ span: 8 }}
+            wrapperCol={{ span: 16 }}
+            onFinish={handleVariableDone}
+          >
+            {docVariables.map((x, i) => <Form.Item label={varNameToLabelName(x.name)} name={x.name} key={i} rules={[{ required: true, message: ' ' }]}>
+              <Input />
+            </Form.Item>)}
+            <Form.Item wrapperCol={{ offset: 0, span: 24 }}>
+              <Button block type="primary" htmlType="submit">Next</Button>
+            </Form.Item>
+          </Form>
+        </div>
+        <div>
+          <Space direction="vertical" style={{width: '100%'}}>
+            {!pdfData ? <Spin style={{margin: 'auto'}} /> : <>
+              <Button type="link" href={pdfData.location} target="_blank">{pdfData.name}</Button>
+              <Button block onClick={handleBackToVariables}>Back</Button>
+              <Button block type="primary" onClick={handleFinish}>Next</Button>
+            </>}
+          </Space>
+        </div>
+      </StepWizard>
     </Space>
-    <Button type="link" href={fileUrl} target="_blank">{name}.pdf</Button>
-    <Alert message="Notes" description={description} type="warning" showIcon closable />
-    <Divider />
-
-    {/* {file && <PdfViewer file={file} width={500}/>} */}
-    {/* {file && <PdfViewer data={file} width={500} />} */}
-  </Space>
+  </>
 }
 
 AutoDocEditor.propTypes = {
@@ -106,7 +141,8 @@ AutoDocEditor.propTypes = {
 };
 
 AutoDocEditor.defaultProps = {
-  disabled: false
+  disabled: false,
+  variables: {},
 };
 
 export default AutoDocEditor;

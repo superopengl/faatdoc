@@ -21,5 +21,5 @@ export async function applyDocTemplate(id, variables) {
 }
 
 export async function pdfDocTemplate(id, variables) {
-  return request('POST', `doc_template/${id}/pdf`, null, {variables}, 'blob');
+  return httpPost(`doc_template/${id}/pdf`, {variables});
 }
