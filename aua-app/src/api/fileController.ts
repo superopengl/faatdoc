@@ -33,9 +33,9 @@ export const downloadFile = handlerWrapper(async (req, res) => {
 export const getFile = handlerWrapper(async (req, res) => {
   const { id } = req.params;
   const repo = getRepository(File);
-  const image = await repo.findOne(id);
-  assert(image, 404);
-  res.json(image);
+  const file = await repo.findOne(id);
+  assert(file, 404);
+  res.json(file);
 });
 
 export const searchFileList = handlerWrapper(async (req, res) => {

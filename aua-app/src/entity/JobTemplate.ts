@@ -25,8 +25,5 @@ export class JobTemplate {
   hasUploadDocs: boolean;
 
   @Column({default: true})
-  hasSignDocs: boolean;
-
-  @Column({default: true})
   hasFeedbackDocs: boolean;
 }

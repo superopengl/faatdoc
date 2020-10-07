@@ -6,7 +6,6 @@ export class DocTemplate {
   @PrimaryColumn('uuid')
   id: string;
 
-
   @Column()
   @Index({ unique: true })
   name: string;

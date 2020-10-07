@@ -4,16 +4,18 @@ import { generateJob } from 'services/jobService';
 import JobGenerator from './JobGenerator';
 import StepWizard from 'react-step-wizard';
 import FieldsEditor from './FieldsEditor';
-import AutoDocEditor from './AutoDocEditor';
+import GenDocFieldEditor from './GenDocFieldEditor';
 import { merge } from 'lodash';
-import { Button, Divider, Skeleton, Radio, Space, Typography } from 'antd';
+import { Collapse, Button, Divider, Skeleton, Radio, Space, Typography } from 'antd';
+import GenDocLinkViewer from './GenDocLinkViewer';
+const { Panel } = Collapse;
 
 const JobFormWizard = props => {
   const { value } = props;
 
   const [loading, setLoading] = React.useState(false);
   const [job, setJob] = React.useState(value);
-  const [variables, setVariables] = React.useState({});
+  const [variableContextDic, setVariableContextDic] = React.useState({});
   const wizardRef = React.useRef(null);
 
   const handleJobGenerated = async (values) => {
@@ -22,50 +24,70 @@ const JobFormWizard = props => {
     const job = await generateJob(jobTemplateId, portfolioId);
     setJob(job);
     setLoading(false);
-    wizardRef.current.nextStep();
   }
 
-  const handleFieldsChange = job => {
-    const variables = job.fields.map(f => ({name: f.name, value: f.value}));
+  const handleJobFieldsChange = job => {
+    const variables = job.fields.reduce((pre, cur) => {
+      pre[cur.name] = cur.value;
+      return pre;
+    }, {});
     setJob(job);
-    setVariables(variables);
+    setVariableContextDic(variables);
     wizardRef.current.nextStep();
   }
 
   const handleVariablesChange = variables => {
-    setVariables(variables);
+    setVariableContextDic(variables);
   }
 
-  const handleStepCancel = () => {
+  const handleStepBack = () => {
     wizardRef.current.previousStep();
 
   }
 
-  const handleDocFinish = (signDoc, usedVariables) => {
-    setVariables(merge({}, variables, usedVariables));
-    job.signDocs = [...job.signDocs, signDoc];
+  const handleSkip = () => {
+    handleNext();
+  }
+
+  const handleNext = () => {
     wizardRef.current.nextStep();
+  }
+
+  const handleGenDocFieldChange = values => {
+    setVariableContextDic({
+      ...variableContextDic,
+      ...values,
+    });
+    handleNext();
+  }
+
+  const handleGenDocViewConfirmed = doc => {
+    job.genDocs = job.genDocs.map(d => d.docTemplateId === doc.docTemplateId ? doc : d);
+    setJob({ ...job });
+    handleNext();
   }
 
   if (loading) {
     return <Skeleton active />
   }
 
-  return <StepWizard
-    ref={wizardRef}
-  >
-    {!job && <JobGenerator onChange={handleJobGenerated} />}
-    {job && <>
-      <FieldsEditor job={job} onChange={handleFieldsChange} />
-      {job.docTemplateIds.map((docTempId, i) => <AutoDocEditor
-        key={i}
-        docTemplateId={docTempId}
-        variables={variables}
-        onVariablesChange={handleVariablesChange}
-        onFinish={handleDocFinish}
-        onCancel={handleStepCancel}
-      />)}
-    </>}
+  if (!job) {
+    return <JobGenerator onChange={handleJobGenerated} />
+  }
+
+  const genDocSteps = [];
+  job.genDocs.forEach((doc) => {
+    if (doc.variables.length) {
+      genDocSteps.push(<GenDocFieldEditor doc={doc} onSkip={handleSkip} onBack={handleStepBack} onFinish={handleGenDocFieldChange} />);
+    }
+    genDocSteps.push(<GenDocLinkViewer doc={doc} onSkip={handleSkip} onBack={handleStepBack} onFinish={handleGenDocViewConfirmed} />);
+  });
+
+  return <StepWizard ref={wizardRef} >
+    <FieldsEditor job={job} onChange={handleJobFieldsChange} />
+    {genDocSteps}
   </StepWizard>
+
+
 }
 export default JobFormWizard;

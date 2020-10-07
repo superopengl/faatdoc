@@ -54,7 +54,7 @@ export const saveJob = handlerWrapper(async (req, res) => {
 
   const { user: { id: userId } } = req as any;
 
-  const { id, name, jobTemplateId, portfolioId, fields, status, docTemplateIds, uploadDocs, signDocs, feedbackDocs } = req.body;
+  const { id, name, jobTemplateId, portfolioId, fields, status, genDocs, uploadDocs, signDocs, feedbackDocs } = req.body;
   assert(name, 400, 'name is empty');
 
   const portfolio = await getRepository(Portfolio).findOne(portfolioId);
@@ -80,7 +80,7 @@ export const saveJob = handlerWrapper(async (req, res) => {
   job.name = name;
   job.forWhom = guessDisplayNameFromFields(portfolio.fields);
   job.fields = fields;
-  job.docTemplateIds = docTemplateIds;
+  job.genDocs = genDocs;
   job.uploadDocs = uploadDocs;
   job.signDocs = signDocs;
   job.feedbackDocs = feedbackDocs;

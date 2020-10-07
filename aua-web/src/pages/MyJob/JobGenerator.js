@@ -7,6 +7,7 @@ import { PortfolioAvatar } from 'components/PortfolioAvatar';
 import { Spin } from 'antd';
 import { listJobTemplate } from 'services/jobTemplateService';
 import { listPortfolio } from 'services/portfolioService';
+import StepWizard from 'react-step-wizard';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -41,6 +42,7 @@ const JobGenerator = props => {
   const [jobTemplateList, setJobTemplateList] = React.useState([]);
   const [portfolioList, setPortfolioList] = React.useState([]);
   const [jobTemplateId, setJobTemplateId] = React.useState();
+  const wizardRef = React.useRef(null);
 
   const loadData = async () => {
     setLoading(true);
@@ -61,7 +63,7 @@ const JobGenerator = props => {
   }
 
   const handleJobTypeChange = e => {
-    setCurrentStep(1);
+    wizardRef.current.nextStep();
     setJobTemplateId(e.target.value);
   }
 
@@ -86,29 +88,33 @@ const JobGenerator = props => {
         <Steps.Step title="Choose job type" />
         <Steps.Step title="Choose portfolio" />
       </Steps> */}
-      <Space size="middle" direction="vertical" style={{ width: '100%' }}>
-        {currentStep === 0 && <>
-          <Text type="secondary">Choose job type</Text>
-          <Radio.Group buttonStyle="outline" style={{ width: '100%' }} onChange={handleJobTypeChange}>
-            {jobTemplateList.map((item, i) => <Radio.Button key={i} value={item.id}>{item.name}</Radio.Button>)}
-          </Radio.Group>
-        </>}
-        {currentStep === 1 && <>
-          <Text type="secondary">Choose portfolio to fill the job automatically</Text>
-          <Radio.Group buttonStyle="outline" style={{ width: '100%' }} onChange={handlePortfolioChange}>
-            {portfolioList.map((item, i) => <Radio.Button className="portfolio" key={i} value={item.id}>
-              <Space>
-                <PortfolioAvatar value={item.name} size={40} />
-                <div style={{display: 'flex', flexDirection: 'column', lineHeight: 1.2}}>
-                  <div>{item.name}</div>
-                  {item.email && <Text type="secondary"><small>{item.email}</small></Text>}
-                </div>
-              </Space>
-            </Radio.Button>)}
-          </Radio.Group>
-        </>}
-      </Space>
+      <StepWizard ref={wizardRef}>
+        <div>
+          <Space size="middle" direction="vertical" style={{ width: '100%' }}>
+            <Text type="secondary">Choose job type</Text>
+            <Radio.Group buttonStyle="outline" style={{ width: '100%' }} onChange={handleJobTypeChange}>
+              {jobTemplateList.map((item, i) => <Radio.Button key={i} value={item.id}>{item.name}</Radio.Button>)}
+            </Radio.Group>
+          </Space>
+        </div>
+        <div>
+          <Space size="middle" direction="vertical" style={{ width: '100%' }}>
+            <Text type="secondary">Choose portfolio to fill the job automatically</Text>
+            <Radio.Group buttonStyle="outline" style={{ width: '100%' }} onChange={handlePortfolioChange}>
+              {portfolioList.map((item, i) => <Radio.Button className="portfolio" key={i} value={item.id}>
+                <Space>
+                  <PortfolioAvatar value={item.name} size={40} />
+                  <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.2 }}>
+                    <div>{item.name}</div>
+                    {item.email && <Text type="secondary"><small>{item.email}</small></Text>}
+                  </div>
+                </Space>
+              </Radio.Button>)}
+            </Radio.Group>
+          </Space>
 
+        </div>
+      </StepWizard>
     </Container>
   );
 };
