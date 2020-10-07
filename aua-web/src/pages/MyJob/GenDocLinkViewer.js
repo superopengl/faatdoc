@@ -1,4 +1,4 @@
-import { Button, Divider, Alert, Space, Typography } from 'antd';
+import { Button, Divider, Alert, Space, Typography, Spin } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
@@ -25,7 +25,10 @@ const GenDocLinkViewer = props => {
 
   const loadEntity = async () => {
     setLoading(true);
-    const variables = doc.variables.filter(x => x !== 'now').map(x => ({ name: x.name, value: variableDic[x.name] }));
+    const variables = doc.variables.map(x => x.name).filter(x => x !== 'now').reduce((pre, cur) => {
+      pre[cur] = variableDic[cur];
+      return pre;
+    }, {});
     const varHash = computeVariablesHash(variables);
 
     if (doc.varHash !== varHash) {
@@ -36,7 +39,9 @@ const GenDocLinkViewer = props => {
   };
 
   React.useEffect(() => {
-    loadEntity();
+    if (isActive) {
+      loadEntity();
+    }
   }, [isActive]);
 
   const handleBack = () => {
@@ -57,15 +62,21 @@ const GenDocLinkViewer = props => {
     onSkip();
   }
 
+  if (!isActive) {
+    return null;
+  }
+
   return <>
     <Space direction="vertical" style={{ width: '100%' }}>
       <Title level={4}>{docTemplateName}</Title>
       {docTemplateDescription && <Alert description={docTemplateDescription} type="warning" closable />}
-      <FileLink id={pdfData.id} name={pdfData.name} location={pdfData.location} />
+      {pdfData.name ? <FileLink id={pdfData.id} name={pdfData.name} location={pdfData.location} /> : <Spin>Generating doc</Spin>}
       <Divider />
+      <Space style={{ width: '100%' }}>
         <Button block onClick={handleBack}>Back</Button>
         <Button block onClick={handleSkipDoc} disabled={loading}>Skip</Button>
         <Button block type="primary" onClick={handleNext} disabled={loading || !pdfData}>Next</Button>
+      </Space>
     </Space>
   </>
 }

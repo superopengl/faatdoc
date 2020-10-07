@@ -63,7 +63,6 @@ const MyJobForm = (props) => {
   }
 
   const handleSubmit = async (values) => {
-    // debugger;
     setLoading(true);
     try {
       await saveJob({ ...job, ...values, status: 'todo' });

@@ -71,7 +71,6 @@ const DocTemplateForm = (props) => {
     return <Spin />
   }
 
-  // debugger;
   return (
     // <Space direction="vertical" size="small" style={{ width: '100%' }}>
     <Form onFinish={handleSave} initialValues={entity} style={{position: 'relative'}}>

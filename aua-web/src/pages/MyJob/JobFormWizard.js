@@ -76,11 +76,23 @@ const JobFormWizard = props => {
   }
 
   const genDocSteps = [];
-  job.genDocs.forEach((doc) => {
+  job.genDocs.forEach((doc, i) => {
     if (doc.variables.length) {
-      genDocSteps.push(<GenDocFieldEditor doc={doc} onSkip={handleSkip} onBack={handleStepBack} onFinish={handleGenDocFieldChange} />);
+      genDocSteps.push(<GenDocFieldEditor key={`field_${i}`}
+        doc={doc}
+        variableDic={variableContextDic}
+        onSkip={handleSkip}
+        onBack={handleStepBack}
+        onFinish={handleGenDocFieldChange}
+      />);
     }
-    genDocSteps.push(<GenDocLinkViewer doc={doc} onSkip={handleSkip} onBack={handleStepBack} onFinish={handleGenDocViewConfirmed} />);
+    genDocSteps.push(<GenDocLinkViewer key={`doc_${i}`}
+      doc={doc}
+      variableDic={variableContextDic}
+      onSkip={handleSkip}
+      onBack={handleStepBack}
+      onFinish={handleGenDocViewConfirmed}
+    />);
   });
 
   return <StepWizard ref={wizardRef} >

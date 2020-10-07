@@ -119,8 +119,8 @@ export const createPdfFromDocTemplate = handlerWrapper(async (req, res) => {
   const { name, md, variables } = docTemplate;
 
   const filledMarkdown = variables.reduce((pre, cur) => {
-    const pattern = `{{${cur}}}`;
-    const replacement = pattern === `{{now}}` ? moment(getUtcNow()).format('D MMM YYYY') : inboundVariables[cur];
+    const pattern = new RegExp(`{{${cur}}}`, 'g');
+    const replacement = cur === `now` ? moment(getUtcNow()).format('D MMM YYYY') : inboundVariables[cur];
 
     assert(replacement !== undefined, 400, `Variable '${cur}' is missing`);
     return pre.replace(pattern, replacement);

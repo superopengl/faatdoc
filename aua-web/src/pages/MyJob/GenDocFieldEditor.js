@@ -42,7 +42,7 @@ const DocViewerInner = styled.div`
 `;
 
 const GenDocFieldEditor = props => {
-  const { doc, variableDic, onFinish, onBack, onSkip } = props;
+  const { doc, variableDic, onFinish, onBack, onSkip, isActive } = props;
   const { variables: docVariables, docTemplateName, docTemplateDescription } = doc;
 
   const handleSubmit = async values => {
@@ -57,10 +57,14 @@ const GenDocFieldEditor = props => {
     onSkip();
   }
 
-  const variableKvps = docVariables.filter(x => x !== 'now').map(x => ({
+  const variableKvps = docVariables.filter(x => x.name !== 'now').map(x => ({
     ...x,
     value: variableDic[x.name]
   }));
+
+  if (!isActive) {
+    return null;
+  }
 
   return <>
     <Space direction="vertical" style={{ width: '100%' }}>
@@ -77,10 +81,10 @@ const GenDocFieldEditor = props => {
           <Input allowClear />
         </Form.Item>)}
         <Divider />
-        <Space direction="vertical" style={{ width: '100%' }}>
-          <Button block onClick={handleBack}>Back</Button>
-          <Button block onClick={handleSkipDoc}>Skip</Button>
-          <Button block htmlType="submit" type="primary">Next</Button>
+        <Space style={{ width: '100%' }}>
+          <Button onClick={handleBack}>Back</Button>
+          <Button onClick={handleSkipDoc}>Skip</Button>
+          <Button htmlType="submit" type="primary">Next</Button>
         </Space>
       </Form>
     </Space>

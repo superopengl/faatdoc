@@ -1,15 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { Button, Divider, Skeleton, Alert, Space, Typography, Spin, Form } from 'antd';
-import { FileIcon as ReactFileIcon, defaultStyles } from 'react-file-icon';
+import { Button, Typography, Spin } from 'antd';
 import { getFile } from 'services/fileService';
 
-const { Paragraph, Title, Text } = Typography;
+const { Text } = Typography;
 
-const StyledFileIcon = styled.div`
-  display: inline-block;
-`;
 
 const FileLink = props => {
   const { name, id, location } = props;
@@ -28,13 +23,11 @@ const FileLink = props => {
     loadEntity();
   }, [location]);
 
-  // debugger;
-
   if (!fileUrl) {
-    return <Text disabled><Spin /> {name}</Text>
+    return <Spin>{name}</Spin>
   }
 
-  return <Button type="link" href={fileUrl} target="_blank">{name}</Button>
+  return <Button style={{paddingLeft: 0, paddingRight: 0}} type="link" href={fileUrl} target="_blank">{name}</Button>
 }
 
 FileLink.propTypes = {

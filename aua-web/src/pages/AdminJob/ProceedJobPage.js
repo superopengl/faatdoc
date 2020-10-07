@@ -121,11 +121,8 @@ const ProceedJobPage = (props) => {
   }
 
   const handleSubmit = async () => {
-
-    // debugger;
     setLoading(true);
     await saveJob({ ...job });
-    // form.resetFields();
     setLoading(false);
   }
 
