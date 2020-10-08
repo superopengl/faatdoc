@@ -28,15 +28,15 @@ export class JobHistory {
   @Column({ type: 'json' })
   fields: any;
 
-  @Column({ type: 'json', array: true, default: '{}' })
+  @Column({ type: 'json' })
   genDocs: GenDoc[];
 
-  @Column({ type: 'json', array: true, default: '{}' })
+  @Column({ type: 'json' })
   uploadDocs: UploadDoc[];
 
-  @Column({ type: 'json', array: true, default: '{}' })
+  @Column({ type: 'json' })
   signDocs: SignDoc[];
 
-  @Column({ type: 'json', array: true, default: '{}' })
+  @Column({ type: 'json' })
   feedbackDocs: FeedbackDoc[];
 }

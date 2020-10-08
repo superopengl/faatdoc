@@ -21,6 +21,7 @@ const JobFormWizard = props => {
   const [job, setJob] = React.useState(value);
   const [variableContextDic, setVariableContextDic] = React.useState({});
   const wizardRef = React.useRef(null);
+  const generatorRef = React.useRef(null);
 
   const handleJobGenerated = async (values) => {
     setLoading(true);
@@ -43,7 +44,7 @@ const JobFormWizard = props => {
     }, {});
     setJob(job);
     setVariableContextDic({
-      ...variableContextDic, 
+      ...variableContextDic,
       ...variables
     });
     wizardRef.current.nextStep();
@@ -51,7 +52,6 @@ const JobFormWizard = props => {
 
   const handleStepBack = () => {
     wizardRef.current.previousStep();
-
   }
 
   const handleSkip = () => {
@@ -100,50 +100,53 @@ const JobFormWizard = props => {
 
   const getGenDocSteps = () => {
     const steps = [];
-    job.genDocs.forEach((doc, i) => {
-      if (doc.variables.length) {
-        steps.push(<GenDocFieldStep key={`field_${i}`}
+    if (job?.genDocs) {
+      job.genDocs.forEach((doc, i) => {
+        if (doc.variables.length) {
+          steps.push(<GenDocFieldStep key={`field_${i}`}
+            doc={doc}
+            variableDic={variableContextDic}
+            onSkip={handleSkip}
+            onBack={handleStepBack}
+            onFinish={handleGenDocFieldChange}
+          />);
+        }
+        steps.push(<GenDocLinkStep key={`doc_${i}`}
           doc={doc}
           variableDic={variableContextDic}
           onSkip={handleSkip}
           onBack={handleStepBack}
-          onFinish={handleGenDocFieldChange}
+          onFinish={handleGenDocViewConfirmed}
         />);
-      }
-      steps.push(<GenDocLinkStep key={`doc_${i}`}
-        doc={doc}
-        variableDic={variableContextDic}
-        onSkip={handleSkip}
-        onBack={handleStepBack}
-        onFinish={handleGenDocViewConfirmed}
-      />);
-    });
+      });
+    }
     return steps;
   }
 
   console.log('wizard var dic', variableContextDic);
 
-  if (!job) {
-    return <JobGenerator onChange={handleJobGenerated} />
-  }
 
   return <Spin spinning={loading}>
-    {wizardRef.current?.currentStep} / {wizardRef.current?.totalSteps}
-    <StepWizard ref={wizardRef} >
-      {/* <JobGenerator onChange={handleJobGenerated} /> */}
-      <FieldsEditor job={job} onChange={handleJobFieldsChange} />
-      {getGenDocSteps()}
-      <UploadDocStep
-        job={job}
-        onSkip={handleSkip}
-        onBack={handleStepBack}
-        onFinish={handleUploadDocsChange}
-      />
-      <FinalReviewStep
-        job={job}
-        onBack={handleStepBack}
-        onFinish={handlePostSubmit}
-      />
+    <StepWizard ref={generatorRef} >
+      {!job && <JobGenerator onChange={handleJobGenerated} />}
+      {job && <div>
+        {wizardRef.current?.currentStep} / {wizardRef.current?.totalSteps}
+        <StepWizard ref={wizardRef}>
+          <FieldsEditor job={job} onChange={handleJobFieldsChange} />
+          {getGenDocSteps()}
+          <UploadDocStep
+            job={job}
+            onSkip={handleSkip}
+            onBack={handleStepBack}
+            onFinish={handleUploadDocsChange}
+          />
+          <FinalReviewStep
+            job={job}
+            onBack={handleStepBack}
+            onFinish={handlePostSubmit}
+          />
+        </StepWizard>
+      </div>}
     </StepWizard>
   </Spin>
 

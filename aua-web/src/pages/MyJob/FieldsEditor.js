@@ -36,7 +36,7 @@ const FieldsEditor = (props) => {
       const formItemProps = {
         label: <>{varNameToLabelName(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
         name: ['fields', i, 'value'],
-        rules: [{ required }]
+        rules: [{ required, message: ' ' }]
       }
       return (
         <Form.Item key={i} {...formItemProps}>

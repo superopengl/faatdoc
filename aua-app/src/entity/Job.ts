@@ -40,16 +40,16 @@ export class Job {
   @Column({ type: 'json' })
   fields: any;
 
-  @Column({ type: 'json', array: true, default: '{}' })
+  @Column({ type: 'json', default: [] })
   genDocs: GenDoc[];
 
-  @Column({ type: 'json', array: true, default: '{}' })
+  @Column({ type: 'json', default: [] })
   uploadDocs: UploadDoc[];
 
-  @Column({ type: 'json', array: true, default: '{}' })
+  @Column({ type: 'json', default: [] })
   signDocs: SignDoc[];
 
-  @Column({ type: 'json', array: true, default: '{}' })
+  @Column({ type: 'json', default: [] })
   feedbackDocs: FeedbackDoc[];
 }
 
