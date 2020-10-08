@@ -31,7 +31,7 @@ const DocMarkdownEditor = props => {
 }
 
 const EMPTY_TEMPLATE = {
-  name: 'xx',
+  name: '',
   md: SampleMarkdown
 }
 

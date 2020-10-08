@@ -164,7 +164,9 @@ const UserPage = () => {
     const { email } = values;
     await inviteUser(email);
     setInviteVisible(false);
+    loadList();
   }
+
 
   return (
     <LayoutStyled>

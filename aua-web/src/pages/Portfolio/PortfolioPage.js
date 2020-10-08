@@ -8,6 +8,8 @@ import { EditOutlined, UserOutlined, PlusOutlined, TeamOutlined, DeleteOutlined 
 import { listPortfolio, deletePortfolio } from 'services/portfolioService';
 import { TimeAgo } from 'components/TimeAgo';
 import { Card } from 'antd';
+import { withRouter } from 'react-router-dom';
+import * as queryString from 'query-string';
 
 const { Title, Paragraph } = Typography;
 
@@ -44,9 +46,11 @@ color: #143e86 !important;
 
 const PortfolioPage = props => {
 
+  const { create } = queryString.parse(props.location.search);
+
   const [list, setList] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
-  const [newModalVisible, setNewModalVisible] = React.useState(false);
+  const [newModalVisible, setNewModalVisible] = React.useState(!!create);
 
   const loadList = async () => {
     setLoading(true);
@@ -171,4 +175,4 @@ PortfolioPage.propTypes = {};
 
 PortfolioPage.defaultProps = {};
 
-export default PortfolioPage;
+export default withRouter(PortfolioPage);

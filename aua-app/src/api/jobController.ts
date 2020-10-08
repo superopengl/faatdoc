@@ -145,7 +145,7 @@ export const searchJob = handlerWrapper(async (req, res) => {
       `x.agentId as "agentId"`,
       `x.status as status`,
       `x."lastUpdatedAt" as "lastUpdatedAt"`,
-      `x."signedAt" as "signedAt"`,
+      // `x."signedAt" as "signedAt"`,
     ]);
   if (text) {
     query = query.andWhere('x.name ILIKE :text OR x."forWhom" ILIKE :text OR j.name ILIKE :text', { text: `%${text}%` });

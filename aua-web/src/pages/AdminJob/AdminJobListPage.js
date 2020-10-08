@@ -121,7 +121,7 @@ const AdminJobListPage = (props) => {
     },
     {
       title: 'Signed At',
-      dataIndex: 'signedAt',
+      // dataIndex: 'signedAt',
       sorter: () => 0, // Server end sorting. moment(a.createdAt).toDate() - moment(b.createdAt).toDate(),
       render: (text, record) => {
         return <Space size="small"><TimeAgo value={text} extra={<Button shape="circle" icon={<SearchOutlined />} onClick={() => handleShowSignDetail(record.id)} />} /></Space>;
@@ -248,9 +248,8 @@ const AdminJobListPage = (props) => {
     props.history.push('/job/new');
   }
 
-  const initialLoadList = React.useCallback(() => loadList());
   React.useEffect(() => {
-    initialLoadList();
+    loadList();
   }, []);
 
   const StatusSelectOptions = [

@@ -1,6 +1,7 @@
 import * as moment from 'moment';
 import { varNameToLabelName } from 'util/varNameToLabelName';
 import { labelNameToVarName } from 'util/labelNameToVarName';
+import {isValidABN, isValidACN, isValidABNorACN} from "abnacn-validator";
 
 export const BuiltInFieldDef = [
   {
@@ -142,7 +143,7 @@ export const BuiltInFieldDef = [
   {
     name: 'abn',
     inputType: 'text',
-    rules: [{ required: true, max: 20, message: ' ' }],
+    rules: [{ required: true, validator: (rule, value) => isValidABN(value) ? Promise.resolve() : Promise.reject('Invalid ABN') }],
     inputProps: {
       maxLength: 20,
       allowClear: true,
@@ -153,7 +154,7 @@ export const BuiltInFieldDef = [
   {
     name: 'acn',
     inputType: 'text',
-    rules: [{ required: true, max: 20, message: ' ' }],
+    rules: [{ required: true, validator: (rule, value) => isValidACN(value) ? Promise.resolve() : Promise.reject('Invalid ACN') }],
     inputProps: {
       maxLength: 20,
       allowClear: true,

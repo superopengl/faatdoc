@@ -95,7 +95,7 @@ const ClientDashboardPage = (props) => {
       content: 'Please create portfolio before creating job. Go to create protofolio now?',
       okText: 'Yes, go to create portfolio',
       maskClosable: true,
-      onOk: () => props.history.push('/portfolio')
+      onOk: () => props.history.push('/portfolio?create=1')
     });
   }
 
@@ -141,7 +141,7 @@ const ClientDashboardPage = (props) => {
                 {!hasPortfolio && <>
                   <Title type="secondary" level={4}>My Portfolio</Title>
                   <Paragraph >Portfolios are predefined information that can be used to automatically fill in your job application. You can save the information like name, phone, address, TFN, and etc. for future usage.</Paragraph>
-                  <Link to="/portfolio"><Button size="large" type="primary" ghost block icon={<PlusOutlined />}>New Portfolio</Button></Link>
+                  <Link to="/portfolio?create=1"><Button size="large" type="primary" ghost block icon={<PlusOutlined />}>New Portfolio</Button></Link>
                   <Divider />
                 </>}
                 {toSignJobList.length > 0 && <>
@@ -162,21 +162,6 @@ const ClientDashboardPage = (props) => {
               </>}
             </Space>
           </StyledCol>
-
-          {/* <StyledCol {...span}>
-            <Space size="small" direction="vertical" style={{ width: '100%' }}>
-              <Title type="secondary" level={4}>Jobs with Unread Messages</Title>
-              <Space style={{ width: '100%', justifyContent: 'space-between' }}>
-                <Link to="/message"><Button type="link" style={{ padding: 0 }}>All messages ({notifyCount} unread)</Button></Link>
-              </Space>
-              <Divider />
-              <MessageList
-                onFetchNextPage={handleFetchNextPage}
-                max={10}
-                size={10}
-              />
-            </Space>
-          </StyledCol> */}
         </Row>
         <Space size="large" direction="vertical" style={{ width: '100%' }}>
           <Space style={{ width: '100%', justifyContent: 'flex-end' }} >
