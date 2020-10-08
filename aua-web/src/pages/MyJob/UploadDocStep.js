@@ -24,6 +24,10 @@ const UploadDocStep = (props) => {
     return null;
   }
 
+  const handleUploadingChange = uploading => {
+    setLoading(uploading);
+  }
+
   return <Form
     layout="vertical"
     onFinish={handleSubmit}
@@ -35,7 +39,7 @@ const UploadDocStep = (props) => {
       name="uploadDocs"
     // rules={[{ required: true, message: 'Please upload files' }]}
     >
-      <FileUploader disabled={loading} />
+      <FileUploader disabled={loading} onUploadingChange={handleUploadingChange} />
     </Form.Item>
     <Divider />
     <StepButtonSet onBack={onBack} loading={loading}/>

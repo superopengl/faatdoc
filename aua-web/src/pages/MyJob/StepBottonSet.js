@@ -11,13 +11,20 @@ import { LeftOutlined, RightOutlined, StarTwoTone } from '@ant-design/icons';
 const { Text } = Typography;
 
 const StepButtonSet = (props) => {
-  const {onBack, onSkip, showsBack, loading} = props;
+  const {onBack, onNext, showsBack, loading} = props;
 
-  return <Space style={{ width: '100%', justifyContent: 'space-between' }}>
+  const nextButtonProps = onNext ? {
+    onClick: () => onNext()
+  } : {
+    htmlType: 'submit'
+  }
+
+  return <>
+  <Space style={{ width: '100%', justifyContent: 'space-between', marginTop: 20 }}>
     <Button shape="circle" size="large" onClick={() => onBack()} icon={<LeftOutlined />} style={{visibility: showsBack ? 'visible' : 'hidden'}}></Button>
     {/* <Button onClick={() => onSkip()}>Skip</Button> */}
-    <Button shape="circle" size="large" type="primary" htmlType="submit" icon={<RightOutlined />} disabled={loading}></Button>
-  </Space>
+    <Button shape="circle" size="large" type="primary" icon={<RightOutlined />} disabled={loading} {...nextButtonProps}></Button>
+  </Space></>
 };
 
 StepButtonSet.propTypes = {

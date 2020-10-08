@@ -81,8 +81,7 @@ const GenDocLinkStep = props => {
       <Title level={4}>{docTemplateName}</Title>
       {docTemplateDescription && <Paragraph type="secondary">{docTemplateDescription}</Paragraph>}
       <FileLink placeholder={`${docTemplateName}.pdf`} id={pdfData.id} name={pdfData.fileName} location={pdfData.location} />
-      <Divider />
-      <StepButtonSet onBack={onBack} loading={loading}/>
+      <StepButtonSet onBack={onBack} onNext={handleNext} loading={loading}/>
     </Space>
   </>
 }

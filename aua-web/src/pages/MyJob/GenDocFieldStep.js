@@ -56,7 +56,7 @@ const GenDocFieldStep = props => {
         initialValues={initialValues}
       >
         {Object.keys(initialValues).map((name, i) => <Form.Item label={varNameToLabelName(name)} name={name} key={i} rules={[{ required: true, message: ' ' }]}>
-          <Input allowClear />
+          <Input allowClear autoFocus={i === 0}/>
         </Form.Item>)}
       <StepButtonSet onBack={onBack} />
 

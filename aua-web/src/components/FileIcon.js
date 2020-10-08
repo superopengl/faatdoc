@@ -13,7 +13,7 @@ export const FileIcon = props => {
 
   if(!name) return null;
 
-  const height = width / 40 * 50;
+  const height = width / 30 * 36;
   const tokens = name.split('.');
   const ext = tokens[tokens.length - 1];
 
@@ -26,5 +26,5 @@ FileIcon.propTypes = {
 };
 
 FileIcon.defaultProps = {
-  width: 40,
+  width: 30,
 };

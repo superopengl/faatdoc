@@ -31,12 +31,12 @@ const FileLink = props => {
   }, [location, id]);
 
   return <Spin spinning={loading}>
-    <Button block style={{ paddingLeft: 0, paddingRight: 0 }} type="link" href={fileUrl} target="_blank">
-      <Space style={{ width: '100%' }}>
+    <Link href={fileUrl} target="_blank" style={{width: '100%'}}>
+      <Space style={{ width: '100%', alignItems: 'center' }}>
         <FileIcon name={fileName} />
-        <span style={{ position: 'relative', top: -4 }}>{fileName}</span>
+        {fileName}
       </Space>
-    </Button>
+    </Link>
   </Spin>
 }
 

@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { varNameToLabelName } from 'util/varNameToLabelName';
 import FileLink from 'components/FileLink';
 import { BsFillInfoCircleFill } from 'react-icons/bs';
+import { LeftOutlined, RightOutlined, StarTwoTone } from '@ant-design/icons';
 
 const { Title, Text } = Typography;
 
@@ -17,16 +18,18 @@ const JobReviewItem = props => {
   const { text, description, value } = props;
   return <Space style={{ width: '100%', justifyContent: 'space-between' }}>
     {text && <Text strong>{varNameToLabelName(text)}</Text>}
-    <div>{value}</div>
+    {value}
     {description && <Popover
       title={text}
-    content={<PopoverContent>{description}</PopoverContent>}
+      content={<PopoverContent>{description}</PopoverContent>}
       trigger="click"
     >
-      <BsFillInfoCircleFill size={20} style={{fill: '#143e86'}}/>
+      <Button type="link" icon={<BsFillInfoCircleFill size={20} style={{ fill: '#143e86' }} />} />
     </Popover>}
   </Space>
 }
+
+const PartDivider = props => <Divider><Text type="secondary">{props.text}</Text></Divider>
 
 const FinalReviewStep = props => {
   const { job, onFinish, onBack, isActive, okText } = props;
@@ -48,14 +51,14 @@ const FinalReviewStep = props => {
       <Title level={4}>{job.name}</Title>
       {job.docTemplateDescription && <Alert description={job.docTemplateDescription} type="warning" closable />}
       {job.fields.length > 0 && <>
-        <Divider>Fields</Divider>
+        <PartDivider text="Fields" />
         {job.fields.map((field, i) => {
           const { name, description, value } = field;
           return <JobReviewItem key={i} text={varNameToLabelName(name)} description={description} value={value} />
         })}
       </>}
       {job.genDocs?.length > 0 && <>
-        <Divider>Auto Gen Docs</Divider>
+        <PartDivider text="Auto Gen Docs" />
         {job.genDocs.map((doc, i) => {
           const { docTemplateDescription, fileId, fileName } = doc;
           return <JobReviewItem key={i} description={docTemplateDescription} value={<FileLink id={fileId} name={fileName} />}
@@ -63,30 +66,33 @@ const FinalReviewStep = props => {
         })}
       </>}
       {job.uploadDocs?.length > 0 && <>
-        <Divider>Uploaded Docs</Divider>
+        <PartDivider text="Uploaded Docs" />
         {job.uploadDocs.map((fileId, i) => {
           return <JobReviewItem key={i} value={<FileLink id={fileId} />}
           />
         })}
       </>}
       {job.signDocs?.length > 0 && <>
-        <Divider>Signed Docs</Divider>
+        <PartDivider text="Signed Docs" />
         {job.signDocs.map((fileId, i) => {
           return <JobReviewItem key={i} value={<FileLink id={fileId} />}
           />
         })}
       </>}
       {job.feedbackDocs?.length > 0 && <>
-        <Divider>Feedback Docs</Divider>
+        <PartDivider text="Feedback Docs" />
         {job.feedbackDocs.map((fileId, i) => {
           return <JobReviewItem key={i} value={<FileLink id={fileId} />}
           />
         })}
       </>}
       <Divider />
-      <Space style={{ width: '100%' }}>
-        <Button onClick={handleBack}>Back</Button>
-        <Button onClick={handleSave} type="primary">{okText || 'Save and Submit'}</Button>
+      <Space style={{ width: '100%', justifyContent: 'space-between' }}>
+        {/* <Button onClick={handleBack}>Back</Button> */}
+        <Button shape="circle" size="large" onClick={() => onBack()} icon={<LeftOutlined />}></Button>
+        <Button onClick={handleSave} type="primary" style={{borderRadius: '6px 20px 20px 6px'}}>Save and Submit</Button>
+        {/* <Button shape="circle" size="large" type="primary" icon={<RightOutlined />} disabled={loading} {...nextButtonProps}></Button> */}
+
       </Space>
     </Space>
   </>

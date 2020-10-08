@@ -43,12 +43,16 @@ const { Text } = Typography;
 
 
 export const FileUploader = (props) => {
+  const { onUploadingChange } = props;
+
   const [uploadFileId, setUploadFileId] = React.useState(uuidv4());
   const [fileList, setFileList] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
 
   const loadFileList = async () => {
     const { value } = props;
     if (value && value.length) {
+      setLoading(true);
       const list = await searchFile(value);
       const fileList = list.map(x => ({
         uid: x.id,
@@ -57,8 +61,15 @@ export const FileUploader = (props) => {
         url: x.location,
       }));
       setFileList(fileList);
+      setLoading(false);
     }
   }
+
+  React.useEffect(() => {
+    if (onUploadingChange) {
+      onUploadingChange(loading);
+    }
+  }, [loading]);
 
   React.useEffect(() => {
     loadFileList()
@@ -68,9 +79,12 @@ export const FileUploader = (props) => {
     const { fileList } = info;
     setFileList(fileList);
     setUploadFileId(uuidv4());
-
+    
     const fileIds = fileList.filter(f => f.status === 'done').map(f => _.get(f, 'response.id', f.uid));
     props.onChange(fileIds);
+
+    const uploading = fileList.some(f => f.status === 'uploading');
+    setLoading(uploading);
   };
 
   const handlePreview = file => {
@@ -78,7 +92,6 @@ export const FileUploader = (props) => {
     const url = file.url || file.response.location;
     saveAs(url, fileName);
   }
-
 
   const { size, disabled } = props;
 
@@ -97,6 +110,7 @@ export const FileUploader = (props) => {
         fileList={fileList}
         onPreview={handlePreview}
         onChange={handleChange}
+        // beforeUpload={handleBeforeUpload}
         showUploadList={{
           showDownloadIcon: false,
           showRemoveIcon: true,
@@ -107,8 +121,8 @@ export const FileUploader = (props) => {
       // showUploadList={true}
       >
         {disabled ? <Text type="secondary">File upload is disabled</Text>
-          :<div style={{display: 'flex', flexDirection: 'column', width: '100%', alignItems: 'center'}}>
-              <AiOutlineUpload size={30} style={{ fill: 'rgba(0, 0, 0, 0.65)' }} />
+          : <div style={{ display: 'flex', flexDirection: 'column', width: '100%', alignItems: 'center' }}>
+            <AiOutlineUpload size={30} style={{ fill: 'rgba(0, 0, 0, 0.65)' }} />
           Click or drag file to this area to upload
         </div>}
       </Dragger>

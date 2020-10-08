@@ -35,15 +35,16 @@ const JobFieldsEditor = (props) => {
         name: ['fields', i, 'value'],
         rules: [{ required, message: ' ' }]
       }
+      const autoFocus = i === 0;
       return (
         <Form.Item key={i} {...formItemProps}>
-          {type === 'text' ? <Input disabled={disabled} /> :
-            type === 'year' ? <DateInput picker="year" placeholder="YYYY" disabled={disabled} /> :
-              type === 'monthRange' ? <RangePickerInput picker="month" disabled={disabled} /> :
-                type === 'number' ? <Input disabled={disabled} type="number" pattern="[0-9.]*" /> :
-                  type === 'paragraph' ? <Input.TextArea disabled={disabled} /> :
-                    type === 'date' ? <DateInput picker="date" disabled={disabled} placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD" /> :
-                      type === 'select' ? <Radio.Group disabled={disabled} buttonStyle="solid">
+          {type === 'text' ? <Input disabled={disabled} autoFocus={autoFocus}/> :
+            type === 'year' ? <DateInput picker="year" placeholder="YYYY" disabled={disabled}/> :
+              type === 'monthRange' ? <RangePickerInput picker="month" disabled={disabled}/> :
+                type === 'number' ? <Input disabled={disabled} type="number" pattern="[0-9.]*" autoFocus={autoFocus}/> :
+                  type === 'paragraph' ? <Input.TextArea disabled={disabled} autoFocus={autoFocus}/> :
+                    type === 'date' ? <DateInput picker="date" disabled={disabled} placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD"/> :
+                      type === 'select' ? <Radio.Group disabled={disabled} buttonStyle="solid" autoFocus={autoFocus}>
                         {field.options?.map((x, i) => <Radio key={i} style={{ display: 'block', height: '2rem' }} value={x.value}>{x.label}</Radio>)}
                       </Radio.Group> :
                         <Text danger>Unsupported field type '{type}'</Text>}
