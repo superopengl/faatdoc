@@ -16,6 +16,7 @@ import { RangePickerInput } from 'components/RangePickerInput';
 import { Select } from 'antd';
 import FieldEditor from 'components/FieldEditor';
 import { SyncOutlined } from '@ant-design/icons';
+import FileLink from 'components/FileLink';
 
 const { Text } = Typography;
 const ContainerStyled = styled.div`
@@ -251,24 +252,29 @@ const ProceedJobPage = (props) => {
             })}
           </Col>
           <Col span={12}>
+            {job.genDocs && <Form.Item
+              label="Auto Generated Docs"
+            >
+              {job.genDocs.map((d, i) => <FileLink id={d.fileId}/>)}
+            </Form.Item>}
             {job.uploadDocs && <Form.Item
               label="Client Uploaded Docs"
               name="uploadDocs"
-              // rules={[{ required: true, message: 'Please upload files' }]}
+            // rules={[{ required: true, message: 'Please upload files' }]}
             >
               <FileUploader disabled={loading} />
             </Form.Item>}
             {job.signDocs && <Form.Item
               label="Docs To Sign"
               name="signDocs"
-              // rules={[{ required: true, message: 'Please upload files' }]}
+            // rules={[{ required: true, message: 'Please upload files' }]}
             >
               <FileUploader disabled={loading} />
             </Form.Item>}
             {job.feedbackDocs && <Form.Item
               label="Feedback Docs"
               name="feedbackDocs"
-              // rules={[{ required: true, message: 'Please upload files' }]}
+            // rules={[{ required: true, message: 'Please upload files' }]}
             >
               <FileUploader disabled={loading} />
             </Form.Item>}

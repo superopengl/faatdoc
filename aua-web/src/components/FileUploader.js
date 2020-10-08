@@ -34,6 +34,7 @@ const Container = styled.div`
   }
   .ant-upload-list-item-name {
     width: auto;
+    padding-left: 8px;
   }
 }
 `
