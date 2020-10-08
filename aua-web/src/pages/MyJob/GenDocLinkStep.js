@@ -22,6 +22,14 @@ const GenDocLinkStep = props => {
 
   const { docTemplateId, docTemplateName, docTemplateDescription } = doc;
 
+  const computeDocVarHash = (doc) => {
+    const variables = doc.variables.filter(x => x.name !== 'now').reduce((pre, cur) => {
+      pre[cur.name] = cur.value;
+      return pre;
+    }, {});
+    const varHash = computeVariablesHash(variables);
+    return varHash;
+  }
 
   const loadEntity = async () => {
     setLoading(true);
@@ -53,6 +61,7 @@ const GenDocLinkStep = props => {
       ...doc,
       fileId: pdfData.id,
       fileName: pdfData.fileName,
+      varHash: computeDocVarHash(doc),
       signedAt: new Date(),
     }
     onFinish(genDoc);

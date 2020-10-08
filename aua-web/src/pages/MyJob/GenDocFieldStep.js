@@ -49,13 +49,16 @@ const GenDocFieldStep = props => {
 
   React.useEffect(() => {
     const initialValues = docVariables.filter(x => x.name !== 'now').reduce((pre, cur) => {
-      pre[cur.name] = variableDic[cur.name];
+      pre[cur.name] = cur.value || variableDic[cur.name];
       return pre;
     }, {});
     setInitialValues(initialValues);
   }, [variableDic]);
 
   const handleSubmit = async values => {
+    doc.variables.forEach(x => {
+      x.value = values[x.name];
+    });
     onFinish(values);
   };
 
