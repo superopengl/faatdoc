@@ -108,20 +108,20 @@ const ProceedJobPage = (props) => {
     initialLoadEntity();
   }, [])
 
-  const updateLodgmentWithFormValues = values => {
-    job.name = values.name;
+  // const updateLodgmentWithFormValues = values => {
+  //   job.name = values.name;
 
-    job.fields.forEach(field => {
-      field.value = values[field.name];
-    })
+  //   job.fields.forEach(field => {
+  //     field.value = values[field.name];
+  //   })
 
-    return job;
-  }
+  //   return job;
+  // }
 
-  const handleValuesChange = (changedValues, allValues) => {
-    const lodgment = updateLodgmentWithFormValues(allValues);
-    setJob({ ...lodgment });
-  }
+  // const handleValuesChange = (changedValues, allValues) => {
+  //   const lodgment = updateLodgmentWithFormValues(allValues);
+  //   setJob({ ...lodgment });
+  // }
 
   const handleSubmit = async (values) => {
     setLoading(true);
@@ -202,7 +202,7 @@ const ProceedJobPage = (props) => {
     <HomeHeader></HomeHeader>
     <ContainerStyled>
       {job && <Form form={form} layout="vertical"
-        onValuesChange={handleValuesChange}
+        // onValuesChange={handleValuesChange}
         onFinish={handleSubmit}
         style={{ textAlign: 'left', width: '100%' }}
         initialValues={job}
