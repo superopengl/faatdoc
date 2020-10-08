@@ -1,5 +1,5 @@
 import { BellOutlined, MessageOutlined } from '@ant-design/icons';
-import { Button, Divider, Skeleton, Alert, Space, Typography, Input, Form } from 'antd';
+import { Button, Divider, Skeleton, Alert, Space, Typography, Popover, Tooltip } from 'antd';
 import { DateInput } from 'components/DateInput';
 import { RangePickerInput } from 'components/RangePickerInput';
 import JobChat from 'pages/AdminJob/JobChat';
@@ -22,7 +22,8 @@ import PDFViewer from 'mgr-pdf-viewer-react';
 import PdfViewer from 'components/PdfViewer';
 import StepWizard from 'react-step-wizard';
 import FileLink from 'components/FileLink';
-
+import { QuestionCircleTwoTone, StarFilled, StarTwoTone } from '@ant-design/icons';
+import { BsFillInfoCircleFill } from 'react-icons/bs';
 
 const { Paragraph, Title, Text } = Typography;
 
@@ -42,12 +43,22 @@ const DocViewerInner = styled.div`
   padding: 1rem;
 `;
 
+const PopoverContent = styled.div`
+  max-width: 500px;
+`;
+
 const JobReviewItem = props => {
   const { text, description, value } = props;
-  return <Space direction="vertical" style={{ width: '100%' }}>
+  return <Space style={{ width: '100%', justifyContent: 'space-between' }}>
     {text && <Text strong>{varNameToLabelName(text)}</Text>}
-    {description && <Text type="secondary"><small>{description}</small></Text>}
     <div>{value}</div>
+    {description && <Popover
+      title={text}
+    content={<PopoverContent>{description}</PopoverContent>}
+      trigger="click"
+    >
+      <BsFillInfoCircleFill size={20} style={{fill: '#143e86'}}/>
+    </Popover>}
   </Space>
 }
 
@@ -80,8 +91,8 @@ const FinalReviewStep = props => {
       {job.genDocs?.length > 0 && <>
         <Divider>Auto Gen Docs</Divider>
         {job.genDocs.map((doc, i) => {
-          const { docTemplateName, docTemplateDescription, fileId, fileName, fileLocation } = doc;
-          return <JobReviewItem key={i} text={docTemplateName} description={docTemplateDescription} value={<FileLink id={fileId} name={fileName} />}
+          const { docTemplateName, docTemplateDescription, fileId, fileName } = doc;
+          return <JobReviewItem key={i} description={docTemplateDescription} value={<FileLink id={fileId} name={fileName} />}
           />
         })}
       </>}

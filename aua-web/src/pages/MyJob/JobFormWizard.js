@@ -128,6 +128,7 @@ const JobFormWizard = props => {
   }
 
   return <Spin spinning={loading}>
+    {wizardRef.current?.currentStep} / {wizardRef.current?.totalSteps}
     <StepWizard ref={wizardRef} >
       {/* <JobGenerator onChange={handleJobGenerated} /> */}
       <FieldsEditor job={job} onChange={handleJobFieldsChange} />
