@@ -2,11 +2,12 @@
 import { getRepository, In } from 'typeorm';
 import { assert } from './assert';
 import * as _ from 'lodash';
-import { Job, GenDoc } from '../entity/Job';
+import { Job } from '../entity/Job';
+import { GenDoc } from "../types/GenDoc";
 import { getUtcNow } from './getUtcNow';
 import { JobTemplate } from '../entity/JobTemplate';
 import { Portfolio } from '../entity/Portfolio';
-import { JobStatus } from '../enums/JobStatus';
+import { JobStatus } from '../types/JobStatus';
 import { guessDisplayNameFromFields } from './guessDisplayNameFromFields';
 import { v4 as uuidv4 } from 'uuid';
 import { DocTemplate } from '../entity/DocTemplate';

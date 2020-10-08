@@ -6,7 +6,7 @@ import { JobTemplate } from '../entity/JobTemplate';
 import { Job } from '../entity/Job';
 import { Message } from '../entity/Message';
 import { User } from '../entity/User';
-import { JobStatus } from '../enums/JobStatus';
+import { JobStatus } from '../types/JobStatus';
 import { sendEmail } from '../services/emailService';
 import { assert, assertRole } from '../utils/assert';
 import { handlerWrapper } from '../utils/asyncHandler';
@@ -222,19 +222,19 @@ export const assignJob = handlerWrapper(async (req, res) => {
   res.json();
 });
 
-export const signJob = handlerWrapper(async (req, res) => {
-  assertRole(req, 'client');
-  const { id } = req.params;
+// export const signJob = handlerWrapper(async (req, res) => {
+//   assertRole(req, 'client');
+//   const { id } = req.params;
 
-  const now = getUtcNow();
-  await getRepository(Job).update(id, {
-    signedAt: now,
-    lastUpdatedAt: now,
-    status: JobStatus.SIGNED
-  });
+//   const now = getUtcNow();
+//   await getRepository(Job).update(id, {
+//     signedAt: now,
+//     lastUpdatedAt: now,
+//     status: JobStatus.SIGNED
+//   });
 
-  res.json();
-});
+//   res.json();
+// });
 
 export const completeJob = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent');

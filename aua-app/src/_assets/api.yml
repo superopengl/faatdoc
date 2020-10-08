@@ -423,24 +423,7 @@ paths:
       responses:
         200:
           description: OK
-  /job/{id}/sign:
-    post:
-      operationId: signJob
-      # security:
-      #   - authClient: []
-      parameters:
-        - name: id
-          in: path
-          type: string
-          format: uuid
-          required: true
-      responses:
-        200:
-          description: OK
-  /job/{id}/assign:
-    post:
-      operationId: assignJob
-      # security:
+     # security:
       #   - authClient: []
       parameters:
         - name: id

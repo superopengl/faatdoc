@@ -1,5 +1,9 @@
 import { Column, PrimaryColumn, Entity } from 'typeorm';
-import { JobStatus } from '../enums/JobStatus';
+import { JobStatus } from '../types/JobStatus';
+import { FeedbackDoc } from '../types/FeedbackDoc';
+import { GenDoc } from '../types/GenDoc';
+import { SignDoc } from '../types/SignDoc';
+import { UploadDoc } from '../types/UploadDoc';
 
 @Entity()
 export class Job {
@@ -33,9 +37,6 @@ export class Job {
   @Column('uuid')
   userId: string;
 
-  @Column({ nullable: true })
-  signedAt?: Date;
-
   @Column({ type: 'json' })
   fields: any;
 
@@ -52,32 +53,4 @@ export class Job {
   feedbackDocs: FeedbackDoc[];
 }
 
-export type GenDoc = {
-  docTemplateId: string,
-  docTemplateName: string,
-  docTemplateDescription: string, 
-  variables: { name: string, value?: string }[],
-  varHash?: string,
-  fileId?: string,
-  fileName?: string,
-  status: 'skipped' | 'agreed' | 'pending'
-};
-
-export type UploadDoc = {
-  fileId: string,
-  fileName: string,
-};
-
-export type SignDoc = {
-  fileId: string,
-  fileName: string,
-  lastReadAt: Date,
-  signedAt: Date,
-};
-
-
-export type FeedbackDoc = {
-  fileId: string,
-  fileName: string
-};
 

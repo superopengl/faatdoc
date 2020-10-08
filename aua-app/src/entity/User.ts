@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, Index } from 'typeorm';
-import { Role } from '../enums/Role';
-import { UserStatus } from '../enums/UserStatus';
+import { Role } from '../types/Role';
+import { UserStatus } from '../types/UserStatus';
 
 
 @Entity()

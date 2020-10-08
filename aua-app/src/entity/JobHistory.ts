@@ -1,30 +1,42 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { JobStatus as JobStatus } from '../enums/JobStatus';
-
+import { JobStatus } from '../types/JobStatus';
+import { FeedbackDoc } from '../types/FeedbackDoc';
+import { GenDoc } from '../types/GenDoc';
+import { SignDoc } from '../types/SignDoc';
+import { UploadDoc } from '../types/UploadDoc';
 
 @Entity()
 export class JobHistory {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ default: () => `timezone('UTC', now())` })
+  historyCreatedAt?: Date;
+
   @Column('uuid')
   jobId: string;
 
   @Column()
-  lastUpdatedAt: Date;
-
-  @Column()
   name: string;
 
-  @Column()
+  @Column({ default: JobStatus.TODO })
   status: JobStatus;
 
   @Column('uuid', { nullable: true })
   agentId?: string;
 
-  @Column({ nullable: true })
-  signedAt?: Date;
-
   @Column({ type: 'json' })
   fields: any;
+
+  @Column({ type: 'json', array: true, default: '{}' })
+  genDocs: GenDoc[];
+
+  @Column({ type: 'json', array: true, default: '{}' })
+  uploadDocs: UploadDoc[];
+
+  @Column({ type: 'json', array: true, default: '{}' })
+  signDocs: SignDoc[];
+
+  @Column({ type: 'json', array: true, default: '{}' })
+  feedbackDocs: FeedbackDoc[];
 }

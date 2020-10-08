@@ -5,13 +5,13 @@ import { assert, assertRole } from '../utils/assert';
 import { validatePasswordStrength } from '../utils/validatePasswordStrength';
 import * as _ from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
-import { UserStatus } from '../enums/UserStatus';
+import { UserStatus } from '../types/UserStatus';
 import { computeUserSecret } from '../utils/computeUserSecret';
 import { handlerWrapper } from '../utils/asyncHandler';
 import { sendEmail } from '../services/emailService';
 import { logError } from '../utils/logger';
 import { getUtcNow } from '../utils/getUtcNow';
-import { Role } from '../enums/Role';
+import { Role } from '../types/Role';
 import * as jwt from 'jsonwebtoken';
 import { attachJwtCookie, clearJwtCookie } from '../utils/jwt';
 

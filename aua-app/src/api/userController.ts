@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Agent } from '../entity/Agent';
 import { Portfolio } from '../entity/Portfolio';
 import { User } from '../entity/User';
-import { UserStatus } from '../enums/UserStatus';
+import { UserStatus } from '../types/UserStatus';
 import { assert, assertRole } from '../utils/assert';
 import { handlerWrapper } from '../utils/asyncHandler';
 import { computeUserSecret } from '../utils/computeUserSecret';

@@ -5,7 +5,7 @@ import { SysLog } from '../entity/SysLog';
 import { generateJobByJobTemplateAndPortfolio } from '../utils/generateJobByJobTemplateAndPortfolio';
 import { assert } from '../utils/assert';
 import { v4 as uuidv4 } from 'uuid';
-import { JobStatus } from '../enums/JobStatus';
+import { JobStatus } from '../types/JobStatus';
 import { Job } from '../entity/Job';
 import errorToJSON from 'error-to-json';
 import * as moment from 'moment';

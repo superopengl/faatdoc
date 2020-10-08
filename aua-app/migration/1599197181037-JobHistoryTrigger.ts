@@ -8,8 +8,8 @@ export class JobHistoryTrigger1599197181037 implements MigrationInterface {
         RETURNS trigger AS
         $BODY$
         BEGIN
-            INSERT INTO job_history ("jobId", "lastUpdatedAt", name, status, "agentId",  "signedAt", fields)
-            VALUES (NEW.id, NEW."lastUpdatedAt", NEW.name, NEW.status, NEW."agentId", NEW."signedAt", NEW.fields);
+            INSERT INTO job_history ("jobId", name, status, "agentId", fields, "genDocs", "uploadDocs", "signDocs", "feedbackDocs")
+            VALUES (NEW.id, NEW.name, NEW.status, NEW."agentId", NEW.fields, NEW."genDocs", NEW."uploadDocs", NEW."signDocs", NEW."feedbackDocs");
             RETURN NULL;
         END;
         $BODY$
