@@ -22,6 +22,7 @@ dependencies:
   markdown-it: 11.0.1
   markdown-it-pdf: 1.1.0
   markdown-pdf: 10.0.0
+  md5: 2.3.0
   moment: 2.27.0
   pg: 8.3.3_pg@8.3.3
   sanitize-html: 1.27.4
@@ -601,6 +602,10 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-4D3B6Wf41KOYRFdszmDqMCGq5VV/uMAB273JILmO+3jAlh8X4qDtdtgCR3fxtbLEMzSx22QdhnDcJvu2u1fVwg==
+  /charenc/0.0.2:
+    dev: false
+    resolution:
+      integrity: sha1-wKHS86cJLgN3S/qD8UwPxXkKhmc=
   /chokidar/3.4.2:
     dependencies:
       anymatch: 3.1.1
@@ -829,6 +834,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-Gk2c4y6xKEO8FSAUTklqtfSr7oTq0CiPQeLBG5Fl0qoXpZyMcj1SG59YL+hqq04bu6/IuEA7lMkYDAplQNKkyg==
+  /crypt/0.0.2:
+    dev: false
+    resolution:
+      integrity: sha1-iNf/fsDfuG9xPch7u0LQRNPmxBs=
   /crypto-random-string/2.0.0:
     dev: true
     engines:
@@ -1756,7 +1765,6 @@ packages:
     resolution:
       integrity: sha512-ZMERYes6pDydyuGidse7OsHxtbI7WVeUEozgR/g7rd0xUimYNlvZRE/K2MgZTjWy725IfelLeVcEM97mmtRGXw==
   /is-buffer/1.1.6:
-    dev: true
     resolution:
       integrity: sha512-NcdALwpXkTm5Zvvbk7owOUSvVvBKDgKP5/ewfXEznmQFfs4ZRmanOeKBTjRVjka3QFoN6XJ+9F3USqfHqTaU5w==
   /is-ci/2.0.0:
@@ -2264,6 +2272,14 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-o3lFfAOTpCgCXEXpNN86RaCVGE1YlxjWuAJ79XevAPoTyCBsl06BWhnFogYedg+JZxPjB3LWsA8JxZiCjsPPLA==
+  /md5/2.3.0:
+    dependencies:
+      charenc: 0.0.2
+      crypt: 0.0.2
+      is-buffer: 1.1.6
+    dev: false
+    resolution:
+      integrity: sha512-T1GITYmFaKuO91vxyoQMFETst+O71VUPEU3ze5GNzDm0OWdP8v1ziTaAEPUr/3kLsY3Sftgz242A1SetQiDL7g==
   /mdurl/1.0.1:
     dev: false
     resolution:
@@ -4158,6 +4174,7 @@ specifiers:
   markdown-it: ^11.0.1
   markdown-it-pdf: ^1.1.0
   markdown-pdf: ^10.0.0
+  md5: ^2.3.0
   moment: ^2.27.0
   nodemon: ^2.0.4
   pg: ^8.3.3

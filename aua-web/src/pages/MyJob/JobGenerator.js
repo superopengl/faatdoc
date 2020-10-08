@@ -58,10 +58,6 @@ const JobGenerator = props => {
     loadData();
   }, []);
 
-  const handleChange = (values) => {
-    props.onChange(values);
-  }
-
   const handleJobTypeChange = e => {
     wizardRef.current.nextStep();
     setJobTemplateId(e.target.value);

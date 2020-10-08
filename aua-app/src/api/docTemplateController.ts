@@ -12,6 +12,8 @@ import * as stringToStream from 'string-to-stream';
 import { uploadToS3 } from '../utils/uploadToS3';
 import * as MarkdownIt from 'markdown-it';
 import * as markdownItPdf from 'markdown-it-pdf';
+import { File } from '../entity/File';
+import * as md5 from 'md5';
 
 const mdParser = new MarkdownIt().use(markdownItPdf);
 
@@ -134,12 +136,16 @@ export const createPdfFromDocTemplate = handlerWrapper(async (req, res) => {
 
   const location = await uploadToS3(pdfFileId, pdfFileName, data);
 
-  const result = {
+  const file: File = {
     id: pdfFileId,
-    name: pdfFileName,
+    fileName: pdfFileName,
+    mime: 'application/pdf',
     location,
+    md5: md5(data)
   };
 
-  res.json(result);
+  await getRepository(File).save(file);
+
+  res.json(file);
 });
 

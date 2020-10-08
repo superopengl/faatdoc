@@ -54,6 +54,7 @@
     "markdown-it": "^11.0.1",
     "markdown-it-pdf": "^1.1.0",
     "markdown-pdf": "^10.0.0",
+    "md5": "^2.3.0",
     "moment": "^2.27.0",
     "pg": "^8.3.3",
     "sanitize-html": "^1.27.4",

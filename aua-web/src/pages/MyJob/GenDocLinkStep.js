@@ -9,10 +9,10 @@ import { computeVariablesHash } from 'util/computeVariableHash';
 import FileLink from 'components/FileLink';
 
 
-const { Title } = Typography;
+const { Title, Paragraph } = Typography;
 
 
-const GenDocLinkViewer = props => {
+const GenDocLinkStep = props => {
   const { doc, variableDic, onFinish, onBack, onSkip, isActive } = props;
   const [loading, setLoading] = React.useState(isActive);
   const [pdfData, setPdfData] = React.useState({
@@ -52,7 +52,7 @@ const GenDocLinkViewer = props => {
     const genDoc = {
       ...doc,
       fileId: pdfData.id,
-      fileName: pdfData.name,
+      fileName: pdfData.fileName,
       signedAt: new Date(),
     }
     onFinish(genDoc);
@@ -69,8 +69,8 @@ const GenDocLinkViewer = props => {
   return <>
     <Space direction="vertical" style={{ width: '100%' }}>
       <Title level={4}>{docTemplateName}</Title>
-      {docTemplateDescription && <Alert description={docTemplateDescription} type="warning" closable />}
-      {pdfData.name ? <FileLink id={pdfData.id} name={pdfData.name} location={pdfData.location} /> : <Spin>Generating doc</Spin>}
+      {docTemplateDescription && <Paragraph type="secondary">{docTemplateDescription}</Paragraph>}
+      <FileLink placeholder={`${docTemplateName}.pdf`} id={pdfData.id} name={pdfData.fileName} location={pdfData.location} />
       <Divider />
       <Space style={{ width: '100%' }}>
         <Button block onClick={handleBack}>Back</Button>
@@ -81,15 +81,15 @@ const GenDocLinkViewer = props => {
   </>
 }
 
-GenDocLinkViewer.propTypes = {
+GenDocLinkStep.propTypes = {
   doc: PropTypes.any.isRequired,
   variableDic: PropTypes.object.isRequired,
   disabled: PropTypes.bool.isRequired,
 };
 
-GenDocLinkViewer.defaultProps = {
+GenDocLinkStep.defaultProps = {
   disabled: false,
   variableDic: {},
 };
 
-export default GenDocLinkViewer;
+export default GenDocLinkStep;

@@ -41,9 +41,19 @@ const DocViewerInner = styled.div`
   padding: 1rem;
 `;
 
-const GenDocFieldEditor = props => {
+const GenDocFieldStep = props => {
   const { doc, variableDic, onFinish, onBack, onSkip, isActive } = props;
   const { variables: docVariables, docTemplateName, docTemplateDescription } = doc;
+
+  const [initialValues, setInitialValues] = React.useState({});
+
+  React.useEffect(() => {
+    const initialValues = docVariables.filter(x => x.name !== 'now').reduce((pre, cur) => {
+      pre[cur.name] = variableDic[cur.name];
+      return pre;
+    }, {});
+    setInitialValues(initialValues);
+  }, [variableDic]);
 
   const handleSubmit = async values => {
     onFinish(values);
@@ -57,27 +67,25 @@ const GenDocFieldEditor = props => {
     onSkip();
   }
 
-  const variableKvps = docVariables.filter(x => x.name !== 'now').map(x => ({
-    ...x,
-    value: variableDic[x.name]
-  }));
-
   if (!isActive) {
     return null;
   }
 
+  console.log('initialValues', initialValues);
+  console.log('variableDic', variableDic);
+
   return <>
     <Space direction="vertical" style={{ width: '100%' }}>
       <Title level={4}>{docTemplateName}</Title>
-      {docTemplateDescription && <Alert description={docTemplateDescription} type="warning" closable />}
+      {docTemplateDescription && <Paragraph type="secondary">{docTemplateDescription}</Paragraph>}
       <Form
         layout="vertical"
         // labelCol={{ span: 8 }}
         // wrapperCol={{ span: 16 }}
         onFinish={handleSubmit}
-        initialValues={variableKvps}
+        initialValues={initialValues}
       >
-        {variableKvps.map((x, i) => <Form.Item label={varNameToLabelName(x.name)} name={x.name} key={i} rules={[{ required: true, message: ' ' }]}>
+        {Object.keys(initialValues).map((name, i) => <Form.Item label={varNameToLabelName(name)} name={name} key={i} rules={[{ required: true, message: ' ' }]}>
           <Input allowClear />
         </Form.Item>)}
         <Divider />
@@ -91,15 +99,15 @@ const GenDocFieldEditor = props => {
   </>
 }
 
-GenDocFieldEditor.propTypes = {
+GenDocFieldStep.propTypes = {
   doc: PropTypes.any.isRequired,
   variableDic: PropTypes.object.isRequired,
   disabled: PropTypes.bool.isRequired,
 };
 
-GenDocFieldEditor.defaultProps = {
+GenDocFieldStep.defaultProps = {
   disabled: false,
   variableDic: {},
 };
 
-export default GenDocFieldEditor;
+export default GenDocFieldStep;
