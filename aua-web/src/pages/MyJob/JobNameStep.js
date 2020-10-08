@@ -11,13 +11,11 @@ import StepButtonSet from './StepBottonSet';
 
 const { Text, Title } = Typography;
 
-const UploadDocStep = (props) => {
-  const { job, onChange, onFinish, onBack, onSkip, isActive } = props;
-  const [loading, setLoading] = React.useState(false);
+const JobNameStep = (props) => {
+  const { job, onFinish, onBack, onSkip, isActive } = props;
 
   const handleSubmit = async (values) => {
-    const {uploadDocs} = values;
-    onFinish(uploadDocs);
+    onFinish(values.name);
   }
 
   if (!isActive) {
@@ -31,24 +29,24 @@ const UploadDocStep = (props) => {
     initialValues={job}
   >
     <Form.Item
-      label={<Title level={4}>Client Uploaded Docs</Title>}
-      name="uploadDocs"
-    // rules={[{ required: true, message: 'Please upload files' }]}
+      label={<Title level={4}>Job Name</Title>}
+      name="name"
+      rules={[{ required: true, message: ' ' }]}
     >
-      <FileUploader disabled={loading} />
+      <Input placeholder="Job Name" autoFocus />
     </Form.Item>
-    <Divider />
-    <StepButtonSet onBack={onBack} loading={loading}/>
+    {/* <Button block type="primary" htmlType="submit">Next</Button> */}
+    <StepButtonSet showsBack={false} />
   </Form>
 };
 
-UploadDocStep.propTypes = {
+JobNameStep.propTypes = {
   job: PropTypes.any.isRequired,
   disabled: PropTypes.bool.isRequired,
 };
 
-UploadDocStep.defaultProps = {
+JobNameStep.defaultProps = {
   disabled: false
 };
 
-export default withRouter(UploadDocStep);
+export default withRouter(JobNameStep);

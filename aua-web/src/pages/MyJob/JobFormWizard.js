@@ -3,25 +3,68 @@ import React from 'react';
 import { generateJob, saveJob } from 'services/jobService';
 import JobGenerator from './JobGenerator';
 import StepWizard from 'react-step-wizard';
-import FieldsEditor from './FieldsEditor';
+import JobFieldsEditor from './JobFieldsEditor';
 import GenDocFieldStep from './GenDocFieldStep';
 import { merge } from 'lodash';
-import { Collapse, Spin, Divider, Skeleton, Radio, Space, Typography } from 'antd';
+import { Collapse, Spin, Affix, Button, Progress, Space, Typography } from 'antd';
 import GenDocLinkStep from './GenDocLinkStep';
 import UploadDocStep from './UploadDocStep';
 import FinalReviewStep from './FinalReviewStep';
 import { withRouter } from 'react-router-dom';
 import { getPortfolio } from 'services/portfolioService';
+import * as queryString from 'query-string';
+import JobChat from 'pages/AdminJob/JobChat';
+import styled from 'styled-components';
+import { BellOutlined, MessageOutlined } from '@ant-design/icons';
+import JobNameStep from './JobNameStep';
 const { Panel } = Collapse;
+
+const { Text } = Typography;
+
+const AffixContactButton = styled(Button)`
+width: 60px;
+height: 60px;
+display: flex;
+align-items: center;
+justify-content: center;
+border: none;
+background-color: rgba(255,77,79, 0.8);
+color: white;
+// box-shadow: 1px 1px 5px #222222;
+border: 2px solid white;
+
+&:focus,&:hover,&:active {
+color: white;
+background-color: rgba(20, 62, 134, 0.8);
+border: 2px solid white;
+}
+`;
 
 const JobFormWizard = props => {
   const { value } = props;
+  const { chat } = queryString.parse(props.location.search);
 
   const [loading, setLoading] = React.useState(false);
   const [job, setJob] = React.useState(value);
   const [variableContextDic, setVariableContextDic] = React.useState({});
+  const [chatVisible, setChatVisible] = React.useState(Boolean(chat));
+  const [progess, setProgress] = React.useState({ current: 0, total: 0 });
   const wizardRef = React.useRef(null);
   const generatorRef = React.useRef(null);
+
+  React.useEffect(() => {
+    setProgress({
+      current: wizardRef?.current?.currentStep || 0,
+      total: wizardRef?.current?.totalSteps || 0
+    })
+  }, [wizardRef?.current?.currentStep, wizardRef?.current?.totalSteps])
+
+  const handleStepChange = (info) => {
+    setProgress({
+      current: info.activeStep || 0,
+      total: wizardRef.current.totalSteps
+    });
+  }
 
   const handleJobGenerated = async (values) => {
     setLoading(true);
@@ -98,6 +141,12 @@ const JobFormWizard = props => {
     }
   }
 
+  const handleUpdateJobName = name => {
+    job.name = name;
+    setJob({ ...job });
+    handleNext();
+  }
+
   const getGenDocSteps = () => {
     const steps = [];
     if (job?.genDocs) {
@@ -129,10 +178,20 @@ const JobFormWizard = props => {
   return <Spin spinning={loading}>
     <StepWizard ref={generatorRef} >
       {!job && <JobGenerator onChange={handleJobGenerated} />}
-      {job && <div>
-        {wizardRef.current?.currentStep} / {wizardRef.current?.totalSteps}
-        <StepWizard ref={wizardRef}>
-          <FieldsEditor job={job} onChange={handleJobFieldsChange} />
+      {job && <><Space size="large" direction="vertical" style={{ width: '100%' }}>
+        <div style={{ textAlign: 'center', fontSize: '2rem' }}>
+          <Text type="secondary">{progess.current} / {progess.total}</Text>
+          <Progress strokeColor="#143e86" strokeLinecap="square" type="line" percent={progess.total ? 100 * progess.current / progess.total : 0} showInfo={false} />
+        </div>
+        <StepWizard ref={wizardRef} onStepChange={handleStepChange}>
+          <JobNameStep
+            job={job}
+            onFinish={handleUpdateJobName}
+          />
+          <JobFieldsEditor job={job}
+            onSkip={handleSkip}
+            onBack={handleStepBack}
+            onFinish={handleJobFieldsChange} />
           {getGenDocSteps()}
           <UploadDocStep
             job={job}
@@ -146,8 +205,19 @@ const JobFormWizard = props => {
             onFinish={handlePostSubmit}
           />
         </StepWizard>
-      </div>}
+      </Space></>}
     </StepWizard>
+    {!!job?.id && <>
+      <JobChat visible={chatVisible} onClose={() => setChatVisible(false)} jobId={job.id} />
+      <Affix style={{ position: 'fixed', bottom: 30, right: 30 }}>
+        <AffixContactButton type="primary" shape="circle" size="large"
+          onClick={() => setChatVisible(true)}
+          style={{ fontSize: 24 }}
+        >
+          <MessageOutlined />
+        </AffixContactButton>
+      </Affix>
+    </>}
   </Spin>
 
 

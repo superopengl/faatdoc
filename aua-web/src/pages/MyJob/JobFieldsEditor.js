@@ -1,4 +1,4 @@
-import { Button, Form, Input, Radio, Typography } from 'antd';
+import { Button, Form, Input, Radio, Typography, Divider, Space } from 'antd';
 import { DateInput } from 'components/DateInput';
 import { RangePickerInput } from 'components/RangePickerInput';
 import PropTypes from 'prop-types';
@@ -6,18 +6,19 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { varNameToLabelName } from 'util/varNameToLabelName';
 import { merge } from 'lodash';
+import StepButtonSet from './StepBottonSet';
 
 const { Text } = Typography;
 
-const FieldsEditor = (props) => {
-  const { job, onChange, disabled } = props;
+const JobFieldsEditor = (props) => {
+  const { job, onFinish, disabled, onBack, onSkip, isActive } = props;
 
   const handleSubmit = async (values) => {
     const changedJob = merge({}, job, values);
-    onChange(changedJob);
+    onFinish(changedJob);
   }
 
-  if (!job) {
+  if (!job || !isActive) {
     return null;
   }
 
@@ -27,10 +28,6 @@ const FieldsEditor = (props) => {
     style={{ textAlign: 'left' }}
     initialValues={job}
   >
-    <Form.Item label="Job Name" name="name" rules={[{ required: true }]}>
-      <Input disabled={disabled} />
-    </Form.Item>
-
     {job.fields.filter(field => !field.officialOnly).map((field, i) => {
       const { name, description, type, required } = field;
       const formItemProps = {
@@ -53,19 +50,22 @@ const FieldsEditor = (props) => {
         </Form.Item>
       );
     })}
-    <Form.Item>
-      <Button key="submit" block type="primary" htmlType="submit" disabled={disabled}>Next</Button>
-    </Form.Item>
+      {/* <Space style={{ width: '100%' }}>
+        <Button onClick={() => onBack()}>Back</Button>
+        <Button onClick={() => onSkip()}>Skip</Button>
+        <Button type="primary" htmlType="submit">Next</Button>
+      </Space> */}
+      <StepButtonSet onBack={onBack} />
   </Form>
 };
 
-FieldsEditor.propTypes = {
+JobFieldsEditor.propTypes = {
   job: PropTypes.any.isRequired,
   disabled: PropTypes.bool.isRequired,
 };
 
-FieldsEditor.defaultProps = {
+JobFieldsEditor.defaultProps = {
   disabled: false
 };
 
-export default withRouter(FieldsEditor);
+export default withRouter(JobFieldsEditor);

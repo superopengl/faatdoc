@@ -7,6 +7,7 @@ import MarkdownIt from 'markdown-it'
 import 'react-markdown-editor-lite/lib/index.css';
 import { computeVariablesHash } from 'util/computeVariableHash';
 import FileLink from 'components/FileLink';
+import StepButtonSet from './StepBottonSet';
 
 
 const { Title, Paragraph } = Typography;
@@ -81,11 +82,7 @@ const GenDocLinkStep = props => {
       {docTemplateDescription && <Paragraph type="secondary">{docTemplateDescription}</Paragraph>}
       <FileLink placeholder={`${docTemplateName}.pdf`} id={pdfData.id} name={pdfData.fileName} location={pdfData.location} />
       <Divider />
-      <Space style={{ width: '100%' }}>
-        <Button block onClick={handleBack}>Back</Button>
-        <Button block onClick={handleSkipDoc} disabled={loading}>Skip</Button>
-        <Button block type="primary" onClick={handleNext} disabled={loading || !pdfData}>Next</Button>
-      </Space>
+      <StepButtonSet onBack={onBack} loading={loading}/>
     </Space>
   </>
 }
