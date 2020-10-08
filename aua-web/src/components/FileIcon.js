@@ -21,7 +21,7 @@ export const FileIcon = props => {
 }
 
 FileIcon.propTypes = {
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   width: PropTypes.number,
 };
 

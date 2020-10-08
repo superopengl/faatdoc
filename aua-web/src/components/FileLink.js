@@ -27,11 +27,11 @@ const FileLink = props => {
   }
 
   React.useEffect(() => {
-    loadEntity();
+    loadEntity()
   }, [location, id]);
 
   return <Spin spinning={loading}>
-    <Link href={fileUrl} target="_blank" style={{width: '100%'}}>
+    <Link href={fileUrl} target="_blank" style={{ width: '100%' }}>
       <Space style={{ width: '100%', alignItems: 'center' }}>
         <FileIcon name={fileName} />
         {fileName}

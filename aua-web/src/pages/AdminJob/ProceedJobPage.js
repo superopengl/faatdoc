@@ -17,6 +17,8 @@ import { Select } from 'antd';
 import FieldEditor from 'components/FieldEditor';
 import { SyncOutlined } from '@ant-design/icons';
 import FileLink from 'components/FileLink';
+import { notify } from 'util/notify';
+import {merge} from 'lodash';
 
 const { Text } = Typography;
 const ContainerStyled = styled.div`
@@ -121,9 +123,14 @@ const ProceedJobPage = (props) => {
     setJob({ ...lodgment });
   }
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (values) => {
     setLoading(true);
-    await saveJob({ ...job });
+    await saveJob({
+      ...job,
+      ...values,
+      fields: merge(job.fields, values.fields)
+    });
+    notify.success('Successfully saved');
     setLoading(false);
   }
 
@@ -255,7 +262,7 @@ const ProceedJobPage = (props) => {
             {job.genDocs && <Form.Item
               label="Auto Generated Docs"
             >
-              {job.genDocs.map((d, i) => <FileLink id={d.fileId}/>)}
+              {job.genDocs.map((d, i) => <FileLink key={i} id={d.fileId} />)}
             </Form.Item>}
             {job.uploadDocs && <Form.Item
               label="Client Uploaded Docs"
