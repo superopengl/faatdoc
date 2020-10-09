@@ -72,7 +72,7 @@ export const saveJob = handlerWrapper(async (req, res) => {
     validateJobStatusChange(null, status);
     job = new Job();
     job.id = uuidv4();
-    job.userId = userId;
+    job.userId = portfolio.userId;
     job.jobTemplateId = jobTemplateId;
     job.portfolioId = portfolioId;
   }
