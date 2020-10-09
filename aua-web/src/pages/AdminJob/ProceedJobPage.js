@@ -276,14 +276,14 @@ const ProceedJobPage = (props) => {
               name="signDocs"
             // rules={[{ required: true, message: 'Please upload files' }]}
             >
-              <FileUploader disabled={loading} />
+              <FileUploader disabled={loading} showsLastReadAt={true} showsSignedAt={true}/>
             </Form.Item>}
             {job.feedbackDocs && <Form.Item
               label="Feedback Docs"
               name="feedbackDocs"
             // rules={[{ required: true, message: 'Please upload files' }]}
             >
-              <FileUploader disabled={loading} />
+              <FileUploader disabled={loading} showsLastReadAt={true}/>
             </Form.Item>}
           </Col>
         </Row>

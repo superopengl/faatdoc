@@ -1,15 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Upload, Typography } from 'antd';
+import { Upload, Typography, Button, Space, Col } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
 import * as _ from 'lodash';
 import styled from 'styled-components';
-import { searchFile } from 'services/fileService';
+import { getFile, searchFile } from 'services/fileService';
 import { FileIcon } from './FileIcon';
 import { saveAs } from 'file-saver';
 import { AiOutlineUpload } from 'react-icons/ai';
+import FileLink from './FileLink';
+import { CheckCircleFilled, CheckCircleOutlined, DeleteOutlined } from '@ant-design/icons';
+import { FcCheckmark } from 'react-icons/fc';
+import { FaPenSquare, FaEye } from 'react-icons/fa'
+import { Badge } from 'antd';
+import { Popover } from 'antd';
+import { TimeAgo } from './TimeAgo';
+import { Row } from 'antd';
 
 const { Dragger } = Upload;
+const { Text } = Typography;
 
 const Container = styled.div`
 & {
@@ -36,15 +45,64 @@ const Container = styled.div`
     width: auto;
     padding-left: 8px;
   }
+}`;
+
+const FileIconContainer = styled.div`
+  display: inline-block;
+  position: relative;
+`;
+
+const FileUploadItem = props => {
+  const { value } = props;
+  const id = _.get(value, 'response.id', value.uid);
+  const name = _.get(value, 'response.fileName', value.name);
+  const location = _.get(value, 'response.location', value.url);
+  return <Space style={{ width: '100%', justifyContent: 'space-between' }}>
+    <FileLink id={id} name={name} location={location} />
+    {/* <Text code>{JSON.stringify(value, null, 2)}</Text> */}
+    <Button icon={<DeleteOutlined />} type="link" style={{ paddingRight: 0 }}></Button>
+  </Space>
 }
-`
 
+const FileIconWithOverlay = props => {
+  const { id, name, showsLastReadAt, showsSignedAt } = props
 
-const { Text } = Typography;
+  const [file, setFile] = React.useState();
 
+  const loadEntity = async () => {
+    if (showsLastReadAt || showsSignedAt) {
+      const file = await getFile(id);
+      setFile(file);
+    }
+  }
+
+  React.useEffect(() => {
+    loadEntity();
+  }, []);
+
+  if (!file) {
+    return <FileIcon name={name} />
+  }
+
+  const { lastReadAt, signedAt } = file;
+
+  return <Popover content={
+    <Space direction="vertical">
+        <TimeAgo value={lastReadAt} surfix="Last read:" direction="horizontal" defaultContent="Unread"/>
+        <TimeAgo value={signedAt} surfix="Signed at:" direction="horizontal" defaultContent="Unsigned"/>
+    </Space>
+  } trigger="click">
+    <FileIconContainer>
+      <FileIcon name={name} />
+      {!lastReadAt ? <Badge color="blue" style={{ position: 'absolute', top: -8, left: -8 }} /> : 
+        !signedAt ? <Badge color="red" style={{ position: 'absolute', top: -8, left: -8 }} /> : 
+        null}
+    </FileIconContainer>
+  </Popover>
+}
 
 export const FileUploader = (props) => {
-  const { onUploadingChange } = props;
+  const { onUploadingChange, showsLastReadAt, showsSignedAt } = props;
 
   const [uploadFileId, setUploadFileId] = React.useState(uuidv4());
   const [fileList, setFileList] = React.useState([]);
@@ -77,10 +135,10 @@ export const FileUploader = (props) => {
   }, []);
 
   const handleChange = (info) => {
-    const { fileList } = info;
+    const { file, fileList } = info;
     setFileList(fileList);
     setUploadFileId(uuidv4());
-    
+
     const fileIds = fileList.filter(f => f.status === 'done').map(f => _.get(f, 'response.id', f.uid));
     props.onChange(fileIds);
 
@@ -94,11 +152,20 @@ export const FileUploader = (props) => {
     saveAs(url, fileName);
   }
 
+  const handleRemove = file => {
+
+  }
+
   const { size, disabled } = props;
 
   const maxSize = size || 20;
 
-  const getFileIcon = file => <FileIcon name={file.name} />
+  const getFileIcon = file => <FileIconWithOverlay
+    id={file.uid}
+    name={file.name}
+    showsLastReadAt={showsLastReadAt}
+    showsSignedAt={showsSignedAt}
+  />
 
   return (
     <Container className="clearfix">
@@ -111,11 +178,13 @@ export const FileUploader = (props) => {
         fileList={fileList}
         onPreview={handlePreview}
         onChange={handleChange}
+        onRemove={handleRemove}
         // beforeUpload={handleBeforeUpload}
         showUploadList={{
           showDownloadIcon: false,
           showRemoveIcon: true,
         }}
+        // showUploadList={false}
         // iconRender={() => <UploadOutlined />}
         disabled={disabled || fileList.length >= maxSize}
         iconRender={getFileIcon}
@@ -127,6 +196,7 @@ export const FileUploader = (props) => {
           Click or drag file to this area to upload
         </div>}
       </Dragger>
+      {/* {fileList.map((f, i) => <FileUploadItem key={i} value={f} />)} */}
     </Container>
   );
 
@@ -136,8 +206,12 @@ FileUploader.propTypes = {
   value: PropTypes.arrayOf(PropTypes.string),
   size: PropTypes.number,
   disabled: PropTypes.bool,
+  showsLastReadAt: PropTypes.bool,
+  showsSignedAt: PropTypes.bool,
 };
 
 FileUploader.defaultProps = {
-  disabled: false
+  disabled: false,
+  showsLastReadAt: false,
+  showsSignedAt: false,
 };
