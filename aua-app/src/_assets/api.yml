@@ -596,3 +596,9 @@ paths:
       responses:
         200:
           description: OK
+  /stats:
+    get:
+      operationId: getAdminStats
+      responses:
+        200:
+          description: OK

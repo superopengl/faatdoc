@@ -8,3 +8,4 @@ export * from './jobController';
 export * from './recurringController';
 export * from './messageController';
 export * from './contactController';
+export * from './statsController';

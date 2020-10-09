@@ -30,6 +30,7 @@ import PortfolioForm from 'pages/Portfolio/PortfolioForm';
 import DisclaimerPage from 'pages/DisclaimerPage';
 import MyJobSign from 'pages/MyJob/MyJobSign';
 import ClientDashboardPage from 'pages/ClientDashboard/ClientDashboardPage';
+import AdminDashboardPage from 'pages/AdminDashboard/AdminDashboardPage';
 
 
 class App extends React.Component {
@@ -85,6 +86,7 @@ class App extends React.Component {
             <RoleRoute visible={isGuest} loading={loading} exact path="/login" component={LogInPage} />
             <RoleRoute visible={isGuest} loading={loading} exact path="/signin" component={SignInPage} />
             <RoleRoute visible={isGuest} loading={loading} exact path="/forgot_password" component={ForgotPasswordPage} />
+            <RoleRoute visible={isAdmin || isAgent} loading={loading} exact path="/dashboard" component={AdminDashboardPage} />
             <RoleRoute visible={isClient} loading={loading} exact path="/landing" component={ClientDashboardPage} />
             <RoleRoute visible={isClient} loading={loading} exact path="/portfolio" component={PortfolioPage} />
             <RoleRoute visible={isClient} loading={loading} exact path="/portfolio/:id" component={PortfolioForm} />

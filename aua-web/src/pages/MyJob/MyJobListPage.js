@@ -71,6 +71,7 @@ const MyJobListPage = (props) => {
     if (!portfolioList.length) {
       Modal.confirm({
         title: 'No portfolio',
+        maskClosable: true,
         content: 'Please create portfolio before creating job. Go to create protofolio now?',
         okText: 'Yes, go to create portfolio',
         onOk: () => props.history.push('/portfolio')

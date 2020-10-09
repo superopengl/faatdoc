@@ -11,6 +11,7 @@
     "abnacn-validator": "^0.0.5",
     "antd": "^4.6.2",
     "axios": "^0.19.2",
+    "bizcharts": "^4.0.14",
     "craco-less": "^1.16.0",
     "cron-parser": "^2.16.3",
     "cronstrue": "^1.100.0",
