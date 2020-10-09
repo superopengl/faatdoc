@@ -4,7 +4,7 @@ import Text from 'antd/lib/typography/Text';
 import HomeHeader from 'components/HomeHeader';
 import { JobStatus } from 'components/JobStatus';
 import { TimeAgo } from 'components/TimeAgo';
-import ReviewSignPage from 'pages/MyJob/ReviewSignPage';
+import SignDocEditor from 'pages/MyJob/SignDocEditor';
 import React from 'react';
 import Highlighter from "react-highlight-words";
 import { Link } from 'react-router-dom';
@@ -220,7 +220,7 @@ const AdminJobListPage = (props) => {
   const handleShowSignDetail = async (jobId) => {
     Modal.info({
       title: 'Client Review And Sign Details',
-      content: <ReviewSignPage id={jobId} readonly={true} />,
+      content: <SignDocEditor id={jobId} readonly={true} />,
       width: 700,
       icon: null,
       maskClosable: true,

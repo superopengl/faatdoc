@@ -11,6 +11,7 @@ import MessageList from 'components/MessageList';
 import { GlobalContext } from 'contexts/GlobalContext';
 import { Divider } from 'antd';
 import MyJobList from 'pages/MyJob/MyJobList';
+import { Alert } from 'antd';
 
 
 const { Title, Paragraph } = Typography;
@@ -58,6 +59,7 @@ const ClientDashboardPage = (props) => {
   const [toSignJobList, setToSignJobList] = React.useState([]);
   const [unreadJobList, setUnreadJobList] = React.useState([]);
   const [completeList, setCompleteList] = React.useState([]);
+  const [todoList, setTodoList] = React.useState([]);
   const [portfolioList, setPortfolioList] = React.useState([]);
   const [, setHasMessage] = React.useState(false);
   const context = React.useContext(GlobalContext);
@@ -73,6 +75,7 @@ const ClientDashboardPage = (props) => {
     setToSignJobList(list.filter(x => x.status === 'to_sign'));
     setUnreadJobList(list.filter(x => x.lastUnreadMessageAt));
     setCompleteList(list.filter(x => x.status === 'complete'));
+    setTodoList(list.filter(x => x.status === 'todo'));
     setLoading(false);
     if (!portfolioList.length) {
       showNoPortfolioWarn();
@@ -92,6 +95,7 @@ const ClientDashboardPage = (props) => {
   const showNoPortfolioWarn = () => {
     Modal.confirm({
       title: 'No portfolio',
+      maskClosable: true,
       content: 'Please create portfolio before creating job. Go to create protofolio now?',
       okText: 'Yes, go to create portfolio',
       maskClosable: true,
@@ -123,6 +127,14 @@ const ClientDashboardPage = (props) => {
   }
 
   const hasPortfolio = !!portfolioList.length;
+  const hasNotableJobs = toSignJobList.length || unreadJobList.length || completeList.length;
+  const showsTodoList = !hasNotableJobs && todoList.length > 0;
+  const hasNothing = !hasNotableJobs && !todoList.length
+
+  if(hasNothing) {
+    props.history.push(`job`);
+    return null;
+  }
 
   return (
     <LayoutStyled>
@@ -131,7 +143,6 @@ const ClientDashboardPage = (props) => {
         <Row gutter={80}>
           <StyledCol span={24}>
             <Space size="small" direction="vertical" style={{ width: '100%' }}>
-              {/* <Title type="secondary" level={4}>My Jobs</Title> */}
               <Space style={{ width: '100%', justifyContent: 'space-between' }}>
                 <Link to="/job">All jobs</Link>
                 <Button type="link" onClick={createNewJob} style={{ padding: 0 }} icon={<PlusOutlined />}>Create New Job</Button>
@@ -156,8 +167,12 @@ const ClientDashboardPage = (props) => {
                 </>}
                 {completeList.length > 0 && <>
                   <Title type="secondary" level={4}>Recent Completed Jobs</Title>
-                  <MyJobList data={completeList} onItemClick={handleGoToJobWithMessage} />
+                  <MyJobList data={completeList} onItemClick={handleGoToJob} />
                   <Divider />
+                </>}
+                {showsTodoList && <>
+                  <Title type="secondary" level={4}>Todo Jobs</Title>
+                  <MyJobList data={todoList} onItemClick={handleGoToJob} />
                 </>}
               </>}
             </Space>

@@ -20,8 +20,8 @@ export async function searchJob(query) {
   return httpPost('job/search', query);
 }
 
-export async function signJob(id) {
-  return httpPost(`job/${id}/sign`);
+export async function signJobDoc(id, fileIds) {
+  return httpPost(`job/${id}/sign`, {files: fileIds});
 }
 
 export async function generateJob(jobTemplateId, portfolioId) {

@@ -39,7 +39,7 @@ export const TimeAgo = props => {
 TimeAgo.propTypes = {
   surfix: PropTypes.string,
   value: PropTypes.any,
-  defaultContent: PropTypes.string,
+  defaultContent: PropTypes.any,
   direction: PropTypes.string,
   extra: PropTypes.any,
   strong: PropTypes.bool,

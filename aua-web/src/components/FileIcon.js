@@ -9,7 +9,7 @@ const StyledFileIcon = styled.div`
 `;
 
 export const FileIcon = props => {
-  const { name, width } = props;
+  const { name, width, style } = props;
 
   if(!name) return null;
 
@@ -17,7 +17,7 @@ export const FileIcon = props => {
   const tokens = name.split('.');
   const ext = tokens[tokens.length - 1];
 
-  return <StyledFileIcon style={{width, height }}><ReactFileIcon extension={ext} {...defaultStyles[ext]} /></StyledFileIcon>;
+  return <StyledFileIcon style={{...style, width, height }}><ReactFileIcon extension={ext} {...defaultStyles[ext]} /></StyledFileIcon>;
 }
 
 FileIcon.propTypes = {

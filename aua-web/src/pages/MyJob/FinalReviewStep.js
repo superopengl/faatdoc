@@ -24,7 +24,7 @@ const JobReviewItem = props => {
       content={<PopoverContent>{description}</PopoverContent>}
       trigger="click"
     >
-      <Button type="link" icon={<BsFillInfoCircleFill size={20} style={{ fill: '#143e86' }} />} />
+      <Button type="link" style={{position: 'relative', top: 4}} icon={<BsFillInfoCircleFill size={20} style={{ fill: '#143e86' }} />} />
     </Popover>}
   </Space>
 }
@@ -32,7 +32,7 @@ const JobReviewItem = props => {
 const PartDivider = props => <Divider><Text type="secondary">{props.text}</Text></Divider>
 
 const FinalReviewStep = props => {
-  const { job, onFinish, onBack, isActive, okText } = props;
+  const { job, onFinish, onBack, isActive, showsFooter, showsSignDoc } = props;
 
   const handleSave = async () => {
     onFinish();
@@ -42,7 +42,7 @@ const FinalReviewStep = props => {
     onBack();
   }
 
-  if (!isActive) {
+  if (isActive === false) {
     return null;
   }
 
@@ -72,7 +72,7 @@ const FinalReviewStep = props => {
           />
         })}
       </>}
-      {job.signDocs?.length > 0 && <>
+      {(showsSignDoc && job.signDocs?.length > 0) && <>
         <PartDivider text="Signed Docs" />
         {job.signDocs.map((fileId, i) => {
           return <JobReviewItem key={i} value={<FileLink id={fileId} />}
@@ -86,23 +86,26 @@ const FinalReviewStep = props => {
           />
         })}
       </>}
-      <Divider />
-      <Space style={{ width: '100%', justifyContent: 'space-between' }}>
-        {/* <Button onClick={handleBack}>Back</Button> */}
-        <Button shape="circle" size="large" onClick={() => onBack()} icon={<LeftOutlined />}></Button>
-        <Button onClick={handleSave} type="primary" style={{borderRadius: '6px 20px 20px 6px'}}>Save and Submit</Button>
-        {/* <Button shape="circle" size="large" type="primary" icon={<RightOutlined />} disabled={loading} {...nextButtonProps}></Button> */}
-
-      </Space>
+      {showsFooter && <>
+        <Divider />
+        <Space style={{ width: '100%', justifyContent: 'space-between' }}>
+          <Button shape="circle" size="large" onClick={() => onBack()} icon={<LeftOutlined />}></Button>
+          <Button onClick={handleSave} type="primary">Save and Submit</Button>
+        </Space>
+      </>}
     </Space>
   </>
 }
 
 FinalReviewStep.propTypes = {
   job: PropTypes.any.isRequired,
+  showsFooter: PropTypes.bool,
+  showsSignDoc: PropTypes.bool,
 };
 
 FinalReviewStep.defaultProps = {
+  showsFooter: true,
+  showsSignDoc: true,
 };
 
 export default FinalReviewStep;

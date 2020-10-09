@@ -1,6 +1,6 @@
 
 import * as moment from 'moment';
-import { getConnection, getManager, getRepository, IsNull } from 'typeorm';
+import { getConnection, getManager, getRepository, IsNull, In, Not } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { JobTemplate } from '../entity/JobTemplate';
 import { Job } from '../entity/Job';
@@ -14,6 +14,8 @@ import { generateJobByJobTemplateAndPortfolio } from '../utils/generateJobByJobT
 import { getUtcNow } from '../utils/getUtcNow';
 import { guessDisplayNameFromFields } from '../utils/guessDisplayNameFromFields';
 import { Portfolio } from '../entity/Portfolio';
+import { File } from '../entity/File';
+import * as _ from 'lodash';
 
 export const generateJob = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
@@ -167,7 +169,10 @@ export const listJob = handlerWrapper(async (req, res) => {
   const query = getManager()
     .createQueryBuilder()
     .from(Job, 'j')
-    .where({ userId: clientId })
+    .where({ 
+      userId: clientId,
+      status: Not(JobStatus.ARCHIVE)
+     })
     .leftJoin(q => q.from(Message, 'x')
       .where(`"clientUserId" = :id`, { id: clientId })
       .andWhere(`"readAt" IS NULL`)
@@ -222,19 +227,34 @@ export const assignJob = handlerWrapper(async (req, res) => {
   res.json();
 });
 
-// export const signJob = handlerWrapper(async (req, res) => {
-//   assertRole(req, 'client');
-//   const { id } = req.params;
+export const signJobDoc = handlerWrapper(async (req, res) => {
+  assertRole(req, 'client');
+  const { id } = req.params;
+  const { files } = req.body;
+  assert(files?.length, 400, 'No files to sign');
+  const jobRepo = getRepository(Job);
+  const job = await jobRepo.findOne(id);
+  assert(job, 404);
 
-//   const now = getUtcNow();
-//   await getRepository(Job).update(id, {
-//     signedAt: now,
-//     lastUpdatedAt: now,
-//     status: JobStatus.SIGNED
-//   });
+  const fileIds = _.intersection(files, job.signDocs);
+  assert(fileIds.length, 400, 'No files to sign');
 
-//   res.json();
-// });
+  const now = getUtcNow();
+  const fileRepo = getRepository(File);
+  await fileRepo.update(fileIds, { signedAt: now });
+
+  const unsignedFileCount = await fileRepo.count({
+    id: In(job.signDocs),
+    signedAt: IsNull()
+  });
+
+  if(unsignedFileCount === 0) {
+    job.status = JobStatus.SIGNED;
+    await jobRepo.save(job);
+  }
+
+  res.json();
+});
 
 export const completeJob = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent');

@@ -4,6 +4,7 @@ import { FeedbackDoc } from '../types/FeedbackDoc';
 import { GenDoc } from '../types/GenDoc';
 import { SignDoc } from '../types/SignDoc';
 import { UploadDoc } from '../types/UploadDoc';
+import { stringType } from 'aws-sdk/clients/iam';
 
 @Entity()
 export class Job {
@@ -43,14 +44,14 @@ export class Job {
   @Column({ type: 'json', default: [] })
   genDocs: GenDoc[];
 
-  @Column({ type: 'json', default: [] })
-  uploadDocs: UploadDoc[];
+  @Column({ type: 'varchar',array: true, default: '{}' })
+  uploadDocs: string[];
 
-  @Column({ type: 'json', default: [] })
-  signDocs: SignDoc[];
+  @Column({ type: 'varchar',array: true, default: '{}' })
+  signDocs: string[];
 
-  @Column({ type: 'json', default: [] })
-  feedbackDocs: FeedbackDoc[];
+  @Column({ type: 'varchar',array: true, default: '{}' })
+  feedbackDocs: string[];
 }
 
 

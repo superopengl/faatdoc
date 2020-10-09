@@ -5,7 +5,8 @@ import { withRouter } from 'react-router-dom';
 import { getJob } from 'services/jobService';
 import styled from 'styled-components';
 import MyJobForm from './MyJobForm';
-import ReviewSignPage from './ReviewSignPage';
+import MyJobReadView from './MyJobReadView';
+import SignDocEditor from './SignDocEditor';
 
 const { Title } = Typography;
 
@@ -46,13 +47,18 @@ const MyJobSign = (props) => {
     props.history.push(`/job`);
   }
 
+  const loadEntity = async () => {
+    const updatedJob = await getJob(job.id);
+    setJob(updatedJob);
+  }
+
   const { status } = job || {};
   const defaultActiveKey = status && status === 'to_sign' ? 'sign' : 'view';
 
   return (
     <Space size="large" direction="vertical" style={{ width: '100%' }}>
       <StyledTitleRow>
-        <Title level={2} style={{ margin: 'auto' }}>Review Job</Title>
+        <Title level={2} style={{ margin: 'auto' }}>Sign Job</Title>
       </StyledTitleRow>
       {status === 'signed' && <Alert
         message="The job has been signed."
@@ -68,10 +74,11 @@ const MyJobSign = (props) => {
       />}
       {!loading && <Tabs defaultActiveKey={defaultActiveKey}>
         <Tabs.TabPane tab="Application" key="view">
-          <MyJobForm showsAll={status === 'complete'} value={job} onOk={() => goToJobList()} />
+          {/* <MyJobForm showsAll={status === 'complete'} value={job} onOk={() => goToJobList()} /> */}
+          <MyJobReadView value={job} showsSignDoc={false}/>
         </Tabs.TabPane>
         <Tabs.TabPane tab="Sign" key="sign">
-          <ReviewSignPage value={job} onOk={() => goToJobList()} />
+          <SignDocEditor value={job} onOk={() => loadEntity()} />
         </Tabs.TabPane>
       </Tabs>}
       {/* <Button block type="link" onClick={() => props.history.goBack()}>Cancel</Button> */}

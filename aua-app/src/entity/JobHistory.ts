@@ -31,12 +31,12 @@ export class JobHistory {
   @Column({ type: 'json' })
   genDocs: GenDoc[];
 
-  @Column({ type: 'json' })
-  uploadDocs: UploadDoc[];
+  @Column({ type: 'varchar', array: true, default: '{}' })
+  uploadDocs: string[];
 
-  @Column({ type: 'json' })
-  signDocs: SignDoc[];
+  @Column({ type: 'varchar', array: true, default: '{}' })
+  signDocs: string[];
 
-  @Column({ type: 'json' })
-  feedbackDocs: FeedbackDoc[];
+  @Column({ type: 'varchar', array: true, default: '{}' })
+  feedbackDocs: string[];
 }

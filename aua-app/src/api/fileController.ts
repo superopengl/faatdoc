@@ -10,12 +10,12 @@ import { uuidToRelativePath } from '../utils/uuidToRelativePath';
 import { assertRole } from '../utils';
 import { getUtcNow } from '../utils/getUtcNow';
 import { Job } from '../entity/Job';
-import { uploadToS3 } from '../utils/uploadToS3';
+import { getS3ObjectStream, uploadToS3 } from '../utils/uploadToS3';
 
 export const downloadFile = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client', 'agent');
   const { id } = req.params;
-  const { user: {id: userId, role} } = req as any;
+  const { user: { id: userId, role } } = req as any;
 
   const repo = getRepository(File);
   const file = await repo.findOne(id);
@@ -27,7 +27,13 @@ export const downloadFile = handlerWrapper(async (req, res) => {
     await repo.save(file);
   }
 
-  res.redirect(file.location);
+  const { fileName, mime } = file;
+
+  const stream = getS3ObjectStream(id, fileName);
+  res.setHeader('Content-type', mime);
+  res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
+  
+  stream.pipe(res);
 });
 
 export const getFile = handlerWrapper(async (req, res) => {
