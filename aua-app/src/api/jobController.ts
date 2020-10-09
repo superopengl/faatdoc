@@ -50,7 +50,6 @@ function validateJobStatusChange(oldStatus, newStatus) {
   return nextStatii.includes(newStatus);
 }
 
-
 export const saveJob = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent', 'client');
 
@@ -169,10 +168,10 @@ export const listJob = handlerWrapper(async (req, res) => {
   const query = getManager()
     .createQueryBuilder()
     .from(Job, 'j')
-    .where({ 
+    .where({
       userId: clientId,
       status: Not(JobStatus.ARCHIVE)
-     })
+    })
     .leftJoin(q => q.from(Message, 'x')
       .where(`"clientUserId" = :id`, { id: clientId })
       .andWhere(`"readAt" IS NULL`)
@@ -248,7 +247,7 @@ export const signJobDoc = handlerWrapper(async (req, res) => {
     signedAt: IsNull()
   });
 
-  if(unsignedFileCount === 0) {
+  if (unsignedFileCount === 0) {
     job.status = JobStatus.SIGNED;
     await jobRepo.save(job);
   }
