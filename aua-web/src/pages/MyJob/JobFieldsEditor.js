@@ -43,7 +43,7 @@ const JobFieldsEditor = (props) => {
               type === 'monthRange' ? <RangePickerInput picker="month" disabled={disabled}/> :
                 type === 'number' ? <Input disabled={disabled} type="number" pattern="[0-9.]*" autoFocus={autoFocus}/> :
                   type === 'paragraph' ? <Input.TextArea disabled={disabled} autoFocus={autoFocus}/> :
-                    type === 'date' ? <DateInput picker="date" disabled={disabled} placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD"/> :
+                    type === 'date' ? <DateInput picker="date" disabled={disabled} placeholder="DD MMM YYYY" style={{ display: 'block' }} format="D MM YYYY"/> :
                       type === 'select' ? <Radio.Group disabled={disabled} buttonStyle="solid" autoFocus={autoFocus}>
                         {field.options?.map((x, i) => <Radio key={i} style={{ display: 'block', height: '2rem' }} value={x.value}>{x.label}</Radio>)}
                       </Radio.Group> :

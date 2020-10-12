@@ -249,7 +249,7 @@ const ProceedJobPage = (props) => {
                       type === 'monthRange' ? <RangePickerInput picker="month" disabled={loading} /> :
                         type === 'number' ? <Input disabled={loading} type="number" /> :
                           type === 'paragraph' ? <Input.TextArea disabled={loading} /> :
-                            type === 'date' ? <DateInput picker="date" disabled={loading} placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="YYYY-MM-DD" /> :
+                            type === 'date' ? <DateInput picker="date" disabled={loading} placeholder="DD MMM YYYY" style={{ display: 'block' }} format="D MMM YYYY" /> :
                               type === 'select' ? <Radio.Group disabled={loading} buttonStyle="solid">
                                 {field.options?.map((x, i) => <Radio key={i} style={{ display: 'block', height: '2rem' }} value={x.value}>{x.label}</Radio>)}
                               </Radio.Group> :

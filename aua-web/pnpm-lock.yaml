@@ -41,6 +41,7 @@ dependencies:
   react-to-print: 2.9.0_react-dom@16.13.1+react@16.13.1
   reactjs-localstorage: 1.0.1
   styled-components: 5.1.1_479e60ee9c1aa71dc1eb81036e3619dc
+  tfn: 1.0.0
   uniqolor: 1.0.1
   uuid: 8.3.0
   validator: 13.1.1
@@ -12691,6 +12692,10 @@ packages:
     dev: false
     resolution:
       integrity: sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
+  /tfn/1.0.0:
+    dev: false
+    resolution:
+      integrity: sha1-9A8oZcouR9brrr02pPFKTxSTtTI=
   /throat/4.1.0:
     dev: false
     resolution:
@@ -13859,6 +13864,7 @@ specifiers:
   react-to-print: ^2.9.0
   reactjs-localstorage: ^1.0.1
   styled-components: ^5.1.0
+  tfn: ^1.0.0
   uniqolor: ^1.0.1
   uuid: ^8.3.0
   validator: ^13.1.1

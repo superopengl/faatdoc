@@ -2,6 +2,9 @@ import * as moment from 'moment';
 import { varNameToLabelName } from 'util/varNameToLabelName';
 import { labelNameToVarName } from 'util/labelNameToVarName';
 import {isValidABN, isValidACN, isValidABNorACN} from "abnacn-validator";
+import tfn, * as tfc from 'tfn';
+
+const isValidTfn = (text) => tfn(text).valid;
 
 export const BuiltInFieldDef = [
   {
@@ -132,7 +135,7 @@ export const BuiltInFieldDef = [
   {
     name: 'tfn',
     inputType: 'text',
-    rules: [{ required: true, max: 20, message: ' ' }],
+    rules: [{ required: true, validator: (rule, value) => isValidTfn(value) ? Promise.resolve() : Promise.reject('Invalid TFN') }],
     inputProps: {
       maxLength: 20,
       allowClear: true,
