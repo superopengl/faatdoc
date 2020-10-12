@@ -1,4 +1,4 @@
-import { Column, PrimaryColumn, Entity } from 'typeorm';
+import { Column, PrimaryGeneratedColumn, Entity } from 'typeorm';
 import { JobStatus } from '../types/JobStatus';
 import { FeedbackDoc } from '../types/FeedbackDoc';
 import { GenDoc } from '../types/GenDoc';
@@ -8,7 +8,7 @@ import { stringType } from 'aws-sdk/clients/iam';
 
 @Entity()
 export class Job {
-  @PrimaryColumn('uuid')
+  @PrimaryGeneratedColumn('uuid')
   id?: string;
 
   @Column({ default: () => `timezone('UTC', now())` })

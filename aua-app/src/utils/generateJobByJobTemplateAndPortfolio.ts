@@ -17,10 +17,10 @@ function prefillFieldsWithProtofolio(jobTemplateFields, portfolioFields) {
   if (!portfolioFields) return jobTemplateFields;
 
   const map = new Map(portfolioFields.map(({ name, value }) => [name, value]));
-  const fields = jobTemplateFields.map(jf => (
+  const fields = jobTemplateFields.map(jobTemplate => (
     {
-      ...jf,
-      value: map.get(jf.name)
+      ...jobTemplate,
+      value: map.get(jobTemplate.name)
     }
   ));
 

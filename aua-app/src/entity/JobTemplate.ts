@@ -20,10 +20,4 @@ export class JobTemplate {
 
   @Column({ type: 'json' })
   fields: any;
-
-  @Column({default: true})
-  hasUploadDocs: boolean;
-
-  @Column({default: true})
-  hasFeedbackDocs: boolean;
 }

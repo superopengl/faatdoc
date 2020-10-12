@@ -106,15 +106,15 @@ const JobTemplateForm = (props) => {
         <Form.Item label="Job Template Name" name="name" rules={[{ required: true, message: ' ', whitespace: true, max: 100 }]}>
           <Input placeholder="Job Template Name" />
         </Form.Item>
-        <Form.Item label="Upload documents is required?" name="hasUploadDocs" valuePropName="checked">
+        {/* <Form.Item label="Upload documents is required?" name="hasUploadDocs" valuePropName="checked">
           <Checkbox>Upload documents is required?</Checkbox>
-        </Form.Item>
-        <Form.Item label="Has documents to sign?" name="hasSignDocs" valuePropName="checked">
+        </Form.Item> */}
+        {/* <Form.Item label="Has documents to sign?" name="hasSignDocs" valuePropName="checked">
           <Checkbox>Has documents to sign?</Checkbox>
-        </Form.Item>
-        <Form.Item label="Has feedback documents?" name="hasFeedbackDocs" valuePropName="checked">
+        </Form.Item> */}
+        {/* <Form.Item label="Has feedback documents?" name="hasFeedbackDocs" valuePropName="checked">
           <Checkbox>Has feedback documents?</Checkbox>
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item label="Doc Templates to Apply" name="docTemplateIds">
           <Select
             mode="multiple"

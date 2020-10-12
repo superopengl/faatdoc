@@ -4,15 +4,12 @@ import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 import { Layout, Spin, Affix, Button } from 'antd';
 import HomeHeader from 'components/HomeHeader';
-import MyJobForm from './MyJobForm';
-import { listJobTemplate } from 'services/jobTemplateService';
-import { listPortfolio } from 'services/portfolioService';
-import { generateJob, getJob, saveJob } from 'services/jobService';
+import { getJob } from 'services/jobService';
 import MyJobSign from './MyJobSign';
 import JobFormWizard from './JobFormWizard';
 import MyJobReadView from './MyJobReadView';
 import * as queryString from 'query-string';
-import { BellOutlined, MessageOutlined } from '@ant-design/icons';
+import { MessageOutlined } from '@ant-design/icons';
 import JobChat from 'pages/AdminJob/JobChat';
 
 const ContainerStyled = styled.div`

@@ -86,7 +86,7 @@ const DocTemplateForm = (props) => {
         </Paragraph>
       <Form.Item name="md" rules={[{ required: true, message: ' ' }]}>
         <DocMarkdownEditor
-          style={{ height: windowHeight - 280 }}
+          style={{ height: windowHeight - 340 }}
         />
       </Form.Item>
     </Form >
