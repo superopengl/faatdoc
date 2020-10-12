@@ -53,7 +53,7 @@ const span = {
 }
 
 const StatCard = (props) => {
-  const { title, value, loading } = props;
+  const { title, value, loading, color } = props;
 
   const sumAll = (data) => {
     return sum(Object.values(data).map(x => +x));
@@ -86,7 +86,7 @@ const StatCard = (props) => {
         legend={{
           position: 'top-center'
         }}
-        // color={['blue','yellow','green']}
+        color={color || ['#91d5ff','#096dd9','#d3adf7', '#722ed1', '#22075e']}
       />
       <Space style={{ width: '100%', justifyContent: 'space-between' }} size="large">
         {Object.entries(value).map(([k, v], i) => <div key={i}>{k} <Text style={{ fontSize: 28 }} type="secondary" strong>{v}</Text></div>)}
@@ -95,7 +95,7 @@ const StatCard = (props) => {
   </Card>
 }
 
-const AdminDashboardPage = (props) => {
+const AdminStatsPage = (props) => {
 
   const [loading, setLoading] = React.useState(true);
   const [stats, setStats] = React.useState();
@@ -123,13 +123,13 @@ const AdminDashboardPage = (props) => {
         </Space>
         <Row gutter={40}>
           <Col {...span}>
-            <StatCard title={<Link to="/user">User <MdOpenInNew /></Link>} value={stats?.user} loading={loading} />
+            <StatCard title={<Link to="/user">User <MdOpenInNew /></Link>} value={stats?.user} loading={loading} color={['#b37feb', '#91d5ff', '#1890ff']} />
           </Col>
           <Col {...span}>
             <StatCard title="Portfolio" value={stats?.portfolio} loading={loading} />
           </Col>
-          <Col {...span}>
-            <StatCard title={<Link to="/job">Job <MdOpenInNew /></Link>} value={stats?.job} loading={loading} />
+          <Col {...span} >
+            <StatCard title={<Link to="/job">Job <MdOpenInNew /></Link>} value={stats?.job} loading={loading} color={['#91d5ff', '#ff7875', '#1890ff', '#87e8de', '#b37feb']}/>
           </Col>
         </Row>
       </ContainerStyled>
@@ -137,8 +137,8 @@ const AdminDashboardPage = (props) => {
   );
 };
 
-AdminDashboardPage.propTypes = {};
+AdminStatsPage.propTypes = {};
 
-AdminDashboardPage.defaultProps = {};
+AdminStatsPage.defaultProps = {};
 
-export default withRouter(AdminDashboardPage);
+export default withRouter(AdminStatsPage);
