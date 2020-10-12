@@ -5,7 +5,7 @@ export async function getFile(id) {
 }
 
 export async function searchFile(ids) {
-  return httpPost('file/search', { ids });
+  return ids?.length ? httpPost('file/search', { ids }) : [];
 }
 
 export async function downloadFile(id) {

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
-import { Input, Button, Form, PageHeader, Space, Layout, Drawer, Typography, Radio, Row, Col } from 'antd';
+import { Input, Button, Form, PageHeader, Space, Layout, Drawer, Typography, Radio, Row, Col, Modal } from 'antd';
 import { FileUploader } from 'components/FileUploader';
 import HomeHeader from 'components/HomeHeader';
 
@@ -18,7 +18,7 @@ import FieldEditor from 'components/FieldEditor';
 import { SyncOutlined } from '@ant-design/icons';
 import FileLink from 'components/FileLink';
 import { notify } from 'util/notify';
-import {merge} from 'lodash';
+import { merge } from 'lodash';
 
 const { Text } = Typography;
 const ContainerStyled = styled.div`
@@ -98,6 +98,7 @@ const ProceedJobPage = (props) => {
     if (id) {
       const job = await getJob(id);
       setJob(job);
+      setStatusValue({ value: defaultStatus[job.status] })
     }
     setLoading(false);
   }
@@ -162,7 +163,14 @@ const ProceedJobPage = (props) => {
   const handleStatusChange = async option => {
     const value = option?.value;
     if (!value) return;
-    if (value !== job.status) {
+    if (value === 'to_sign' && !job.signDocs.length) {
+      Modal.error({
+        title: 'Cannot change status',
+        content: <>Cannot change status to <Text strong>To Sign</Text> because there is no documents to sign.</>,
+        maskClosable: true
+      });
+      form.setFieldsValue({});
+    } else if (value !== job.status) {
       job.status = value;
       setLoading(true);
       await saveJob(job);
@@ -177,7 +185,9 @@ const ProceedJobPage = (props) => {
     signed: 'Signed',
     complete: 'Complete',
     archive: 'Archive'
-  }[status];
+  };
+
+  const [statusValue, setStatusValue] = React.useState({ value: defaultStatus[status] });
 
   const options = [
     { value: 'todo', label: 'To Do' },
@@ -201,7 +211,9 @@ const ProceedJobPage = (props) => {
   return (<LayoutStyled>
     <HomeHeader></HomeHeader>
     <ContainerStyled>
-      {job && <Form form={form} layout="vertical"
+      {job && <Form 
+        form={form} 
+        layout="vertical"
         // onValuesChange={handleValuesChange}
         onFinish={handleSubmit}
         style={{ textAlign: 'left', width: '100%' }}
@@ -217,7 +229,7 @@ const ProceedJobPage = (props) => {
               <Button type="primary" ghost disabled={loading} onClick={() => handleMessage()}>Message</Button>
               <Button type="primary" ghost disabled={loading} onClick={() => handleModifyFields()}>Modify Fields</Button>
               <Button type="primary" htmlType="submit" disabled={loading}>Save</Button>
-              <StatusSelect defaultValue={{ value: defaultStatus }}
+              <StatusSelect value={statusValue}
                 labelInValue={true}
                 style={{ width: 120 }}
                 className={status}
@@ -276,14 +288,14 @@ const ProceedJobPage = (props) => {
               name="signDocs"
             // rules={[{ required: true, message: 'Please upload files' }]}
             >
-              <FileUploader disabled={loading} showsLastReadAt={true} showsSignedAt={true}/>
+              <FileUploader disabled={loading} showsLastReadAt={true} showsSignedAt={true} />
             </Form.Item>}
             {job.feedbackDocs && <Form.Item
               label="Feedback Docs"
               name="feedbackDocs"
             // rules={[{ required: true, message: 'Please upload files' }]}
             >
-              <FileUploader disabled={loading} showsLastReadAt={true}/>
+              <FileUploader disabled={loading} showsLastReadAt={true} />
             </Form.Item>}
           </Col>
         </Row>

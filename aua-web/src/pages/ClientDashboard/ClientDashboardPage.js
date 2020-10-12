@@ -131,10 +131,10 @@ const ClientDashboardPage = (props) => {
   const showsTodoList = !hasNotableJobs && todoList.length > 0;
   const hasNothing = !hasNotableJobs && !todoList.length
 
-  if(hasNothing) {
-    props.history.push(`job`);
-    return null;
-  }
+  // if(hasNothing) {
+  //   props.history.push(`job`);
+  //   return null;
+  // }
 
   return (
     <LayoutStyled>
