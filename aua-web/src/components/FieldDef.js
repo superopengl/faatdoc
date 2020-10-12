@@ -214,7 +214,9 @@ export const BuiltInFieldDef = [
 
 export const BuiltInFieldType = Array.from(new Set(BuiltInFieldDef.map(x => x.inputType))).filter(x => x !== 'select');
 
-export const BuiltInFieldLabelNames = BuiltInFieldDef.map(x => varNameToLabelName(x.name));
+// export const BuiltInFieldLabelNames = BuiltInFieldDef.map(x => varNameToLabelName(x.name));
+
+export const BuiltInFieldLabelValuePairs = BuiltInFieldDef.map(x => ({label: varNameToLabelName(x.name), value: x.name}));
 
 export const getBuiltInFieldByVarName = (varName) => {
   return BuiltInFieldDef.find(x => x.name === varName);

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { Button, Select, Checkbox, Table, Space, Typography, AutoComplete } from 'antd';
 import { UpOutlined, DownOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-import { BuiltInFieldLabelNames, BuiltInFieldType, getBuiltInFieldByLabelName, getBuiltInFieldByVarName } from 'components/FieldDef';
+import { BuiltInFieldLabelValuePairs, BuiltInFieldType, getBuiltInFieldByLabelName, getBuiltInFieldByVarName } from 'components/FieldDef';
 import { varNameToLabelName } from 'util/varNameToLabelName';
 import { labelNameToVarName } from 'util/labelNameToVarName';
 
@@ -18,7 +18,7 @@ const EMPTY_ROW = {
 
 const FieldEditor = (props) => {
 
-  const { value, onChange, loading } = props;
+  const { value, onChange, loading, onCancel } = props;
 
   const [fields, setFields] = React.useState(value);
 
@@ -27,8 +27,23 @@ const FieldEditor = (props) => {
     setFields(value);
   }, [value]);
 
-  React.useEffect(() => {
-    if (value === fields) return;
+  // React.useEffect(() => {
+  //   if (value === fields) return;
+  //   const newValue = fields.map(f => {
+  //     const varName = labelNameToVarName(f.name);
+  //     const builtInField = getBuiltInFieldByVarName(varName);
+  //     const type = builtInField?.inputType || f.type;
+  //     return {
+  //       ...f,
+  //       name: varName,
+  //       type
+  //     };
+  //   });
+
+  //   onChange(newValue);
+  // }, [fields]); 
+
+  const handleSave = () => {
     const newValue = fields.map(f => {
       const varName = labelNameToVarName(f.name);
       const builtInField = getBuiltInFieldByVarName(varName);
@@ -41,7 +56,7 @@ const FieldEditor = (props) => {
     });
 
     onChange(newValue);
-  }, [fields]); 
+  }
 
   const addNewRow = () => {
     fields.push({ ...EMPTY_ROW });
@@ -74,10 +89,7 @@ const FieldEditor = (props) => {
     setFields([...fields]);
   }
 
-  const nameOptions = BuiltInFieldLabelNames.map(x => ({
-    label: varNameToLabelName(x),
-    value: x
-  }));
+  const nameOptions = BuiltInFieldLabelValuePairs;
 
   const columns = [
     {
@@ -90,7 +102,7 @@ const FieldEditor = (props) => {
       render: (text, record, index) => {
         return <AutoComplete
           placeholder="Name"
-          options={nameOptions}
+          options={nameOptions.filter(x => !fields.some(f => f.name === x.value))}
           allowClear={true}
           maxLength={50}
           defaultValue={varNameToLabelName(text)}
@@ -160,10 +172,10 @@ const FieldEditor = (props) => {
       />
       <Space style={{ width: '100%', justifyContent: 'space-between' }}>
         <Button icon={<PlusOutlined />} onClick={addNewRow} disabled={!canAddNewField}>Add New Field</Button>
-        {/* <Space>
-          <Button key="cancel" onClick={() => handleClose()}>Cancel</Button>
+        <Space>
+          <Button key="cancel" onClick={() => onCancel()}>Cancel</Button>
           <Button key="save" type="primary" onClick={() => handleSave()}>Save</Button>
-        </Space> */}
+        </Space>
       </Space>
 
     </Space>

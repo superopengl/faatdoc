@@ -249,9 +249,10 @@ const ProceedJobPage = (props) => {
 
   const handleFieldChange = async value => {
     job.fields = value;
+    setJob({...job});
     setDrawerVisible(false);
-    await handleSubmit();
-    await loadEntity();
+    // await handleSubmit();
+    // await loadEntity();
   }
 
   return (<LayoutStyled>
