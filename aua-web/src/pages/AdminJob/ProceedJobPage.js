@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 import { Input, Button, Form, PageHeader, Space, Layout, Drawer, Typography, Radio, Row, Col, Modal } from 'antd';
@@ -15,10 +14,14 @@ import JobChat from './JobChat';
 import { RangePickerInput } from 'components/RangePickerInput';
 import { Select } from 'antd';
 import FieldEditor from 'components/FieldEditor';
-import { SyncOutlined } from '@ant-design/icons';
+import { FileAddOutlined, SyncOutlined } from '@ant-design/icons';
 import FileLink from 'components/FileLink';
 import { notify } from 'util/notify';
 import { merge } from 'lodash';
+import { FileIcon } from 'components/FileIcon';
+import { GrDocumentConfig } from 'react-icons/gr';
+import { Tag } from 'antd';
+import GenDocForm from './GenDocForm';
 
 const { Text } = Typography;
 const ContainerStyled = styled.div`
@@ -91,6 +94,7 @@ const ProceedJobPage = (props) => {
 
   const [job, setJob] = React.useState();
   const [showsNotify, setShowsNotify] = React.useState(false);
+  const [currentDocTemplateId, setCurrentDocTemplateId] = React.useState();
 
 
   const loadEntity = async () => {
@@ -109,20 +113,23 @@ const ProceedJobPage = (props) => {
     initialLoadEntity();
   }, [])
 
-  // const updateLodgmentWithFormValues = values => {
-  //   job.name = values.name;
+  const handlePostGenDoc = (fileId, varHash) => {
+    const genDoc = job.genDocs.find(d => d.docTemplateId === currentDocTemplateId);
+    genDoc.fileId = fileId;
+    genDoc.varHash = varHash;
+    setJob({...job});
+    setCurrentDocTemplateId(null);
+  }
 
-  //   job.fields.forEach(field => {
-  //     field.value = values[field.name];
-  //   })
+  const showGenDocModal = (docTemplateId) => {
+    setCurrentDocTemplateId(docTemplateId);
+  }
 
-  //   return job;
-  // }
 
-  // const handleValuesChange = (changedValues, allValues) => {
-  //   const lodgment = updateLodgmentWithFormValues(allValues);
-  //   setJob({ ...lodgment });
-  // }
+  const handleValuesChange = (changedValues, allValues) => {
+    const changedJob = merge(job, changedValues);
+    setJob({ ...changedJob });
+  }
 
   const handleSubmit = async (values) => {
     setLoading(true);
@@ -211,10 +218,10 @@ const ProceedJobPage = (props) => {
   return (<LayoutStyled>
     <HomeHeader></HomeHeader>
     <ContainerStyled>
-      {job && <Form 
-        form={form} 
+      {job && <Form
+        form={form}
         layout="vertical"
-        // onValuesChange={handleValuesChange}
+        onValuesChange={handleValuesChange}
         onFinish={handleSubmit}
         style={{ textAlign: 'left', width: '100%' }}
         initialValues={job}
@@ -274,7 +281,14 @@ const ProceedJobPage = (props) => {
             {job.genDocs && <Form.Item
               label="Auto Generated Docs"
             >
-              {job.genDocs.map((d, i) => <FileLink key={i} id={d.fileId} />)}
+              {job.genDocs.map((d, i) => <div key={i}>{
+                d.fileId ? <FileLink id={d.fileId} /> : <Space style={{ width: '100%', justifyContent: 'space-between' }}>
+                  <Space style={{ width: '100%', alignItems: 'center' }}>
+                    <FileIcon name={`${d.docTemplateName}.gen`} /> {d.docTemplateName}<Tag>pending</Tag>
+                  </Space>
+                  <Button type="link" size="large" icon={<FileAddOutlined />} onClick={() => showGenDocModal(d.docTemplateId)}></Button>
+                </Space>}
+              </div>)}
             </Form.Item>}
             {job.uploadDocs && <Form.Item
               label="Client Uploaded Docs"
@@ -319,6 +333,17 @@ const ProceedJobPage = (props) => {
     >
       <FieldEditor value={job?.fields} onChange={handleFieldChange} onCancel={() => setDrawerVisible(false)} />
     </StyledDrawer>
+    <Modal
+      visible={currentDocTemplateId}
+      title="Generate Doc"
+      footer={null}
+      maskClosable={true}
+      destroyOnClose={true}
+      onOk={() => setCurrentDocTemplateId(null)}
+      onCancel={() => setCurrentDocTemplateId(null)}
+    >
+      {currentDocTemplateId && <GenDocForm docTemplateId={currentDocTemplateId} fields={job?.fields} onFinish={handlePostGenDoc} />}
+    </Modal>
   </LayoutStyled >
 
   );

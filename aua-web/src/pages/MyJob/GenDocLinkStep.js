@@ -2,7 +2,7 @@ import { Button, Divider, Alert, Space, Typography, Spin } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
-import { pdfDocTemplate } from 'services/docTemplateService';
+import { genPdfFromDocTemplate } from 'services/docTemplateService';
 import MarkdownIt from 'markdown-it'
 import 'react-markdown-editor-lite/lib/index.css';
 import { computeVariablesHash } from 'util/computeVariableHash';
@@ -41,7 +41,7 @@ const GenDocLinkStep = props => {
     const varHash = computeVariablesHash(variables);
 
     if (doc.varHash !== varHash) {
-      const pdfData = await pdfDocTemplate(docTemplateId, variables);
+      const pdfData = await genPdfFromDocTemplate(docTemplateId, variables);
       setPdfData(pdfData);
     }
     setLoading(false);

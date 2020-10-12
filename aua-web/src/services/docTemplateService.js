@@ -20,6 +20,6 @@ export async function applyDocTemplate(id, variables) {
   return httpPost(`doc_template/${id}/apply`, {variables});
 }
 
-export async function pdfDocTemplate(id, variables) {
+export async function genPdfFromDocTemplate(id, variables) {
   return httpPost(`doc_template/${id}/pdf`, {variables});
 }
