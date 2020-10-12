@@ -14,7 +14,7 @@ import JobChat from './JobChat';
 import { RangePickerInput } from 'components/RangePickerInput';
 import { Select } from 'antd';
 import FieldEditor from 'components/FieldEditor';
-import { FileAddOutlined, SyncOutlined } from '@ant-design/icons';
+import { DeleteOutlined, FileAddOutlined, QuestionCircleOutlined, QuestionOutlined, SyncOutlined } from '@ant-design/icons';
 import FileLink from 'components/FileLink';
 import { notify } from 'util/notify';
 import { merge } from 'lodash';
@@ -84,6 +84,25 @@ const StatusSelect = styled(Select)`
 }
 `
 
+const DeleteGenDocButton = styled(Button)`
+  width: 60px !important;
+  height: 60px !important;
+  position: relative;
+  opacity: 0.5;
+  color: rgba(0,0,0,0.45);
+
+  &:hover {
+    color: rgba(0,0,0,0.45);
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.038);
+  }
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+`;
+
 const ProceedJobPage = (props) => {
   const id = props.match.params.id;
   // const { name, id, fields } = value || {};
@@ -117,7 +136,7 @@ const ProceedJobPage = (props) => {
     const genDoc = job.genDocs.find(d => d.docTemplateId === currentDocTemplateId);
     genDoc.fileId = fileId;
     genDoc.varHash = varHash;
-    setJob({...job});
+    setJob({ ...job });
     setCurrentDocTemplateId(null);
   }
 
@@ -183,6 +202,26 @@ const ProceedJobPage = (props) => {
       await saveJob(job);
       loadEntity();
     }
+  }
+
+  const deleteGenDoc = (docTemplateId) => {
+    const doc = job.genDocs.find(d => d.docTemplateId === docTemplateId);
+    Modal.confirm({
+      title: <>Delete <Text strong>{doc.docTemplateName}</Text></>,
+      icon: <QuestionCircleOutlined danger/>,
+      closable: true,
+      maskClosable: true,
+      okText: 'Yes, Delete',
+      okButtonProps: {
+        danger: true
+      },
+      onOk: () => {
+        delete doc.fileId;
+        delete doc.fileName;
+        setJob({ ...job });
+      }
+    });
+
   }
 
   const status = job?.status;
@@ -282,12 +321,16 @@ const ProceedJobPage = (props) => {
               label="Auto Generated Docs"
             >
               {job.genDocs.map((d, i) => <div key={i}>{
-                d.fileId ? <FileLink id={d.fileId} /> : <Space style={{ width: '100%', justifyContent: 'space-between' }}>
-                  <Space style={{ width: '100%', alignItems: 'center' }}>
-                    <FileIcon name={`${d.docTemplateName}.gen`} /> {d.docTemplateName}<Tag>pending</Tag>
-                  </Space>
-                  <Button type="link" size="large" icon={<FileAddOutlined />} onClick={() => showGenDocModal(d.docTemplateId)}></Button>
-                </Space>}
+                d.fileId ? <Space style={{ width: '100%', justifyContent: 'space-between' }}>
+                  <FileLink id={d.fileId} />
+                  <DeleteGenDocButton type="link" size="large" icon={<DeleteOutlined />} onClick={() => deleteGenDoc(d.docTemplateId)}></DeleteGenDocButton>
+                </Space>
+                  : <Space style={{ width: '100%', justifyContent: 'space-between' }}>
+                    <Space style={{ width: '100%', alignItems: 'center' }}>
+                      <FileIcon name={`${d.docTemplateName}.gen`} /> {d.docTemplateName}<Tag>pending</Tag>
+                    </Space>
+                    <Button type="link" size="large" icon={<FileAddOutlined />} onClick={() => showGenDocModal(d.docTemplateId)}></Button>
+                  </Space>}
               </div>)}
             </Form.Item>}
             {job.uploadDocs && <Form.Item

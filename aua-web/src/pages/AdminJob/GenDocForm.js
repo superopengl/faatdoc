@@ -31,8 +31,7 @@ const GenDocForm = props => {
   const { docTemplateId, fields, onFinish } = props;
   const [loading, setLoading] = React.useState(true);
   const [docTemplate, setDocTemplate] = React.useState();
-  const [initialValues, setInitialValues] = React.useState({});
-
+  const [initialValues, setInitialValues] = React.useState();
 
   const loadEntity = async () => {
     setLoading(true);
@@ -63,7 +62,7 @@ const GenDocForm = props => {
     <Space direction="vertical" style={{ width: '100%' }}>
       <Title level={4}>{docTemplate?.name}</Title>
       {docTemplate?.description && <Paragraph type="secondary">{docTemplate.description}</Paragraph>}
-      <Form
+      {initialValues && <Form
         layout="vertical"
         // labelCol={{ span: 8 }}
         // wrapperCol={{ span: 16 }}
@@ -76,7 +75,7 @@ const GenDocForm = props => {
         <Form.Item>
           <Button htmlType="submit" block type="primary">Generate Doc</Button>
         </Form.Item>
-      </Form>
+      </Form>}
     </Space>
   </Spin>
 }
