@@ -294,7 +294,7 @@ const AdminJobListPage = (props) => {
             </Select>
             <Button onClick={() => clearAllFilters()}>Reset Filters</Button>
             <Button onClick={() => loadList()} icon={<SyncOutlined />}></Button>
-            <Button onClick={() => handleCreateJob()} type="primary" ghost icon={<PlusOutlined />}></Button>
+            <Button onClick={() => handleCreateJob()} type="primary" icon={<PlusOutlined />}>New Job</Button>
           </Space>
           <Table columns={columnDef}
             dataSource={jobList}

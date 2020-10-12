@@ -162,7 +162,8 @@ const ProceedJobPage = (props) => {
   }
 
   const handleCancel = () => {
-    goToListPage();
+    // goToListPage();
+    props.history.goBack();
   }
 
   const goToListPage = () => {

@@ -57,8 +57,8 @@ async function getJobStat() {
     todo: 0,
     to_sign: 0,
     signed: 0,
-    completed: 0,
-    archieved: 0,
+    complete: 0,
+    archive: 0,
   });
 }
 
