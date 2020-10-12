@@ -113,6 +113,7 @@ const HomeHeaderRaw = props => {
             {isGuest && <Menu.Item key="team"><HashLink to="/#team">Team</HashLink></Menu.Item>}
             {isGuest && <Menu.Item key="signin"><Link to="/signin">Sign In</Link></Menu.Item>}
             {isGuest && <Menu.Item key="login"><Link to="/login">Log In</Link></Menu.Item>}
+            {(isAdmin || isAgent) && <Menu.Item key="board"><Link to="/board">Board</Link></Menu.Item>}
             {isClient && <Menu.Item key="landing"><Link to="/landing">Dashboard</Link></Menu.Item>}
             {!isGuest && <Menu.Item key="job"><Link to="/job">Job</Link></Menu.Item>}
             {isClient && <Menu.Item key="portfolio"><Link to="/portfolio">Portfolio</Link></Menu.Item>}
@@ -155,6 +156,7 @@ const HomeHeaderRaw = props => {
             {isGuest && <Menu.Item key="login"><LoginOutlined /> <Link to="/login">Log In</Link></Menu.Item>}
             {isGuest && <Menu.Item key="signin"><UserAddOutlined /> <Link to="/signin">Sign In</Link></Menu.Item>}
             {/* {isAdmin && <Menu.Item key="admin"><SettingOutlined /> <Link to="/admin">Admin</Link></Menu.Item>} */}
+            {(isAdmin || isAgent) && <Menu.Item key="board"><DashboardOutlined /> <Link to="/board">Board</Link></Menu.Item>}
             {isClient && <Menu.Item key="landing"><DashboardOutlined /> <Link to="/landing">Dashboard</Link></Menu.Item>}
             {!isGuest && <Menu.Item key="job"><SnippetsOutlined /> <Link to="/job">Job</Link></Menu.Item>}
             {isClient && <Menu.Item key="portfolio"><IdcardOutlined /> <Link to="/portfolio">Portfolio</Link></Menu.Item>}

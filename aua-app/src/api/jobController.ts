@@ -229,18 +229,19 @@ export const assignJob = handlerWrapper(async (req, res) => {
 export const signJobDoc = handlerWrapper(async (req, res) => {
   assertRole(req, 'client');
   const { id } = req.params;
-  const { files } = req.body;
-  assert(files?.length, 400, 'No files to sign');
   const jobRepo = getRepository(Job);
   const job = await jobRepo.findOne(id);
   assert(job, 404);
-
-  const fileIds = _.intersection(files, job.signDocs);
-  assert(fileIds.length, 400, 'No files to sign');
-
-  const now = getUtcNow();
+  const { files } = req.body;
   const fileRepo = getRepository(File);
-  await fileRepo.update(fileIds, { signedAt: now });
+
+  if (files?.length) {
+    const fileIds = _.intersection(files, job.signDocs);
+    if (fileIds.length) {
+      const now = getUtcNow();
+      await fileRepo.update(fileIds, { signedAt: now });
+    }
+  }
 
   const unsignedFileCount = await fileRepo.count({
     id: In(job.signDocs),

@@ -318,7 +318,7 @@ const ProceedJobPage = (props) => {
             })}
           </Col>
           <Col span={12}>
-            {job.genDocs && <Form.Item
+            {job.genDocs?.length > 0 && <Form.Item
               label="Auto Generated Docs"
             >
               {job.genDocs.map((d, i) => <div key={i}>{

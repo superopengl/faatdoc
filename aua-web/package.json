@@ -26,6 +26,7 @@
     "object-hash": "^2.0.3",
     "query-string": "^6.13.1",
     "react": "^16.13.1",
+    "react-beautiful-dnd": "^13.0.0",
     "react-chat-elements": "^10.10.2",
     "react-dom": "^16.13.1",
     "react-file-icon": "^1.0.0",
