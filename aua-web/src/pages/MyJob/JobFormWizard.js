@@ -86,7 +86,7 @@ const JobFormWizard = props => {
   }
 
   const handleGenDocViewConfirmed = doc => {
-    job.genDocs = job.genDocs.map(d => d.docTemplateId === doc.docTemplateId ? doc : d);
+    job.docs = job.docs.map(d => d.docTemplateId === doc.docTemplateId ? doc : d);
     setJob({ ...job });
     handleNext();
   }
@@ -121,26 +121,25 @@ const JobFormWizard = props => {
 
   const getGenDocSteps = () => {
     const steps = [];
-    if (job?.genDocs) {
-      job.genDocs.forEach((doc, i) => {
-        if (doc.variables.length) {
-          steps.push(<GenDocFieldStep key={`field_${i}`}
-            doc={doc}
-            variableDic={variableContextDic}
-            onSkip={handleSkip}
-            onBack={handleStepBack}
-            onFinish={handleGenDocFieldChange}
-          />);
-        }
-        steps.push(<GenDocLinkStep key={`doc_${i}`}
+    const genDocs = job?.docs.filter(d => d.docTemplateId) || [];
+    genDocs.forEach((doc, i) => {
+      if (doc.variables.length) {
+        steps.push(<GenDocFieldStep key={`field_${i}`}
           doc={doc}
           variableDic={variableContextDic}
           onSkip={handleSkip}
           onBack={handleStepBack}
-          onFinish={handleGenDocViewConfirmed}
+          onFinish={handleGenDocFieldChange}
         />);
-      });
-    }
+      }
+      steps.push(<GenDocLinkStep key={`doc_${i}`}
+        doc={doc}
+        variableDic={variableContextDic}
+        onSkip={handleSkip}
+        onBack={handleStepBack}
+        onFinish={handleGenDocViewConfirmed}
+      />);
+    });
     return steps;
   }
 

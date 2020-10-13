@@ -1,10 +1,11 @@
-import { Column, PrimaryGeneratedColumn, Entity } from 'typeorm';
+import { Column, PrimaryGeneratedColumn, Entity, OneToMany } from 'typeorm';
 import { JobStatus } from '../types/JobStatus';
 import { FeedbackDoc } from '../types/FeedbackDoc';
 import { GenDoc } from '../types/GenDoc';
 import { SignDoc } from '../types/SignDoc';
 import { UploadDoc } from '../types/UploadDoc';
 import { stringType } from 'aws-sdk/clients/iam';
+import { JobDoc } from '../types/JobDoc';
 
 @Entity()
 export class Job {
@@ -41,17 +42,20 @@ export class Job {
   @Column({ type: 'json' })
   fields: any;
 
+  // @Column({ type: 'json', default: [] })
+  // genDocs: GenDoc[];
+
+  // @Column({ type: 'varchar', array: true, default: '{}' })
+  // uploadDocs: string[];
+
+  // @Column({ type: 'varchar', array: true, default: '{}' })
+  // signDocs: string[];
+
+  // @Column({ type: 'varchar', array: true, default: '{}' })
+  // feedbackDocs: string[];
+
   @Column({ type: 'json', default: [] })
-  genDocs: GenDoc[];
-
-  @Column({ type: 'varchar',array: true, default: '{}' })
-  uploadDocs: string[];
-
-  @Column({ type: 'varchar',array: true, default: '{}' })
-  signDocs: string[];
-
-  @Column({ type: 'varchar',array: true, default: '{}' })
-  feedbackDocs: string[];
+  docs: JobDoc[];
 }
 
 

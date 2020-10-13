@@ -55,7 +55,7 @@ export const saveJob = handlerWrapper(async (req, res) => {
 
   const { user: { id: userId } } = req as any;
 
-  const { id, name, jobTemplateId, portfolioId, fields, status, genDocs, uploadDocs, signDocs, feedbackDocs } = req.body;
+  const { id, name, jobTemplateId, portfolioId, fields, status, docs } = req.body;
   assert(name, 400, 'name is empty');
 
   const portfolio = await getRepository(Portfolio).findOne(portfolioId);
@@ -64,12 +64,12 @@ export const saveJob = handlerWrapper(async (req, res) => {
   const repo = getRepository(Job);
   let job: Job;
   if (id) {
-    // Existing lodgment save
+    // Existing job save
     job = await repo.findOne(id);
-    assert(job, 404, 'Lodgment is not found');
+    assert(job, 404, 'Job is not found');
     validateJobStatusChange(job.status, status);
   } else {
-    // New lodgment
+    // New job
     validateJobStatusChange(null, status);
     job = new Job();
     job.id = uuidv4();
@@ -81,10 +81,7 @@ export const saveJob = handlerWrapper(async (req, res) => {
   job.name = name;
   job.forWhom = guessDisplayNameFromFields(portfolio.fields);
   job.fields = fields;
-  job.genDocs = genDocs;
-  job.uploadDocs = uploadDocs;
-  job.signDocs = signDocs;
-  job.feedbackDocs = feedbackDocs;
+  job.docs = docs;
   job.status = status;
   job.lastUpdatedAt = getUtcNow();
 
@@ -233,20 +230,13 @@ export const signJobDoc = handlerWrapper(async (req, res) => {
   const job = await jobRepo.findOne(id);
   assert(job, 404);
   const { files } = req.body;
-  const fileRepo = getRepository(File);
 
   if (files?.length) {
-    const fileIds = _.intersection(files, job.signDocs);
-    if (fileIds.length) {
-      const now = getUtcNow();
-      await fileRepo.update(fileIds, { signedAt: now });
-    }
+    const now = getUtcNow();
+    job.docs.filter(d => d.requiresSign && files.includes(d.fileId)).forEach(d => d.signedAt = now);
   }
 
-  const unsignedFileCount = await fileRepo.count({
-    id: In(job.signDocs),
-    signedAt: IsNull()
-  });
+  const unsignedFileCount = job.docs.filter(d => d.requiresSign && !d.signedAt).length;
 
   if (unsignedFileCount === 0) {
     job.status = JobStatus.SIGNED;

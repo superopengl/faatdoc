@@ -1,0 +1,39 @@
+import { Column, PrimaryGeneratedColumn, Entity, ManyToOne } from 'typeorm';
+import { Job } from '../entity/Job';
+import { getUtcNow } from '../utils/getUtcNow';
+
+
+export class JobDoc {
+  // @PrimaryGeneratedColumn('uuid')
+  // id?: string;
+
+  // @Column({ default: () => `timezone('UTC', now())` })
+  createdAt: Date = getUtcNow();
+
+  // @Column({ nullable: true })
+  lastReadAt?: Date;
+
+  // @Column({ nullable: true })
+  signedAt?: Date;
+
+  // @Column({ nullable: true })
+  docTemplateId?: string;
+
+  // @Column({ type: 'json', default: [] })
+  variables?: { name: string; value?: any; }[];
+
+  // @Column({ nullable: true })
+  varHash?: string;
+
+  // @Column({ nullable: true })
+  fileId?: string;
+
+  fileName?: string;
+
+  // @Column({ default: false })
+  requiresSign: boolean = false;
+
+  // @Column({ default: false })
+  isFeedback: boolean = false;
+}
+

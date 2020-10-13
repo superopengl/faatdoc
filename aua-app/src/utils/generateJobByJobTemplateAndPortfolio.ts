@@ -11,6 +11,7 @@ import { JobStatus } from '../types/JobStatus';
 import { guessDisplayNameFromFields } from './guessDisplayNameFromFields';
 import { v4 as uuidv4 } from 'uuid';
 import { DocTemplate } from '../entity/DocTemplate';
+import { JobDoc } from '../types/JobDoc';
 
 
 function prefillFieldsWithProtofolio(jobTemplateFields, portfolioFields) {
@@ -27,14 +28,16 @@ function prefillFieldsWithProtofolio(jobTemplateFields, portfolioFields) {
   return fields;
 }
 
-function mapDocTemplatesToGenDocs(docTemplates: DocTemplate[]): GenDoc[] {
-  return docTemplates.map(x => ({
-    docTemplateId: x.id,
-    docTemplateName: x.name,
-    docTemplateDescription: x.description,
-    variables: x.variables.map(name => ({ name, value: undefined })),
-    status: 'pending',
-  }));
+function mapDocTemplatesToGenDocs(docTemplates: DocTemplate[]): JobDoc[] {
+  return docTemplates.map(x => {
+    const jobDoc = new JobDoc();
+    jobDoc.docTemplateId = x.id;
+    // docTemplateName: x.name,
+    // docTemplateDescription: x.description,
+    jobDoc.variables = x.variables.map(name => ({ name, value: undefined }));
+    jobDoc.fileName = `${x.name}.pdf`;
+    return jobDoc;
+  });
 }
 
 export const generateJobByJobTemplateAndPortfolio = async (jobTemplateId, portfolioId, genName: (job: JobTemplate, porto: Portfolio) => string) => {
@@ -64,7 +67,7 @@ export const generateJobByJobTemplateAndPortfolio = async (jobTemplateId, portfo
   job.jobTemplateId = jobTemplateId;
   job.portfolioId = portfolioId;
   job.fields = fields;
-  job.genDocs = mapDocTemplatesToGenDocs(docTemplates);
+  job.docs = mapDocTemplatesToGenDocs(docTemplates);
   job.lastUpdatedAt = getUtcNow();
   job.status = JobStatus.TODO;
 

@@ -102,7 +102,7 @@ const FileIconWithOverlay = props => {
 }
 
 export const FileUploader = (props) => {
-  const { onUploadingChange, showsLastReadAt, showsSignedAt } = props;
+  const { onUploadingChange, showsLastReadAt, showsSignedAt, showUploadList } = props;
 
   const [uploadFileId, setUploadFileId] = React.useState(uuidv4());
   const [fileList, setFileList] = React.useState([]);
@@ -180,10 +180,7 @@ export const FileUploader = (props) => {
         onChange={handleChange}
         onRemove={handleRemove}
         // beforeUpload={handleBeforeUpload}
-        showUploadList={{
-          showDownloadIcon: false,
-          showRemoveIcon: true,
-        }}
+        showUploadList={showUploadList}
         // showUploadList={false}
         // iconRender={() => <UploadOutlined />}
         disabled={disabled || fileList.length >= maxSize}
@@ -208,10 +205,15 @@ FileUploader.propTypes = {
   disabled: PropTypes.bool,
   showsLastReadAt: PropTypes.bool,
   showsSignedAt: PropTypes.bool,
+  showUploadList: PropTypes.any,
 };
 
 FileUploader.defaultProps = {
   disabled: false,
   showsLastReadAt: false,
   showsSignedAt: false,
+  showUploadList: {
+    showDownloadIcon: false,
+    showRemoveIcon: true,
+  },
 };

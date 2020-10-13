@@ -11,6 +11,7 @@ import { assertRole } from '../utils';
 import { getUtcNow } from '../utils/getUtcNow';
 import { Job } from '../entity/Job';
 import { getS3ObjectStream, uploadToS3 } from '../utils/uploadToS3';
+import { v4 as uuidv4 } from 'uuid';
 
 export const downloadFile = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client', 'agent');
@@ -32,7 +33,7 @@ export const downloadFile = handlerWrapper(async (req, res) => {
   const stream = getS3ObjectStream(id, fileName);
   res.setHeader('Content-type', mime);
   res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
-  
+
   stream.pipe(res);
 });
 
@@ -56,12 +57,11 @@ export const searchFileList = handlerWrapper(async (req, res) => {
 
 export const uploadFile = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client', 'agent');
-  const { id } = req.params;
-  assert(id, 404, 'Image ID not specified');
   const { file } = (req as any).files;
-  assert(file, 404, 'No file uploaded');
+  assert(file, 404, 'No file to upload');
   const { name, data, mimetype, md5 } = file;
 
+  const id = uuidv4();
   const location = await uploadToS3(id, name, data);
 
   const entity: File = {
