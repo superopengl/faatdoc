@@ -8,6 +8,7 @@ import { Spin } from 'antd';
 import { listJobTemplate } from 'services/jobTemplateService';
 import { listPortfolio } from 'services/portfolioService';
 import StepWizard from 'react-step-wizard';
+import { GlobalContext } from 'contexts/GlobalContext';
 
 const { Title, Text, Paragraph } = Typography;
 

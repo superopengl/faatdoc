@@ -57,32 +57,11 @@ const FinalReviewStep = props => {
           return <JobReviewItem key={i} text={varNameToLabelName(name)} description={description} value={value} />
         })}
       </>}
-      {job.genDocs?.length > 0 && <>
-        <PartDivider text="Auto Gen Docs" />
-        {job.genDocs.map((doc, i) => {
+      {job.docs?.length > 0 && <>
+        <PartDivider text="Attachments" />
+        {job.docs.map((doc, i) => {
           const { docTemplateDescription, fileId, fileName } = doc;
           return <JobReviewItem key={i} description={docTemplateDescription} value={<FileLink id={fileId} name={fileName} />}
-          />
-        })}
-      </>}
-      {job.uploadDocs?.length > 0 && <>
-        <PartDivider text="Uploaded Docs" />
-        {job.uploadDocs.map((fileId, i) => {
-          return <JobReviewItem key={i} value={<FileLink id={fileId} />}
-          />
-        })}
-      </>}
-      {(showsSignDoc && job.signDocs?.length > 0) && <>
-        <PartDivider text="Signed Docs" />
-        {job.signDocs.map((fileId, i) => {
-          return <JobReviewItem key={i} value={<FileLink id={fileId} />}
-          />
-        })}
-      </>}
-      {job.feedbackDocs?.length > 0 && <>
-        <PartDivider text="Feedback Docs" />
-        {job.feedbackDocs.map((fileId, i) => {
-          return <JobReviewItem key={i} value={<FileLink id={fileId} />}
           />
         })}
       </>}

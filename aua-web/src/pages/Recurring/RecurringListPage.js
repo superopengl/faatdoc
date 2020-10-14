@@ -98,7 +98,7 @@ const RecurringListPage = (props) => {
       onFilter: (value, record) => record.agentId === value,
       render: (text, record) => record.portfolioName ? <>
         <Space>
-          <PortfolioAvatar value={text} size={40} />
+          <PortfolioAvatar value={text} user={record.email} size={40} />
           <div direction="vertical" style={{display: 'flex', flexDirection: 'column', justifyContent: 'flex-start'}}>
             {text}
             <Text type="secondary"><small>{record.email || <Text type="danger">deleted user</Text>}</small></Text>

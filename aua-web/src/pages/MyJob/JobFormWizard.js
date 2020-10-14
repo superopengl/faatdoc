@@ -91,8 +91,8 @@ const JobFormWizard = props => {
     handleNext();
   }
 
-  const handleUploadDocsChange = fileIds => {
-    job.uploadDocs = fileIds;
+  const handleUploadDocsChange = docs => {
+    job.docs = docs;
     setJob({ ...job });
     handleNext();
   }
@@ -178,6 +178,7 @@ const JobFormWizard = props => {
         </StepWizard>
       </Space></>}
     </StepWizard>
+{/* <pre>{JSON.stringify(job, null, 2)}</pre> */}
   </Spin>
 
 

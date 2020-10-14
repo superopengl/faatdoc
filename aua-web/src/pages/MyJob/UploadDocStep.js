@@ -15,9 +15,10 @@ const UploadDocStep = (props) => {
   const { job, onChange, onFinish, onBack, onSkip, isActive } = props;
   const [loading, setLoading] = React.useState(false);
 
+  const initialValues = { fileIds: job.docs.filter(d => d.isByClient).map(d => d.fileId) };
+
   const handleSubmit = async (values) => {
-    const {uploadDocs} = values;
-    onFinish(uploadDocs);
+    onFinish(job.docs);
   }
 
   if (!isActive) {
@@ -28,21 +29,28 @@ const UploadDocStep = (props) => {
     setLoading(uploading);
   }
 
+  const handleRemove = (fileId) => {
+    job.docs = job.docs.filter(d => d.fileId !== fileId);
+  }
+
+  const handleAdd = (fileId) => {
+    job.docs = [...job.docs, { fileId, isByClient: true }];
+  }
   return <Form
     layout="vertical"
     onFinish={handleSubmit}
     style={{ textAlign: 'left' }}
-    initialValues={job}
+    initialValues={initialValues}
   >
     <Form.Item
       label={<Title level={4}>Client Uploaded Docs</Title>}
-      name="uploadDocs"
+      name="fileIds"
     // rules={[{ required: true, message: 'Please upload files' }]}
     >
-      <FileUploader disabled={loading} onUploadingChange={handleUploadingChange} />
+      <FileUploader disabled={loading} onRemove={handleRemove} onAdd={handleAdd} onUploadingChange={handleUploadingChange} />
     </Form.Item>
     <Divider />
-    <StepButtonSet onBack={onBack} loading={loading}/>
+    <StepButtonSet onBack={onBack} loading={loading} />
   </Form>
 };
 

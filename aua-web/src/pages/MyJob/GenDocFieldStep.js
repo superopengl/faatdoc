@@ -1,4 +1,4 @@
-import { Button, Divider, Space, Typography, Input, Form } from 'antd';
+import { Space, Typography, Input, Form } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { varNameToLabelName } from 'util/varNameToLabelName';
@@ -29,13 +29,6 @@ const GenDocFieldStep = props => {
     onFinish(values);
   };
 
-  const handleBack = () => {
-    onBack();
-  }
-
-  const handleSkipDoc = () => {
-    onSkip();
-  }
 
   if (!isActive) {
     return null;

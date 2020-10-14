@@ -104,7 +104,6 @@ const FileIconWithOverlay = props => {
 export const FileUploader = (props) => {
   const { onUploadingChange, showsLastReadAt, showsSignedAt, showUploadList } = props;
 
-  const [uploadFileId, setUploadFileId] = React.useState(uuidv4());
   const [fileList, setFileList] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
 
@@ -137,12 +136,12 @@ export const FileUploader = (props) => {
   const handleChange = (info) => {
     const { file, fileList } = info;
     setFileList(fileList);
-    setUploadFileId(uuidv4());
 
-    const fileIds = fileList.filter(f => f.status === 'done').map(f => _.get(f, 'response.id', f.uid));
-    props.onChange(fileIds);
+    if(file.status === 'done') {
+      props.onAdd( _.get(file, 'response.id', file.uid));
+    }
 
-    const uploading = fileList.some(f => f.status === 'uploading');
+    const uploading = file.status === 'uploading';
     setLoading(uploading);
   };
 
@@ -153,12 +152,12 @@ export const FileUploader = (props) => {
   }
 
   const handleRemove = file => {
-
+    props.onRemove(file.uid);
   }
 
   const { size, disabled } = props;
 
-  const maxSize = size || 20;
+  const maxSize = size || 30;
 
   const getFileIcon = file => <FileIconWithOverlay
     id={file.uid}
@@ -171,7 +170,7 @@ export const FileUploader = (props) => {
     <Container className="clearfix">
       <Dragger
         multiple={true}
-        action={`${process.env.REACT_APP_AUA_API_ENDPOINT}/file/${uploadFileId}`}
+        action={`${process.env.REACT_APP_AUA_API_ENDPOINT}/file`}
         withCredentials={true}
         accept="*/*"
         listType="text"

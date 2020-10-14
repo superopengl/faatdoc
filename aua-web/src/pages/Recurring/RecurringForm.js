@@ -71,7 +71,7 @@ const RecurringForm = (props) => {
           <StyledPortfolioSelect allowClear>
             {portfolioList.map((x, i) => (<Select.Option key={i} value={x.id}>
               <Space>
-                <PortfolioAvatar value={x.name} size={40} />
+                <PortfolioAvatar value={x.name} user={x.email} size={40} />
                 <div style={{display: 'flex', flexDirection: 'column'}}>
                   <div style={{margin: 0, lineHeight: '1rem'}}>{x.name}</div>
                   <Text style={{margin: 0, lineHeight: '0.8rem'}} type="secondary"><small>{x.email}</small></Text>

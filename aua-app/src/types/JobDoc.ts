@@ -8,7 +8,7 @@ export class JobDoc {
   // id?: string;
 
   // @Column({ default: () => `timezone('UTC', now())` })
-  createdAt: Date = getUtcNow();
+  createdAt?: Date;
 
   // @Column({ nullable: true })
   lastReadAt?: Date;
@@ -35,5 +35,7 @@ export class JobDoc {
 
   // @Column({ default: false })
   isFeedback: boolean = false;
+
+  isByClient: boolean = false;
 }
 
