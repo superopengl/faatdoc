@@ -1,10 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link, withRouter } from 'react-router-dom';
-import { Typography, Button, Modal, Form, Input, Checkbox, Layout } from 'antd';
+import { Typography, Button, Modal, Form, Input, Checkbox, Layout, Divider } from 'antd';
 import { Logo } from 'components/Logo';
 import { signIn } from 'services/authService';
 import { GlobalContext } from 'contexts/GlobalContext';
+import GoogleSsoButton from 'components/GoogleSsoButton';
+import GoogleLogoSvg from 'components/GoogleLogoSvg';
 const { Title } = Typography;
 
 const PageContainer = styled.div`
@@ -124,6 +126,22 @@ const SignInPage = (props) => {
                 </Form.Item> */}
               </Form>
               {/* <Link to="/"><Button block type="link">Go to home page</Button></Link> */}
+              <Divider>or</Divider>
+              <GoogleSsoButton
+                render={
+                  renderProps => (
+                    <Button
+                      ghost
+                      type="primary"
+                      block
+                      icon={<GoogleLogoSvg size={16} />}
+                      // icon={<GoogleOutlined />}
+                      onClick={renderProps.onClick}
+                      disabled={renderProps.disabled}
+                    >Sign In with Google</Button>
+                  )}
+              />
+
             </ContainerStyled>
           </PageContainer>
         </LayoutStyled>;

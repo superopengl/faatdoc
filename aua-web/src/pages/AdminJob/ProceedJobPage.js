@@ -151,7 +151,7 @@ const ProceedJobPage = (props) => {
   const handleStatusChange = async option => {
     const value = option?.value;
     if (!value) return;
-    if (value === 'to_sign' && !job.signDocs.length) {
+    if (value === 'to_sign' && !job.docs.filter(d => d.requiresSign).length) {
       Modal.error({
         title: 'Cannot change status',
         content: <>Cannot change status to <Text strong>To Sign</Text> because there is no documents to sign.</>,
@@ -192,7 +192,7 @@ const ProceedJobPage = (props) => {
 
   const handleFieldChange = async value => {
     job.fields = value;
-    setJob({...job});
+    setJob({ ...job });
     setDrawerVisible(false);
     // await handleSubmit();
     // await loadEntity();
@@ -200,7 +200,7 @@ const ProceedJobPage = (props) => {
 
   const handleJobDocsChange = (docs) => {
     job.docs = docs;
-    setJob({...job});
+    setJob({ ...job });
   }
 
   return (<LayoutStyled>
@@ -238,18 +238,17 @@ const ProceedJobPage = (props) => {
           ]}
         >
         </PageHeader>
-
         <Divider />
-        <Row gutter={32}>
-          <Col span={8}>
-            {job.fields.map((field, i) => {
-              const { name, description, type } = field;
-              const formItemProps = {
-                label: <>{varNameToLabelName(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
-                name: ['fields', i, 'value']
-                // rules: [{ required }]
-              }
-              return (
+        <Row gutter={20}>
+          {job.fields.map((field, i) => {
+            const { name, description, type } = field;
+            const formItemProps = {
+              label: <>{varNameToLabelName(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
+              name: ['fields', i, 'value']
+              // rules: [{ required }]
+            }
+            return (
+              <Col span={6} key={i}>
                 <Form.Item key={i} {...formItemProps}>
                   {type === 'text' ? <Input disabled={loading} /> :
                     type === 'year' ? <DateInput picker="year" placeholder="YYYY" disabled={loading} /> :
@@ -262,15 +261,15 @@ const ProceedJobPage = (props) => {
                               </Radio.Group> :
                                 null}
                 </Form.Item>
-              );
-            })}
-          </Col>
-          <Col span={16}>
-
-            <JobDocEditor value={job.docs} onChange={handleJobDocsChange}/>
+              </Col>
+            );
+          })}
+        </Row>
+        <Row>
+          <Col span={24}>
+            <JobDocEditor value={job.docs} onChange={handleJobDocsChange} />
           </Col>
         </Row>
-
       </Form>
       }
       {/* <Divider type="vertical" style={{ height: "100%" }} /> */}

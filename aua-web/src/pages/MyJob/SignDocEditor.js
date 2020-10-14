@@ -40,7 +40,7 @@ const SignDocEditor = (props) => {
 
 
   const getSignFiles = async (job) => {
-    const files = await searchFile(job.signDocs);
+    const files = await searchFile(job.docs.filter(d => d.requiresSign).map(d => d.fileId));
     return files
   }
 

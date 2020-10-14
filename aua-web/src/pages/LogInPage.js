@@ -70,7 +70,7 @@ const LogInPage = props => {
       <ContainerStyled>
         <LogoContainer><Logo /></LogoContainer>
         <Title level={2}>Log In</Title>
-        <Link to="/signin"><Button size="small" block type="link">Not a user? Click to sign up</Button></Link>
+        <Link to="/signin"><Button size="small" block type="link">Not a user? Click to sign in</Button></Link>
         <GoogleSsoButton
           render={
             renderProps => (

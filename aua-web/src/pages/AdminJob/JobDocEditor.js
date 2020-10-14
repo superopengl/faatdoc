@@ -91,32 +91,32 @@ const FileIconWithOverlay = props => {
 }
 
 export const JobDocEditor = (props) => {
-  const { onChange } = props;
+  const { value, onChange } = props;
 
-  const [docList, setDocList] = React.useState([]);
+  const [docList, setDocList] = React.useState(value);
   const [loading, setLoading] = React.useState(false);
   const [genDocModalVisible, setGenDocModalVisible] = React.useState(false);
 
-  const loadFileList = async () => {
-    const { value } = props;
-    if (value && value.length) {
-      setLoading(true);
-      const list = await searchFile(value);
-      const fileList = list.map(x => ({
-        uid: x.id,
-        name: x.fileName,
-        status: 'done',
-        url: x.location,
-      }));
-      setDocList(fileList);
-      setLoading(false);
-    }
-  }
+  // const loadFileList = async () => {
+  //   const { value } = props;
+  //   if (value && value.length) {
+  //     setLoading(true);
+  //     const list = await searchFile(value);
+  //     const fileList = list.map(x => ({
+  //       uid: x.id,
+  //       name: x.fileName,
+  //       status: 'done',
+  //       url: x.location,
+  //     }));
+  //     setDocList(fileList);
+  //     setLoading(false);
+  //   }
+  // }
 
 
-  React.useEffect(() => {
-    loadFileList()
-  }, []);
+  // React.useEffect(() => {
+  //   loadFileList()
+  // }, []);
 
   const handleChange = (info) => {
     const { file } = info;
@@ -206,11 +206,13 @@ export const JobDocEditor = (props) => {
     },
     {
       title: 'Require Sign?',
-      render: (value, doc) => doc.signedAt ? null : <Switch onChange={checked => handleReqireSign(doc, checked)} />
+      dataIndex: 'requiresSign',
+      render: (value, doc) => doc.signedAt ? null : <Switch defaultChecked={value} onChange={checked => handleReqireSign(doc, checked)} />
     },
     {
       title: 'Feedback Doc?',
-      render: (value, doc) => <Switch onChange={checked => handleFeedbackDoc(doc, checked)} />
+      dataIndex: 'isFeedback',
+      render: (value, doc) => <Switch defaultChecked={value} onChange={checked => handleFeedbackDoc(doc, checked)} />
     },
     {
       title: 'Last Read At',
@@ -237,7 +239,7 @@ export const JobDocEditor = (props) => {
           action={`${process.env.REACT_APP_AUA_API_ENDPOINT}/file`}
           withCredentials={true}
           accept="*/*"
-          fileList={docList}
+          // fileList={docList}
           onChange={handleChange}
           showUploadList={false}
           disabled={loading}
@@ -251,6 +253,7 @@ export const JobDocEditor = (props) => {
         dataSource={docList}
         pagination={false}
         loading={loading}
+        rowKey={record => record.fileId}
       />
       <GenDocStepperModal visible={genDocModalVisible} onChange={handleGenDocDone} onCancel={() => setGenDocModalVisible(false)} />
     </Container>
