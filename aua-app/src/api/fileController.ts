@@ -15,22 +15,34 @@ import { v4 as uuidv4 } from 'uuid';
 
 export const downloadFile = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client', 'agent');
-  const { id } = req.params;
+  const { jobId, fileId } = req.params;
   const { user: { id: userId, role } } = req as any;
 
-  const repo = getRepository(File);
-  const file = await repo.findOne(id);
+  const jobRepo = getRepository(Job);
+  const job = await jobRepo.findOne(jobId);
+  assert(job, 404);
+
+  const fileRepo = getRepository(File);
+  const file = await fileRepo.findOne(fileId);
   assert(file, 404);
 
+  const jobDoc = job.docs.find(d => d.fileId === fileId);
+  assert(jobDoc, 404);
+
   if (role === 'client') {
-    // Only record the read by client
-    file.lastReadAt = getUtcNow();
-    await repo.save(file);
+    assert(job.userId === userId, 404);
+    // // Only record the read by client
+    const now = getUtcNow();
+    jobDoc.lastReadAt = now;
+    await jobRepo.save(job);
+
+    file.lastReadAt = now;
+    await fileRepo.save(file);
   }
 
   const { fileName, mime } = file;
 
-  const stream = getS3ObjectStream(id, fileName);
+  const stream = getS3ObjectStream(fileId, fileName);
   res.setHeader('Content-type', mime);
   res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
 

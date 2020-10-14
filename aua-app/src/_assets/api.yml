@@ -19,13 +19,18 @@ paths:
       responses:
         200:
           description: OK
-  /file/download/{id}:
+  /file/download/job/{jobId}/file/{fileId}:
     get:
       operationId: downloadFile
       # security:
       #   - authLoggedInUser: []
       parameters:
-        - name: id
+        - name: jobId
+          in: path
+          type: string
+          format: uuid
+          required: true
+        - name: fileId
           in: path
           type: string
           format: uuid

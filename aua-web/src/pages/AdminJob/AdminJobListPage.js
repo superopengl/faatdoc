@@ -217,16 +217,6 @@ const AdminJobListPage = (props) => {
     await loadJobWithQuery(newQueryInfo);
   }
 
-  const handleShowSignDetail = async (jobId) => {
-    Modal.info({
-      title: 'Client Review And Sign Details',
-      content: <SignDocEditor id={jobId} readonly={true} />,
-      width: 700,
-      icon: null,
-      maskClosable: true,
-    });
-  }
-
   const handleStatusFilter = async (status) => {
     const newQueryInfo = {
       ...queryInfo,

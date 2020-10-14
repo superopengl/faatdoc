@@ -8,12 +8,13 @@ export async function searchFile(ids) {
   return ids?.length ? httpPost('file/search', { ids }) : [];
 }
 
-export async function downloadFile(id) {
-  return request('GET', `file/download/${id}`, null, null, 'blob');
+export async function downloadFile(jobId, fileId) {
+  if (!jobId || !fileId) throw new Error('Missing jobId and fileId');
+  return request('GET', `file/download/job/${jobId}/file/${fileId}`, null, null, 'blob');
 }
 
-export async function openFile(id) {
-  const data = await downloadFile(id);
+export async function openFile(jobId, fileId) {
+  const data = await downloadFile(jobId, fileId);
   const fileUrl = URL.createObjectURL(data);
   window.open(fileUrl);
 }

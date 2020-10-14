@@ -64,7 +64,7 @@ const SignDocEditor = (props) => {
   }
 
   const handleFileClick = async (file) => {
-    await openFile(file.id);
+    await openFile(job.id, file.id);
     loadEntity();
   }
 
