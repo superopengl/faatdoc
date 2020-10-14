@@ -45,19 +45,19 @@ const COLUMN_DEFS = [
   {
     status: 'to_sign',
     label: 'To Sign',
-    bgColor: '#ffccc7',
+    bgColor: '#f5f5f5',
     hoverColor: '#ff4d4f',
   },
   {
     status: 'signed',
     label: 'Signed',
-    bgColor: '#91d5ff',
+    bgColor: '#f5f5f5',
     hoverColor: '#1890ff',
   },
   {
     status: 'complete',
     label: 'Completed',
-    bgColor: '#d9f7be',
+    bgColor: '#f5f5f5',
     hoverColor: '#73d13d',
   },
 ]
@@ -119,7 +119,10 @@ const AdminBoardPage = props => {
                   <Col span={6}
                     ref={provided.innerRef}>
                     <StyledColumn direction="vertical" style={{ backgroundColor: s.bgColor, border: `2px dashed ${snapshot.isDraggingOver ? s.hoverColor : s.bgColor}` }}>
-                      <Title level={4} style={{ textAlign: 'center', margin: '0 auto' }}><Text type="secondary">{s.label}</Text> <sup>{jobList.filter(j => j.status === s.status).length}</sup></Title>
+                      <Space style={{ width: '100%', justifyContent: 'space-between' }}>
+                        <Title level={5} style={{ textAlign: 'center', margin: '0 auto' }} type="secondary">{s.label}</Title>
+                        <Text strong>{jobList.filter(j => j.status === s.status).length}</Text>
+                      </Space>
                       {jobList.filter(j => j.status === s.status).map((job, index) => {
                         // if (task.statusId === status.id)
                         return (

@@ -83,7 +83,7 @@ const LogInPage = props => {
                 style={{ marginTop: '1.5rem' }}
                 onClick={renderProps.onClick}
                 disabled={renderProps.disabled}
-              >Log In with Google</Button>
+              >Continue with Google</Button>
             )}
         />
 

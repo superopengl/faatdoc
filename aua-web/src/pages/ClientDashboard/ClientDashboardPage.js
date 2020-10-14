@@ -174,6 +174,7 @@ const ClientDashboardPage = (props) => {
                   <Title type="secondary" level={4}>Todo Jobs</Title>
                   <MyJobList data={todoList} onItemClick={handleGoToJob} />
                 </>}
+                {hasNothing && <Alert message="No news is good news" color="blue"/>}
               </>}
             </Space>
           </StyledCol>

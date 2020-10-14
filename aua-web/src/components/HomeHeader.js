@@ -115,16 +115,18 @@ const HomeHeaderRaw = props => {
             {isGuest && <Menu.Item key="login"><Link to="/login">Log In</Link></Menu.Item>}
             {(isAdmin || isAgent) && <Menu.Item key="board"><Link to="/board">Board</Link></Menu.Item>}
             {isClient && <Menu.Item key="landing"><Link to="/landing">Dashboard</Link></Menu.Item>}
-            {!isGuest && <Menu.Item key="job"><Link to="/job">Job</Link></Menu.Item>}
+            {!isGuest && <Menu.Item key="job"><Link to="/job">Jobs</Link></Menu.Item>}
             {isClient && <Menu.Item key="portfolio"><Link to="/portfolio">Portfolio</Link></Menu.Item>}
             {/* {isAdmin && <Menu.Item key="clients"><Link to="/clients">Users</Link></Menu.Item>} */}
             {/* {isAdmin && <Menu.Item key="admin"><Link to="/admin">Admin</Link></Menu.Item>} */}
-            {isAdmin && <Menu.Item key="job_template"><Link to="/job_template">Job Template</Link></Menu.Item>}
-            {isAdmin && <Menu.Item key="doc_template"><Link to="/doc_template">Doc Template</Link></Menu.Item>}
-            {isAdmin && <Menu.Item key="recurring"><Link to="/recurring">Recurring</Link></Menu.Item>}
-            {isAdmin && <Menu.Item key="user"><Link to="/user">User</Link></Menu.Item>}
-            {!isGuest && <Menu.Item key="message"><Link to="/message"><Badge count={notifyCount} showZero={false} offset={[10, 0]}>Message</Badge></Link></Menu.Item>}
-            {(isAdmin || isAgent) && <Menu.Item key="stats"><Link to="/stats">Statistics</Link></Menu.Item>}
+            {!isGuest && <Menu.Item key="message"><Link to="/message"><Badge count={notifyCount} showZero={false} offset={[10, 0]}>Messages</Badge></Link></Menu.Item>}
+            {isAdmin && <Menu.SubMenu key="settings" title="Settings">
+              <Menu.Item key="job_template"><Link to="/job_template">Job Templates</Link></Menu.Item>
+              <Menu.Item key="doc_template"><Link to="/doc_template">Doc Templates</Link></Menu.Item>
+              <Menu.Item key="recurring"><Link to="/recurring">Recurring</Link></Menu.Item>
+              <Menu.Item key="user"><Link to="/user">Users</Link></Menu.Item>
+              <Menu.Item key="stats"><Link to="/stats">Statistics</Link></Menu.Item>
+            </Menu.SubMenu>}
             {!isGuest && <Menu.SubMenu key="me" title={<Avatar size={40} icon={<UserOutlined style={{ fontSize: 20 }} />} style={{ backgroundColor: isAdmin ? '#FF4D4F' : isAgent ? '#000000' : '#143e86' }} />}>
               {/* {isAdmin && <Menu.Item key="impersonate"><Link to="/impersonate">Impersonate</Link></Menu.Item>} */}
               {canChangePassword && <Menu.Item key="changePassword"><Link to="/change_password">Change Password</Link></Menu.Item>}

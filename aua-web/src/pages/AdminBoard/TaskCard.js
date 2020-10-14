@@ -1,4 +1,4 @@
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined , EllipsisOutlined} from '@ant-design/icons';
 import { Button, Modal, Tooltip, Space, Card } from 'antd';
 import Text from 'antd/lib/typography/Text';
 import React from 'react';
@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import { Draggable } from 'react-beautiful-dnd';
 import { PortfolioAvatar } from 'components/PortfolioAvatar';
 import PropTypes from 'prop-types';
+import { Menu } from 'antd';
 
 const StyledCard = styled(Card)`
 position: relative;
@@ -30,7 +31,7 @@ const TaskCard = (props) => {
   const handleDelete = async (e) => {
     e.stopPropagation();
     Modal.confirm({
-      title: <>Archive job <Text strong>{name}</Text>?</>,
+      title: <>Archive <Text strong>{name}</Text>?</>,
       okText: 'Yes, Archive it',
       onOk: async () => {
         await deleteJob(id);
@@ -68,14 +69,20 @@ const TaskCard = (props) => {
                 </Space>
               </Space>
             </Space>
-            <Space size="small" style={{ position: 'absolute', right: 0, bottom: 0 }}>
+            <div style={{ display: 'flex', position: 'absolute', right: 0, bottom: 0 }}>
               <Tooltip placement="bottom" title="Proceed job">
                 <Link to={`/job/${id}/proceed`}><Button type="link" icon={<EditOutlined />}></Button></Link>
               </Tooltip>
               <Tooltip placement="bottom" title="Delete job">
                 <Button type="link" danger onClick={handleDelete} icon={<DeleteOutlined />}></Button>
               </Tooltip>
-            </Space>
+              {/* <Menu mode="horizontal">
+                <Menu.SubMenu icon={<EllipsisOutlined />}>
+                  <Menu.Item icon={<EditOutlined />}>Proceed</Menu.Item>
+                  <Menu.Item icon={<DeleteOutlined />}>Archieve</Menu.Item>
+                </Menu.SubMenu>
+              </Menu> */}
+            </div>
           </StyledCard>
         </div>
       )
