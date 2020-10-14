@@ -97,26 +97,9 @@ export const JobDocEditor = (props) => {
   const [loading, setLoading] = React.useState(false);
   const [genDocModalVisible, setGenDocModalVisible] = React.useState(false);
 
-  // const loadFileList = async () => {
-  //   const { value } = props;
-  //   if (value && value.length) {
-  //     setLoading(true);
-  //     const list = await searchFile(value);
-  //     const fileList = list.map(x => ({
-  //       uid: x.id,
-  //       name: x.fileName,
-  //       status: 'done',
-  //       url: x.location,
-  //     }));
-  //     setDocList(fileList);
-  //     setLoading(false);
-  //   }
-  // }
-
-
-  // React.useEffect(() => {
-  //   loadFileList()
-  // }, []);
+  React.useEffect(() => {
+    setDocList(value);
+  }, [value]);
 
   const handleChange = (info) => {
     const { file } = info;

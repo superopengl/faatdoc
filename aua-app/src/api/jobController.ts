@@ -237,11 +237,11 @@ export const signJobDoc = handlerWrapper(async (req, res) => {
   }
 
   const unsignedFileCount = job.docs.filter(d => d.requiresSign && !d.signedAt).length;
-
   if (unsignedFileCount === 0) {
     job.status = JobStatus.SIGNED;
-    await jobRepo.save(job);
   }
+
+  await jobRepo.save(job);
 
   res.json();
 });
