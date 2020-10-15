@@ -96,6 +96,7 @@ export const JobDocEditor = (props) => {
   const [docList, setDocList] = React.useState(value);
   const [loading, setLoading] = React.useState(false);
   const [genDocModalVisible, setGenDocModalVisible] = React.useState(false);
+  const [docTemplateId, setDocTemplateId] = React.useState();
 
   React.useEffect(() => {
     setDocList(value);
@@ -167,16 +168,35 @@ export const JobDocEditor = (props) => {
     updateDocList([...docList]);
   }
 
-  const handleGenDocDone = (newDoc) => {
-    updateDocList([...docList, newDoc])
+  const handleGenDocDone = (generatedDoc) => {
+    if(docTemplateId) {
+      updateDocList(docList.map(d => d.docTemplateId === docTemplateId ? generatedDoc : d));
+    } else {
+      updateDocList([...docList, generatedDoc])
+    }
     setGenDocModalVisible(false);
+  }
+
+  const showGenDocModalSpecific = (docTemplateId) => {
+    if(!docTemplateId) throw new Error('docTemplateId is not specified');
+    setDocTemplateId(docTemplateId);
+    setGenDocModalVisible(true);
+  }
+
+  const showGenDocModalAny = () => {
+    setDocTemplateId(null);
+    setGenDocModalVisible(true);
   }
 
   const columns = [
     {
       title: 'Document',
       dataIndex: 'fileId',
-      render: (value, doc) => <FileLink id={value} name={doc.fileName} />
+      render: (value, doc) => value ? <FileLink id={value} name={doc.fileName} /> : 
+      <Space style={{ width: '100%', alignItems: 'center' }}>
+        <FileIcon name={doc.fileName} />
+        {doc.fileName}
+      </Space>
     },
     {
       title: 'Doc Template',
@@ -209,14 +229,19 @@ export const JobDocEditor = (props) => {
     },
     {
       title: '',
-      render: (value, doc) => <Button type="link" onClick={() => handleDeleteDoc(doc)} danger icon={<DeleteOutlined/>}></Button>
+      render: (value, doc) => <>
+      <Button type="link" onClick={() => handleDeleteDoc(doc)} danger icon={<DeleteOutlined/>}></Button>
+      {!doc.fileId && <Button type="link" onClick={() => showGenDocModalSpecific(doc.docTemplateId)} icon={<FileAddOutlined/>}></Button>}
+      </>
     }
   ];
+
+  let rowKey = 0;
 
   return (
     <Container className="clearfix">
       <Space style={{ width: '100%', margin: '1rem auto', justifyContent: 'flex-end' }}>
-        <Button disabled={loading} icon={<FileAddOutlined />} onClick={() => setGenDocModalVisible(true)}>Add from Doc Template</Button>
+        <Button disabled={loading} icon={<FileAddOutlined />} onClick={() => showGenDocModalAny()}>Add from Doc Template</Button>
         <Upload
           multiple={true}
           action={`${process.env.REACT_APP_AUA_API_ENDPOINT}/file`}
@@ -236,9 +261,14 @@ export const JobDocEditor = (props) => {
         dataSource={docList}
         pagination={false}
         loading={loading}
-        rowKey={record => record.fileId}
+        rowKey={record => rowKey++}
       />
-      <GenDocStepperModal visible={genDocModalVisible} onChange={handleGenDocDone} onCancel={() => setGenDocModalVisible(false)} />
+      <GenDocStepperModal 
+        visible={genDocModalVisible} 
+        onChange={handleGenDocDone} 
+        docTemplateId={docTemplateId}
+        onCancel={() => setGenDocModalVisible(false)} 
+      />
     </Container>
   );
 

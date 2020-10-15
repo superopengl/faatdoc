@@ -1,35 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { withRouter } from 'react-router-dom';
-import { Input, Button, Form, Modal, Space, Layout, Drawer, Typography, Radio, Row, Col, Spin } from 'antd';
-import { FileUploader } from 'components/FileUploader';
-import HomeHeader from 'components/HomeHeader';
+import { Input, Button, Form, Modal, Space, Typography, Spin } from 'antd';
 import StepWizard from 'react-step-wizard';
 
-import { Divider } from 'antd';
-import { getJob, saveJob } from '../../services/jobService';
 import { varNameToLabelName } from 'util/varNameToLabelName';
-import { DateInput } from 'components/DateInput';
-import JobChat from './JobChat';
-import { RangePickerInput } from 'components/RangePickerInput';
-import { Select } from 'antd';
-import FieldEditor from 'components/FieldEditor';
-import { FileAddOutlined, SyncOutlined } from '@ant-design/icons';
-import FileLink from 'components/FileLink';
-import { notify } from 'util/notify';
-import { merge } from 'lodash';
-import { FileIcon } from 'components/FileIcon';
-import { GrDocumentConfig } from 'react-icons/gr';
-import { Tag } from 'antd';
 import { getDocTemplate, genPdfFromDocTemplate, listDocTemplate } from 'services/docTemplateService';
-import { computeVariablesHash } from 'util/computeVariableHash';
 
-const { Paragraph, Title, Text } = Typography;
-
+const { Paragraph, Title } = Typography;
 
 const GenDocStepperModal = props => {
-  const { visible, fields, onChange, onCancel } = props;
+  const { visible, fields, docTemplateId, onChange, onCancel } = props;
   const [loading, setLoading] = React.useState(true);
   const [docTemplateList, setDocTemplateList] = React.useState([]);
   const [docTemplate, setDocTemplate] = React.useState();
@@ -38,9 +18,15 @@ const GenDocStepperModal = props => {
 
   const loadList = async () => {
     setLoading(true);
-    const list = await listDocTemplate();
-    list.sort((a, b) => a.name.localeCompare(b.name));
-    setDocTemplateList(list);
+    if (docTemplateId) {
+      const docTemplate = await getDocTemplate(docTemplateId);
+      setDocTemplate(docTemplate);
+      handleChooseDocTemplate(docTemplate);
+    } else {
+      const list = await listDocTemplate();
+      list.sort((a, b) => a.name.localeCompare(b.name));
+      setDocTemplateList(list);
+    }
     setLoading(false);
   }
 
@@ -60,7 +46,7 @@ const GenDocStepperModal = props => {
       fileId: pdfFile.id,
       fileName: pdfFile.fileName,
     }
-    onChange(doc)
+    onChange(doc);
   }
 
   const handleChooseDocTemplate = docTemplate => {
@@ -71,6 +57,13 @@ const GenDocStepperModal = props => {
     }, {})
     setInitialValues(initialValues);
     stepperRef.current.nextStep();
+  }
+
+  const transitions = {
+    enterRight: 'animate__fadeIn',
+    enterLeft: 'animate__fadeIn',
+    exitRight: 'animate__fadeIn',
+    exitLeft: 'animate__fadeIn'
   }
 
   return <Modal
@@ -84,7 +77,7 @@ const GenDocStepperModal = props => {
     footer={null}
   >
     {visible && <Spin spinning={loading}>
-      <StepWizard ref={stepperRef}>
+      <StepWizard ref={stepperRef} transitions={transitions}>
         <div>
           <Title level={4}>Choose a doc template</Title>
           <Space direction="vertical" style={{ width: '100%' }}>
@@ -119,6 +112,7 @@ const GenDocStepperModal = props => {
 GenDocStepperModal.propTypes = {
   visible: PropTypes.bool.isRequired,
   fields: PropTypes.array,
+  docTemplateId: PropTypes.string,
 };
 
 GenDocStepperModal.defaultProps = {

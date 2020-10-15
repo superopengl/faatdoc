@@ -32,7 +32,7 @@ const RecurringForm = (props) => {
 
   const loadEntity = async () => {
     setLoading(true);
-    const jobTemplateList = await listJobTemplate({recurring: 1});
+    const jobTemplateList = await listJobTemplate();
     const portfolioList = await listPortfolio();
     if (id) {
       const recurring = await getRecurring(id);

@@ -28,11 +28,8 @@ export const saveJobTemplate = handlerWrapper(async (req, res) => {
 export const listJobTemplates = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client', 'agent');
 
-  const { recurring } = req.query;
-
   const list = await getRepository(JobTemplate)
     .createQueryBuilder('x')
-    .where(recurring ? `array_length(x."docTemplateIds", 1) IS NULL` : '1=1')
     .orderBy('x.createdAt', 'ASC')
     .select(['id', 'name', `"createdAt"`, '"lastUpdatedAt"', `"docTemplateIds"`])
     .execute();

@@ -12,6 +12,6 @@ export async function deleteJobTemplate(id) {
   return httpDelete(`job_template/${id}`);
 }
 
-export async function listJobTemplate(recurring) {
-  return httpGet('job_template', {recurring});
+export async function listJobTemplate() {
+  return httpGet('job_template');
 }
