@@ -138,7 +138,7 @@ const SignInPage = (props) => {
                       // icon={<GoogleOutlined />}
                       onClick={renderProps.onClick}
                       disabled={renderProps.disabled}
-                    >Sign In with Google</Button>
+                    >Continue with Google</Button>
                   )}
               />
 
