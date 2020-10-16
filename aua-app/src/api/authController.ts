@@ -103,19 +103,15 @@ export const signin = handlerWrapper(async (req, res) => {
 
   const { id, email } = result;
 
-  const name = `user`;
-  const url = process.env.AUA_DOMAIN_NAME;
   // Non-blocking sending email
   sendEmail({
-    templateName: 'welcome',
+    template: 'welcome',
     to: email,
     vars: {
-      email,
-      name,
-      url
+      email
     },
     shouldBcc: true
-  }).catch(err => logError(err, req, res, 'error at sending out email'));
+  });
 
   const info = {
     id,
@@ -134,7 +130,7 @@ async function setUserToResetPasswordStatus(user: User) {
   const url = `${process.env.AUA_DOMAIN_NAME}/reset_password/${resetPasswordToken}/`;
   await sendEmail({
     to: user.email,
-    templateName: 'resetPassword',
+    template: 'resetPassword',
     vars: {
       url
     },

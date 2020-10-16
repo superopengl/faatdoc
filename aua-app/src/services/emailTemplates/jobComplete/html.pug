@@ -1,6 +1,11 @@
 p Dear Client
 
-p Your job was completed. Please login to 
+p The status of your job 
+  strong #{jobName}
+  |  changed.
+
+p Please log into 
   a(href=website) #{website}
+  |  for the details.
 
 include ../signature.pug

@@ -10,7 +10,7 @@ export const saveContact = handlerWrapper(async (req, res) => {
   assert(name && contact && message, 404, `Invalid contact information`);
 
   await sendEmail({
-    templateName: 'contact',
+    template: 'contact',
     to: 'accountant@auao.com.au',
     vars: {
       name,

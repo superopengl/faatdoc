@@ -7,96 +7,107 @@ import * as sanitizeHtml from 'sanitize-html';
 import * as nodemailer from 'nodemailer';
 import * as Email from 'email-templates';
 import * as path from 'path';
+import { Job } from '../entity/Job';
+import { getRepository, In } from 'typeorm';
+import { Portfolio } from '../entity/Portfolio';
+import { User } from '../entity/User';
+import { JobStatus } from '../types/JobStatus';
+import { File } from '../entity/File';
+import { logError } from '../utils/logger';
 
-let transporter = null;
+let emailerInstance = null;
+const sender = 'AU Accounting Office <accountant@auao.com.au>';
 
-function getTransporter() {
-  if (!transporter) {
+function getEmailer() {
+  if (!emailerInstance) {
     awsConfig();
-    transporter = nodemailer.createTransport({
+    const transport = nodemailer.createTransport({
       SES: new aws.SES({ apiVersion: '2010-12-01' })
     });
+
+    emailerInstance = new Email({
+      preview: false,
+      send: true,
+      transport,
+    });
   }
-  return transporter;
+  return emailerInstance;
 }
 
-export async function sendJobCompleteEmail(job) {
-  const transport = getTransporter();
+export function sendEmail(req: EmailRequest) {
+  const { to, template, vars, shouldBcc, attachments } = req;
+  assert(to, 400, 'Email recipient is not specified');
+  assert(template, 400, 'Email template is not specified');
 
-  const email = new Email({
-    message: {
-      from: 'accountant@auao.com.au',
-    },
-    transport
-  });
+  const locals = {
+    website: process.env.AUA_DOMAIN_NAME,
+    ...vars
+  };
 
-  await email.send({
-    template: path.join(__dirname, 'emailTemplates', 'jobComplete'),
-    locals: {
-      name: 'Jun Shao',
-      website: 'http://localhost:6001'
-    },
+  getEmailer().send({
+    template: path.join(__dirname, 'emailTemplates', template),
+    locals,
     message: {
-      to: 'mr.shaojun@gmail.com',
-      attachments: [
-        {
-          filename: 'Director regins letter.pdf',
-          path: 'https://auao-portal-upload.s3.ap-southeast-2.amazonaws.com/dev/31802242-7cb3-4fd1-b7f0-90f2406374de/Director%20resign%20letter.pdf'
-        }
-      ]
+      from: sender,
+      bcc: shouldBcc ? sender : undefined,
+      to,
+      attachments
     }
-  });
+  }).catch(err => logError(err, req, null, 'Sending email error'));
 }
+
+
 
 export class EmailRequest {
   to: string;
+  template: string;
   vars: object;
-  templateName: string;
+  attachments?: { filename: string, path: string }[];
   shouldBcc?: boolean = false;
 }
 
-function sanitizeVars(vars) {
-  const sanitized = {};
-  Object.entries(vars).forEach(([k, v]) => sanitized[k] = _.isString(v) ? sanitizeHtml(v) : v);
-  return sanitized;
-}
+// function sanitizeVars(vars) {
+//   const sanitized = {};
+//   Object.entries(vars).forEach(([k, v]) => sanitized[k] = _.isString(v) ? sanitizeHtml(v) : v);
+//   return sanitized;
+// }
 
-export async function sendEmail(req: EmailRequest) {
-  assert(req.to, 400, 'Email recipient is not specified');
-  const template = templates[req.templateName];
-  assert(template, 404, `Email template '${req.templateName}' is not found`);
+// export async function sendEmail2(req: EmailRequest) {
+//   assert(req.to, 400, 'Email recipient is not specified');
+//   const template = templates[req.template];
+//   assert(template, 404, `Email template '${req.template}' is not found`);
 
-  const body = template.body(sanitizeVars(req.vars));
-  awsConfig();
+//   const body = template.body(sanitizeVars(req.vars));
+//   awsConfig();
 
-  const ses = new aws.SES({ apiVersion: '2010-12-01' });
+//   const ses = new aws.SES({ apiVersion: '2010-12-01' });
 
-  const params = {
-    Destination: {
-      CcAddresses: [],
-      ToAddresses: [req.to],
-      BccAddresses: req.shouldBcc ? ['accountant@auao.com.au'] : []
-    },
-    Message: {
-      Body: {
-        Html: {
-          Charset: 'UTF-8',
-          Data: body
-        },
-        // Text: {
-        //   Charset: 'UTF-8',
-        //   Data: body
-        // }
-      },
-      Subject: {
-        Charset: 'UTF-8',
-        Data: template.subject
-      }
-    },
-    Source: 'AU Accounting Office <accountant@auao.com.au>',
-    ReplyToAddresses: ['AU Accounting Office <accountant@auao.com.au>'],
-  };
+//   const params = {
+//     Destination: {
+//       CcAddresses: [],
+//       ToAddresses: [req.to],
+//       BccAddresses: req.shouldBcc ? ['accountant@auao.com.au'] : []
+//     },
+//     Message: {
+//       Body: {
+//         Html: {
+//           Charset: 'UTF-8',
+//           Data: body
+//         },
+//         // Text: {
+//         //   Charset: 'UTF-8',
+//         //   Data: body
+//         // }
+//       },
+//       Subject: {
+//         Charset: 'UTF-8',
+//         Data: template.subject
+//       }
+//     },
+//     Source: 'AU Accounting Office <accountant@auao.com.au>',
+//     ReplyToAddresses: ['AU Accounting Office <accountant@auao.com.au>'],
+//   };
 
-  const sesRequest = ses.sendEmail(params).promise();
-  await sesRequest;
-}
+//   const sesRequest = ses.sendEmail(params).promise();
+//   await sesRequest;
+// }

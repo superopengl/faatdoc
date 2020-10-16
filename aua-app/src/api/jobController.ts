@@ -7,7 +7,7 @@ import { Job } from '../entity/Job';
 import { Message } from '../entity/Message';
 import { User } from '../entity/User';
 import { JobStatus } from '../types/JobStatus';
-import { sendEmail, EmailRequest, sendJobCompleteEmail } from '../services/emailService';
+import { sendEmail, EmailRequest } from '../services/emailService';
 import { assert, assertRole } from '../utils/assert';
 import { handlerWrapper } from '../utils/asyncHandler';
 import { generateJobByJobTemplateAndPortfolio } from '../utils/generateJobByJobTemplateAndPortfolio';
@@ -50,6 +50,46 @@ function validateJobStatusChange(oldStatus, newStatus) {
   return nextStatii.includes(newStatus);
 }
 
+async function sendJobStatusChangeEmail(job: Job) {
+  const portfolio = await getRepository(Portfolio).findOne(job.portfolioId);
+  const user = await getRepository(User).findOne(job.userId);
+  const { id: jobId, status: jobStatus, docs: jobDocs, name: jobName } = job;
+  const to = user.email;
+  let template = null;
+  const vars = {
+    jobId,
+    jobName,
+    jobStatus
+  };
+  let attachments;
+  let shouldBcc = false;
+
+  switch (jobStatus) {
+    case JobStatus.COMPLETE:
+      template = 'jobComplete';
+      shouldBcc = true;
+      const fileIds = (jobDocs || []).filter(d => d.isFeedback).map(d => d.fileId);
+      attachments = fileIds.length ?
+        await getRepository(File)
+          .createQueryBuilder()
+          .where(`id IN (:...ids)`, { ids: fileIds })
+          .select(['fileName as filename', 'location as path']) :
+        [];
+      break;
+
+    default:
+      break;
+  }
+
+  await sendEmail({
+    to,
+    template,
+    vars,
+    attachments,
+    shouldBcc
+  });
+}
+
 export const saveJob = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent', 'client');
 
@@ -86,7 +126,7 @@ export const saveJob = handlerWrapper(async (req, res) => {
   job.lastUpdatedAt = getUtcNow();
 
   if(status === JobStatus.COMPLETE) {
-    await sendJobCompleteEmail(job);
+    await sendJobStatusChangeEmail(job);
   }
 
   await repo.save(job);
@@ -281,7 +321,7 @@ async function sendJobMessage(Job, senderId, content) {
     vars: {
       name: Job.name
     },
-    templateName: 'jobMessage'
+    template: 'jobMessage'
   }).catch(() => { });
 }
 

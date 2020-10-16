@@ -1,0 +1,10 @@
+p Dear Client
+
+p Your job 
+  strong 
+    a(href=website + '/job/' + jobId) #{jobName}
+  |  was completed. Please login to our website 
+  a(href=website) #{website}
+  |  to check the result.
+
+include ../signature.pug

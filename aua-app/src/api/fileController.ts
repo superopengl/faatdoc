@@ -61,7 +61,7 @@ export const searchFileList = handlerWrapper(async (req, res) => {
   const { ids } = req.body;
   const files = await getRepository(File)
     .createQueryBuilder()
-    .where('id IN(:...ids)', { ids })
+    .where('id IN (:...ids)', { ids })
     .getMany();
   res.json(files);
 });
