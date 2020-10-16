@@ -7,7 +7,7 @@ import { Job } from '../entity/Job';
 import { Message } from '../entity/Message';
 import { User } from '../entity/User';
 import { JobStatus } from '../types/JobStatus';
-import { sendEmail } from '../services/emailService';
+import { sendEmail, EmailRequest, sendJobCompleteEmail } from '../services/emailService';
 import { assert, assertRole } from '../utils/assert';
 import { handlerWrapper } from '../utils/asyncHandler';
 import { generateJobByJobTemplateAndPortfolio } from '../utils/generateJobByJobTemplateAndPortfolio';
@@ -84,6 +84,10 @@ export const saveJob = handlerWrapper(async (req, res) => {
   job.docs = docs;
   job.status = status;
   job.lastUpdatedAt = getUtcNow();
+
+  if(status === JobStatus.COMPLETE) {
+    await sendJobCompleteEmail(job);
+  }
 
   await repo.save(job);
 

@@ -4,6 +4,38 @@ import { assert } from '../utils/assert';
 import * as templates from './emailTemplates';
 import * as _ from 'lodash';
 import * as sanitizeHtml from 'sanitize-html';
+import * as nodemailer from 'nodemailer';
+import { Email } from 'email-templates';
+
+let transporter = null;
+
+function getTransporter() {
+  if (!transporter) {
+    awsConfig();
+    transporter = nodemailer.createTransport({
+      SES: new aws.SES({ apiVersion: '2010-12-01' })
+    });
+  }
+  return transporter;
+}
+
+export async function sendJobCompleteEmail(job) {
+  const tran = getTransporter();
+
+  await tran.sendMail({
+    from: 'accountant@auao.com.au',
+    to: 'mr.shaojun@gmail.com',
+    subject: 'Hello {{user}}',
+    text: 'hello {{user}}',
+    html: '<b>hello{{user}}</b>',
+    attachments: [
+      {
+        filename: 'Director regins letter.pdf',
+        path: 'https://auao-portal-upload.s3.ap-southeast-2.amazonaws.com/dev/31802242-7cb3-4fd1-b7f0-90f2406374de/Director%20resign%20letter.pdf'
+      }
+    ]
+  });
+}
 
 export class EmailRequest {
   to: string;
