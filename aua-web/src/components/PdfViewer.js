@@ -1,11 +1,8 @@
-import { Typography, Button } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
-import MarkdownIt from 'markdown-it'
 import 'react-markdown-editor-lite/lib/index.css';
 import PDFViewer from 'mgr-pdf-viewer-react';
-
 
 const Container = styled.div`
   background-color: #333333;
@@ -14,7 +11,6 @@ const Container = styled.div`
   overflow-x: auto;
   overflow-y: auto;
 `;
-
 
 const PdfViewer = props => {
   const { data, width } = props;

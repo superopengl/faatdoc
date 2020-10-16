@@ -6,13 +6,12 @@ import { saveDocTemplate, getDocTemplate } from 'services/docTemplateService';
 import { notify } from 'util/notify';
 import MarkdownIt from 'markdown-it'
 import MdEditor from 'react-markdown-editor-lite'
-import * as markdownCenterText from 'markdown-it-center-text';
 import 'react-markdown-editor-lite/lib/index.css';
 import { Spin } from 'antd';
 import { useWindowHeight } from '@react-hook/window-size'
 import { SampleMarkdown } from './SampleMarkdown';
 
-const mdParser = new MarkdownIt().use(markdownCenterText);
+const mdParser = new MarkdownIt({html: true, linkify: true});
 const { Paragraph, Text } = Typography;
 
 const DocMarkdownEditor = props => {

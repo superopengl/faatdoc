@@ -16,7 +16,6 @@ dependencies:
   javascript-time-ago: 2.0.13
   lodash: 4.17.19
   markdown-it: 11.0.1
-  markdown-it-center-text: 1.0.4
   mgr-pdf-viewer-react: 1.0.3_react-dom@16.13.1
   moment: 2.27.0
   object-hash: 2.0.3
@@ -8068,10 +8067,6 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-7Nyo8TFE5mDxtb1B8S80edmN+48=
-  /markdown-it-center-text/1.0.4:
-    dev: false
-    resolution:
-      integrity: sha512-7AA0gek4FYJ6gWB2kdGNx06k3GrlO97nEMY7uovQ70/6MtfqPznrgnKoWO3V4p36m3RT5GeQIFXqBH9Wr4iL/g==
   /markdown-it/11.0.1:
     dependencies:
       argparse: 1.0.10
@@ -13913,7 +13908,6 @@ specifiers:
   javascript-time-ago: ^2.0.13
   lodash: ^4.17.15
   markdown-it: ^11.0.1
-  markdown-it-center-text: ^1.0.4
   mgr-pdf-viewer-react: ^1.0.3
   moment: ^2.25.3
   nodemon: ^2.0.4
