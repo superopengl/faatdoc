@@ -371,7 +371,7 @@ async function sendJobMessage(Job, senderId, content) {
       name: Job.name
     },
     template: 'jobMessage'
-  }).catch(() => { });
+  });
 }
 
 export const notifyJob = handlerWrapper(async (req, res) => {

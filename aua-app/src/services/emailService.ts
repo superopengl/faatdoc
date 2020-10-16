@@ -1,18 +1,10 @@
 import * as aws from 'aws-sdk';
 import { awsConfig } from '../utils/awsConfig';
 import { assert } from '../utils/assert';
-import * as templates from './emailTemplates';
 import * as _ from 'lodash';
-import * as sanitizeHtml from 'sanitize-html';
 import * as nodemailer from 'nodemailer';
 import * as Email from 'email-templates';
 import * as path from 'path';
-import { Job } from '../entity/Job';
-import { getRepository, In } from 'typeorm';
-import { Portfolio } from '../entity/Portfolio';
-import { User } from '../entity/User';
-import { JobStatus } from '../types/JobStatus';
-import { File } from '../entity/File';
 import { logError } from '../utils/logger';
 
 let emailerInstance = null;
