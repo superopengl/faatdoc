@@ -5,7 +5,8 @@ import * as templates from './emailTemplates';
 import * as _ from 'lodash';
 import * as sanitizeHtml from 'sanitize-html';
 import * as nodemailer from 'nodemailer';
-import { Email } from 'email-templates';
+import * as Email from 'email-templates';
+import * as path from 'path';
 
 let transporter = null;
 
@@ -20,20 +21,30 @@ function getTransporter() {
 }
 
 export async function sendJobCompleteEmail(job) {
-  const tran = getTransporter();
+  const transport = getTransporter();
 
-  await tran.sendMail({
-    from: 'accountant@auao.com.au',
-    to: 'mr.shaojun@gmail.com',
-    subject: 'Hello {{user}}',
-    text: 'hello {{user}}',
-    html: '<b>hello{{user}}</b>',
-    attachments: [
-      {
-        filename: 'Director regins letter.pdf',
-        path: 'https://auao-portal-upload.s3.ap-southeast-2.amazonaws.com/dev/31802242-7cb3-4fd1-b7f0-90f2406374de/Director%20resign%20letter.pdf'
-      }
-    ]
+  const email = new Email({
+    message: {
+      from: 'accountant@auao.com.au',
+    },
+    transport
+  });
+
+  await email.send({
+    template: path.join(__dirname, 'emailTemplates', 'jobComplete'),
+    locals: {
+      name: 'Jun Shao',
+      website: 'http://localhost:6001'
+    },
+    message: {
+      to: 'mr.shaojun@gmail.com',
+      attachments: [
+        {
+          filename: 'Director regins letter.pdf',
+          path: 'https://auao-portal-upload.s3.ap-southeast-2.amazonaws.com/dev/31802242-7cb3-4fd1-b7f0-90f2406374de/Director%20resign%20letter.pdf'
+        }
+      ]
+    }
   });
 }
 

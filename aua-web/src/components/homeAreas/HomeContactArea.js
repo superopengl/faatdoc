@@ -71,7 +71,7 @@ class HomeContactArea extends React.Component {
           </Row>
           <Row>
             <Col span={24}>
-            <HomeOutlined style={{ marginRight: 8 }} /><a href="http://maps.google.com/?q=Unit 101, 11 Spring St., Chatswood, NSW 2067" target="_blank" rel="noopener noreferrer">
+            <HomeOutlined style={{ marginRight: 8 }} /><a href="https://maps.google.com/?q=Unit 101, 11 Spring St., Chatswood, NSW 2067" target="_blank" rel="noopener noreferrer">
                 Unit 101, 11 Spring St., Chatswood, NSW 2067
                 </a>
             </Col>
