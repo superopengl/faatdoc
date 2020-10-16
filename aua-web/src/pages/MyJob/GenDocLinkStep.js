@@ -35,7 +35,7 @@ const GenDocLinkStep = props => {
     setLoading(true);
     const docTemplate = await getDocTemplate(doc.docTemplateId);
     setDocTemplate(docTemplate);
-    const variables = doc.variables.map(x => x.name).filter(x => x !== 'now').reduce((pre, cur) => {
+    const variables = (doc.variables || []).map(x => x.name).filter(x => x !== 'now').reduce((pre, cur) => {
       pre[cur] = variableDic[cur];
       return pre;
     }, {});

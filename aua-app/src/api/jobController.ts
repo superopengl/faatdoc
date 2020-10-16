@@ -27,28 +27,8 @@ export const generateJob = handlerWrapper(async (req, res) => {
     (j, p) => `${j.name} for ${p.name}`
   );
 
-  // await getRepository(Job).save(Job);
-
   res.json(Job);
 });
-
-function validateJobStatusChange(oldStatus, newStatus) {
-  const s = JobStatus;
-  let nextStatii = [];
-  switch (oldStatus) {
-    case null:
-    case undefined:
-      nextStatii = [s.TODO];
-    case s.TODO:
-      nextStatii = [s.TODO, s.TO_SIGN, s.COMPLETE];
-    case s.TO_SIGN:
-      nextStatii = [s.COMPLETE];
-    case s.COMPLETE:
-    default:
-  }
-
-  return nextStatii.includes(newStatus);
-}
 
 async function sendNewJobCreatedEmail(job: Job) {
   const user = await getRepository(User).findOne(job.userId);
@@ -119,7 +99,7 @@ async function sendCompletedEmail(job: Job) {
   });
 }
 
-async function handleJobStatusChange(oldStatus, job) {
+async function handleJobStatusChange(oldStatus: JobStatus, job: Job) {
   const { status } = job;
   if (oldStatus === status) return;
 
@@ -130,6 +110,8 @@ async function handleJobStatusChange(oldStatus, job) {
     // Job completed
     await sendCompletedEmail(job);
   } else if (status === JobStatus.TO_SIGN) {
+    const hasDocToSign = job.docs?.filter(d => d.fileId && d.requiresSign && !d.signedAt).length;
+    assert(hasDocToSign, 400, 'Cannot change status because there is no document to sign.');
     // Require sign
     await sendRequireSignEmail(job);
   } else if (status === JobStatus.ARCHIVE) {
@@ -157,11 +139,9 @@ export const saveJob = handlerWrapper(async (req, res) => {
     // Existing job save
     job = await repo.findOne(id);
     assert(job, 404, 'Job is not found');
-    validateJobStatusChange(job.status, status);
     oldStatus = job.status;
   } else {
     // New job
-    validateJobStatusChange(null, status);
     job = new Job();
     job.id = uuidv4();
     job.userId = portfolio.userId;

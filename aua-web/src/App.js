@@ -95,6 +95,7 @@ class App extends React.Component {
             <RoleRoute visible={isClient} loading={loading} exact path="/portfolio/new/:type" component={PortfolioForm} />
             <RoleRoute loading={loading} path="/reset_password" exact component={ResetPasswordPage} />
             <RoleRoute visible={isAdmin} loading={loading} exact path="/job_template" component={JobTemplatePage} />
+            <RoleRoute visible={isAdmin} loading={loading} exact path="/job_template/:id" component={JobTemplatePage} />
             <RoleRoute visible={isAdmin} loading={loading} exact path="/doc_template" component={DocTemplatePage} />
             <RoleRoute visible={isAdmin} loading={loading} exact path="/user" component={UserPage} />
             <RoleRoute visible={isAdmin} loading={loading} exact path="/recurring" component={RecurringListPage} />

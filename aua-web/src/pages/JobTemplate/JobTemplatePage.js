@@ -6,6 +6,7 @@ import HomeHeader from 'components/HomeHeader';
 import { TimeAgo } from 'components/TimeAgo';
 import JobTemplateForm from 'pages/JobTemplate/JobTemplateForm';
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import { deleteJobTemplate, listJobTemplate } from 'services/jobTemplateService';
 import styled from 'styled-components';
 
@@ -47,7 +48,7 @@ const LayoutStyled = styled(Layout)`
 
 
 
-export const JobTemplatePage = () => {
+export const JobTemplatePage = props => {
   const columnDef = [
     {
       title: 'Job Template Name',
@@ -80,12 +81,12 @@ export const JobTemplatePage = () => {
     },
   ];
 
+  const jobTemplateId = props.match.params.id;
 
   const [list, setList] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
-  const [drawerVisible, setDrawerVisible] = React.useState(false);
-  const [currentId, setCurrentId] = React.useState();
-
+  const [drawerVisible, setDrawerVisible] = React.useState(!!jobTemplateId);
+  const [currentId, setCurrentId] = React.useState(jobTemplateId);
 
   const handleEdit = (e, item) => {
     e.stopPropagation();
@@ -179,4 +180,4 @@ JobTemplatePage.propTypes = {};
 
 JobTemplatePage.defaultProps = {};
 
-export default JobTemplatePage;
+export default withRouter(JobTemplatePage);

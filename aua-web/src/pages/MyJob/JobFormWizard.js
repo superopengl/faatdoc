@@ -123,7 +123,7 @@ const JobFormWizard = props => {
     const steps = [];
     const genDocs = job?.docs.filter(d => d.docTemplateId) || [];
     genDocs.forEach((doc, i) => {
-      if (doc.variables.length) {
+      if (doc.variables?.length) {
         steps.push(<GenDocFieldStep key={`field_${i}`}
           doc={doc}
           variableDic={variableContextDic}

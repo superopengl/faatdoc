@@ -126,23 +126,8 @@ const ProceedJobPage = (props) => {
   }
 
   const handleCancel = () => {
-    // goToListPage();
     props.history.goBack();
   }
-
-
-  // const getFormInitialValues = () => {
-  //   const values = {
-  //     name: job?.name || 'New Job',
-  //     status: job?.status || 'todo'
-  //   };
-  //   if (job && job.fields) {
-  //     for (const f of job.fields) {
-  //       values[f.name] = f.value;
-  //     }
-  //   }
-  //   return values;
-  // }
 
   const handleMessage = () => {
     setShowsNotify(true);
@@ -151,18 +136,15 @@ const ProceedJobPage = (props) => {
   const handleStatusChange = async option => {
     const value = option?.value;
     if (!value) return;
-    if (value === 'to_sign' && !job.docs.filter(d => !d.signedAt && d.requiresSign).length) {
-      Modal.error({
-        title: 'Cannot change status',
-        content: <>Cannot change status to <Text strong>To Sign</Text> because there is no documents to sign.</>,
-        maskClosable: true
-      });
-      form.setFieldsValue({});
-    } else if (value !== job.status) {
+    if (value !== job.status) {
       job.status = value;
       setLoading(true);
-      await saveJob(job);
-      loadEntity();
+      try {
+        await saveJob(job);
+      } finally {
+        await loadEntity();
+        setLoading(false);
+      }
     }
   }
 
@@ -194,8 +176,6 @@ const ProceedJobPage = (props) => {
     job.fields = value;
     setJob({ ...job });
     setDrawerVisible(false);
-    // await handleSubmit();
-    // await loadEntity();
   }
 
   const handleJobDocsChange = (docs) => {

@@ -43,7 +43,7 @@ const Container = styled.div`
 }`;
 
 
-const StyledSpace = styled(Space)`
+const PendingDoc = styled.div`
   &:hover {
     cursor: pointer;
   }
@@ -147,11 +147,13 @@ export const JobDocEditor = (props) => {
       dataIndex: 'fileId',
       render: (value, doc) => value ? <FileLink id={value} name={doc.fileName} /> :
         <Tooltip title="Generate from the doc template">
-          <StyledSpace style={{ width: '100%', alignItems: 'center' }} onClick={() => showGenDocModalSpecific(doc.docTemplateId)}>
-            <FileIcon name={doc.fileName} />
-            {doc.fileName}
-            <Tag icon={<ExclamationCircleOutlined />} color="warning">Pending doc template. Click to generate!</Tag>
-          </StyledSpace>
+          <PendingDoc>
+            <Space style={{ width: '100%', alignItems: 'center' }} onClick={() => showGenDocModalSpecific(doc.docTemplateId)}>
+              <FileIcon name={doc.fileName} />
+              {doc.fileName}
+              <Tag icon={<ExclamationCircleOutlined />} color="warning">Pending doc template. Click to generate!</Tag>
+            </Space>
+          </PendingDoc>
         </Tooltip>
     },
     // {
@@ -221,7 +223,7 @@ export const JobDocEditor = (props) => {
           showUploadList={false}
           disabled={loading}
         >
-          <Button disabled={loading} icon={<UploadOutlined />}>Click to Upload</Button>
+          <Button disabled={loading} icon={<UploadOutlined />}>Upload</Button>
         </Upload>
       </Space>
       {/* <Text code style={{ whiteSpace: 'pre-line' }}>{JSON.stringify(docList, null, 2)}</Text> */}

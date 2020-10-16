@@ -45,6 +45,7 @@ const GenDocStepperModal = props => {
       docTemplateId: docTemplate.id,
       fileId: pdfFile.id,
       fileName: pdfFile.fileName,
+      variables: Object.entries(values).map(([k, v]) => ({ name: k, value: v }))
     }
     onChange(doc);
   }

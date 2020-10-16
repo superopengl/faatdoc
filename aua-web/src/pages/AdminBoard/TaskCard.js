@@ -1,8 +1,7 @@
-import { DeleteOutlined, EditOutlined} from '@ant-design/icons';
-import { Button, Modal, Tooltip, Space, Card } from 'antd';
+import { Modal, Space, Card } from 'antd';
 import Text from 'antd/lib/typography/Text';
 import React from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { deleteJob } from '../../services/jobService';
 import styled from 'styled-components';
 import { Draggable } from 'react-beautiful-dnd';
@@ -27,21 +26,6 @@ const TaskCard = (props) => {
     ...draggableStyle
   });
 
-  const handleDelete = async (e) => {
-    e.stopPropagation();
-    Modal.confirm({
-      title: <>Archive <Text strong>{name}</Text>?</>,
-      okText: 'Yes, Archive it',
-      onOk: async () => {
-        await deleteJob(id);
-        onChange();
-      },
-      maskClosable: true,
-      okButtonProps: {
-        danger: true
-      }
-    });
-  }
 
   const handleEditJob = (id) => {
     props.history.push(`/job/${id}/proceed`);
@@ -68,20 +52,14 @@ const TaskCard = (props) => {
                 </Space>
               </Space>
             </Space>
-            <div style={{ display: 'flex', position: 'absolute', right: 0, bottom: 0 }}>
+            {/* <div style={{ display: 'flex', position: 'absolute', right: 0, bottom: 0 }}>
               <Tooltip placement="bottom" title="Proceed job">
                 <Link to={`/job/${id}/proceed`}><Button type="link" icon={<EditOutlined />}></Button></Link>
               </Tooltip>
               <Tooltip placement="bottom" title="Delete job">
                 <Button type="link" danger onClick={handleDelete} icon={<DeleteOutlined />}></Button>
               </Tooltip>
-              {/* <Menu mode="horizontal">
-                <Menu.SubMenu icon={<EllipsisOutlined />}>
-                  <Menu.Item icon={<EditOutlined />}>Proceed</Menu.Item>
-                  <Menu.Item icon={<DeleteOutlined />}>Archieve</Menu.Item>
-                </Menu.SubMenu>
-              </Menu> */}
-            </div>
+            </div> */}
           </StyledCard>
         </div>
       )

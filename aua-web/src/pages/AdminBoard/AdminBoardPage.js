@@ -94,9 +94,12 @@ const AdminBoardPage = props => {
     if (job.status !== status) {
       job.status = status;
       setLoading(true);
-      await saveJob(job);
-      loadList();
-      setLoading(false);
+      try {
+        await saveJob(job);
+      } finally {
+        await loadList();
+        setLoading(false);
+      }
     }
   }
 
