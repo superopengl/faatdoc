@@ -4,7 +4,7 @@ import * as path from 'path';
 import { connectDatabase } from './db';
 import * as dotenv from 'dotenv';
 import { restartCronService } from './services/cronService';
-import {createWebsocketServer} from './ws';
+import { createWebsocketServer } from './ws';
 import * as WebSocket from 'ws';
 
 function validateEnvVars() {

@@ -3,7 +3,7 @@ import { getRepository, In } from 'typeorm';
 import { assert } from './assert';
 import * as _ from 'lodash';
 import { Job } from '../entity/Job';
-import { GenDoc } from "../types/GenDoc";
+import { GenDoc } from '../types/GenDoc';
 import { getUtcNow } from './getUtcNow';
 import { JobTemplate } from '../entity/JobTemplate';
 import { Portfolio } from '../entity/Portfolio';
