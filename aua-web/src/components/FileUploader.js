@@ -1,21 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Upload, Typography, Button, Space, Col } from 'antd';
-import { v4 as uuidv4 } from 'uuid';
+import { Upload, Typography, Space } from 'antd';
 import * as _ from 'lodash';
 import styled from 'styled-components';
 import { getFile, searchFile } from 'services/fileService';
 import { FileIcon } from './FileIcon';
 import { saveAs } from 'file-saver';
 import { AiOutlineUpload } from 'react-icons/ai';
-import FileLink from './FileLink';
-import { CheckCircleFilled, CheckCircleOutlined, DeleteOutlined } from '@ant-design/icons';
-import { FcCheckmark } from 'react-icons/fc';
-import { FaPenSquare, FaEye } from 'react-icons/fa'
 import { Badge } from 'antd';
 import { Popover } from 'antd';
 import { TimeAgo } from './TimeAgo';
-import { Row } from 'antd';
 
 const { Dragger } = Upload;
 const { Text } = Typography;
@@ -52,17 +46,6 @@ const FileIconContainer = styled.div`
   position: relative;
 `;
 
-const FileUploadItem = props => {
-  const { value } = props;
-  const id = _.get(value, 'response.id', value.uid);
-  const name = _.get(value, 'response.fileName', value.name);
-  const location = _.get(value, 'response.location', value.url);
-  return <Space style={{ width: '100%', justifyContent: 'space-between' }}>
-    <FileLink id={id} name={name} location={location} />
-    {/* <Text code>{JSON.stringify(value, null, 2)}</Text> */}
-    <Button icon={<DeleteOutlined />} type="link" style={{ paddingRight: 0 }}></Button>
-  </Space>
-}
 
 const FileIconWithOverlay = props => {
   const { id, name, showsLastReadAt, showsSignedAt } = props

@@ -1,22 +1,14 @@
-import { Alert, Layout, Space, Tabs, Typography } from 'antd';
-import HomeHeader from 'components/HomeHeader';
+import { Alert, Space, Tabs, Typography } from 'antd';
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { getJob } from 'services/jobService';
 import styled from 'styled-components';
-import MyJobForm from './MyJobForm';
 import MyJobReadView from './MyJobReadView';
 import SignDocEditor from './SignDocEditor';
 
 const { Title } = Typography;
 
 
-const ContainerStyled = styled.div`
-  margin: 6rem auto 2rem auto;
-  padding: 0 1rem;
-  width: 100%;
-  max-width: 600px;
-`;
 
 const StyledTitleRow = styled.div`
  display: flex;
@@ -25,27 +17,13 @@ const StyledTitleRow = styled.div`
  width: 100%;
 `
 
-const LayoutStyled = styled(Layout)`
-  margin: 0 auto 0 auto;
-  background-color: #ffffff;
-  height: 100%;
-
-  .job-count .ant-badge-count {
-    background-color: #143e86;
-    color: #eeeeee;
-    // box-shadow: 0 0 0 1px #143e86 inset;
-  }
-`;
 
 const MyJobSign = (props) => {
   const { value } = props;
 
-  const [loading, setLoading] = React.useState(false);
+  const [loading] = React.useState(false);
   const [job, setJob] = React.useState(value);
 
-  const goToJobList = () => {
-    props.history.push(`/job`);
-  }
 
   const loadEntity = async () => {
     const updatedJob = await getJob(job.id);

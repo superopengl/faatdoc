@@ -2,13 +2,10 @@ import { Button, Layout, Modal, Space, Typography, Row, Col, Spin } from 'antd';
 import HomeHeader from 'components/HomeHeader';
 import React from 'react';
 import { withRouter, Link } from 'react-router-dom';
-import { listJob, searchJob } from 'services/jobService';
+import { listJob } from 'services/jobService';
 import { listPortfolio } from 'services/portfolioService';
 import { PlusOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
-import { listMessages } from 'services/messageService';
-import MessageList from 'components/MessageList';
-import { GlobalContext } from 'contexts/GlobalContext';
 import { Divider } from 'antd';
 import MyJobList from 'pages/MyJob/MyJobList';
 import { Alert } from 'antd';
@@ -44,14 +41,6 @@ const LayoutStyled = styled(Layout)`
   }
 `;
 
-const span = {
-  xs: 24,
-  sm: 24,
-  md: 12,
-  lg: 12,
-  xl: 12,
-  xxl: 12
-}
 
 const ClientDashboardPage = (props) => {
 
@@ -61,9 +50,7 @@ const ClientDashboardPage = (props) => {
   const [completeList, setCompleteList] = React.useState([]);
   const [todoList, setTodoList] = React.useState([]);
   const [portfolioList, setPortfolioList] = React.useState([]);
-  const [, setHasMessage] = React.useState(false);
-  const context = React.useContext(GlobalContext);
-  const { notifyCount } = context;
+  const [] = React.useState(false);
 
   const loadList = async () => {
     setLoading(true);
@@ -112,11 +99,6 @@ const ClientDashboardPage = (props) => {
     }
   }
 
-  const handleFetchNextPage = async (page, size) => {
-    const data = await listMessages({ page, size, unreadOnly: true });
-    setHasMessage(!!data.length);
-    return data;
-  }
 
   const handleGoToJobWithMessage = job => {
     props.history.push(`/job/${job.id}?chat=true`)

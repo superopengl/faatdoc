@@ -10,7 +10,6 @@ import { TimeAgo } from 'components/TimeAgo';
 import { Card } from 'antd';
 import { withRouter } from 'react-router-dom';
 import * as queryString from 'query-string';
-import { GlobalContext } from 'contexts/GlobalContext';
 
 const { Title, Paragraph } = Typography;
 

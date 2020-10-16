@@ -1,4 +1,4 @@
-import { DeleteOutlined, EditOutlined , EllipsisOutlined} from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined} from '@ant-design/icons';
 import { Button, Modal, Tooltip, Space, Card } from 'antd';
 import Text from 'antd/lib/typography/Text';
 import React from 'react';
@@ -8,7 +8,6 @@ import styled from 'styled-components';
 import { Draggable } from 'react-beautiful-dnd';
 import { PortfolioAvatar } from 'components/PortfolioAvatar';
 import PropTypes from 'prop-types';
-import { Menu } from 'antd';
 
 const StyledCard = styled(Card)`
 position: relative;

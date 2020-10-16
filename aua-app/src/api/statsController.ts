@@ -1,7 +1,7 @@
 
 import { getRepository } from 'typeorm';
 import { handlerWrapper } from '../utils/asyncHandler';
-import { assertRole } from '../utils';
+import { assertRole } from '../utils/assert';
 import { Job } from '../entity/Job';
 import { User } from '../entity/User';
 import { Portfolio } from '../entity/Portfolio';

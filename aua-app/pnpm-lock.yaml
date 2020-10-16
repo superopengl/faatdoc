@@ -28,7 +28,6 @@ dependencies:
   nodemailer: 6.4.14
   pg: 8.3.3_pg@8.3.3
   pug: 3.0.0
-  sanitize-html: 1.27.4
   serialize-error: 7.0.1
   string-to-stream: 3.0.1
   swagger-routes-express: 3.2.1
@@ -3331,10 +3330,6 @@ packages:
       node: '>=4'
     resolution:
       integrity: sha1-vjX1Qlvh9/bHRxhPmKeIy5lHfuA=
-  /parse-srcset/1.0.2:
-    dev: false
-    resolution:
-      integrity: sha1-8r0iH2zJcKk42IVWq8WJyqqiveE=
   /parse5-htmlparser2-tree-adapter/5.1.1:
     dependencies:
       parse5: 5.1.1
@@ -3524,16 +3519,6 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-AerA/jta9xoqbAL+q7jB/vfgDqs=
-  /postcss/7.0.32:
-    dependencies:
-      chalk: 2.4.2
-      source-map: 0.6.1
-      supports-color: 6.1.0
-    dev: false
-    engines:
-      node: '>=6.0.0'
-    resolution:
-      integrity: sha512-03eXong5NLnNCD05xscnGKGDZ98CyzoqPSMjOe6SuoQY7Z2hIj0Ld1g/O/UQRuOle2aRtiIRDg9tDcTGAkLfKw==
   /postgres-array/2.0.0:
     dev: false
     engines:
@@ -4096,15 +4081,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
-  /sanitize-html/1.27.4:
-    dependencies:
-      htmlparser2: 4.1.0
-      lodash: 4.17.19
-      parse-srcset: 1.0.2
-      postcss: 7.0.32
-    dev: false
-    resolution:
-      integrity: sha512-VvY1hxVvMXzSos/LzqeBl9/KYu3mkEOtl5NMwz6jER318dSHDCig0AOjZOtnoCwAC3HMs9LhfWkPCmQGttb4ng==
   /sax/1.2.1:
     dev: false
     resolution:
@@ -4469,14 +4445,6 @@ packages:
       node: '>=4'
     resolution:
       integrity: sha512-QjVjwdXIt408MIiAqCX4oUKsgU2EqAGzs2Ppkm4aQYbjm+ZEWEcW4SfFNTr4uMNZma0ey4f5lgLrkB0aX0QMow==
-  /supports-color/6.1.0:
-    dependencies:
-      has-flag: 3.0.0
-    dev: false
-    engines:
-      node: '>=6'
-    resolution:
-      integrity: sha512-qe1jfm1Mg7Nq/NSh6XE24gPXROEVsWHxC1LIx//XNlD9iw7YZQGjZNjYN7xGaEG6iKdA8EtNFW6R0gjnVXp+wQ==
   /supports-color/7.1.0:
     dependencies:
       has-flag: 4.0.0
@@ -5249,7 +5217,6 @@ specifiers:
   nodemon: ^2.0.4
   pg: ^8.3.3
   pug: ^3.0.0
-  sanitize-html: ^1.27.4
   serialize-error: ^7.0.1
   string-to-stream: ^3.0.1
   swagger-routes-express: ^3.1.2

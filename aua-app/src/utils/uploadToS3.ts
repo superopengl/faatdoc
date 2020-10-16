@@ -1,4 +1,4 @@
-import { assert } from '.';
+import { assert } from './assert';
 import * as aws from 'aws-sdk';
 import { awsConfig } from './awsConfig';
 
@@ -16,7 +16,7 @@ function getDefaultConfig(id, name) {
   return {
     Bucket: bucketName,
     Key: key,
-  }
+  };
 }
 
 export async function uploadToS3(id, name, data): Promise<string> {

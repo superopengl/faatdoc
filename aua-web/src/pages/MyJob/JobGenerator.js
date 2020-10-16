@@ -1,16 +1,14 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import { Button, Form, Radio, Space, Steps, Typography } from 'antd';
-import { DoubleRightOutlined } from '@ant-design/icons';
+import { Radio, Space, Typography } from 'antd';
 import { PortfolioAvatar } from 'components/PortfolioAvatar';
 import { Spin } from 'antd';
 import { listJobTemplate } from 'services/jobTemplateService';
 import { listPortfolio } from 'services/portfolioService';
 import StepWizard from 'react-step-wizard';
-import { GlobalContext } from 'contexts/GlobalContext';
 
-const { Title, Text, Paragraph } = Typography;
+const { Title, Text } = Typography;
 
 const Container = styled.div`
 .ant-radio-button-wrapper:not(:first-child)::before {
@@ -38,7 +36,7 @@ const StyledTitleRow = styled.div`
 `
 
 const JobGenerator = props => {
-  const [currentStep, setCurrentStep] = React.useState(0);
+  const [] = React.useState(0);
   const [loading, setLoading] = React.useState(true);
   const [jobTemplateList, setJobTemplateList] = React.useState([]);
   const [portfolioList, setPortfolioList] = React.useState([]);

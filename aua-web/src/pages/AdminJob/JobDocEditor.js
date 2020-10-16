@@ -3,21 +3,15 @@ import PropTypes from 'prop-types';
 import { Upload, Typography, Button, Space, Modal, Tooltip, Tag } from 'antd';
 import * as _ from 'lodash';
 import styled from 'styled-components';
-import { getFile, searchFile } from 'services/fileService';
 import { FileIcon } from '../../components/FileIcon';
-import { saveAs } from 'file-saver';
 import FileLink from '../../components/FileLink';
 import {
   QuestionCircleOutlined, DeleteOutlined, FileAddOutlined, UploadOutlined,
   HighlightOutlined, PushpinFilled, ExclamationCircleOutlined
 } from '@ant-design/icons';
-import { Badge } from 'antd';
-import { Popover } from 'antd';
 import { TimeAgo } from '../../components/TimeAgo';
 import { Table } from 'antd';
-import { Checkbox } from 'antd';
 import GenDocStepperModal from './GenDocStepperModal';
-import { Switch } from 'antd';
 
 const { Text } = Typography;
 
@@ -48,10 +42,6 @@ const Container = styled.div`
   }
 }`;
 
-const FileIconContainer = styled.div`
-  display: inline-block;
-  position: relative;
-`;
 
 const StyledSpace = styled(Space)`
   &:hover {
@@ -60,42 +50,6 @@ const StyledSpace = styled(Space)`
 `;
 
 
-const FileIconWithOverlay = props => {
-  const { id, name, showsLastReadAt, showsSignedAt } = props
-
-  const [file, setFile] = React.useState();
-
-  const loadEntity = async () => {
-    if (showsLastReadAt || showsSignedAt) {
-      const file = await getFile(id);
-      setFile(file);
-    }
-  }
-
-  React.useEffect(() => {
-    loadEntity();
-  }, []);
-
-  if (!file) {
-    return <FileIcon name={name} />
-  }
-
-  const { lastReadAt, signedAt } = file;
-
-  return <Popover content={
-    <Space direction="vertical">
-      <TimeAgo value={lastReadAt} surfix="Last read:" direction="horizontal" defaultContent="Unread" />
-      <TimeAgo value={signedAt} surfix="Signed at:" direction="horizontal" defaultContent="Unsigned" />
-    </Space>
-  } trigger="click">
-    <FileIconContainer>
-      <FileIcon name={name} />
-      {!lastReadAt ? <Badge color="blue" style={{ position: 'absolute', top: -8, left: -8 }} /> :
-        !signedAt ? <Badge color="red" style={{ position: 'absolute', top: -8, left: -8 }} /> :
-          null}
-    </FileIconContainer>
-  </Popover>
-}
 
 export const JobDocEditor = (props) => {
   const { value, onChange } = props;
@@ -130,15 +84,8 @@ export const JobDocEditor = (props) => {
     }
   };
 
-  const handlePreview = file => {
-    const fileName = file.name || file.response.fileName;
-    const url = file.url || file.response.location;
-    saveAs(url, fileName);
-  }
 
-  const { size, disabled } = props;
 
-  const maxSize = size || 20;
 
   const updateDocList = (updatedDocList) => {
     setDocList(updatedDocList);
@@ -163,20 +110,6 @@ export const JobDocEditor = (props) => {
     });
   }
 
-  const handleReqireSign = (doc, requiresSign) => {
-    if (requiresSign && !doc.fileId) {
-      Modal.error({
-        title: 'Cannot require sign',
-        content: 'The document is not generated yet.',
-        maskClosable: true,
-      });
-      return false;
-    }
-    if (!doc.signedAt) {
-      doc.requiresSign = requiresSign;
-      updateDocList([...docList]);
-    }
-  }
 
   const handleGenDocDone = (generatedDoc) => {
     if (docTemplateId) {
@@ -297,7 +230,7 @@ export const JobDocEditor = (props) => {
         dataSource={docList}
         pagination={false}
         loading={loading}
-        rowKey={record => rowKey++}
+        rowKey={() => rowKey++}
       />
       <GenDocStepperModal
         visible={genDocModalVisible}

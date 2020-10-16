@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { varNameToLabelName } from 'util/varNameToLabelName';
 import FileLink from 'components/FileLink';
 import { BsFillInfoCircleFill } from 'react-icons/bs';
-import { LeftOutlined, RightOutlined, StarTwoTone } from '@ant-design/icons';
+import { LeftOutlined } from '@ant-design/icons';
 
 const { Title, Text } = Typography;
 
@@ -32,15 +32,12 @@ const JobReviewItem = props => {
 const PartDivider = props => <Divider><Text type="secondary">{props.text}</Text></Divider>
 
 const FinalReviewStep = props => {
-  const { job, onFinish, onBack, isActive, showsFooter, showsSignDoc } = props;
+  const { job, onFinish, onBack, isActive, showsFooter } = props;
 
   const handleSave = async () => {
     onFinish();
   };
 
-  const handleBack = () => {
-    onBack();
-  }
 
   if (isActive === false) {
     return null;

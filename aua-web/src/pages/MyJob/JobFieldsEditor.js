@@ -1,4 +1,4 @@
-import { Button, Form, Input, Radio, Typography, Divider, Space } from 'antd';
+import { Form, Input, Radio, Typography } from 'antd';
 import { DateInput } from 'components/DateInput';
 import { RangePickerInput } from 'components/RangePickerInput';
 import PropTypes from 'prop-types';
@@ -11,7 +11,7 @@ import StepButtonSet from './StepBottonSet';
 const { Text } = Typography;
 
 const JobFieldsEditor = (props) => {
-  const { job, onFinish, disabled, onBack, onSkip, isActive } = props;
+  const { job, onFinish, disabled, onBack, isActive } = props;
 
   const handleSubmit = async (values) => {
     const changedJob = merge({}, job, values);

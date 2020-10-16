@@ -1,16 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Typography, Modal, Badge, List, Space, Spin } from 'antd';
-import { PortfolioAvatar } from 'components/PortfolioAvatar';
+import { Typography, List, Space, Spin } from 'antd';
 import { TimeAgo } from 'components/TimeAgo';
-import { getMessage, countUnreadMessage } from 'services/messageService';
+import { countUnreadMessage } from 'services/messageService';
 import { GlobalContext } from 'contexts/GlobalContext';
-import { RiExternalLinkLine } from 'react-icons/ri';
 import InfiniteScroll from 'react-infinite-scroller';
 import { withRouter } from 'react-router-dom';
 
-const { Paragraph, Link } = Typography;
+const { Paragraph } = Typography;
 
 const StyledListItem = styled.div`
 display: flex;
@@ -39,7 +37,7 @@ cursor: pointer;
 
 const MessageList = (props) => {
 
-  const { onItemRead, onFetchNextPage, size, max } = props;
+  const { onFetchNextPage, size, max } = props;
 
   const [list, setList] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
@@ -128,7 +126,7 @@ const MessageList = (props) => {
         size="small"
         // style={{ marginTop: '1rem' }}
         renderItem={item => (<StyledListItem
-          onClick={e => handleItemClick(item)}
+          onClick={() => handleItemClick(item)}
         >
           {/* {!item.readAt && <Badge color="geekblue" style={{visibility: item.readAt ?  'hidden' : 'visible'}} />} */}
           <div style={{ width: 'calc(100% - 120px)' }}>

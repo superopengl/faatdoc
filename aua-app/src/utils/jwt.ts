@@ -1,6 +1,5 @@
 
 import * as jwt from 'jsonwebtoken';
-import { User } from '../entity/User';
 import { getUtcNow } from './getUtcNow';
 import * as moment from 'moment';
 import { UserRole } from 'aws-sdk/clients/workmail';

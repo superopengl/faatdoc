@@ -1,14 +1,7 @@
-import { Button, Form, Input, Radio, Typography, Divider, Space } from 'antd';
-import { DateInput } from 'components/DateInput';
-import { RangePickerInput } from 'components/RangePickerInput';
-import PropTypes from 'prop-types';
+import { Button, Space } from 'antd';
 import React from 'react';
-import { withRouter } from 'react-router-dom';
-import { varNameToLabelName } from 'util/varNameToLabelName';
-import { merge } from 'lodash';
-import { LeftOutlined, RightOutlined, StarTwoTone } from '@ant-design/icons';
+import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 
-const { Text } = Typography;
 
 const StepButtonSet = (props) => {
   const {onBack, onNext, showsBack, loading} = props;

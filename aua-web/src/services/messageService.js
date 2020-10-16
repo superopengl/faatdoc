@@ -1,4 +1,4 @@
-import { httpGet, httpDelete, httpPost } from './http';
+import { httpGet, httpPost } from './http';
 
 export async function getMessage(id) {
   return httpGet(`message/${id}`);

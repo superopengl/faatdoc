@@ -2,22 +2,14 @@ import { Button, Layout, Card, Space, Typography, Row, Col, Spin } from 'antd';
 import HomeHeader from 'components/HomeHeader';
 import React from 'react';
 import { withRouter, Link } from 'react-router-dom';
-import { listJob, searchJob } from 'services/jobService';
-import { listPortfolio } from 'services/portfolioService';
-import { SyncOutlined, PlusOutlined } from '@ant-design/icons';
+import { SyncOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
-import { listMessages } from 'services/messageService';
-import MessageList from 'components/MessageList';
 import { GlobalContext } from 'contexts/GlobalContext';
-import { Divider } from 'antd';
-import MyJobList from 'pages/MyJob/MyJobList';
-import { Alert } from 'antd';
 import { getStats } from 'services/statsService';
-import { sum } from 'lodash';
 import { MdOpenInNew } from 'react-icons/md';
 import { DonutChart } from "bizcharts";
 
-const { Title, Paragraph, Text } = Typography;
+const { Text } = Typography;
 
 
 const ContainerStyled = styled.div`
@@ -55,9 +47,6 @@ const span = {
 const StatCard = (props) => {
   const { title, value, loading, color } = props;
 
-  const sumAll = (data) => {
-    return sum(Object.values(data).map(x => +x));
-  }
 
   const data = Object.entries(value || {}).map(([k, v]) => ({type: k, value: v}));
 
@@ -95,12 +84,11 @@ const StatCard = (props) => {
   </Card>
 }
 
-const AdminStatsPage = (props) => {
+const AdminStatsPage = () => {
 
   const [loading, setLoading] = React.useState(true);
   const [stats, setStats] = React.useState();
   const context = React.useContext(GlobalContext);
-  const { notifyCount } = context;
 
   const loadEntity = async () => {
     setLoading(true);

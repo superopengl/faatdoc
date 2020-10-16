@@ -9,7 +9,7 @@ const { Paragraph, Title } = Typography;
 
 
 const GenDocFieldStep = props => {
-  const { doc, variableDic, onFinish, onBack, onSkip, isActive } = props;
+  const { doc, variableDic, onFinish, onBack, isActive } = props;
   const { variables: docVariables, docTemplateName, docTemplateDescription } = doc;
 
   const [initialValues, setInitialValues] = React.useState({});

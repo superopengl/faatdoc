@@ -4,7 +4,7 @@ import JobGenerator from './JobGenerator';
 import StepWizard from 'react-step-wizard';
 import JobFieldsEditor from './JobFieldsEditor';
 import GenDocFieldStep from './GenDocFieldStep';
-import { Collapse, Spin, Progress, Space, Typography } from 'antd';
+import { Spin, Progress, Space, Typography } from 'antd';
 import GenDocLinkStep from './GenDocLinkStep';
 import UploadDocStep from './UploadDocStep';
 import FinalReviewStep from './FinalReviewStep';

@@ -1,4 +1,4 @@
-import { httpGet, httpPost, request } from './http';
+import { httpGet } from './http';
 
 export async function getStats() {
   return httpGet(`stats`);

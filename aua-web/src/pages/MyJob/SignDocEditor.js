@@ -1,4 +1,3 @@
-import { Alert } from 'antd';
 import { Button, List, Space, Typography, Form, Checkbox, Modal } from 'antd';
 import { FileIcon } from 'components/FileIcon';
 import FileLink from 'components/FileLink';
@@ -6,7 +5,7 @@ import { TimeAgo } from 'components/TimeAgo';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { openFile, searchFile } from 'services/fileService';
-import { getJob, signJobDoc } from 'services/jobService';
+import { signJobDoc } from 'services/jobService';
 import styled from 'styled-components';
 import * as _ from 'lodash';
 
@@ -34,7 +33,7 @@ const SignDocEditor = (props) => {
   const { value, onOk } = props;
 
   const job = value;
-  const [loading, setLoading] = React.useState(true);
+  const [, setLoading] = React.useState(true);
   const [fileToSign, setFileToSign] = React.useState();
   const [files, setFiles] = React.useState([]);
 

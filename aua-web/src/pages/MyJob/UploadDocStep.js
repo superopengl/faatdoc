@@ -1,23 +1,19 @@
-import { Button, Form, Input, Divider, Space, Typography } from 'antd';
-import { DateInput } from 'components/DateInput';
-import { RangePickerInput } from 'components/RangePickerInput';
+import { Form, Divider, Typography } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { varNameToLabelName } from 'util/varNameToLabelName';
-import { merge } from 'lodash';
 import { FileUploader } from 'components/FileUploader';
 import StepButtonSet from './StepBottonSet';
 
-const { Text, Title } = Typography;
+const { Title } = Typography;
 
 const UploadDocStep = (props) => {
-  const { job, onChange, onFinish, onBack, onSkip, isActive } = props;
+  const { job, onFinish, onBack, isActive } = props;
   const [loading, setLoading] = React.useState(false);
 
   const initialValues = { fileIds: job.docs.filter(d => d.isByClient).map(d => d.fileId) };
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async () => {
     onFinish(job.docs);
   }
 

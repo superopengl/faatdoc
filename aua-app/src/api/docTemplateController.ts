@@ -8,14 +8,10 @@ import { getUtcNow } from '../utils/getUtcNow';
 import { DocTemplate } from '../entity/DocTemplate';
 import * as moment from 'moment';
 import * as markdownpdf from 'markdown-pdf';
-import * as stringToStream from 'string-to-stream';
 import { uploadToS3 } from '../utils/uploadToS3';
-import * as MarkdownIt from 'markdown-it';
-import * as markdownItPdf from 'markdown-it-pdf';
 import { File } from '../entity/File';
 import * as md5 from 'md5';
 
-const mdParser = new MarkdownIt().use(markdownItPdf);
 
 function extractVariables(md: string) {
   const pattern = /\{\{[a-zA-Z]+\}\}/ig;

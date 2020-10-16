@@ -1,13 +1,9 @@
 
 import { getRepository } from 'typeorm';
 import { File } from '../entity/File';
-import { assert } from '../utils';
+import { assert } from '../utils/assert';
 import { handlerWrapper } from '../utils/asyncHandler';
-import * as path from 'path';
-import * as fse from 'fs-extra';
-import * as fs from 'fs';
-import { uuidToRelativePath } from '../utils/uuidToRelativePath';
-import { assertRole } from '../utils';
+import { assertRole } from '../utils/assert';
 import { getUtcNow } from '../utils/getUtcNow';
 import { Job } from '../entity/Job';
 import { getS3ObjectStream, uploadToS3 } from '../utils/uploadToS3';
