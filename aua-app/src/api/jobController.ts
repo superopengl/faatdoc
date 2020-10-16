@@ -1,13 +1,13 @@
 
 import * as moment from 'moment';
-import { getConnection, getManager, getRepository, IsNull, In, Not } from 'typeorm';
+import { getManager, getRepository, Not } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { JobTemplate } from '../entity/JobTemplate';
 import { Job } from '../entity/Job';
 import { Message } from '../entity/Message';
 import { User } from '../entity/User';
 import { JobStatus } from '../types/JobStatus';
-import { sendEmail, EmailRequest } from '../services/emailService';
+import { sendEmail } from '../services/emailService';
 import { assert, assertRole } from '../utils/assert';
 import { handlerWrapper } from '../utils/asyncHandler';
 import { generateJobByJobTemplateAndPortfolio } from '../utils/generateJobByJobTemplateAndPortfolio';
@@ -19,7 +19,7 @@ import * as _ from 'lodash';
 
 export const generateJob = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
-  const { jobTemplateId, portfolioId, name } = req.body;
+  const { jobTemplateId, portfolioId } = req.body;
 
   const Job = await generateJobByJobTemplateAndPortfolio(
     jobTemplateId,
@@ -50,50 +50,99 @@ function validateJobStatusChange(oldStatus, newStatus) {
   return nextStatii.includes(newStatus);
 }
 
-async function sendJobStatusChangeEmail(job: Job) {
-  const portfolio = await getRepository(Portfolio).findOne(job.portfolioId);
+async function sendNewJobCreatedEmail(job: Job) {
   const user = await getRepository(User).findOne(job.userId);
-  const { id: jobId, status: jobStatus, docs: jobDocs, name: jobName } = job;
-  const to = user.email;
-  let template = null;
-  const vars = {
-    jobId,
-    jobName,
-    jobStatus
-  };
-  let attachments;
-  let shouldBcc = false;
-
-  switch (jobStatus) {
-    case JobStatus.COMPLETE:
-      template = 'jobComplete';
-      shouldBcc = true;
-      const fileIds = (jobDocs || []).filter(d => d.isFeedback).map(d => d.fileId);
-      attachments = fileIds.length ?
-        await getRepository(File)
-          .createQueryBuilder()
-          .where(`id IN (:...ids)`, { ids: fileIds })
-          .select(['fileName as filename', 'location as path']) :
-        [];
-      break;
-
-    default:
-      break;
-  }
+  const { id: jobId, name: jobName } = job;
 
   await sendEmail({
-    to,
-    template,
-    vars,
-    attachments,
-    shouldBcc
+    to: user.email,
+    template: 'jobCreated',
+    vars: {
+      jobId,
+      jobName,
+    },
+    shouldBcc: true
   });
+}
+
+async function sendRequireSignEmail(job: Job) {
+  const user = await getRepository(User).findOne(job.userId);
+  const { id: jobId, name: jobName } = job;
+
+  await sendEmail({
+    to: user.email,
+    template: 'jobToSign',
+    vars: {
+      jobId,
+      jobName,
+    },
+    shouldBcc: true
+  });
+}
+
+async function sendArchiveEmail(job: Job) {
+  const user = await getRepository(User).findOne(job.userId);
+  const { id: jobId, name: jobName } = job;
+
+  await sendEmail({
+    to: user.email,
+    template: 'jobArchived',
+    vars: {
+      jobId,
+      jobName,
+    },
+    shouldBcc: true
+  });
+}
+
+async function sendJobStatusChangeEmail(job: Job) {
+  const user = await getRepository(User).findOne(job.userId);
+  const { id: jobId, docs: jobDocs, name: jobName } = job;
+  const fileIds = (jobDocs || []).filter(d => d.isFeedback).map(d => d.fileId);
+  const attachments = fileIds.length ?
+    await getRepository(File)
+      .createQueryBuilder()
+      .where(`id IN (:...ids)`, { ids: fileIds })
+      .select(['fileName as filename', 'location as path'])
+      .execute() :
+    undefined;
+
+  await sendEmail({
+    to: user.email,
+    template: 'jobComplete',
+    vars: {
+      jobId,
+      jobName,
+    },
+    attachments,
+    shouldBcc: true
+  });
+}
+
+async function handleJobStatusChange(oldStatus, job) {
+  const { status } = job;
+  if (oldStatus === status) return;
+
+  if (!oldStatus) {
+    // New job
+    await sendNewJobCreatedEmail(job);
+  } else if (status === JobStatus.COMPLETE) {
+    // Job completed
+    await sendJobStatusChangeEmail(job);
+  } else if (status === JobStatus.TO_SIGN) {
+    // Require sign
+    await sendRequireSignEmail(job);
+  } else if (status === JobStatus.ARCHIVE) {
+    // Archived
+    await sendArchiveEmail(job);
+  }
+
 }
 
 export const saveJob = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent', 'client');
 
-  const { user: { id: userId } } = req as any;
+  const { } = req as any;
 
   const { id, name, jobTemplateId, portfolioId, fields, status, docs } = req.body;
   assert(name, 400, 'name is empty');
@@ -102,12 +151,14 @@ export const saveJob = handlerWrapper(async (req, res) => {
   assert(name, 404, 'portfolio is not found');
 
   const repo = getRepository(Job);
+  let oldStatus;
   let job: Job;
   if (id) {
     // Existing job save
     job = await repo.findOne(id);
     assert(job, 404, 'Job is not found');
     validateJobStatusChange(job.status, status);
+    oldStatus = job.status;
   } else {
     // New job
     validateJobStatusChange(null, status);
@@ -125,9 +176,7 @@ export const saveJob = handlerWrapper(async (req, res) => {
   job.status = status;
   job.lastUpdatedAt = getUtcNow();
 
-  if(status === JobStatus.COMPLETE) {
-    await sendJobStatusChangeEmail(job);
-  }
+  await handleJobStatusChange(oldStatus, job);
 
   await repo.save(job);
 
@@ -367,7 +416,7 @@ export const listJobNotifies = handlerWrapper(async (req, res) => {
 export const markJobNotifyRead = handlerWrapper(async (req, res) => {
   assertRole(req, 'client');
   const { id } = req.params;
-  const { user: { role, id: userId } } = req as any;
+  const { user: { id: userId } } = req as any;
 
   // Mark notification read
   await getRepository(Message).update({ jobId: id, clientUserId: userId }, { readAt: getUtcNow() });
