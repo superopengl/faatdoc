@@ -101,9 +101,9 @@ async function sendCompletedEmail(job: Job) {
   const fileIds = (jobDocs || []).filter(d => d.isFeedback).map(d => d.fileId).filter(x => x);
   const attachments = fileIds.length ?
     await getRepository(File)
-      .createQueryBuilder()
-      .where(`id IN (:...ids)`, { ids: fileIds })
-      .select(['fileName as filename', 'location as path'])
+      .createQueryBuilder('x')
+      .where(`x.id IN (:...ids)`, { ids: fileIds })
+      .select(['x.fileName as filename', 'x.location as path'])
       .execute() :
     undefined;
 

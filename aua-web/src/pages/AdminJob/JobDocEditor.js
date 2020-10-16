@@ -258,11 +258,11 @@ export const JobDocEditor = (props) => {
     {
       title: 'Action',
       render: (value, doc) => <Space >
-        <Tooltip title="Require sign">
-          <Button shape="circle" type={doc.requiresSign ? 'secondary' : 'primary'} onClick={() => toggleRequiresSign(doc)} icon={<HighlightOutlined />} disabled={!doc.fileId || doc.signedAt}></Button>
+        <Tooltip title={doc.requiresSign ? 'Revoke sign request' : 'Requires sign'}>
+          <Button shape="circle" type={doc.requiresSign ? 'primary' : 'secondary'} onClick={() => toggleRequiresSign(doc)} icon={<HighlightOutlined />} disabled={!doc.fileId || doc.signedAt}></Button>
         </Tooltip>
-        <Tooltip title="Make this a feedback document">
-          <Button shape="circle" type={doc.isFeedback ? 'secondary' : 'primary'} onClick={() => toggleIsFeedback(doc)} icon={<PushpinFilled />} disabled={!doc.fileId}></Button>
+        <Tooltip title={`${doc.isFeedback ? 'Exclude from' : 'Include into'} feedback documents`}>
+          <Button shape="circle" type={doc.isFeedback ? 'primary' : 'secondary'} onClick={() => toggleIsFeedback(doc)} icon={<PushpinFilled />} disabled={!doc.fileId}></Button>
         </Tooltip>
         <Tooltip title="Delete document">
           <Button shape="circle" onClick={() => handleDeleteDoc(doc)} danger icon={<DeleteOutlined />}></Button>

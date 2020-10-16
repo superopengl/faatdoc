@@ -46,6 +46,9 @@ const FinalReviewStep = props => {
     return null;
   }
 
+  const supportDocs = job.docs?.filter(d => !d.isFeedback) || [];
+  const feedbackDocs = job.docs?.filter(d => d.isFeedback) || [];
+
   return <>
     <Space direction="vertical" style={{ width: '100%' }}>
       <Title level={4}>{job.name}</Title>
@@ -57,9 +60,17 @@ const FinalReviewStep = props => {
           return <JobReviewItem key={i} text={varNameToLabelName(name)} description={description} value={value} />
         })}
       </>}
-      {job.docs?.length > 0 && <>
-        <PartDivider text="Attachments" />
-        {job.docs.map((doc, i) => {
+      {supportDocs.length > 0 && <>
+        <PartDivider text="Support Documents" />
+        {supportDocs.map((doc, i) => {
+          const { docTemplateDescription, fileId, fileName } = doc;
+          return <JobReviewItem key={i} description={docTemplateDescription} value={<FileLink id={fileId} name={fileName} />}
+          />
+        })}
+      </>}
+      {feedbackDocs.length > 0 && <>
+        <PartDivider text="Feedback Documents" />
+        {feedbackDocs.map((doc, i) => {
           const { docTemplateDescription, fileId, fileName } = doc;
           return <JobReviewItem key={i} description={docTemplateDescription} value={<FileLink id={fileId} name={fileName} />}
           />
