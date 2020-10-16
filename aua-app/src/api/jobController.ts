@@ -95,10 +95,10 @@ async function sendArchiveEmail(job: Job) {
   });
 }
 
-async function sendJobStatusChangeEmail(job: Job) {
+async function sendCompletedEmail(job: Job) {
   const user = await getRepository(User).findOne(job.userId);
   const { id: jobId, docs: jobDocs, name: jobName } = job;
-  const fileIds = (jobDocs || []).filter(d => d.isFeedback).map(d => d.fileId);
+  const fileIds = (jobDocs || []).filter(d => d.isFeedback).map(d => d.fileId).filter(x => x);
   const attachments = fileIds.length ?
     await getRepository(File)
       .createQueryBuilder()
@@ -128,7 +128,7 @@ async function handleJobStatusChange(oldStatus, job) {
     await sendNewJobCreatedEmail(job);
   } else if (status === JobStatus.COMPLETE) {
     // Job completed
-    await sendJobStatusChangeEmail(job);
+    await sendCompletedEmail(job);
   } else if (status === JobStatus.TO_SIGN) {
     // Require sign
     await sendRequireSignEmail(job);
@@ -339,18 +339,6 @@ export const signJobDoc = handlerWrapper(async (req, res) => {
   res.json();
 });
 
-export const completeJob = handlerWrapper(async (req, res) => {
-  assertRole(req, 'admin', 'agent');
-  const { id } = req.params;
-  const repo = getRepository(Job);
-  const job = await repo.findOne(id);
-  assert(job, 404);
-  assert(['todo', 'to_sign', 'signed'].includes(job.status), 400, 'Status invalid');
-
-  await repo.update(id, { status: JobStatus.COMPLETE });
-
-  res.json();
-});
 
 async function sendJobMessage(Job, senderId, content) {
   const user = await getRepository(User).findOne(Job.userId);

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Upload, Typography, Button, Space, Modal, Spin } from 'antd';
+import { Upload, Typography, Button, Space, Modal, Tooltip, Tag } from 'antd';
 import * as _ from 'lodash';
 import styled from 'styled-components';
 import { getFile, searchFile } from 'services/fileService';
@@ -8,7 +8,8 @@ import { FileIcon } from '../../components/FileIcon';
 import { saveAs } from 'file-saver';
 import FileLink from '../../components/FileLink';
 import {
-  QuestionCircleOutlined, DeleteOutlined, FileAddOutlined, UploadOutlined
+  QuestionCircleOutlined, DeleteOutlined, FileAddOutlined, UploadOutlined,
+  HighlightOutlined, PushpinFilled, ExclamationCircleOutlined
 } from '@ant-design/icons';
 import { Badge } from 'antd';
 import { Popover } from 'antd';
@@ -50,6 +51,12 @@ const Container = styled.div`
 const FileIconContainer = styled.div`
   display: inline-block;
   position: relative;
+`;
+
+const StyledSpace = styled(Space)`
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 
@@ -157,19 +164,22 @@ export const JobDocEditor = (props) => {
   }
 
   const handleReqireSign = (doc, requiresSign) => {
+    if (requiresSign && !doc.fileId) {
+      Modal.error({
+        title: 'Cannot require sign',
+        content: 'The document is not generated yet.',
+        maskClosable: true,
+      });
+      return false;
+    }
     if (!doc.signedAt) {
       doc.requiresSign = requiresSign;
       updateDocList([...docList]);
     }
   }
 
-  const handleFeedbackDoc = (doc, isFeedback) => {
-    doc.isFeedback = isFeedback;
-    updateDocList([...docList]);
-  }
-
   const handleGenDocDone = (generatedDoc) => {
-    if(docTemplateId) {
+    if (docTemplateId) {
       updateDocList(docList.map(d => d.docTemplateId === docTemplateId ? generatedDoc : d));
     } else {
       updateDocList([...docList, generatedDoc])
@@ -178,7 +188,7 @@ export const JobDocEditor = (props) => {
   }
 
   const showGenDocModalSpecific = (docTemplateId) => {
-    if(!docTemplateId) throw new Error('docTemplateId is not specified');
+    if (!docTemplateId) throw new Error('docTemplateId is not specified');
     setDocTemplateId(docTemplateId);
     setGenDocModalVisible(true);
   }
@@ -188,35 +198,53 @@ export const JobDocEditor = (props) => {
     setGenDocModalVisible(true);
   }
 
+  const toggleRequiresSign = (doc) => {
+    doc.requiresSign = !doc.requiresSign;
+    updateDocList([...docList]);
+  }
+
+  const toggleIsFeedback = (doc) => {
+    doc.isFeedback = !doc.isFeedback;
+    updateDocList([...docList]);
+  }
+
   const columns = [
     {
       title: 'Document',
       dataIndex: 'fileId',
-      render: (value, doc) => value ? <FileLink id={value} name={doc.fileName} /> : 
-      <Space style={{ width: '100%', alignItems: 'center' }}>
-        <FileIcon name={doc.fileName} />
-        {doc.fileName}
-      </Space>
+      render: (value, doc) => value ? <FileLink id={value} name={doc.fileName} /> :
+        <Tooltip title="Generate from the doc template">
+          <StyledSpace style={{ width: '100%', alignItems: 'center' }} onClick={() => showGenDocModalSpecific(doc.docTemplateId)}>
+            <FileIcon name={doc.fileName} />
+            {doc.fileName}
+            <Tag icon={<ExclamationCircleOutlined />} color="warning">Pending doc template. Click to generate!</Tag>
+          </StyledSpace>
+        </Tooltip>
     },
-    {
-      title: 'Doc Template',
-      render: (value, doc) => doc.docTemplateId ? doc.fileName?.replace(/\.pdf$/, '') : null
-      //   render: (value, doc) => {
-      //   const { docTemplateId, fileName } = doc;
-      //   if (!docTemplateId) return null;
-      //   return <Button type="link" href={`/doc_template/${docTemplateId}`}>{fileName.replace(/\.pdf$/, '')}</Button>
-      // }
-    },
-    {
-      title: 'Require Sign?',
-      dataIndex: 'requiresSign',
-      render: (value, doc) => doc.signedAt ? null : <Switch defaultChecked={value} onChange={checked => handleReqireSign(doc, checked)} />
-    },
-    {
-      title: 'Feedback Doc?',
-      dataIndex: 'isFeedback',
-      render: (value, doc) => <Switch defaultChecked={value} onChange={checked => handleFeedbackDoc(doc, checked)} />
-    },
+    // {
+    //   title: 'Doc Template',
+    //   render: (value, doc) => doc.docTemplateId ? <Space>
+    //     {doc.fileName?.replace(/\.pdf$/, '')}
+    //     {!doc.fileId && <Tooltip title="Generate from the doc template">
+    //       <Button shape="circle" onClick={() => showGenDocModalSpecific(doc.docTemplateId)} icon={<FileAddOutlined />}></Button>
+    //     </Tooltip>}
+    //   </Space> : null
+    //   //   render: (value, doc) => {
+    //   //   const { docTemplateId, fileName } = doc;
+    //   //   if (!docTemplateId) return null;
+    //   //   return <Button type="link" href={`/doc_template/${docTemplateId}`}>{fileName.replace(/\.pdf$/, '')}</Button>
+    //   // }
+    // },
+    // {
+    //   title: 'Require Sign?',
+    //   dataIndex: 'requiresSign',
+    //   render: (value, doc) => doc.signedAt ? null : <Switch defaultChecked={value} onChange={checked => handleReqireSign(doc, checked)} />
+    // },
+    // {
+    //   title: 'Feedback Doc?',
+    //   dataIndex: 'isFeedback',
+    //   render: (value, doc) => <Switch defaultChecked={value} onChange={checked => handleFeedbackDoc(doc, checked)} />
+    // },
     {
       title: 'Last Read At',
       dataIndex: 'lastReadAt',
@@ -228,12 +256,20 @@ export const JobDocEditor = (props) => {
       render: (value) => value ? <TimeAgo value={value} /> : null
     },
     {
-      title: '',
-      render: (value, doc) => <>
-      <Button type="link" onClick={() => handleDeleteDoc(doc)} danger icon={<DeleteOutlined/>}></Button>
-      {!doc.fileId && <Button type="link" onClick={() => showGenDocModalSpecific(doc.docTemplateId)} icon={<FileAddOutlined/>}></Button>}
-      </>
-    }
+      title: 'Action',
+      render: (value, doc) => <Space >
+        <Tooltip title="Require sign">
+          <Button shape="circle" type={doc.requiresSign ? 'secondary' : 'primary'} onClick={() => toggleRequiresSign(doc)} icon={<HighlightOutlined />} disabled={!doc.fileId || doc.signedAt}></Button>
+        </Tooltip>
+        <Tooltip title="Make this a feedback document">
+          <Button shape="circle" type={doc.isFeedback ? 'secondary' : 'primary'} onClick={() => toggleIsFeedback(doc)} icon={<PushpinFilled />} disabled={!doc.fileId}></Button>
+        </Tooltip>
+        <Tooltip title="Delete document">
+          <Button shape="circle" onClick={() => handleDeleteDoc(doc)} danger icon={<DeleteOutlined />}></Button>
+        </Tooltip>
+
+      </Space>
+    },
   ];
 
   let rowKey = 0;
@@ -263,11 +299,11 @@ export const JobDocEditor = (props) => {
         loading={loading}
         rowKey={record => rowKey++}
       />
-      <GenDocStepperModal 
-        visible={genDocModalVisible} 
-        onChange={handleGenDocDone} 
+      <GenDocStepperModal
+        visible={genDocModalVisible}
+        onChange={handleGenDocDone}
         docTemplateId={docTemplateId}
-        onCancel={() => setGenDocModalVisible(false)} 
+        onCancel={() => setGenDocModalVisible(false)}
       />
     </Container>
   );

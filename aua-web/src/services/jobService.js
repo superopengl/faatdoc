@@ -45,7 +45,3 @@ export async function notifyJob(jobId, msg) {
   if (!content) return;
   return httpPost(`job/${jobId}/notify`, { content });
 }
-
-export async function completeJob(jobId) {
-  return httpPost(`job/${jobId}/complete`);
-}

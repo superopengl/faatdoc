@@ -490,20 +490,6 @@ paths:
       responses:
         200:
           description: OK
-  /job/{id}/complete:
-    post:
-      operationId: completeJob
-      # security:
-      #   - authClient: []
-      parameters:
-        - name: id
-          in: path
-          type: string
-          format: uuid
-          required: true
-      responses:
-        200:
-          description: OK
   /recurring:
     get:
       operationId: listRecurring
