@@ -71,7 +71,6 @@ export const JobDocEditor = (props) => {
         return;
       }
       case 'done': {
-
         const fileId = _.get(file, 'response.id');
         const fileName = _.get(file, 'response.fileName');
         if (fileId) {
@@ -84,14 +83,10 @@ export const JobDocEditor = (props) => {
     }
   };
 
-
-
-
   const updateDocList = (updatedDocList) => {
     setDocList(updatedDocList);
     onChange(updatedDocList);
   }
-
 
   const handleDeleteDoc = doc => {
     Modal.confirm({
@@ -109,7 +104,6 @@ export const JobDocEditor = (props) => {
       }
     });
   }
-
 
   const handleGenDocDone = (generatedDoc) => {
     if (docTemplateId) {

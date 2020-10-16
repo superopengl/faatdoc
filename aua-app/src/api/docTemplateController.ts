@@ -7,11 +7,10 @@ import { handlerWrapper } from '../utils/asyncHandler';
 import { getUtcNow } from '../utils/getUtcNow';
 import { DocTemplate } from '../entity/DocTemplate';
 import * as moment from 'moment';
-import * as markdownpdf from 'markdown-pdf';
 import { uploadToS3 } from '../utils/uploadToS3';
 import { File } from '../entity/File';
 import * as md5 from 'md5';
-
+import { mdToPdf } from 'md-to-pdf';
 
 function extractVariables(md: string) {
   const pattern = /\{\{[a-zA-Z]+\}\}/ig;
@@ -95,15 +94,8 @@ export const applyDocTemplate = handlerWrapper(async (req, res) => {
 });
 
 async function mdToPdfBuffer(md) {
-  return new Promise((resolve, reject) => {
-    markdownpdf().from.string(md).to.buffer(null, function (err, PdfBuffer) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(PdfBuffer);
-      }
-    });
-  });
+  const pdf = await mdToPdf({content: md});
+  return pdf.content;
 }
 
 export const createPdfFromDocTemplate = handlerWrapper(async (req, res) => {
