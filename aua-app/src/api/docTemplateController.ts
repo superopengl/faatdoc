@@ -116,7 +116,7 @@ export const createPdfFromDocTemplate = handlerWrapper(async (req, res) => {
 
   const { name, md, variables } = docTemplate;
 
-  const filledMarkdown = variables.reduce((pre, cur) => {
+  const bakedMd = variables.reduce((pre, cur) => {
     const pattern = new RegExp(`{{${cur}}}`, 'g');
     const replacement = cur === `now` ? moment(getUtcNow()).format('D MMM YYYY') : inboundVariables[cur];
 
@@ -128,7 +128,7 @@ export const createPdfFromDocTemplate = handlerWrapper(async (req, res) => {
   const pdfFileId = uuidv4();
   const pdfFileName = `${name}.pdf`;
 
-  const data = await mdToPdfBuffer(filledMarkdown);
+  const data = await mdToPdfBuffer(bakedMd);
 
   const location = await uploadToS3(pdfFileId, pdfFileName, data);
 
