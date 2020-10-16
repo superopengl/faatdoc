@@ -151,7 +151,7 @@ const ProceedJobPage = (props) => {
   const handleStatusChange = async option => {
     const value = option?.value;
     if (!value) return;
-    if (value === 'to_sign' && !job.docs.filter(d => d.requiresSign).length) {
+    if (value === 'to_sign' && !job.docs.filter(d => !d.signedAt && d.requiresSign).length) {
       Modal.error({
         title: 'Cannot change status',
         content: <>Cannot change status to <Text strong>To Sign</Text> because there is no documents to sign.</>,
