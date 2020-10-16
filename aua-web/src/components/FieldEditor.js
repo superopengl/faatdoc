@@ -18,7 +18,7 @@ const EMPTY_ROW = {
 
 const FieldEditor = (props) => {
 
-  const { value, onChange, loading, onCancel } = props;
+  const { value, onChange, loading, onCancel, hasOkCancelButtons } = props;
 
   const [fields, setFields] = React.useState(value);
 
@@ -172,10 +172,10 @@ const FieldEditor = (props) => {
       />
       <Space style={{ width: '100%', justifyContent: 'space-between' }}>
         <Button icon={<PlusOutlined />} onClick={addNewRow} disabled={!canAddNewField}>Add New Field</Button>
-        <Space>
+        {hasOkCancelButtons && <Space>
           <Button key="cancel" onClick={() => onCancel()}>Cancel</Button>
           <Button key="save" type="primary" onClick={() => handleSave()}>Save</Button>
-        </Space>
+        </Space>}
       </Space>
 
     </Space>
@@ -185,13 +185,13 @@ const FieldEditor = (props) => {
 FieldEditor.propTypes = {
   value: PropTypes.array.isRequired,
   loading: PropTypes.bool,
-  footer: PropTypes.object,
+  hasOkCancelButtons: PropTypes.bool,
 };
 
 FieldEditor.defaultProps = {
   value: [],
   loading: false,
-  footer: null
+  hasOkCancelButtons: true
 };
 
 export default withRouter(FieldEditor);
