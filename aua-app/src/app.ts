@@ -66,8 +66,8 @@ export function createAppInstance() {
   //     return req.cookies['jwt'] || null;
   //   }
   // }));
-  app.use(bodyParser.json({ limit: '4mb' }));
-  app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
+  app.use(bodyParser.json({ limit: '8mb' }));
+  app.use(bodyParser.urlencoded({ extended: true, limit: '20mb' }));
   // app.use(expressSession({
   //   name: 'session',
   //   secret: 'aua',
