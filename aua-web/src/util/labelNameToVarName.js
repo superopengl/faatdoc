@@ -1,10 +1,3 @@
-export function labelNameToVarName(pascalCase) {
-  for (const b of ['TFN', 'ABN', 'ACN']) {
-    if (b === pascalCase) {
-      return b.toLowerCase();
-    }
-  }
-  const words = pascalCase.split(/ +/);
-  const text = words.join('');
-  return text.charAt(0).toLowerCase() + text.substring(1);
+export function labelNameToVarName(spaceSnake) {
+  return spaceSnake ? spaceSnake.trim().replace(/ +/g, '_') : spaceSnake;
 }

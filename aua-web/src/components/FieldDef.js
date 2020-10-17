@@ -8,7 +8,7 @@ const isValidTfn = (text) => tfn(text).valid;
 
 export const BuiltInFieldDef = [
   {
-    name: 'givenName',
+    name: 'Given_Name',
     inputType: 'text',
     rules: [{ required: true, whitespace: true, max: 100, message: ' ' }],
     inputProps: {
@@ -20,7 +20,7 @@ export const BuiltInFieldDef = [
     portfolioType: ['individual'],
   },
   {
-    name: 'surname',
+    name: 'Surname',
     inputType: 'text',
     rules: [{ required: true, whitespace: true, max: 100, message: ' ' }],
     inputProps: {
@@ -32,7 +32,7 @@ export const BuiltInFieldDef = [
     portfolioType: ['individual'],
   },
   {
-    name: 'company',
+    name: 'Company',
     inputType: 'text',
     rules: [{ required: true, whitespace: true, max: 100, message: ' ' }],
     inputProps: {
@@ -44,7 +44,7 @@ export const BuiltInFieldDef = [
     portfolioType: ['business'],
   },
   {
-    name: 'phone',
+    name: 'Phone',
     description: `split with ', ' if there are more than one`,
     inputType: 'text',
     rules: [{ required: true, whitespace: true, max: 30, message: ' ' }],
@@ -58,7 +58,7 @@ export const BuiltInFieldDef = [
     portfolioType: ['individual', 'business'],
   },
   {
-    name: 'wechat',
+    name: 'Wechat',
     inputType: 'text',
     rules: [{ required: false, max: 50, message: ' ' }],
     inputProps: {
@@ -69,7 +69,7 @@ export const BuiltInFieldDef = [
     portfolioType: ['individual', 'business'],
   },
   {
-    name: 'address',
+    name: 'Address',
     inputType: 'text',
     rules: [{ required: true, max: 100, message: ' ' }],
     inputProps: {
@@ -80,7 +80,7 @@ export const BuiltInFieldDef = [
     portfolioType: ['individual', 'business'],
   },
   {
-    name: 'dateOfBirth',
+    name: 'Date_Of_Birth',
     inputType: 'date',
     rules: [{
       required: true,
@@ -98,7 +98,7 @@ export const BuiltInFieldDef = [
     portfolioType: ['individual'],
   },
   {
-    name: 'dueDate',
+    name: 'Due_Date',
     inputType: 'date',
     rules: [{
       required: true,
@@ -113,7 +113,7 @@ export const BuiltInFieldDef = [
     portfolioType: [],
   },
   {
-    name: 'gender',
+    name: 'Gender',
     inputType: 'select',
     rules: [{ required: false, message: 'Please choose a gender' }],
     options: [
@@ -133,7 +133,7 @@ export const BuiltInFieldDef = [
     portfolioType: ['individual'],
   },
   {
-    name: 'tfn',
+    name: 'TFN',
     inputType: 'text',
     rules: [{ required: true, validator: (rule, value) => isValidTfn(value) ? Promise.resolve() : Promise.reject('Invalid TFN') }],
     inputProps: {
@@ -144,7 +144,7 @@ export const BuiltInFieldDef = [
     portfolioType: ['individual'],
   },
   {
-    name: 'abn',
+    name: 'ABN',
     inputType: 'text',
     rules: [{ required: true, validator: (rule, value) => isValidABN(value) ? Promise.resolve() : Promise.reject('Invalid ABN') }],
     inputProps: {
@@ -155,7 +155,7 @@ export const BuiltInFieldDef = [
     portfolioType: ['business'],
   },
   {
-    name: 'acn',
+    name: 'ACN',
     inputType: 'text',
     rules: [{ required: true, validator: (rule, value) => isValidACN(value) ? Promise.resolve() : Promise.reject('Invalid ACN') }],
     inputProps: {
@@ -166,7 +166,7 @@ export const BuiltInFieldDef = [
     portfolioType: ['business'],
   },
   {
-    name: 'occupation',
+    name: 'Occupation',
     inputType: 'text',
     rules: [{ required: false, max: 50, message: ' ' }],
     inputProps: {
@@ -177,7 +177,7 @@ export const BuiltInFieldDef = [
     portfolioType: ['individual'],
   },
   {
-    name: 'industry',
+    name: 'Industry',
     inputType: 'text',
     rules: [{ required: false, max: 50, message: ' ' }],
     inputProps: {
@@ -188,7 +188,7 @@ export const BuiltInFieldDef = [
     portfolioType: ['business'],
   },
   {
-    name: 'remark',
+    name: 'Remark',
     inputType: 'paragraph',
     rules: [{ required: false, max: 500, message: ' ' }],
     inputProps: {
@@ -199,13 +199,13 @@ export const BuiltInFieldDef = [
     portfolioType: ['individual', 'business'],
   },
   {
-    name: 'year',
+    name: 'Year',
     inputType: 'year',
     rules: [{ required: true, message: 'Please choose a financial year' }],
     portfolioType: [],
   },
   {
-    name: 'monthRange',
+    name: 'Month_Range',
     inputType: 'monthRange',
     rules: [{ required: true, message: 'Please choose start/end months' }],
     portfolioType: [],
