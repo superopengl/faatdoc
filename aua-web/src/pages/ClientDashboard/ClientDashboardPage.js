@@ -133,7 +133,7 @@ const ClientDashboardPage = (props) => {
               {loading ? <Spin style={{ width: '100%', margin: '2rem auto' }} /> : <>
                 {!hasPortfolio && <>
                   <Title type="secondary" level={4}>My Portfolio</Title>
-                  <Paragraph >Portfolios are predefined information that can be used to automatically fill in your job application. You can save the information like name, phone, address, TFN, and etc. for future usage.</Paragraph>
+                  <Paragraph >Portfolios are predefined information that can be used to automatically fill in your job application. You can save the information like name, phone, address, TFN, and etc. for future use.</Paragraph>
                   <Link to="/portfolio?create=1"><Button size="large" type="primary" ghost block icon={<PlusOutlined />}>New Portfolio</Button></Link>
                   <Divider />
                 </>}
@@ -156,7 +156,7 @@ const ClientDashboardPage = (props) => {
                   <Title type="secondary" level={4}>Todo Jobs</Title>
                   <MyJobList data={todoList} onItemClick={handleGoToJob} />
                 </>}
-                {hasNothing && <Alert message="No news is good news" color="blue"/>}
+                {/* {hasNothing && <Alert message="No news is good news" color="blue"/>} */}
               </>}
             </Space>
           </StyledCol>

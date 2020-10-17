@@ -18,7 +18,7 @@ const EMPTY_ROW = {
 
 const FieldEditor = (props) => {
 
-  const { value, onChange, loading, onCancel, hasOkCancelButtons } = props;
+  const { value, onChange, loading } = props;
 
   const [fields, setFields] = React.useState(value);
 
@@ -61,6 +61,7 @@ const FieldEditor = (props) => {
   const addNewRow = () => {
     fields.push({ ...EMPTY_ROW });
     setFields([...fields]);
+    handleSave();
   }
 
   const moveUp = (index) => {
@@ -69,6 +70,7 @@ const FieldEditor = (props) => {
     fields[index] = fields[index - 1];
     fields[index - 1] = current;
     setFields([...fields]);
+    handleSave();
   }
 
   const moveDown = (index) => {
@@ -77,16 +79,19 @@ const FieldEditor = (props) => {
     fields[index] = fields[index + 1];
     fields[index + 1] = current;
     setFields([...fields]);
+    handleSave();
   }
 
   const deleteRow = (index) => {
     fields.splice(index, 1);
     setFields([...fields]);
+    handleSave();
   }
 
   const changeValue = (index, name, v) => {
     fields[index][name] = v;
     setFields([...fields]);
+    handleSave();
   }
 
   const nameOptions = BuiltInFieldLabelValuePairs;
@@ -172,10 +177,10 @@ const FieldEditor = (props) => {
       />
       <Space style={{ width: '100%', justifyContent: 'space-between' }}>
         <Button icon={<PlusOutlined />} onClick={addNewRow} disabled={!canAddNewField}>Add New Field</Button>
-        {hasOkCancelButtons && <Space>
+        {/* {hasOkCancelButtons && <Space>
           <Button key="cancel" onClick={() => onCancel()}>Cancel</Button>
           <Button key="save" type="primary" onClick={() => handleSave()}>Save</Button>
-        </Space>}
+        </Space>} */}
       </Space>
 
     </Space>
@@ -185,13 +190,11 @@ const FieldEditor = (props) => {
 FieldEditor.propTypes = {
   value: PropTypes.array.isRequired,
   loading: PropTypes.bool,
-  hasOkCancelButtons: PropTypes.bool,
 };
 
 FieldEditor.defaultProps = {
   value: [],
   loading: false,
-  hasOkCancelButtons: true
 };
 
 export default withRouter(FieldEditor);

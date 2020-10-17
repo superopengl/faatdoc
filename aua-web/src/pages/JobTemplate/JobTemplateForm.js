@@ -126,7 +126,7 @@ const JobTemplateForm = (props) => {
           </Select>
         </Form.Item>
         <Form.Item label="Fields" name="fields">
-          <FieldEditor loading={loading} hasOkCancelButtons={false}/>
+          <FieldEditor loading={loading}/>
         </Form.Item>
         <Form.Item>
           <Space style={{ width: '100%', justifyContent: 'flex-end' }}>

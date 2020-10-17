@@ -85,6 +85,7 @@ const ProceedJobPage = (props) => {
 
   const [loading, setLoading] = React.useState(true);
   const [drawerVisible, setDrawerVisible] = React.useState(false);
+  const [editingFields, setEditingFields] = React.useState();
   const [form] = Form.useForm();
 
   const [job, setJob] = React.useState();
@@ -173,14 +174,18 @@ const ProceedJobPage = (props) => {
   }
 
   const handleFieldChange = async value => {
-    job.fields = value;
-    setJob({ ...job });
-    setDrawerVisible(false);
+    setEditingFields(value);
   }
 
   const handleJobDocsChange = (docs) => {
     job.docs = docs;
     setJob({ ...job });
+  }
+
+  const handleSaveFieldChange = () => {
+    job.fields = editingFields;
+    setJob({ ...job });
+    setDrawerVisible(false);
   }
 
   return (<LayoutStyled>
@@ -267,7 +272,11 @@ const ProceedJobPage = (props) => {
       width={900}
       footer={null}
     >
-      <FieldEditor value={job?.fields} onChange={handleFieldChange} onCancel={() => setDrawerVisible(false)} />
+      <FieldEditor value={job?.fields} onChange={handleFieldChange} />
+      <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
+        <Button type="link" onClick={() => setDrawerVisible(false)}>Cancel</Button>
+        <Button type="primary" onClick={() => handleSaveFieldChange()}>Save</Button>
+      </Space>
     </StyledDrawer>
   </LayoutStyled >
 

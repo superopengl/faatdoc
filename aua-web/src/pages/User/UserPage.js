@@ -77,7 +77,7 @@ const UserPage = () => {
       render: (text, record) => {
         return (
           <Space size="small" style={{ width: '100%' }}>
-            <Tooltip placement="bottom" title="Reset password">
+            <Tooltip placement="bottom" title="Set password">
               <Button shape="circle" icon={<SafetyCertificateOutlined />} onClick={e => openSetPasswordModal(e, record)} />
             </Tooltip>
             <Tooltip placement="bottom" title="Impersonate">

@@ -85,7 +85,6 @@ const LogInPage = props => {
               >Continue with Google</Button>
             )}
         />
-
         <Divider>or</Divider>
         <Form layout="vertical" onFinish={handleSubmit} style={{ textAlign: 'left' }}>
           <Form.Item label="Email" name="name"
