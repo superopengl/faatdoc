@@ -53,7 +53,7 @@ class HomeContactArea extends React.Component {
         <InfoCard >
           <HashAnchorPlaceholder id="about" />
           <Title style={{ color: "#ffffff" }}>Contact</Title>
-          <Row style={{ maxWidth: 440, margin: '1rem auto' }} gutter={16}>
+          <Row style={{ maxWidth: 480, margin: '1rem auto' }} gutter={16}>
             <Col {...span}>
               <MailOutlined style={{ marginRight: 8 }} /><a href="mailto:accountant@auao.com.au">accountant@auao.com.au</a>
             </Col>
@@ -61,7 +61,7 @@ class HomeContactArea extends React.Component {
               <MailOutlined style={{ marginRight: 8 }} /><a href="mailto:jzhou@auao.com.au">jzhou@auao.com.au</a>
             </Col>
           </Row>
-          <Row style={{ maxWidth: 440, margin: '1rem auto' }} gutter={16}>
+          <Row style={{ maxWidth: 480, margin: '1rem auto' }} gutter={16}>
             <Col {...span}>
               <PhoneOutlined style={{ marginRight: 8 }} /><a href="tel:+61290615028">+61 2 9061 5028</a>
             </Col>
