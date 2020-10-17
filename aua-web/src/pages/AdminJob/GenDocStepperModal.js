@@ -18,16 +18,19 @@ const GenDocStepperModal = props => {
 
   const loadList = async () => {
     setLoading(true);
-    if (docTemplateId) {
-      const docTemplate = await getDocTemplate(docTemplateId);
-      setDocTemplate(docTemplate);
-      handleChooseDocTemplate(docTemplate);
-    } else {
-      const list = await listDocTemplate();
-      list.sort((a, b) => a.name.localeCompare(b.name));
-      setDocTemplateList(list);
+    try {
+      if (docTemplateId) {
+        const docTemplate = await getDocTemplate(docTemplateId);
+        setDocTemplate(docTemplate);
+        handleChooseDocTemplate(docTemplate);
+      } else {
+        const list = await listDocTemplate();
+        list.sort((a, b) => a.name.localeCompare(b.name));
+        setDocTemplateList(list);
+      }
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }
 
   React.useEffect(() => {
@@ -35,7 +38,6 @@ const GenDocStepperModal = props => {
       loadList();
     }
   }, [visible]);
-
 
   const handleSubmit = async (values) => {
     setLoading(true);
