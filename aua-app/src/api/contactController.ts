@@ -11,7 +11,7 @@ export const saveContact = handlerWrapper(async (req, res) => {
 
   await sendEmail({
     template: 'contact',
-    to: 'accountant@auao.com.au',
+    to: 'info@auao.com.au',
     vars: {
       name,
       company,

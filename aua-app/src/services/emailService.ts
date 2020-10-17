@@ -8,7 +8,7 @@ import * as path from 'path';
 import { logError } from '../utils/logger';
 
 let emailerInstance = null;
-const sender = 'AU Accounting Office <accountant@auao.com.au>';
+const sender = 'AU Accounting Office <info@auao.com.au>';
 
 function getEmailer() {
   if (!emailerInstance) {
@@ -78,7 +78,7 @@ export class EmailRequest {
 //     Destination: {
 //       CcAddresses: [],
 //       ToAddresses: [req.to],
-//       BccAddresses: req.shouldBcc ? ['accountant@auao.com.au'] : []
+//       BccAddresses: req.shouldBcc ? ['info@auao.com.au'] : []
 //     },
 //     Message: {
 //       Body: {
@@ -96,8 +96,8 @@ export class EmailRequest {
 //         Data: template.subject
 //       }
 //     },
-//     Source: 'AU Accounting Office <accountant@auao.com.au>',
-//     ReplyToAddresses: ['AU Accounting Office <accountant@auao.com.au>'],
+//     Source: 'AU Accounting Office <info@auao.com.au>',
+//     ReplyToAddresses: ['AU Accounting Office <info@auao.com.au>'],
 //   };
 
 //   const sesRequest = ses.sendEmail(params).promise();
