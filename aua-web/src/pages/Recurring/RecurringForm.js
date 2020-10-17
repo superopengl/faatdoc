@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import 'react-chat-elements/dist/main.css';
 import { withRouter } from 'react-router-dom';
-import { listJobTemplate } from 'services/jobTemplateService';
+import { listTaskTemplate } from 'services/taskTemplateService';
 import { listPortfolio } from 'services/portfolioService';
 import { getRecurring, saveRecurring } from 'services/recurringService';
 import styled from 'styled-components';
@@ -26,19 +26,19 @@ const RecurringForm = (props) => {
 
   const [loading, setLoading] = React.useState(true);
   const [form] = Form.useForm();
-  const [jobTemplateList, setJobTemplateList] = React.useState([]);
+  const [taskTemplateList, setTaskTemplateList] = React.useState([]);
   const [portfolioList, setPortfolioList] = React.useState([]);
   const [initialValues, setInitialValues] = React.useState();
 
   const loadEntity = async () => {
     setLoading(true);
-    const jobTemplateList = await listJobTemplate();
+    const taskTemplateList = await listTaskTemplate();
     const portfolioList = await listPortfolio();
     if (id) {
       const recurring = await getRecurring(id);
       setInitialValues(recurring);
     }
-    setJobTemplateList(jobTemplateList);
+    setTaskTemplateList(taskTemplateList);
     setPortfolioList(portfolioList);
     setLoading(false);
   }
@@ -60,9 +60,9 @@ const RecurringForm = (props) => {
   return <>
     {!loading && <Form layout="vertical" onFinish={handleSaveRecurring} form={form} initialValues={initialValues}>
       <Space direction="vertical" size="small">
-        <Form.Item label="Job Template" name="jobTemplateId" rules={[{ required: true, message: ' ' }]}>
+        <Form.Item label="Task Template" name="taskTemplateId" rules={[{ required: true, message: ' ' }]}>
           <Select allowClear>
-            {jobTemplateList.map((x, i) => (<Select.Option key={i} value={x.id}>
+            {taskTemplateList.map((x, i) => (<Select.Option key={i} value={x.id}>
               {x.name}
             </Select.Option>))}
           </Select>
@@ -89,10 +89,10 @@ const RecurringForm = (props) => {
         </Form.Item>
         <Form.Item
           label="Due Day (+N days after the recurring executes)" name="dueDay" rules={[{ required: false, message: ' ', type: 'number', min: 1, max: 366 }]}
-          help="When the recurring executes, this value will be used to automatically populate the 'Due Date' field (if defined) on the job template."
+          help="When the recurring executes, this value will be used to automatically populate the 'Due Date' field (if defined) on the task template."
         >
           {/* <Input autoSize={{ minRows: 3, maxRows: 20 }} maxLength={20} placeholder="Type here ..." allowClear disabled={loading} /> */}
-          {/* <Text type="secondary"><small>This will automatically fill the 'Due Date' field if it's defined on the job template when the recurring creates one.</small></Text> */}
+          {/* <Text type="secondary"><small>This will automatically fill the 'Due Date' field if it's defined on the task template when the recurring creates one.</small></Text> */}
           {/* <Select>
             <Select.Option value={null}> </Select.Option>
             {new Array(31).fill(null).map((x, i) => <Select.Option key={i} value={i + 1}>{i + 1}</Select.Option>)}

@@ -115,13 +115,13 @@ const HomeHeaderRaw = props => {
             {isGuest && <Menu.Item key="login"><Link to="/login">Log In</Link></Menu.Item>}
             {(isAdmin || isAgent) && <Menu.Item key="board"><Link to="/board">Board</Link></Menu.Item>}
             {isClient && <Menu.Item key="landing"><Link to="/landing">Dashboard</Link></Menu.Item>}
-            {!isGuest && <Menu.Item key="job"><Link to="/job">Jobs</Link></Menu.Item>}
+            {!isGuest && <Menu.Item key="task"><Link to="/task">Tasks</Link></Menu.Item>}
             {isClient && <Menu.Item key="portfolio"><Link to="/portfolio">Portfolio</Link></Menu.Item>}
             {/* {isAdmin && <Menu.Item key="clients"><Link to="/clients">Users</Link></Menu.Item>} */}
             {/* {isAdmin && <Menu.Item key="admin"><Link to="/admin">Admin</Link></Menu.Item>} */}
             {!isGuest && <Menu.Item key="message"><Link to="/message"><Badge count={notifyCount} showZero={false} offset={[10, 0]}>Messages</Badge></Link></Menu.Item>}
             {isAdmin && <Menu.SubMenu key="settings" title="Settings">
-              <Menu.Item key="job_template"><Link to="/job_template">Job Templates</Link></Menu.Item>
+              <Menu.Item key="task_template"><Link to="/task_template">Task Templates</Link></Menu.Item>
               <Menu.Item key="doc_template"><Link to="/doc_template">Doc Templates</Link></Menu.Item>
               <Menu.Item key="recurring"><Link to="/recurring">Recurring</Link></Menu.Item>
               <Menu.Item key="user"><Link to="/user">Users</Link></Menu.Item>
@@ -160,9 +160,9 @@ const HomeHeaderRaw = props => {
             {/* {isAdmin && <Menu.Item key="admin"><SettingOutlined /> <Link to="/admin">Admin</Link></Menu.Item>} */}
             {(isAdmin || isAgent) && <Menu.Item key="board"><DashboardOutlined /> <Link to="/board">Board</Link></Menu.Item>}
             {isClient && <Menu.Item key="landing"><DashboardOutlined /> <Link to="/landing">Dashboard</Link></Menu.Item>}
-            {!isGuest && <Menu.Item key="job"><SnippetsOutlined /> <Link to="/job">Job</Link></Menu.Item>}
+            {!isGuest && <Menu.Item key="task"><SnippetsOutlined /> <Link to="/task">Task</Link></Menu.Item>}
             {isClient && <Menu.Item key="portfolio"><IdcardOutlined /> <Link to="/portfolio">Portfolio</Link></Menu.Item>}
-            {isAdmin && <Menu.Item key="job_template"><ToolOutlined /> <Link to="/job_template">Job Template</Link></Menu.Item>}
+            {isAdmin && <Menu.Item key="task_template"><ToolOutlined /> <Link to="/task_template">Task Template</Link></Menu.Item>}
             {isAdmin && <Menu.Item key="doc_template"><ReconciliationOutlined /> <Link to="/doc_template">Doc Template</Link></Menu.Item>}
             {isAdmin && <Menu.Item key="recurring"><CalendarOutlined /> <Link to="/recurring">Recurring</Link></Menu.Item>}
             {/* {isAdmin && <Menu.Item key="clients"><SettingOutlined /> <Link to="/clients">Users</Link></Menu.Item>} */}

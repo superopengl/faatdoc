@@ -2,7 +2,7 @@ import { Modal, Space, Card } from 'antd';
 import Text from 'antd/lib/typography/Text';
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { deleteJob } from '../../services/jobService';
+import { deleteTask } from '../../services/taskService';
 import styled from 'styled-components';
 import { Draggable } from 'react-beautiful-dnd';
 import { PortfolioAvatar } from 'components/PortfolioAvatar';
@@ -18,8 +18,8 @@ box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 
 const TaskCard = (props) => {
 
-  const { job, index, onChange } = props;
-  const { id, name, forWhom, email, jobTemplateName } = job;
+  const { task, index, onChange } = props;
+  const { id, name, forWhom, email, taskTemplateName } = task;
 
   const getItemStyle = (isDragging, draggableStyle) => ({
     // background: isDragging ? "#C0C0C0" : "",
@@ -27,8 +27,8 @@ const TaskCard = (props) => {
   });
 
 
-  const handleEditJob = (id) => {
-    props.history.push(`/job/${id}/proceed`);
+  const handleEditTask = (id) => {
+    props.history.push(`/task/${id}/proceed`);
   }
 
   return <Draggable draggableId={id} index={index}>
@@ -38,10 +38,10 @@ const TaskCard = (props) => {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}>
-          <StyledCard hoverable onDoubleClick={() => handleEditJob(id)}>
+          <StyledCard hoverable onDoubleClick={() => handleEditTask(id)}>
             <Space direction="vertical" style={{ width: '100%' }}>
               {name}
-              <Text type="secondary">{jobTemplateName}</Text>
+              <Text type="secondary">{taskTemplateName}</Text>
               <Space style={{ width: '100%', justifyContent: 'space-between' }}>
                 <Space style={{ lineHeight: '0.5rem', padding: 0 }}>
                   <PortfolioAvatar value={forWhom} size={32} />
@@ -53,10 +53,10 @@ const TaskCard = (props) => {
               </Space>
             </Space>
             {/* <div style={{ display: 'flex', position: 'absolute', right: 0, bottom: 0 }}>
-              <Tooltip placement="bottom" title="Proceed job">
-                <Link to={`/job/${id}/proceed`}><Button type="link" icon={<EditOutlined />}></Button></Link>
+              <Tooltip placement="bottom" title="Proceed task">
+                <Link to={`/task/${id}/proceed`}><Button type="link" icon={<EditOutlined />}></Button></Link>
               </Tooltip>
-              <Tooltip placement="bottom" title="Delete job">
+              <Tooltip placement="bottom" title="Delete task">
                 <Button type="link" danger onClick={handleDelete} icon={<DeleteOutlined />}></Button>
               </Tooltip>
             </div> */}
@@ -68,7 +68,7 @@ const TaskCard = (props) => {
 }
 
 TaskCard.propTypes = {
-  job: PropTypes.any.isRequired
+  task: PropTypes.any.isRequired
 };
 
 TaskCard.defaultProps = {};

@@ -9,7 +9,7 @@ import 'react-chat-elements/dist/main.css';
 import { withRouter } from 'react-router-dom';
 import { ChatService } from 'services/ChatService';
 import styled from 'styled-components';
-import { listJobNotifies, notifyJob, markJobNotifyRead } from '../../services/jobService';
+import { listTaskNotifies, notifyTask, markTaskNotifyRead } from '../../services/taskService';
 
 const StyledDrawer = styled(Drawer)`
 
@@ -63,8 +63,8 @@ const SentMessage = (props) => <StyledSentMessageBox {...props} position="right"
 
 const ReceivedMessage = (props) => <StyledReceivedMessageBox {...props} position="left" />
 
-const JobChat = (props) => {
-  const { jobId, visible, onClose, readonly } = props;
+const TaskChat = (props) => {
+  const { taskId, visible, onClose, readonly } = props;
   // const { name, id, fields } = value || {};
 
   const context = React.useContext(GlobalContext);
@@ -75,7 +75,7 @@ const JobChat = (props) => {
   const ws = React.useRef(null);
 
   React.useEffect(() => {
-    ws.current = new ChatService(jobId);
+    ws.current = new ChatService(taskId);
 
     return () => {
       ws.current.close();
@@ -93,7 +93,7 @@ const JobChat = (props) => {
 
   const loadList = async () => {
     setLoading(true);
-    const list = await listJobNotifies(jobId);
+    const list = await listTaskNotifies(taskId);
     setList(list);
     setLoading(false);
   }
@@ -102,9 +102,9 @@ const JobChat = (props) => {
   React.useEffect(() => {
     loadList();
     if (visible && context.user.role === 'client') {
-      markJobNotifyRead(jobId);
+      markTaskNotifyRead(taskId);
     }
-  }, [jobId, visible]);
+  }, [taskId, visible]);
 
   const sendMessage = async (values) => {
     const { content } = values;
@@ -121,7 +121,7 @@ const JobChat = (props) => {
     setList([{ ...newMessage, status: 'waiting' }, ...others]);
     ws.current.send(newMessage);
     setList([{ ...newMessage, status: 'sent' }, ...others]);
-    await notifyJob(jobId, content);
+    await notifyTask(taskId, content);
 
     form.resetFields();
     textareaRef.current.focus();
@@ -140,7 +140,7 @@ const JobChat = (props) => {
   }
 
   return <StyledDrawer
-    title="Job Message"
+    title="Task Message"
     placement="right"
     closable={true}
     visible={visible}
@@ -183,15 +183,15 @@ const JobChat = (props) => {
   </StyledDrawer>
 };
 
-JobChat.propTypes = {
-  jobId: PropTypes.string.isRequired,
+TaskChat.propTypes = {
+  taskId: PropTypes.string.isRequired,
   visible: PropTypes.bool.isRequired,
   readonly: PropTypes.bool.isRequired,
 };
 
-JobChat.defaultProps = {
+TaskChat.defaultProps = {
   visible: false,
   readonly: false
 };
 
-export default withRouter(JobChat);
+export default withRouter(TaskChat);

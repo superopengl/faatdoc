@@ -6,8 +6,8 @@ import StepButtonSet from './StepBottonSet';
 
 const { Title } = Typography;
 
-const JobNameStep = (props) => {
-  const { job, onFinish, isActive } = props;
+const TaskNameStep = (props) => {
+  const { task, onFinish, isActive } = props;
 
   const handleSubmit = async (values) => {
     onFinish(values.name);
@@ -21,27 +21,27 @@ const JobNameStep = (props) => {
     layout="vertical"
     onFinish={handleSubmit}
     style={{ textAlign: 'left' }}
-    initialValues={job}
+    initialValues={task}
   >
     <Form.Item
-      label={<Title level={4}>Job Name</Title>}
+      label={<Title level={4}>Task Name</Title>}
       name="name"
       rules={[{ required: true, message: ' ' }]}
     >
-      <Input placeholder="Job Name" autoFocus />
+      <Input placeholder="Task Name" autoFocus />
     </Form.Item>
     {/* <Button block type="primary" htmlType="submit">Next</Button> */}
     <StepButtonSet showsBack={false} />
   </Form>
 };
 
-JobNameStep.propTypes = {
-  job: PropTypes.any.isRequired,
+TaskNameStep.propTypes = {
+  task: PropTypes.any.isRequired,
   disabled: PropTypes.bool.isRequired,
 };
 
-JobNameStep.defaultProps = {
+TaskNameStep.defaultProps = {
   disabled: false
 };
 
-export default withRouter(JobNameStep);
+export default withRouter(TaskNameStep);

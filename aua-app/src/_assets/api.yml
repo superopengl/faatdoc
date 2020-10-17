@@ -19,13 +19,13 @@ paths:
       responses:
         200:
           description: OK
-  /file/download/job/{jobId}/file/{fileId}:
+  /file/download/task/{taskId}/file/{fileId}:
     get:
       operationId: downloadFile
       # security:
       #   - authLoggedInUser: []
       parameters:
-        - name: jobId
+        - name: taskId
           in: path
           type: string
           format: uuid
@@ -209,24 +209,24 @@ paths:
       responses:
         200:
           description: OK
-  /job_template:
+  /task_template:
     post:
-      operationId: saveJobTemplate
+      operationId: saveTaskTemplate
       # security:
       #   - authAdmin: []
       responses:
         200:
           description: OK
     get:
-      operationId: listJobTemplates
+      operationId: listTaskTemplates
       # security:
       #   - authLoggedInUser: []
       responses:
         200:
           description: OK
-  /job_template/{id}:
+  /task_template/{id}:
     get:
-      operationId: getJobTemplate
+      operationId: getTaskTemplate
       # security:
       #   - authLoggedInUser: []
       parameters:
@@ -239,7 +239,7 @@ paths:
         200:
           description: OK
     delete:
-      operationId: deleteJobTemplate
+      operationId: deleteTaskTemplate
       # security:
       #   - authAdmin: []
       parameters:
@@ -363,40 +363,40 @@ paths:
       responses:
         200:
           description: OK
-  /job:
+  /task:
     post:
-      operationId: saveJob
+      operationId: saveTask
       # security:
       #   - authClient: []
       responses:
         200:
           description: OK
     get:
-      operationId: listJob
+      operationId: listTask
       # security:
       #   - authLoggedInUser: []
       responses:
         200:
           description: OK
-  /job/search:
+  /task/search:
     post:
-      operationId: searchJob
+      operationId: searchTask
       # security:
       #   - authLoggedInUser: []
       responses:
         200:
           description: OK
-  /job/generate:
+  /task/generate:
     post:
-      operationId: generateJob
+      operationId: generateTask
       # security:
       #   - authClient: []
       responses:
         200:
           description: OK
-  /job/{id}:
+  /task/{id}:
     get:
-      operationId: getJob
+      operationId: getTask
       # security:
       #   - authLoggedInUser: []
       parameters:
@@ -409,7 +409,7 @@ paths:
         200:
           description: OK
     delete:
-      operationId: deleteJob
+      operationId: deleteTask
       # security:
       #   - authLoggedInUser: []
       parameters:
@@ -421,9 +421,9 @@ paths:
       responses:
         200:
           description: OK
-  /job/{id}/sign:
+  /task/{id}/sign:
     post:
-      operationId: signJobDoc
+      operationId: signTaskDoc
       # security:
       #   - authClient: []
       parameters:
@@ -435,9 +435,9 @@ paths:
       responses:
         200:
           description: OK
-  /job/{id}/assign:
+  /task/{id}/assign:
     post:
-      operationId: assignJob
+      operationId: assignTask
       # security:
       #   - authClient: []
       parameters:
@@ -449,9 +449,9 @@ paths:
       responses:
         200:
           description: OK
-  /job/{id}/notify:
+  /task/{id}/notify:
     get:
-      operationId: listJobNotifies
+      operationId: listTaskNotifies
       # security:
       #   - authClient: []
       parameters:
@@ -464,7 +464,7 @@ paths:
         200:
           description: OK
     post:
-      operationId: notifyJob
+      operationId: notifyTask
       # security:
       #   - authClient: []
       parameters:
@@ -476,9 +476,9 @@ paths:
       responses:
         200:
           description: OK
-  /job/{id}/notify/read:
+  /task/{id}/notify/read:
     post:
-      operationId: markJobNotifyRead
+      operationId: markTaskNotifyRead
       # security:
       #   - authClient: []
       parameters:

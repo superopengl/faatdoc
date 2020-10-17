@@ -2,7 +2,7 @@
 import { getRepository } from 'typeorm';
 import { handlerWrapper } from '../utils/asyncHandler';
 import { assertRole } from '../utils/assert';
-import { Job } from '../entity/Job';
+import { Task } from '../entity/Task';
 import { User } from '../entity/User';
 import { Portfolio } from '../entity/Portfolio';
 
@@ -42,8 +42,8 @@ async function getPortfolioStat() {
   });
 }
 
-async function getJobStat() {
-  const result = await getRepository(Job)
+async function getTaskStat() {
+  const result = await getRepository(Task)
     .createQueryBuilder('x')
     .select('x.status as name')
     .addSelect(`COUNT(1) AS count`)
@@ -65,7 +65,7 @@ async function getJobStat() {
 export const getAdminStats = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent');
 
-  const jobStat = await getRepository(Job)
+  const taskStat = await getRepository(Task)
     .createQueryBuilder('x')
     .select('x.status as name')
     .addSelect(`COUNT(1) AS count`)
@@ -75,7 +75,7 @@ export const getAdminStats = handlerWrapper(async (req, res) => {
   const stats = {
     user: await getUserStats(),
     portfolio: await getPortfolioStat(),
-    job: await getJobStat(),
+    task: await getTaskStat(),
   };
 
   res.json(stats);

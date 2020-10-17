@@ -7,10 +7,10 @@ import { FileUploader } from 'components/FileUploader';
 import HomeHeader from 'components/HomeHeader';
 
 import { Divider } from 'antd';
-import { getJob, saveJob } from '../../services/jobService';
+import { getTask, saveTask } from '../../services/taskService';
 import { varNameToLabelName } from 'util/varNameToLabelName';
 import { DateInput } from 'components/DateInput';
-import JobChat from './JobChat';
+import TaskChat from './TaskChat';
 import { RangePickerInput } from 'components/RangePickerInput';
 import { Select } from 'antd';
 import FieldEditor from 'components/FieldEditor';
@@ -22,7 +22,7 @@ import { FileIcon } from 'components/FileIcon';
 import { GrDocumentConfig } from 'react-icons/gr';
 import { Tag } from 'antd';
 import GenDocStepperModal from './GenDocStepperModal';
-import { JobDocEditor } from './JobDocEditor';
+import { TaskDocEditor } from './TaskDocEditor';
 
 const { Text } = Typography;
 const ContainerStyled = styled.div`
@@ -111,7 +111,7 @@ const GenDocWizardModal = props => {
   const [loading, setLoading] = React.useState(true);
   const [form] = Form.useForm();
 
-  const [job, setJob] = React.useState();
+  const [task, setTask] = React.useState();
   const [showsNotify, setShowsNotify] = React.useState(false);
   const [currentDocTemplateId, setCurrentDocTemplateId] = React.useState();
 
@@ -119,9 +119,9 @@ const GenDocWizardModal = props => {
   const loadEntity = async () => {
     setLoading(true);
     if (id) {
-      const job = await getJob(id);
-      setJob(job);
-      setStatusValue({ value: defaultStatus[job.status] })
+      const task = await getTask(id);
+      setTask(task);
+      setStatusValue({ value: defaultStatus[task.status] })
     }
     setLoading(false);
   }
@@ -133,10 +133,10 @@ const GenDocWizardModal = props => {
   }, [])
 
   const handlePostGenDoc = (fileId, varHash) => {
-    const genDoc = job.genDocs.find(d => d.docTemplateId === currentDocTemplateId);
+    const genDoc = task.genDocs.find(d => d.docTemplateId === currentDocTemplateId);
     genDoc.fileId = fileId;
     genDoc.varHash = varHash;
-    setJob({ ...job });
+    setTask({ ...task });
     setCurrentDocTemplateId(null);
   }
 
@@ -146,16 +146,16 @@ const GenDocWizardModal = props => {
 
 
   const handleValuesChange = (changedValues, allValues) => {
-    const changedJob = merge(job, changedValues);
-    setJob({ ...changedJob });
+    const changedTask = merge(task, changedValues);
+    setTask({ ...changedTask });
   }
 
   const handleSubmit = async (values) => {
     setLoading(true);
-    await saveJob({
-      ...job,
+    await saveTask({
+      ...task,
       ...values,
-      fields: merge(job.fields, values.fields)
+      fields: merge(task.fields, values.fields)
     });
     notify.success('Successfully saved');
     setLoading(false);
@@ -167,16 +167,16 @@ const GenDocWizardModal = props => {
   }
 
   const goToListPage = () => {
-    props.history.push('/job');
+    props.history.push('/task');
   }
 
   // const getFormInitialValues = () => {
   //   const values = {
-  //     name: job?.name || 'New Job',
-  //     status: job?.status || 'todo'
+  //     name: task?.name || 'New Task',
+  //     status: task?.status || 'todo'
   //   };
-  //   if (job && job.fields) {
-  //     for (const f of job.fields) {
+  //   if (task && task.fields) {
+  //     for (const f of task.fields) {
   //       values[f.name] = f.value;
   //     }
   //   }
@@ -190,23 +190,23 @@ const GenDocWizardModal = props => {
   const handleStatusChange = async option => {
     const value = option?.value;
     if (!value) return;
-    if (value === 'to_sign' && !job.signDocs.length) {
+    if (value === 'to_sign' && !task.signDocs.length) {
       Modal.error({
         title: 'Cannot change status',
         content: <>Cannot change status to <Text strong>To Sign</Text> because there is no documents to sign.</>,
         maskClosable: true
       });
       form.setFieldsValue({});
-    } else if (value !== job.status) {
-      job.status = value;
+    } else if (value !== task.status) {
+      task.status = value;
       setLoading(true);
-      await saveJob(job);
+      await saveTask(task);
       loadEntity();
     }
   }
 
   const deleteGenDoc = (docTemplateId) => {
-    const doc = job.genDocs.find(d => d.docTemplateId === docTemplateId);
+    const doc = task.genDocs.find(d => d.docTemplateId === docTemplateId);
     Modal.confirm({
       title: <>Delete <Text strong>{doc.docTemplateName}</Text></>,
       icon: <QuestionCircleOutlined danger/>,
@@ -219,13 +219,13 @@ const GenDocWizardModal = props => {
       onOk: () => {
         delete doc.fileId;
         delete doc.fileName;
-        setJob({ ...job });
+        setTask({ ...task });
       }
     });
 
   }
 
-  const status = job?.status;
+  const status = task?.status;
   const defaultStatus = {
     todo: 'To Do',
     to_sign: 'To Sign',
@@ -249,16 +249,16 @@ const GenDocWizardModal = props => {
   }
 
   const handleFieldChange = async value => {
-    job.fields = value;
-    setJob({...job});
+    task.fields = value;
+    setTask({...task});
     setDrawerVisible(false);
     // await handleSubmit();
     // await loadEntity();
   }
 
-  const handleJobDocsChange = (docs) => {
-    job.docs = docs;
-    setJob({...job});
+  const handleTaskDocsChange = (docs) => {
+    task.docs = docs;
+    setTask({...task});
   }
 
   return (
@@ -271,7 +271,7 @@ const GenDocWizardModal = props => {
       onOk={() => setCurrentDocTemplateId(null)}
       onCancel={() => setCurrentDocTemplateId(null)}
     >
-      {currentDocTemplateId && <GenDocStepperModal docTemplateId={currentDocTemplateId} fields={job?.fields} onFinish={handlePostGenDoc} />}
+      {currentDocTemplateId && <GenDocStepperModal docTemplateId={currentDocTemplateId} fields={task?.fields} onFinish={handlePostGenDoc} />}
     </Modal>
   );
 };

@@ -4,10 +4,10 @@ import {
 import { Button, Drawer, Layout, Modal, Space, Table, Tooltip, Typography } from 'antd';
 import HomeHeader from 'components/HomeHeader';
 import { TimeAgo } from 'components/TimeAgo';
-import JobTemplateForm from 'pages/JobTemplate/JobTemplateForm';
+import TaskTemplateForm from 'pages/TaskTemplate/TaskTemplateForm';
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { deleteJobTemplate, listJobTemplate } from 'services/jobTemplateService';
+import { deleteTaskTemplate, listTaskTemplate } from 'services/taskTemplateService';
 import styled from 'styled-components';
 
 const { Title } = Typography;
@@ -48,10 +48,10 @@ const LayoutStyled = styled(Layout)`
 
 
 
-export const JobTemplatePage = props => {
+export const TaskTemplatePage = props => {
   const columnDef = [
     {
-      title: 'Job Template Name',
+      title: 'Task Template Name',
       dataIndex: 'name',
       render: (text) => text
     },
@@ -69,11 +69,11 @@ export const JobTemplatePage = props => {
       title: 'Action',
       render: (text, record) => (
         <Space size="small">
-          <Tooltip placement="bottom" title="Edit job template">
+          <Tooltip placement="bottom" title="Edit task template">
 
           <Button shape="circle" icon={<EditOutlined />} onClick={e => handleEdit(e, record)} />
           </Tooltip>
-          <Tooltip placement="bottom" title="Delete job template">
+          <Tooltip placement="bottom" title="Delete task template">
           <Button shape="circle" danger icon={<DeleteOutlined />} onClick={e => handleDelete(e, record)} />
           </Tooltip>
         </Space>
@@ -81,12 +81,12 @@ export const JobTemplatePage = props => {
     },
   ];
 
-  const jobTemplateId = props.match.params.id;
+  const taskTemplateId = props.match.params.id;
 
   const [list, setList] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
-  const [drawerVisible, setDrawerVisible] = React.useState(!!jobTemplateId);
-  const [currentId, setCurrentId] = React.useState(jobTemplateId);
+  const [drawerVisible, setDrawerVisible] = React.useState(!!taskTemplateId);
+  const [currentId, setCurrentId] = React.useState(taskTemplateId);
 
   const handleEdit = (e, item) => {
     e.stopPropagation();
@@ -101,7 +101,7 @@ export const JobTemplatePage = props => {
       title: <>To delete Jot Template <strong>{name}</strong>?</>,
       onOk: async () => {
         setLoading(true);
-        await deleteJobTemplate(id);
+        await deleteTaskTemplate(id);
         await loadList();
         setLoading(false);
       },
@@ -115,7 +115,7 @@ export const JobTemplatePage = props => {
 
   const loadList = async () => {
     setLoading(true);
-    const list = await listJobTemplate();
+    const list = await listTaskTemplate();
     setList(list);
     setLoading(false);
   }
@@ -140,10 +140,10 @@ export const JobTemplatePage = props => {
       <ContainerStyled>
         <Space direction="vertical" style={{ width: '100%' }}>
         <StyledTitleRow>
-          <Title level={2} style={{ margin: 'auto' }}>Job Template Management</Title>
+          <Title level={2} style={{ margin: 'auto' }}>Task Template Management</Title>
         </StyledTitleRow>
           <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
-            <Button type="primary" ghost icon={<PlusOutlined />} onClick={() => handleCreateNew()}>New Job Template</Button>
+            <Button type="primary" ghost icon={<PlusOutlined />} onClick={() => handleCreateNew()}>New Task Template</Button>
           </Space>
           <Table columns={columnDef}
             dataSource={list}
@@ -160,7 +160,7 @@ export const JobTemplatePage = props => {
           />
         </Space>
         <StyledDrawer
-          title={!currentId ? 'New Job Template' : 'Edit Job Template'}
+          title={!currentId ? 'New Task Template' : 'Edit Task Template'}
           placement="right"
           closable={true}
           visible={drawerVisible}
@@ -169,15 +169,15 @@ export const JobTemplatePage = props => {
           width={900}
           footer={null}
         >
-          <JobTemplateForm id={currentId} onClose={() => handleDrawerClose()} onOk={() => {handleDrawerClose(); loadList()}}></JobTemplateForm>
+          <TaskTemplateForm id={currentId} onClose={() => handleDrawerClose()} onOk={() => {handleDrawerClose(); loadList()}}></TaskTemplateForm>
         </StyledDrawer>
       </ContainerStyled>
     </LayoutStyled >
   );
 };
 
-JobTemplatePage.propTypes = {};
+TaskTemplatePage.propTypes = {};
 
-JobTemplatePage.defaultProps = {};
+TaskTemplatePage.defaultProps = {};
 
-export default withRouter(JobTemplatePage);
+export default withRouter(TaskTemplatePage);

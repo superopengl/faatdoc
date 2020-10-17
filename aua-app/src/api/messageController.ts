@@ -1,6 +1,6 @@
 
 import { getRepository, IsNull, getManager } from 'typeorm';
-import { Job } from '../entity/Job';
+import { Task } from '../entity/Task';
 import { Message } from '../entity/Message';
 import { assert, assertRole } from '../utils/assert';
 import { handlerWrapper } from '../utils/asyncHandler';
@@ -13,18 +13,18 @@ async function listMessageForClient(clientId, pagenation, unreadOnly) {
     .from(q => q.from(Message, 'x')
       .where(`"clientUserId" = :id`, { id: clientId })
       .andWhere(unreadOnly ? `"readAt" IS NULL` : '1 = 1')
-      .orderBy('"jobId"')
+      .orderBy('"taskId"')
       .addOrderBy('"createdAt"', 'DESC')
-      .distinctOn(['"jobId"'])
+      .distinctOn(['"taskId"'])
     , 'x')
-    .innerJoin(q => q.from(Job, 'l').select('*'), 'l', `l.id = x."jobId"`)
+    .innerJoin(q => q.from(Task, 'l').select('*'), 'l', `l.id = x."taskId"`)
     .offset(pagenation.skip)
     .limit(pagenation.limit)
     .select([
       'x.id as id',
-      'x."jobId" as "jobId"',
+      'x."taskId" as "taskId"',
       'x."createdAt" as "createdAt"',
-      'l.id as "jobId"',
+      'l.id as "taskId"',
       'l."forWhom" as "forWhom"',
       'l.name as name',
       'content',
@@ -42,18 +42,18 @@ async function listMessageForAgent(agentId, pagenation, unreadOnly) {
   .from(q => q.from(Message, 'x')
     .where(`"agentUserId" = :id`, { id: agentId })
     .andWhere(unreadOnly ? `"readAt" IS NULL` : '1 = 1')
-    .orderBy('"jobId"')
+    .orderBy('"taskId"')
     .addOrderBy('"createdAt"', 'DESC')
-    .distinctOn(['"jobId"'])
+    .distinctOn(['"taskId"'])
   , 'x')
-  .innerJoin(q => q.from(Job, 'l').select('*'), 'l', `l.id = x."jobId"`)
+  .innerJoin(q => q.from(Task, 'l').select('*'), 'l', `l.id = x."taskId"`)
   .offset(pagenation.skip)
   .limit(pagenation.limit)
   .select([
     'x.id as id',
-    'x."jobId" as "jobId"',
+    'x."taskId" as "taskId"',
     'x."createdAt" as "createdAt"',
-    'l.id as "jobId"',
+    'l.id as "taskId"',
     'l."forWhom" as "forWhom"',
     'l.name as name',
     'content',
@@ -69,18 +69,18 @@ async function listMessageForAdmin(pagenation, unreadOnly) {
     .select('*')
     .from(q => q.from(Message, 'x')
       .andWhere(unreadOnly ? `"readAt" IS NULL` : '1 = 1')
-      .orderBy('"jobId"')
+      .orderBy('"taskId"')
       .addOrderBy('"createdAt"', 'DESC')
-      .distinctOn(['"jobId"'])
+      .distinctOn(['"taskId"'])
     , 'x')
-    .innerJoin(q => q.from(Job, 'l').select('*'), 'l', `l.id = x."jobId"`)
+    .innerJoin(q => q.from(Task, 'l').select('*'), 'l', `l.id = x."taskId"`)
     .offset(pagenation.skip)
     .limit(pagenation.limit)
     .select([
       'x.id as id',
-      'x."jobId" as "jobId"',
+      'x."taskId" as "taskId"',
       'x."createdAt" as "createdAt"',
-      'l.id as "jobId"',
+      'l.id as "taskId"',
       'l."forWhom" as "forWhom"',
       'l.name as name',
       'content',
@@ -132,13 +132,13 @@ export const getMessage = handlerWrapper(async (req, res) => {
 
   const result = await repo.createQueryBuilder('x')
     .where(query)
-    .innerJoin(q => q.from(Job, 'l').select('*'), 'l', `l.id = x.jobId`)
+    .innerJoin(q => q.from(Task, 'l').select('*'), 'l', `l.id = x.taskId`)
     .select([
       `x.id as id`,
       `x.content as content`,
       `x."createdAt" as "createdAt"`,
       `x."readAt" as "readAt"`,
-      `x."jobId" as "jobId"`,
+      `x."taskId" as "taskId"`,
       `l."name" as name`,
       `l."forWhom" as "forWhom"`,
     ])

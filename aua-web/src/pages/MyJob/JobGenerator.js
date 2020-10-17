@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Radio, Space, Typography } from 'antd';
 import { PortfolioAvatar } from 'components/PortfolioAvatar';
 import { Spin } from 'antd';
-import { listJobTemplate } from 'services/jobTemplateService';
+import { listTaskTemplate } from 'services/taskTemplateService';
 import { listPortfolio } from 'services/portfolioService';
 import StepWizard from 'react-step-wizard';
 
@@ -35,20 +35,20 @@ const StyledTitleRow = styled.div`
  width: 100%;
 `
 
-const JobGenerator = props => {
+const TaskGenerator = props => {
   const [] = React.useState(0);
   const [loading, setLoading] = React.useState(true);
-  const [jobTemplateList, setJobTemplateList] = React.useState([]);
+  const [taskTemplateList, setTaskTemplateList] = React.useState([]);
   const [portfolioList, setPortfolioList] = React.useState([]);
-  const [jobTemplateId, setJobTemplateId] = React.useState();
+  const [taskTemplateId, setTaskTemplateId] = React.useState();
   const wizardRef = React.useRef(null);
 
   const loadData = async () => {
     setLoading(true);
-    const jobTemplateList = await listJobTemplate() || [];
+    const taskTemplateList = await listTaskTemplate() || [];
     const portfolioList = await listPortfolio() || [];
 
-    setJobTemplateList(jobTemplateList);
+    setTaskTemplateList(taskTemplateList);
     setPortfolioList(portfolioList);
     setLoading(false);
   }
@@ -57,14 +57,14 @@ const JobGenerator = props => {
     loadData();
   }, []);
 
-  const handleJobTypeChange = e => {
+  const handleTaskTypeChange = e => {
     wizardRef.current.nextStep();
-    setJobTemplateId(e.target.value);
+    setTaskTemplateId(e.target.value);
   }
 
   const handlePortfolioChange = e => {
     const data = {
-      jobTemplateId,
+      taskTemplateId,
       portfolioId: e.target.value
     };
     props.onChange(data);
@@ -77,24 +77,24 @@ const JobGenerator = props => {
   return (
     <Container>
       <StyledTitleRow>
-        <Title level={2} style={{ margin: 'auto' }}>Jobs</Title>
+        <Title level={2} style={{ margin: 'auto' }}>Tasks</Title>
       </StyledTitleRow>
       {/* <Steps progressDot current={currentStep}>
-        <Steps.Step title="Choose job type" />
+        <Steps.Step title="Choose task type" />
         <Steps.Step title="Choose portfolio" />
       </Steps> */}
       <StepWizard ref={wizardRef}>
         <div>
           <Space size="middle" direction="vertical" style={{ width: '100%' }}>
-            <Text type="secondary">Choose job type</Text>
-            <Radio.Group buttonStyle="outline" style={{ width: '100%' }} onChange={handleJobTypeChange}>
-              {jobTemplateList.map((item, i) => <Radio.Button key={i} value={item.id}>{item.name}</Radio.Button>)}
+            <Text type="secondary">Choose task type</Text>
+            <Radio.Group buttonStyle="outline" style={{ width: '100%' }} onChange={handleTaskTypeChange}>
+              {taskTemplateList.map((item, i) => <Radio.Button key={i} value={item.id}>{item.name}</Radio.Button>)}
             </Radio.Group>
           </Space>
         </div>
         <div>
           <Space size="middle" direction="vertical" style={{ width: '100%' }}>
-            <Text type="secondary">Choose portfolio to fill the job automatically</Text>
+            <Text type="secondary">Choose portfolio to fill the task automatically</Text>
             <Radio.Group buttonStyle="outline" style={{ width: '100%' }} onChange={handlePortfolioChange}>
               {portfolioList.map((item, i) => <Radio.Button className="portfolio" key={i} value={item.id}>
                 <Space>
@@ -114,4 +114,4 @@ const JobGenerator = props => {
   );
 };
 
-export default JobGenerator;
+export default TaskGenerator;

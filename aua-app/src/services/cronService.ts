@@ -1,30 +1,30 @@
 import { getRepository, Not, Equal } from 'typeorm';
 import { Recurring } from '../entity/Recurring';
-import { CronJob } from 'cron';
+import { CronTask } from 'cron';
 import { SysLog } from '../entity/SysLog';
-import { generateJobByJobTemplateAndPortfolio } from '../utils/generateJobByJobTemplateAndPortfolio';
+import { generateTaskByTaskTemplateAndPortfolio } from '../utils/generateTaskByTaskTemplateAndPortfolio';
 import { assert } from '../utils/assert';
 import { v4 as uuidv4 } from 'uuid';
-import { JobStatus } from '../types/JobStatus';
-import { Job } from '../entity/Job';
+import { TaskStatus } from '../types/TaskStatus';
+import { Task } from '../entity/Task';
 import errorToJSON from 'error-to-json';
 import * as moment from 'moment';
 import { getUtcNow } from '../utils/getUtcNow';
 import { CronLock } from '../entity/CronLock';
-import { JobTemplate } from '../entity/JobTemplate';
+import { TaskTemplate } from '../entity/TaskTemplate';
 import { Portfolio } from '../entity/Portfolio';
 import { User } from '../entity/User';
 import * as os from 'os';
-import { sendNewJobCreatedEmail } from '../utils/sendNewJobCreatedEmail';
+import { sendNewTaskCreatedEmail } from '../utils/sendNewTaskCreatedEmail';
 
 const startImmidiatly = true;
 const tz = 'Australia/Sydney';
-const runningJobs = [];
+const runningTasks = [];
 
-function stopRunningJobs() {
-  let job;
-  while ((job = runningJobs.shift())) {
-    job.stop();
+function stopRunningTasks() {
+  let task;
+  while ((task = runningTasks.shift())) {
+    task.stop();
   }
 }
 
@@ -33,7 +33,7 @@ async function startRecurrings() {
 
   const list = await getRepository(Recurring)
     .createQueryBuilder('x')
-    .innerJoin(q => q.from(JobTemplate, 'j'), 'j', 'j.id = x."jobTemplateId"')
+    .innerJoin(q => q.from(TaskTemplate, 'j'), 'j', 'j.id = x."taskTemplateId"')
     .innerJoin(q => q.from(Portfolio, 'p'), 'p', 'p.id = x."portfolioId"')
     .innerJoin(q => q.from(User, 'u'), 'u', 'u.id = p."userId"')
     .select([
@@ -41,9 +41,9 @@ async function startRecurrings() {
     ])
     .execute();
 
-  stopRunningJobs();
-  const jobs = list.map(r => startSingleRecurring(r));
-  runningJobs.push(...jobs);
+  stopRunningTasks();
+  const tasks = list.map(r => startSingleRecurring(r));
+  runningTasks.push(...tasks);
   console.log('Restarted cron service');
 }
 
@@ -51,9 +51,9 @@ function logging(log: SysLog) {
   getRepository(SysLog).save(log).catch(() => { });
 }
 
-function trySetJobDueDateField(job, dueDay) {
+function trySetTaskDueDateField(task, dueDay) {
   if (!dueDay) return;
-  const dueDateField = job.fields.find(x => x.name === 'dueDate');
+  const dueDateField = task.fields.find(x => x.name === 'dueDate');
   if (!dueDateField) return;
   dueDateField.value = moment().add(dueDay, 'day').toDate();
 }
@@ -62,26 +62,26 @@ export async function executeRecurring(recurringId) {
   assert(recurringId, 400);
   const recurring = await getRepository(Recurring).findOne({ id: recurringId });
   assert(recurring, 404);
-  const { jobTemplateId, portfolioId, nameTemplate } = recurring;
+  const { taskTemplateId, portfolioId, nameTemplate } = recurring;
 
-  const job = await generateJobByJobTemplateAndPortfolio(
-    jobTemplateId,
+  const task = await generateTaskByTaskTemplateAndPortfolio(
+    taskTemplateId,
     portfolioId,
     (j, p) => nameTemplate.replace('{{createdDate}}', moment().format('DD MMM YYYY'))
   );
 
-  job.status = JobStatus.TODO;
+  task.status = TaskStatus.TODO;
 
-  trySetJobDueDateField(job, recurring.dueDay);
+  trySetTaskDueDateField(task, recurring.dueDay);
 
-  sendNewJobCreatedEmail(job);
+  sendNewTaskCreatedEmail(task);
 
-  await getRepository(Job).save(job);
+  await getRepository(Task).save(task);
 
-  return job;
+  return task;
 }
 
-function createCronJob(cron, onRunFn) {
+function createCronTask(cron, onRunFn) {
   let cronPattern = cron;
   let onExecuteCallback = onRunFn;
   if (/L/.test(cron)) {
@@ -96,7 +96,7 @@ function createCronJob(cron, onRunFn) {
     };
   }
 
-  return new CronJob(
+  return new CronTask(
     cronPattern,
     onExecuteCallback,
     null,
@@ -106,21 +106,21 @@ function createCronJob(cron, onRunFn) {
 }
 
 
-function startSingleRecurring(recurring: Recurring): CronJob {
-  const { id, cron, jobTemplateId, portfolioId } = recurring;
-  const job = createCronJob(
+function startSingleRecurring(recurring: Recurring): CronTask {
+  const { id, cron, taskTemplateId, portfolioId } = recurring;
+  const task = createCronTask(
     cron,
     async () => {
-      const job = await executeRecurring(id);
+      const task = await executeRecurring(id);
 
       const log = new SysLog();
       log.level = 'info';
       log.message = 'Recurring complete';
       log.data = {
         recurringId: id,
-        jobTemplateId,
+        taskTemplateId,
         portfolioId,
-        createdJobId: job.id
+        createdTaskId: task.id
       };
 
       logging(log);

@@ -14,7 +14,7 @@ const PopoverContent = styled.div`
   max-width: 500px;
 `;
 
-const JobReviewItem = props => {
+const TaskReviewItem = props => {
   const { text, description, value } = props;
   return <Space style={{ width: '100%', justifyContent: 'space-between' }}>
     {text && <Text strong>{varNameToLabelName(text)}</Text>}
@@ -32,7 +32,7 @@ const JobReviewItem = props => {
 const PartDivider = props => <Divider><Text type="secondary">{props.text}</Text></Divider>
 
 const FinalReviewStep = props => {
-  const { job, onFinish, onBack, isActive, showsFooter } = props;
+  const { task, onFinish, onBack, isActive, showsFooter } = props;
 
   const handleSave = async () => {
     onFinish();
@@ -43,25 +43,25 @@ const FinalReviewStep = props => {
     return null;
   }
 
-  const supportDocs = job.docs?.filter(d => !d.isFeedback) || [];
-  const feedbackDocs = job.docs?.filter(d => d.isFeedback) || [];
+  const supportDocs = task.docs?.filter(d => !d.isFeedback) || [];
+  const feedbackDocs = task.docs?.filter(d => d.isFeedback) || [];
 
   return <>
     <Space direction="vertical" style={{ width: '100%' }}>
-      <Title level={4}>{job.name}</Title>
-      {job.docTemplateDescription && <Alert description={job.docTemplateDescription} type="warning" closable />}
-      {job.fields.length > 0 && <>
+      <Title level={4}>{task.name}</Title>
+      {task.docTemplateDescription && <Alert description={task.docTemplateDescription} type="warning" closable />}
+      {task.fields.length > 0 && <>
         <PartDivider text="Fields" />
-        {job.fields.map((field, i) => {
+        {task.fields.map((field, i) => {
           const { name, description, value } = field;
-          return <JobReviewItem key={i} text={varNameToLabelName(name)} description={description} value={value} />
+          return <TaskReviewItem key={i} text={varNameToLabelName(name)} description={description} value={value} />
         })}
       </>}
       {supportDocs.length > 0 && <>
         <PartDivider text="Support Documents" />
         {supportDocs.map((doc, i) => {
           const { docTemplateDescription, fileId, fileName } = doc;
-          return <JobReviewItem key={i} description={docTemplateDescription} value={<FileLink id={fileId} name={fileName} />}
+          return <TaskReviewItem key={i} description={docTemplateDescription} value={<FileLink id={fileId} name={fileName} />}
           />
         })}
       </>}
@@ -69,7 +69,7 @@ const FinalReviewStep = props => {
         <PartDivider text="Feedback Documents" />
         {feedbackDocs.map((doc, i) => {
           const { docTemplateDescription, fileId, fileName } = doc;
-          return <JobReviewItem key={i} description={docTemplateDescription} value={<FileLink id={fileId} name={fileName} />}
+          return <TaskReviewItem key={i} description={docTemplateDescription} value={<FileLink id={fileId} name={fileName} />}
           />
         })}
       </>}
@@ -85,7 +85,7 @@ const FinalReviewStep = props => {
 }
 
 FinalReviewStep.propTypes = {
-  job: PropTypes.any.isRequired,
+  task: PropTypes.any.isRequired,
   showsFooter: PropTypes.bool,
   showsSignDoc: PropTypes.bool,
 };

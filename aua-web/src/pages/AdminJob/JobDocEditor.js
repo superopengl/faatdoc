@@ -49,7 +49,7 @@ const PendingDoc = styled.div`
   }
 `;
 
-export const JobDocEditor = (props) => {
+export const TaskDocEditor = (props) => {
   const { value, fields, onChange } = props;
 
   const [docList, setDocList] = React.useState(value);
@@ -237,11 +237,11 @@ export const JobDocEditor = (props) => {
 
 }
 
-JobDocEditor.propTypes = {
+TaskDocEditor.propTypes = {
   value: PropTypes.arrayOf(PropTypes.any),
   disabled: PropTypes.bool,
 };
 
-JobDocEditor.defaultProps = {
+TaskDocEditor.defaultProps = {
   disabled: false,
 };

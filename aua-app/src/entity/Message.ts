@@ -11,7 +11,7 @@ export class Message {
 
   @Column('uuid')
   @Index()
-  jobId: string;
+  taskId: string;
 
   @Column('uuid')
   sender: string;

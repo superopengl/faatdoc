@@ -61,7 +61,7 @@ const RecurringListPage = (props) => {
   const [currentId, setCurrentId] = React.useState();
   const [healthCheckResult, setHealthCheckResult] = React.useState();
 
-  const isRecurringDeprecated = item => !item.email || !item.jobTemplateId || !item.portfolioName;
+  const isRecurringDeprecated = item => !item.email || !item.taskTemplateId || !item.portfolioName;
 
   const getNextRunDateString = cron => {
     try {
@@ -87,9 +87,9 @@ const RecurringListPage = (props) => {
   }
   const columnDef = [
     {
-      title: 'Job Template',
-      dataIndex: 'jobTemplateName',
-      render: (text, record) => record.jobTemplateName ? <Link to={`/job_template/${record.jobTemplateId}`}>{text}</Link> : <Text type="danger">deleted job template</Text>,
+      title: 'Task Template',
+      dataIndex: 'taskTemplateName',
+      render: (text, record) => record.taskTemplateName ? <Link to={`/task_template/${record.taskTemplateId}`}>{text}</Link> : <Text type="danger">deleted task template</Text>,
       ellipsis: false
     },
     {
@@ -176,9 +176,9 @@ const RecurringListPage = (props) => {
 
   const handleDelete = async (e, item) => {
     e.stopPropagation();
-    const { id, jobTemplateName, portfolioName } = item;
+    const { id, taskTemplateName, portfolioName } = item;
     Modal.confirm({
-      title: <>To delete Recurring <strong>{jobTemplateName}</strong> for <strong>{portfolioName}</strong>?</>,
+      title: <>To delete Recurring <strong>{taskTemplateName}</strong> for <strong>{portfolioName}</strong>?</>,
       onOk: async () => {
         setLoading(true);
         await deleteRecurring(id);
@@ -196,13 +196,13 @@ const RecurringListPage = (props) => {
   const handleRunRecurring = async (e, item) => {
     e.stopPropagation();
     const { id } = item;
-    const job = await runRecurring(id);
+    const task = await runRecurring(id);
     const notice = notify.success(
       'Successfully run the recurring',
-      <Text>The job <TextLink strong onClick={() => {
+      <Text>The task <TextLink strong onClick={() => {
         notice.close();
-        props.history.push(`/job/${job.id}/proceed`);
-      }}>{job.name}</TextLink> was created</Text>,
+        props.history.push(`/task/${task.id}/proceed`);
+      }}>{task.name}</TextLink> was created</Text>,
       15
     );
   }

@@ -6,17 +6,17 @@ import { Input, Button, Form, PageHeader, Space, Layout, Drawer, Typography, Rad
 import HomeHeader from 'components/HomeHeader';
 
 import { Divider } from 'antd';
-import { getJob, saveJob } from '../../services/jobService';
+import { getTask, saveTask } from '../../services/taskService';
 import { varNameToLabelName } from 'util/varNameToLabelName';
 import { DateInput } from 'components/DateInput';
-import JobChat from './JobChat';
+import TaskChat from './TaskChat';
 import { RangePickerInput } from 'components/RangePickerInput';
 import { Select } from 'antd';
 import FieldEditor from 'components/FieldEditor';
 import { SyncOutlined } from '@ant-design/icons';
 import { notify } from 'util/notify';
 import { merge } from 'lodash';
-import { JobDocEditor } from './JobDocEditor';
+import { TaskDocEditor } from './TaskDocEditor';
 
 const { Text } = Typography;
 const ContainerStyled = styled.div`
@@ -33,7 +33,7 @@ const ContainerStyled = styled.div`
   .ant-page-header-heading-title {
     width: 100%;
 
-    .job-name-input {
+    .task-name-input {
       font-weight: 700;
     }
   }
@@ -91,7 +91,7 @@ const StatusSelect = styled(Select)`
 }
 `
 
-const ProceedJobPage = (props) => {
+const ProceedTaskPage = (props) => {
   const id = props.match.params.id;
   // const { name, id, fields } = value || {};
 
@@ -100,15 +100,15 @@ const ProceedJobPage = (props) => {
   const [editingFields, setEditingFields] = React.useState();
   const [form] = Form.useForm();
 
-  const [job, setJob] = React.useState();
+  const [task, setTask] = React.useState();
   const [showsNotify, setShowsNotify] = React.useState(false);
 
   const loadEntity = async () => {
     setLoading(true);
     if (id) {
-      const job = await getJob(id);
-      setJob(job);
-      setStatusValue({ value: defaultStatus[job.status] })
+      const task = await getTask(id);
+      setTask(task);
+      setStatusValue({ value: defaultStatus[task.status] })
     }
     setLoading(false);
   }
@@ -123,16 +123,16 @@ const ProceedJobPage = (props) => {
 
 
   const handleValuesChange = (changedValues) => {
-    const changedJob = merge(job, changedValues);
-    setJob({ ...changedJob });
+    const changedTask = merge(task, changedValues);
+    setTask({ ...changedTask });
   }
 
   const handleSubmit = async (values) => {
     setLoading(true);
-    await saveJob({
-      ...job,
+    await saveTask({
+      ...task,
       ...values,
-      fields: merge(job.fields, values.fields)
+      fields: merge(task.fields, values.fields)
     });
     notify.success('Successfully saved');
     setLoading(false);
@@ -149,11 +149,11 @@ const ProceedJobPage = (props) => {
   const handleStatusChange = async option => {
     const value = option?.value;
     if (!value) return;
-    if (value !== job.status) {
-      job.status = value;
+    if (value !== task.status) {
+      task.status = value;
       setLoading(true);
       try {
-        await saveJob(job);
+        await saveTask(task);
       } finally {
         await loadEntity();
         setLoading(false);
@@ -162,7 +162,7 @@ const ProceedJobPage = (props) => {
   }
 
 
-  const status = job?.status;
+  const status = task?.status;
   const defaultStatus = {
     todo: 'To Do',
     to_sign: 'To Sign',
@@ -189,34 +189,34 @@ const ProceedJobPage = (props) => {
     setEditingFields(value);
   }
 
-  const handleJobDocsChange = (docs) => {
-    job.docs = docs;
-    setJob({ ...job });
+  const handleTaskDocsChange = (docs) => {
+    task.docs = docs;
+    setTask({ ...task });
   }
 
   const handleSaveFieldChange = () => {
-    job.fields = editingFields;
-    setJob({ ...job });
+    task.fields = editingFields;
+    setTask({ ...task });
     setDrawerVisible(false);
   }
 
   return (<LayoutStyled>
     <HomeHeader></HomeHeader>
     <ContainerStyled>
-      {job && <Form
+      {task && <Form
         form={form}
         layout="vertical"
         onValuesChange={handleValuesChange}
         onFinish={handleSubmit}
         style={{ textAlign: 'left', width: '100%' }}
-        initialValues={job}
+        initialValues={task}
       >
         <PageHeader
           onBack={() => handleCancel()}
           title={<Form.Item name="name" rules={[{ required: true, message: ' ' }]} style={{margin: 0, width: '100%'}}>
-            <Input className="job-name-input" placeholder="Task name" disabled={loading} />
+            <Input className="task-name-input" placeholder="Task name" disabled={loading} />
           </Form.Item>}
-          // subTitle={<JobProgressBar status={job.status} width={60} />}
+          // subTitle={<TaskProgressBar status={task.status} width={60} />}
           extra={[
             <Space key="1" style={{ width: '100%', justifyContent: 'flex-end' }}>
               <Button type="primary" ghost disabled={loading} icon={<SyncOutlined />} onClick={() => loadEntity()}></Button>
@@ -239,7 +239,7 @@ const ProceedJobPage = (props) => {
         </PageHeader>
         <Divider />
         <Row gutter={20}>
-          {job.fields.map((field, i) => {
+          {task.fields.map((field, i) => {
             const { name, description, type } = field;
             const formItemProps = {
               label: <>{varNameToLabelName(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
@@ -266,7 +266,7 @@ const ProceedJobPage = (props) => {
         </Row>
         <Row>
           <Col span={24}>
-            <JobDocEditor value={job.docs} fields={job.fields} onChange={handleJobDocsChange} />
+            <TaskDocEditor value={task.docs} fields={task.fields} onChange={handleTaskDocsChange} />
           </Col>
         </Row>
       </Form>
@@ -274,10 +274,10 @@ const ProceedJobPage = (props) => {
       {/* <Divider type="vertical" style={{ height: "100%" }} /> */}
     </ContainerStyled>
 
-    {(job && showsNotify) && <JobChat visible={showsNotify} onClose={() => setShowsNotify(false)} jobId={job?.id} />}
+    {(task && showsNotify) && <TaskChat visible={showsNotify} onClose={() => setShowsNotify(false)} taskId={task?.id} />}
 
     <StyledDrawer
-      title="Modify Job Fields"
+      title="Modify Task Fields"
       placement="right"
       closable={true}
       visible={drawerVisible}
@@ -286,7 +286,7 @@ const ProceedJobPage = (props) => {
       width={900}
       footer={null}
     >
-      <FieldEditor value={job?.fields} onChange={handleFieldChange} />
+      <FieldEditor value={task?.fields} onChange={handleFieldChange} />
       <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
         <Button type="link" onClick={() => setDrawerVisible(false)}>Cancel</Button>
         <Button type="primary" onClick={() => handleSaveFieldChange()}>Save</Button>
@@ -297,10 +297,10 @@ const ProceedJobPage = (props) => {
   );
 };
 
-ProceedJobPage.propTypes = {
+ProceedTaskPage.propTypes = {
   id: PropTypes.string
 };
 
-ProceedJobPage.defaultProps = {};
+ProceedTaskPage.defaultProps = {};
 
-export default withRouter(ProceedJobPage);
+export default withRouter(ProceedTaskPage);

@@ -28,7 +28,7 @@ const GoogleSsoButton = props => {
       
       const isClient = user.role === 'client';
 
-      props.history.push(isClient ? '/landing' : '/job');
+      props.history.push(isClient ? '/landing' : '/task');
     } else {
       notify.error('Failed to log in with Google');
     }

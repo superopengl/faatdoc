@@ -73,8 +73,8 @@ const MessageList = (props) => {
   }
 
   const handleItemClick = (item) => {
-    const { jobId } = item;
-    const url = isClient ? `/job/${jobId}?chat=true` : `/job/${jobId}/proceed`;
+    const { taskId } = item;
+    const url = isClient ? `/task/${taskId}?chat=true` : `/task/${taskId}/proceed`;
     props.history.push(url);
   }
   // const handleRead = async (e, item) => {
@@ -86,20 +86,20 @@ const MessageList = (props) => {
   //   onItemRead(item);
   // }
 
-  // const handleGoToJob = (e, jobId) => {
+  // const handleGoToTask = (e, taskId) => {
   //   e.stopPropagation();
-  //   const url = isClient ? `/job/${jobId}?chat=true` : `/job/${jobId}/proceed`;
+  //   const url = isClient ? `/task/${taskId}?chat=true` : `/task/${taskId}/proceed`;
   //   props.history.push(url);
   //   Modal.destroyAll();
   // }
 
   // const readNotificationDetail = async (notificationId) => {
   //   const item = await getNotification(notificationId);
-  //   const { content, createdAt, readAt, jobId, name, forWhom } = item;
+  //   const { content, createdAt, readAt, taskId, name, forWhom } = item;
   //   Modal.destroyAll();
   //   Modal.info({
   //     icon: null,
-  //     title: <Space style={{ alignItems: 'flex-start' }}><PortfolioAvatar value={forWhom} size={32} /><Link onClick={e => handleGoToJob(e, jobId)}>{name} for {forWhom}<RiExternalLinkLine style={{ marginLeft: '0.5rem' }} /></Link></Space>,
+  //     title: <Space style={{ alignItems: 'flex-start' }}><PortfolioAvatar value={forWhom} size={32} /><Link onClick={e => handleGoToTask(e, taskId)}>{name} for {forWhom}<RiExternalLinkLine style={{ marginLeft: '0.5rem' }} /></Link></Space>,
   //     width: 600,
   //     maskClosable: true,
   //     content: <>

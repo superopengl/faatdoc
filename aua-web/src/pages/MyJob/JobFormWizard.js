@@ -1,8 +1,8 @@
 import React from 'react';
-import { generateJob, saveJob } from 'services/jobService';
-import JobGenerator from './JobGenerator';
+import { generateTask, saveTask } from 'services/taskService';
+import TaskGenerator from './TaskGenerator';
 import StepWizard from 'react-step-wizard';
-import JobFieldsEditor from './JobFieldsEditor';
+import TaskFieldsEditor from './TaskFieldsEditor';
 import GenDocFieldStep from './GenDocFieldStep';
 import { Spin, Progress, Space, Typography } from 'antd';
 import GenDocLinkStep from './GenDocLinkStep';
@@ -10,15 +10,15 @@ import UploadDocStep from './UploadDocStep';
 import FinalReviewStep from './FinalReviewStep';
 import { withRouter } from 'react-router-dom';
 import { getPortfolio } from 'services/portfolioService';
-import JobNameStep from './JobNameStep';
+import TaskNameStep from './TaskNameStep';
 
 const { Text } = Typography;
 
-const JobFormWizard = props => {
+const TaskFormWizard = props => {
   const { value } = props;
 
   const [loading, setLoading] = React.useState(false);
-  const [job, setJob] = React.useState(value);
+  const [task, setTask] = React.useState(value);
   const [variableContextDic, setVariableContextDic] = React.useState({});
   const [progess, setProgress] = React.useState({ current: 0, total: 0 });
   const wizardRef = React.useRef(null);
@@ -38,13 +38,13 @@ const JobFormWizard = props => {
     });
   }
 
-  const handleJobGenerated = async (values) => {
+  const handleTaskGenerated = async (values) => {
     setLoading(true);
-    const { jobTemplateId, portfolioId } = values;
-    const job = await generateJob(jobTemplateId, portfolioId);
+    const { taskTemplateId, portfolioId } = values;
+    const task = await generateTask(taskTemplateId, portfolioId);
     const portfolio = await getPortfolio(portfolioId);
 
-    setJob(job);
+    setTask(task);
     setVariableContextDic(portfolio.fields.reduce((pre, cur) => {
       pre[cur.name] = cur.value
       return pre;
@@ -52,12 +52,12 @@ const JobFormWizard = props => {
     setLoading(false);
   }
 
-  const handleJobFieldsChange = job => {
-    const variables = job.fields.reduce((pre, cur) => {
+  const handleTaskFieldsChange = task => {
+    const variables = task.fields.reduce((pre, cur) => {
       pre[cur.name] = cur.value;
       return pre;
     }, {});
-    setJob(job);
+    setTask(task);
     setVariableContextDic({
       ...variableContextDic,
       ...variables
@@ -86,42 +86,42 @@ const JobFormWizard = props => {
   }
 
   const handleGenDocViewConfirmed = doc => {
-    job.docs = job.docs.map(d => d.docTemplateId === doc.docTemplateId ? doc : d);
-    setJob({ ...job });
+    task.docs = task.docs.map(d => d.docTemplateId === doc.docTemplateId ? doc : d);
+    setTask({ ...task });
     handleNext();
   }
 
   const handleUploadDocsChange = docs => {
-    job.docs = docs;
-    setJob({ ...job });
+    task.docs = docs;
+    setTask({ ...task });
     handleNext();
   }
 
-  const goToJobList = () => {
-    props.history.push(`/job`);
+  const goToTaskList = () => {
+    props.history.push(`/task`);
   }
 
   const handlePostSubmit = async () => {
     setLoading(true);
     try {
-      await saveJob({ ...job, status: 'todo' });
+      await saveTask({ ...task, status: 'todo' });
       // form.resetFields();
       setLoading(false);
-      goToJobList();
+      goToTaskList();
     } catch {
       setLoading(false);
     }
   }
 
-  const handleUpdateJobName = name => {
-    job.name = name;
-    setJob({ ...job });
+  const handleUpdateTaskName = name => {
+    task.name = name;
+    setTask({ ...task });
     handleNext();
   }
 
   const getGenDocSteps = () => {
     const steps = [];
-    const genDocs = job?.docs.filter(d => d.docTemplateId) || [];
+    const genDocs = task?.docs.filter(d => d.docTemplateId) || [];
     genDocs.forEach((doc, i) => {
       if (doc.variables?.length) {
         steps.push(<GenDocFieldStep key={`field_${i}`}
@@ -148,39 +148,39 @@ const JobFormWizard = props => {
 
   return <Spin spinning={loading}>
     <StepWizard ref={generatorRef} >
-      {!job && <JobGenerator onChange={handleJobGenerated} />}
-      {job && <><Space size="large" direction="vertical" style={{ width: '100%' }}>
+      {!task && <TaskGenerator onChange={handleTaskGenerated} />}
+      {task && <><Space size="large" direction="vertical" style={{ width: '100%' }}>
         <div style={{ textAlign: 'center', fontSize: '2rem' }}>
           <Text type="secondary">{progess.current} / {progess.total}</Text>
           <Progress strokeColor="#143e86" strokeLinecap="square" type="line" percent={progess.total ? 100 * progess.current / progess.total : 0} showInfo={false} />
         </div>
         <StepWizard ref={wizardRef} onStepChange={handleStepChange}>
-          <JobNameStep
-            job={job}
-            onFinish={handleUpdateJobName}
+          <TaskNameStep
+            task={task}
+            onFinish={handleUpdateTaskName}
           />
-          <JobFieldsEditor job={job}
+          <TaskFieldsEditor task={task}
             onSkip={handleSkip}
             onBack={handleStepBack}
-            onFinish={handleJobFieldsChange} />
+            onFinish={handleTaskFieldsChange} />
           {getGenDocSteps()}
           <UploadDocStep
-            job={job}
+            task={task}
             onSkip={handleSkip}
             onBack={handleStepBack}
             onFinish={handleUploadDocsChange}
           />
           <FinalReviewStep
-            job={job}
+            task={task}
             onBack={handleStepBack}
             onFinish={handlePostSubmit}
           />
         </StepWizard>
       </Space></>}
     </StepWizard>
-{/* <pre>{JSON.stringify(job, null, 2)}</pre> */}
+{/* <pre>{JSON.stringify(task, null, 2)}</pre> */}
   </Spin>
 
 
 }
-export default withRouter(JobFormWizard);
+export default withRouter(TaskFormWizard);

@@ -4,13 +4,13 @@ import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 import { Layout, Spin, Affix, Button } from 'antd';
 import HomeHeader from 'components/HomeHeader';
-import { getJob } from 'services/jobService';
-import MyJobSign from './MyJobSign';
-import JobFormWizard from './JobFormWizard';
-import MyJobReadView from './MyJobReadView';
+import { getTask } from 'services/taskService';
+import MyTaskSign from './MyTaskSign';
+import TaskFormWizard from './TaskFormWizard';
+import MyTaskReadView from './MyTaskReadView';
 import * as queryString from 'query-string';
 import { MessageOutlined } from '@ant-design/icons';
-import JobChat from 'pages/AdminJob/JobChat';
+import TaskChat from 'pages/AdminTask/TaskChat';
 
 const ContainerStyled = styled.div`
 margin: 4rem auto 0 auto;
@@ -46,20 +46,20 @@ border: 2px solid white;
 }
 `;
 
-const MyJobPage = (props) => {
+const MyTaskPage = (props) => {
   const id = props.match.params.id;
   const isNew = !id || id === 'new';
 
   const { chat } = queryString.parse(props.location.search);
   const [chatVisible, setChatVisible] = React.useState(Boolean(chat));
   const [loading, setLoading] = React.useState(true);
-  const [job, setJob] = React.useState();
+  const [task, setTask] = React.useState();
 
   const loadEntity = async () => {
     setLoading(true);
     if (id && !isNew) {
-      const job = await getJob(id);
-      setJob(job);
+      const task = await getTask(id);
+      setTask(task);
     }
     setLoading(false);
   }
@@ -69,31 +69,31 @@ const MyJobPage = (props) => {
   }, [])
 
   const onOk = () => {
-    props.history.push('/job');
+    props.history.push('/task');
   }
   const onCancel = () => {
     props.history.goBack();
   }
 
-  const showsEditableForm = isNew || job?.status === 'todo';
-  const showsSign = job?.status === 'to_sign';
+  const showsEditableForm = isNew || task?.status === 'todo';
+  const showsSign = task?.status === 'to_sign';
 
   return (<>
     <LayoutStyled>
       <HomeHeader />
       <ContainerStyled>
         {loading ? <Spin/> : 
-          showsEditableForm ? <JobFormWizard
+          showsEditableForm ? <TaskFormWizard
             onOk={onOk}
             onCancel={onCancel}
-            value={job} /> :
-            showsSign ? <MyJobSign value={job} /> :
-              <MyJobReadView value={job} />}
+            value={task} /> :
+            showsSign ? <MyTaskSign value={task} /> :
+              <MyTaskReadView value={task} />}
 
         
       </ContainerStyled>
-      {!!job?.id && <>
-      <JobChat visible={chatVisible} onClose={() => setChatVisible(false)} jobId={job.id} />
+      {!!task?.id && <>
+      <TaskChat visible={chatVisible} onClose={() => setChatVisible(false)} taskId={task.id} />
       <Affix style={{ position: 'fixed', bottom: 30, right: 30 }}>
         <AffixContactButton type="primary" shape="circle" size="large"
           onClick={() => setChatVisible(true)}
@@ -108,12 +108,12 @@ const MyJobPage = (props) => {
   );
 };
 
-MyJobPage.propTypes = {
+MyTaskPage.propTypes = {
   // id: PropTypes.string.isRequired
 };
 
-MyJobPage.defaultProps = {
+MyTaskPage.defaultProps = {
   // id: 'new'
 };
 
-export default withRouter(MyJobPage);
+export default withRouter(MyTaskPage);

@@ -7,25 +7,25 @@ import { v4 as uuidv4 } from 'uuid';
 import { Portfolio } from '../entity/Portfolio';
 import { handlerWrapper } from '../utils/asyncHandler';
 import { getUtcNow } from '../utils/getUtcNow';
-import { JobTemplate } from '../entity/JobTemplate';
+import { TaskTemplate } from '../entity/TaskTemplate';
 import { Recurring } from '../entity/Recurring';
 import { executeRecurring, restartCronService } from '../services/cronService';
 import { CronLock } from '../entity/CronLock';
 
 export const saveRecurring = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin');
-  const { id, nameTemplate, portfolioId, jobTemplateId, cron, dueDay } = req.body;
+  const { id, nameTemplate, portfolioId, taskTemplateId, cron, dueDay } = req.body;
 
   const portfolio = await getRepository(Portfolio).findOne(portfolioId);
   assert(portfolio, 404, 'Porotofolio is not found');
-  const jobTemplate = await getRepository(JobTemplate).findOne(jobTemplateId);
-  assert(jobTemplate, 404, 'JobTemplate is not found');
+  const taskTemplate = await getRepository(TaskTemplate).findOne(taskTemplateId);
+  assert(taskTemplate, 404, 'TaskTemplate is not found');
 
   const recurring = new Recurring();
   recurring.id = id || uuidv4();
-  recurring.nameTemplate = `${portfolio.name} ${jobTemplate.name} {{createdDate}}`;
+  recurring.nameTemplate = `${portfolio.name} ${taskTemplate.name} {{createdDate}}`;
   recurring.portfolioId = portfolioId;
-  recurring.jobTemplateId = jobTemplateId;
+  recurring.taskTemplateId = taskTemplateId;
   recurring.cron = cron;
   recurring.dueDay = dueDay;
   recurring.lastUpdatedAt = getUtcNow();
@@ -44,7 +44,7 @@ export const listRecurring = handlerWrapper(async (req, res) => {
 
   const list = await getRepository(Recurring)
     .createQueryBuilder('x')
-    .leftJoin(q => q.from(JobTemplate, 'j'), 'j', 'j.id = x."jobTemplateId"')
+    .leftJoin(q => q.from(TaskTemplate, 'j'), 'j', 'j.id = x."taskTemplateId"')
     .leftJoin(q => q.from(Portfolio, 'p'), 'p', 'p.id = x."portfolioId"')
     .leftJoin(q => q.from(User, 'u'), 'u', 'u.id = p."userId"')
     .orderBy('x.lastUpdatedAt', 'DESC')
@@ -53,8 +53,8 @@ export const listRecurring = handlerWrapper(async (req, res) => {
       'x."nameTemplate" as "nameTemplate"',
       'x."dueDay" as "dueDay"',
       'u.email as email',
-      'j.name as "jobTemplateName"',
-      `j.id as "jobTemplateId"`,
+      'j.name as "taskTemplateName"',
+      `j.id as "taskTemplateId"`,
       'p.name as "portfolioName"',
       'x.cron as cron',
       'x."lastUpdatedAt" as "lastUpdatedAt"'
@@ -87,9 +87,9 @@ export const runRecurring = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin');
   const { id } = req.params;
 
-  const job = await executeRecurring(id);
+  const task = await executeRecurring(id);
 
-  res.json(job);
+  res.json(task);
 });
 
 export const healthCheckRecurring = handlerWrapper(async (req, res) => {

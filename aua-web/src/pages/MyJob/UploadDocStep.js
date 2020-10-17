@@ -8,13 +8,13 @@ import StepButtonSet from './StepBottonSet';
 const { Title } = Typography;
 
 const UploadDocStep = (props) => {
-  const { job, onFinish, onBack, isActive } = props;
+  const { task, onFinish, onBack, isActive } = props;
   const [loading, setLoading] = React.useState(false);
 
-  const initialValues = { fileIds: job.docs.filter(d => d.isByClient).map(d => d.fileId) };
+  const initialValues = { fileIds: task.docs.filter(d => d.isByClient).map(d => d.fileId) };
 
   const handleSubmit = async () => {
-    onFinish(job.docs);
+    onFinish(task.docs);
   }
 
   if (!isActive) {
@@ -26,11 +26,11 @@ const UploadDocStep = (props) => {
   }
 
   const handleRemove = (fileId) => {
-    job.docs = job.docs.filter(d => d.fileId !== fileId);
+    task.docs = task.docs.filter(d => d.fileId !== fileId);
   }
 
   const handleAdd = (fileId) => {
-    job.docs = [...job.docs, { fileId, isByClient: true }];
+    task.docs = [...task.docs, { fileId, isByClient: true }];
   }
   return <Form
     layout="vertical"
@@ -51,7 +51,7 @@ const UploadDocStep = (props) => {
 };
 
 UploadDocStep.propTypes = {
-  job: PropTypes.any.isRequired,
+  task: PropTypes.any.isRequired,
   disabled: PropTypes.bool.isRequired,
 };
 

@@ -2,12 +2,12 @@ import { Button, Layout, Modal, Space, Typography, Row, Col, Spin } from 'antd';
 import HomeHeader from 'components/HomeHeader';
 import React from 'react';
 import { withRouter, Link } from 'react-router-dom';
-import { listJob } from 'services/jobService';
+import { listTask } from 'services/taskService';
 import { listPortfolio } from 'services/portfolioService';
 import { PlusOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import { Divider } from 'antd';
-import MyJobList from 'pages/MyJob/MyJobList';
+import MyTaskList from 'pages/MyTask/MyTaskList';
 import { Alert } from 'antd';
 
 
@@ -34,7 +34,7 @@ const LayoutStyled = styled(Layout)`
   background-color: #ffffff;
   height: 100%;
 
-  .job-count .ant-badge-count {
+  .task-count .ant-badge-count {
     background-color: #143e86;
     color: #eeeeee;
     // box-shadow: 0 0 0 1px #143e86 inset;
@@ -45,8 +45,8 @@ const LayoutStyled = styled(Layout)`
 const ClientDashboardPage = (props) => {
 
   const [loading, setLoading] = React.useState(true);
-  const [toSignJobList, setToSignJobList] = React.useState([]);
-  const [unreadJobList, setUnreadJobList] = React.useState([]);
+  const [toSignTaskList, setToSignTaskList] = React.useState([]);
+  const [unreadTaskList, setUnreadTaskList] = React.useState([]);
   const [completeList, setCompleteList] = React.useState([]);
   const [todoList, setTodoList] = React.useState([]);
   const [portfolioList, setPortfolioList] = React.useState([]);
@@ -55,12 +55,12 @@ const ClientDashboardPage = (props) => {
   const loadList = async () => {
     setLoading(true);
     const portfolioList = await listPortfolio() || [];
-    // const { data: toSignJobList } = await searchJob({ status: ['to_sign'] });
-    const list = await listJob();
+    // const { data: toSignTaskList } = await searchTask({ status: ['to_sign'] });
+    const list = await listTask();
 
     setPortfolioList(portfolioList);
-    setToSignJobList(list.filter(x => x.status === 'to_sign'));
-    setUnreadJobList(list.filter(x => x.lastUnreadMessageAt));
+    setToSignTaskList(list.filter(x => x.status === 'to_sign'));
+    setUnreadTaskList(list.filter(x => x.lastUnreadMessageAt));
     setCompleteList(list.filter(x => x.status === 'complete'));
     setTodoList(list.filter(x => x.status === 'todo'));
     setLoading(false);
@@ -74,8 +74,8 @@ const ClientDashboardPage = (props) => {
     loadList()
   }, []);
 
-  const goToEditJob = (id) => {
-    props.history.push(`/job/${id || 'new'}`);
+  const goToEditTask = (id) => {
+    props.history.push(`/task/${id || 'new'}`);
   }
 
 
@@ -83,38 +83,38 @@ const ClientDashboardPage = (props) => {
     Modal.confirm({
       title: 'No portfolio',
       maskClosable: true,
-      content: 'Please create portfolio before creating job. Go to create protofolio now?',
+      content: 'Please create portfolio before creating task. Go to create protofolio now?',
       okText: 'Yes, go to create portfolio',
       maskClosable: true,
       onOk: () => props.history.push('/portfolio?create=1')
     });
   }
 
-  const createNewJob = e => {
+  const createNewTask = e => {
     e.stopPropagation();
     if (portfolioList.length) {
-      goToEditJob();
+      goToEditTask();
     } else {
       showNoPortfolioWarn();
     }
   }
 
 
-  const handleGoToJobWithMessage = job => {
-    props.history.push(`/job/${job.id}?chat=true`)
+  const handleGoToTaskWithMessage = task => {
+    props.history.push(`/task/${task.id}?chat=true`)
   }
 
-  const handleGoToJob = job => {
-    props.history.push(`/job/${job.id}`)
+  const handleGoToTask = task => {
+    props.history.push(`/task/${task.id}`)
   }
 
   const hasPortfolio = !!portfolioList.length;
-  const hasNotableJobs = toSignJobList.length || unreadJobList.length || completeList.length;
-  const showsTodoList = !hasNotableJobs && todoList.length > 0;
-  const hasNothing = !hasNotableJobs && !todoList.length
+  const hasNotableTasks = toSignTaskList.length || unreadTaskList.length || completeList.length;
+  const showsTodoList = !hasNotableTasks && todoList.length > 0;
+  const hasNothing = !hasNotableTasks && !todoList.length
 
   // if(hasNothing) {
-  //   props.history.push(`job`);
+  //   props.history.push(`task`);
   //   return null;
   // }
 
@@ -126,35 +126,35 @@ const ClientDashboardPage = (props) => {
           <StyledCol span={24}>
             <Space size="small" direction="vertical" style={{ width: '100%' }}>
               <Space style={{ width: '100%', justifyContent: 'space-between' }}>
-                <Link to="/job">All jobs</Link>
-                <Button type="link" onClick={createNewJob} style={{ padding: 0 }} icon={<PlusOutlined />}>Create New Job</Button>
+                <Link to="/task">All tasks</Link>
+                <Button type="link" onClick={createNewTask} style={{ padding: 0 }} icon={<PlusOutlined />}>Create New Task</Button>
               </Space>
               <Divider />
               {loading ? <Spin style={{ width: '100%', margin: '2rem auto' }} /> : <>
                 {!hasPortfolio && <>
                   <Title type="secondary" level={4}>My Portfolio</Title>
-                  <Paragraph >Portfolios are predefined information that can be used to automatically fill in your job application. You can save the information like name, phone, address, TFN, and etc. for future use.</Paragraph>
+                  <Paragraph >Portfolios are predefined information that can be used to automatically fill in your task application. You can save the information like name, phone, address, TFN, and etc. for future use.</Paragraph>
                   <Link to="/portfolio?create=1"><Button size="large" type="primary" ghost block icon={<PlusOutlined />}>New Portfolio</Button></Link>
                   <Divider />
                 </>}
-                {toSignJobList.length > 0 && <>
+                {toSignTaskList.length > 0 && <>
                   <Title type="secondary" level={4}>Require Sign</Title>
-                  <MyJobList data={toSignJobList} onItemClick={handleGoToJob} />
+                  <MyTaskList data={toSignTaskList} onItemClick={handleGoToTask} />
                   <Divider />
                 </>}
-                {unreadJobList.length > 0 && <>
-                  <Title type="secondary" level={4}>Jobs with Unread Messages</Title>
-                  <MyJobList data={unreadJobList} onItemClick={handleGoToJobWithMessage} />
+                {unreadTaskList.length > 0 && <>
+                  <Title type="secondary" level={4}>Tasks with Unread Messages</Title>
+                  <MyTaskList data={unreadTaskList} onItemClick={handleGoToTaskWithMessage} />
                   <Divider />
                 </>}
                 {completeList.length > 0 && <>
-                  <Title type="secondary" level={4}>Recent Completed Jobs</Title>
-                  <MyJobList data={completeList} onItemClick={handleGoToJob} />
+                  <Title type="secondary" level={4}>Recent Completed Tasks</Title>
+                  <MyTaskList data={completeList} onItemClick={handleGoToTask} />
                   <Divider />
                 </>}
                 {showsTodoList && <>
-                  <Title type="secondary" level={4}>Todo Jobs</Title>
-                  <MyJobList data={todoList} onItemClick={handleGoToJob} />
+                  <Title type="secondary" level={4}>Todo Tasks</Title>
+                  <MyTaskList data={todoList} onItemClick={handleGoToTask} />
                 </>}
                 {/* {hasNothing && <Alert message="No news is good news" color="blue"/>} */}
               </>}

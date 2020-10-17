@@ -12,7 +12,7 @@ export class Recurring {
   nameTemplate: string;
 
   @Column('uuid')
-  jobTemplateId: string;
+  taskTemplateId: string;
 
   @Column('uuid')
   portfolioId: string;

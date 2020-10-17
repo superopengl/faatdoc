@@ -12,15 +12,15 @@ import SignInPage from 'pages/SignInPage';
 import TermAndConditionPage from 'pages/TermAndConditionPage';
 import Error404 from 'pages/Error404';
 import PrivacyPolicyPage from 'pages/PrivacyPolicyPage';
-import MyJobListPage from 'pages/MyJob/MyJobListPage';
-import JobTemplatePage from 'pages/JobTemplate/JobTemplatePage';
+import MyTaskListPage from 'pages/MyTask/MyTaskListPage';
+import TaskTemplatePage from 'pages/TaskTemplate/TaskTemplatePage';
 import DocTemplatePage from 'pages/DocTemplate/DocTemplatePage';
 import PortfolioPage from 'pages/Portfolio/PortfolioPage';
-import AdminJobListPage from 'pages/AdminJob/AdminJobListPage';
-import ProceedJobPage from 'pages/AdminJob/ProceedJobPage';
+import AdminTaskListPage from 'pages/AdminTask/AdminTaskListPage';
+import ProceedTaskPage from 'pages/AdminTask/ProceedTaskPage';
 import { getAuthUser } from 'services/authService';
 import {RoleRoute} from 'components/RoleRoute';
-import MyJobPage from 'pages/MyJob/MyJobPage';
+import MyTaskPage from 'pages/MyTask/MyTaskPage';
 import RecurringListPage from 'pages/Recurring/RecurringListPage';
 import MessagePage from 'pages/Message/MessagePage';
 import UserPage from 'pages/User/UserPage';
@@ -28,7 +28,7 @@ import ImpersonatePage from 'pages/Impersonate/ImpersonatePage';
 import { countUnreadMessage } from 'services/messageService';
 import PortfolioForm from 'pages/Portfolio/PortfolioForm';
 import DisclaimerPage from 'pages/DisclaimerPage';
-import MyJobSign from 'pages/MyJob/MyJobSign';
+import MyTaskSign from 'pages/MyTask/MyTaskSign';
 import ClientDashboardPage from 'pages/ClientDashboard/ClientDashboardPage';
 import AdminStatsPage from 'pages/AdminStats/AdminStatsPage';
 import AdminBoardPage from 'pages/AdminBoard/AdminBoardPage';
@@ -94,17 +94,17 @@ class App extends React.Component {
             <RoleRoute visible={isClient} loading={loading} exact path="/portfolio/:id" component={PortfolioForm} />
             <RoleRoute visible={isClient} loading={loading} exact path="/portfolio/new/:type" component={PortfolioForm} />
             <RoleRoute loading={loading} path="/reset_password" exact component={ResetPasswordPage} />
-            <RoleRoute visible={isAdmin} loading={loading} exact path="/job_template" component={JobTemplatePage} />
-            <RoleRoute visible={isAdmin} loading={loading} exact path="/job_template/:id" component={JobTemplatePage} />
+            <RoleRoute visible={isAdmin} loading={loading} exact path="/task_template" component={TaskTemplatePage} />
+            <RoleRoute visible={isAdmin} loading={loading} exact path="/task_template/:id" component={TaskTemplatePage} />
             <RoleRoute visible={isAdmin} loading={loading} exact path="/doc_template" component={DocTemplatePage} />
             <RoleRoute visible={isAdmin} loading={loading} exact path="/user" component={UserPage} />
             <RoleRoute visible={isAdmin} loading={loading} exact path="/recurring" component={RecurringListPage} />
             <RoleRoute visible={isAdmin} loading={loading} exact path="/impersonate" component={ImpersonatePage} />
             <RoleRoute visible={!isGuest} loading={loading} path="/message" exact component={MessagePage} />
-            <RoleRoute visible={!isGuest} loading={loading} path="/job/new" exact component={MyJobPage} />
-            <RoleRoute visible={!isGuest} loading={loading} path="/job/:id" exact component={MyJobPage} />
-            <RoleRoute visible={isAdmin || isAgent || isClient} loading={loading} path="/job" exact component={isClient ? MyJobListPage : AdminJobListPage} />
-            <RoleRoute visible={isAdmin || isAgent} loading={loading} path="/job/:id/proceed" exact component={ProceedJobPage} />
+            <RoleRoute visible={!isGuest} loading={loading} path="/task/new" exact component={MyTaskPage} />
+            <RoleRoute visible={!isGuest} loading={loading} path="/task/:id" exact component={MyTaskPage} />
+            <RoleRoute visible={isAdmin || isAgent || isClient} loading={loading} path="/task" exact component={isClient ? MyTaskListPage : AdminTaskListPage} />
+            <RoleRoute visible={isAdmin || isAgent} loading={loading} path="/task/:id/proceed" exact component={ProceedTaskPage} />
             <RoleRoute visible={!isGuest} loading={loading} path="/change_password" exact component={ChangePasswordPage} />
             <RoleRoute loading={loading} path="/terms_and_conditions" exact component={TermAndConditionPage} />
             <RoleRoute loading={loading} path="/privacy_policy" exact component={PrivacyPolicyPage} />

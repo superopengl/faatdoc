@@ -28,7 +28,7 @@ const LayoutStyled = styled(Layout)`
   background-color: #ffffff;
   height: 100%;
 
-  .job-count .ant-badge-count {
+  .task-count .ant-badge-count {
     background-color: #143e86;
     color: #eeeeee;
     // box-shadow: 0 0 0 1px #143e86 inset;
@@ -117,7 +117,7 @@ const AdminStatsPage = () => {
             <StatCard title="Portfolio" value={stats?.portfolio} loading={loading} />
           </Col>
           <Col {...span} >
-            <StatCard title={<Link to="/job">Job <MdOpenInNew /></Link>} value={stats?.job} loading={loading} color={['#91d5ff', '#ff7875', '#1890ff', '#87e8de', '#b37feb']}/>
+            <StatCard title={<Link to="/task">Task <MdOpenInNew /></Link>} value={stats?.task} loading={loading} color={['#91d5ff', '#ff7875', '#1890ff', '#87e8de', '#b37feb']}/>
           </Col>
         </Row>
       </ContainerStyled>

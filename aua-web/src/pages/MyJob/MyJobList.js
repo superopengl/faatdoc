@@ -1,6 +1,6 @@
 import { Button, List, Space } from 'antd';
 import Text from 'antd/lib/typography/Text';
-import { JobStatus } from 'components/JobStatus';
+import { TaskStatus } from 'components/TaskStatus';
 import { TimeAgo } from 'components/TimeAgo';
 import React from 'react';
 import { withRouter } from 'react-router-dom';
@@ -8,24 +8,24 @@ import { EditOutlined, ZoomInOutlined, HighlightOutlined } from '@ant-design/ico
 import { Badge } from 'antd';
 
 
-const MyJobList = (props) => {
+const MyTaskList = (props) => {
 
   const { data, loading, onItemClick } = props;
 
-  // const goToEditJob = (id) => {
-  //   props.history.push(`/job/${id || 'new'}`);
+  // const goToEditTask = (id) => {
+  //   props.history.push(`/task/${id || 'new'}`);
   // }
 
-  // const goToViewJob = (id) => {
-  //   props.history.push(`/job/${id}/view`);
+  // const goToViewTask = (id) => {
+  //   props.history.push(`/task/${id}/view`);
   // }
 
-  const actionOnJob = job => {
-    onItemClick(job);
-    // if (['to_sign', 'signed', 'complete'].includes(job.status)) {
-    //   goToViewJob(job.id);
+  const actionOnTask = task => {
+    onItemClick(task);
+    // if (['to_sign', 'signed', 'complete'].includes(task.status)) {
+    //   goToViewTask(task.id);
     // } else {
-    //   goToEditJob(job.id);
+    //   goToEditTask(task.id);
     // }
   }
 
@@ -58,19 +58,19 @@ const MyJobList = (props) => {
       <List.Item
         style={{ paddingLeft: 0, paddingRight: 0 }}
         key={item.id}
-        onClick={() => actionOnJob(item)}
+        onClick={() => actionOnTask(item)}
       >
         <List.Item.Meta
           avatar={<div style={{ position: 'relative' }}>
             {getDotComponent(item)}
-            <JobStatus key="1" status={item.status} width={60} name={item.forWhom} style={{ marginTop: 6 }} />
+            <TaskStatus key="1" status={item.status} width={60} name={item.forWhom} style={{ marginTop: 6 }} />
           </div>}
 
           title={<Text style={{ fontSize: '1rem' }}>{item.name}</Text>}
           description={<Space style={{ width: '100%', justifyContent: 'space-between' }}>
             <TimeAgo value={item.lastUpdatedAt} surfix="Last Updated" accurate={true} />
             <Space>
-              <Button shape="circle" key="action" type="link" onClick={() => actionOnJob(item)} icon={getActionIcon(item.status)}></Button>
+              <Button shape="circle" key="action" type="link" onClick={() => actionOnTask(item)} icon={getActionIcon(item.status)}></Button>
               {/* {item.status === 'draft' && <>
                   <Button key="delete" shape="circle" danger disabled={loading} onClick={e => handleDelete(e, item)} icon={<DeleteOutlined />}></Button>
                 </>} */}
@@ -83,8 +83,8 @@ const MyJobList = (props) => {
   />
 };
 
-MyJobList.propTypes = {};
+MyTaskList.propTypes = {};
 
-MyJobList.defaultProps = {};
+MyTaskList.defaultProps = {};
 
-export default withRouter(MyJobList);
+export default withRouter(MyTaskList);

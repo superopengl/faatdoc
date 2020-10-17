@@ -10,7 +10,7 @@ import { Divider } from 'antd';
 
 
 
-const MyJobReadView = (props) => {
+const MyTaskReadView = (props) => {
   const { value, showsSignDoc } = props;
 
   const handleOk = () => {
@@ -18,21 +18,21 @@ const MyJobReadView = (props) => {
   }
 
   return (<>
-    <FinalReviewStep job={value} showsFooter={false} showsSignDoc={showsSignDoc} />
+    <FinalReviewStep task={value} showsFooter={false} showsSignDoc={showsSignDoc} />
     <Divider/>
     <Button block type="primary" onClick={handleOk}>OK</Button>
   </>
   );
 };
 
-MyJobReadView.propTypes = {
+MyTaskReadView.propTypes = {
   value: PropTypes.any.isRequired,
   showsSignDoc: PropTypes.bool.isRequired,
 };
 
-MyJobReadView.defaultProps = {
+MyTaskReadView.defaultProps = {
   // id: 'new'
   showsSignDoc: true
 };
 
-export default withRouter(MyJobReadView);
+export default withRouter(MyTaskReadView);

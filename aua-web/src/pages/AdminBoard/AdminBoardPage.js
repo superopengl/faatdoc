@@ -5,7 +5,7 @@ import HomeHeader from 'components/HomeHeader';
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { reactLocalStorage } from 'reactjs-localstorage';
-import { saveJob, searchJob } from '../../services/jobService';
+import { saveTask, searchTask } from '../../services/taskService';
 import styled from 'styled-components';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import TaskCard from './TaskCard';
@@ -74,13 +74,13 @@ const DEFAULT_QUERY_INFO = {
 
 const AdminBoardPage = props => {
   const [loading, setLoading] = React.useState(true);
-  const [jobList, setJobList] = React.useState([]);
+  const [taskList, setTaskList] = React.useState([]);
   const [queryInfo] = React.useState(reactLocalStorage.getObject('query', DEFAULT_QUERY_INFO, true))
 
   const loadList = async () => {
     setLoading(true);
-    const { data } = await searchJob(queryInfo);
-    setJobList(data);
+    const { data } = await searchTask(queryInfo);
+    setTaskList(data);
     setLoading(false);
   }
 
@@ -89,13 +89,13 @@ const AdminBoardPage = props => {
   }, []);
 
   const onDragEnd = async result => {
-    const { draggableId: jobId, destination: { droppableId: status } } = result;
-    const job = jobList.find(j => j.id === jobId);
-    if (job.status !== status) {
-      job.status = status;
+    const { draggableId: taskId, destination: { droppableId: status } } = result;
+    const task = taskList.find(j => j.id === taskId);
+    if (task.status !== status) {
+      task.status = status;
       setLoading(true);
       try {
-        await saveJob(job);
+        await saveTask(task);
       } finally {
         await loadList();
         setLoading(false);
@@ -103,16 +103,16 @@ const AdminBoardPage = props => {
     }
   }
 
-  const handleCreateJob = () => {
-    props.history.push('/job/new');
+  const handleCreateTask = () => {
+    props.history.push('/task/new');
   }
   return (
     <LayoutStyled>
       <HomeHeader></HomeHeader>
       <ContainerStyled>
         <Space style={{ width: '100%', justifyContent: 'flex-end', marginBottom: '1rem' }}>
-          <Link to="/job"><Button type="link">All Jobs</Button></Link>
-          <Button type="primary" onClick={() => handleCreateJob()} icon={<PlusOutlined />}>New Job</Button>
+          <Link to="/task"><Button type="link">All Tasks</Button></Link>
+          <Button type="primary" onClick={() => handleCreateTask()} icon={<PlusOutlined />}>New Task</Button>
         </Space>
         <DragDropContext onDragEnd={onDragEnd}>
           <Spin spinning={loading}>
@@ -124,12 +124,12 @@ const AdminBoardPage = props => {
                     <StyledColumn direction="vertical" style={{ backgroundColor: s.bgColor, border: `2px dashed ${snapshot.isDraggingOver ? s.hoverColor : s.bgColor}` }}>
                       <Space style={{ width: '100%', justifyContent: 'space-between' }}>
                         <Title level={5} style={{ textAlign: 'center', margin: '0 auto' }} type="secondary">{s.label}</Title>
-                        <Text strong>{jobList.filter(j => j.status === s.status).length}</Text>
+                        <Text strong>{taskList.filter(j => j.status === s.status).length}</Text>
                       </Space>
-                      {jobList.filter(j => j.status === s.status).map((job, index) => {
+                      {taskList.filter(j => j.status === s.status).map((task, index) => {
                         // if (task.statusId === status.id)
                         return (
-                          <TaskCard key={job.id} index={index} job={job} onChange={() => loadList()} />
+                          <TaskCard key={task.id} index={index} task={task} onChange={() => loadList()} />
                         );
                       })
                       }

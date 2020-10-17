@@ -5,7 +5,7 @@ import { TimeAgo } from 'components/TimeAgo';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { openFile, searchFile } from 'services/fileService';
-import { signJobDoc } from 'services/jobService';
+import { signTaskDoc } from 'services/taskService';
 import styled from 'styled-components';
 import * as _ from 'lodash';
 
@@ -32,20 +32,20 @@ const StyledListItem = styled(List.Item)`
 const SignDocEditor = (props) => {
   const { value, onOk } = props;
 
-  const job = value;
+  const task = value;
   const [, setLoading] = React.useState(true);
   const [fileToSign, setFileToSign] = React.useState();
   const [files, setFiles] = React.useState([]);
 
 
-  const getSignFiles = async (job) => {
-    const files = await searchFile(job.docs.filter(d => d.requiresSign).map(d => d.fileId));
+  const getSignFiles = async (task) => {
+    const files = await searchFile(task.docs.filter(d => d.requiresSign).map(d => d.fileId));
     return files
   }
 
   const loadEntity = async () => {
     setLoading(true);
-    const files = await getSignFiles(job);
+    const files = await getSignFiles(task);
     const sortedFiles = _.sortBy(files, ['fileName']);
     setFiles(sortedFiles);
     setLoading(false);
@@ -57,13 +57,13 @@ const SignDocEditor = (props) => {
 
   const handleSignAll = async () => {
     const unsignedFileIds = files.filter(f => !f.signedAt).map(f => f.id);
-    await signJobDoc(job.id, unsignedFileIds);
+    await signTaskDoc(task.id, unsignedFileIds);
     await loadEntity();
     onOk();
   }
 
   const handleFileClick = async (file) => {
-    await openFile(job.id, file.id);
+    await openFile(task.id, file.id);
     loadEntity();
   }
 
@@ -73,13 +73,13 @@ const SignDocEditor = (props) => {
   }
 
   const handleSignFile = async (file) => {
-    await signJobDoc(job.id, [file.id]);
+    await signTaskDoc(task.id, [file.id]);
     setFileToSign(null);
     await loadEntity();
     onOk();
   }
 
-  const { status } = job || {};
+  const { status } = task || {};
 
   const isSigned = status === 'signed';
   const canSign = status === 'to_sign' && files.every(f => !!f.lastReadAt) && !isSigned;

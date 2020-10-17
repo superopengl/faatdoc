@@ -1,47 +1,47 @@
 import { httpGet, httpPost, httpDelete } from './http';
 
-export async function getJob(id) {
-  return httpGet(`job/${id}`);
+export async function getTask(id) {
+  return httpGet(`task/${id}`);
 }
 
-export async function saveJob(item) {
-  return httpPost('job', item);
+export async function saveTask(item) {
+  return httpPost('task', item);
 }
 
-export async function deleteJob(id) {
-  return httpDelete(`job/${id}`);
+export async function deleteTask(id) {
+  return httpDelete(`task/${id}`);
 }
 
-export async function listJob() {
-  return httpGet('job');
+export async function listTask() {
+  return httpGet('task');
 }
 
-export async function searchJob(query) {
-  return httpPost('job/search', query);
+export async function searchTask(query) {
+  return httpPost('task/search', query);
 }
 
-export async function signJobDoc(id, fileIds) {
-  return httpPost(`job/${id}/sign`, {files: fileIds});
+export async function signTaskDoc(id, fileIds) {
+  return httpPost(`task/${id}/sign`, {files: fileIds});
 }
 
-export async function generateJob(jobTemplateId, portfolioId) {
-  return httpPost('job/generate', {jobTemplateId, portfolioId});
+export async function generateTask(taskTemplateId, portfolioId) {
+  return httpPost('task/generate', {taskTemplateId, portfolioId});
 }
 
-export async function assignJob(jobId, agentId) {
-  return httpPost(`job/${jobId}/assign`, { agentId });
+export async function assignTask(taskId, agentId) {
+  return httpPost(`task/${taskId}/assign`, { agentId });
 }
 
-export async function listJobNotifies(jobId, from, size = 20) {
-  return httpGet(`job/${jobId}/notify`, { from, size });
+export async function listTaskNotifies(taskId, from, size = 20) {
+  return httpGet(`task/${taskId}/notify`, { from, size });
 }
 
-export async function markJobNotifyRead(jobId) {
-  return httpPost(`job/${jobId}/notify/read`);
+export async function markTaskNotifyRead(taskId) {
+  return httpPost(`task/${taskId}/notify/read`);
 }
 
-export async function notifyJob(jobId, msg) {
+export async function notifyTask(taskId, msg) {
   const content = msg?.trim();
   if (!content) return;
-  return httpPost(`job/${jobId}/notify`, { content });
+  return httpPost(`task/${taskId}/notify`, { content });
 }

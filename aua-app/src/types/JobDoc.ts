@@ -1,9 +1,9 @@
 import { Column, PrimaryGeneratedColumn, Entity, ManyToOne } from 'typeorm';
-import { Job } from '../entity/Job';
+import { Task } from '../entity/Task';
 import { getUtcNow } from '../utils/getUtcNow';
 
 
-export class JobDoc {
+export class TaskDoc {
   // @PrimaryGeneratedColumn('uuid')
   // id?: string;
 

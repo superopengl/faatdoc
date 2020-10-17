@@ -1,9 +1,9 @@
 import { Alert, Space, Tabs, Typography } from 'antd';
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { getJob } from 'services/jobService';
+import { getTask } from 'services/taskService';
 import styled from 'styled-components';
-import MyJobReadView from './MyJobReadView';
+import MyTaskReadView from './MyTaskReadView';
 import SignDocEditor from './SignDocEditor';
 
 const { Title } = Typography;
@@ -18,45 +18,45 @@ const StyledTitleRow = styled.div`
 `
 
 
-const MyJobSign = (props) => {
+const MyTaskSign = (props) => {
   const { value } = props;
 
   const [loading] = React.useState(false);
-  const [job, setJob] = React.useState(value);
+  const [task, setTask] = React.useState(value);
 
 
   const loadEntity = async () => {
-    const updatedJob = await getJob(job.id);
-    setJob(updatedJob);
+    const updatedTask = await getTask(task.id);
+    setTask(updatedTask);
   }
 
-  const { status } = job || {};
+  const { status } = task || {};
   const defaultActiveKey = status && status === 'to_sign' ? 'sign' : 'view';
 
   return (
     <Space size="large" direction="vertical" style={{ width: '100%' }}>
       <StyledTitleRow>
-        <Title level={2} style={{ margin: 'auto' }}>Sign Job</Title>
+        <Title level={2} style={{ margin: 'auto' }}>Sign Task</Title>
       </StyledTitleRow>
       {status === 'signed' && <Alert
-        message="The job has been signed."
-        description="Please wait for the job to be completed by us."
+        message="The task has been signed."
+        description="Please wait for the task to be completed by us."
         type="success"
         showIcon
       />}
       {status === 'to_sign' && <Alert
-        message="The job requires signature."
-        description="All below documents have been viewed and the job is ready to e-sign."
+        message="The task requires signature."
+        description="All below documents have been viewed and the task is ready to e-sign."
         type="warning"
         showIcon
       />}
       {!loading && <Tabs defaultActiveKey={defaultActiveKey}>
         <Tabs.TabPane tab="Application" key="view">
-          {/* <MyJobForm showsAll={status === 'complete'} value={job} onOk={() => goToJobList()} /> */}
-          <MyJobReadView value={job} showsSignDoc={false}/>
+          {/* <MyTaskForm showsAll={status === 'complete'} value={task} onOk={() => goToTaskList()} /> */}
+          <MyTaskReadView value={task} showsSignDoc={false}/>
         </Tabs.TabPane>
         <Tabs.TabPane tab="Sign" key="sign">
-          <SignDocEditor value={job} onOk={() => loadEntity()} />
+          <SignDocEditor value={task} onOk={() => loadEntity()} />
         </Tabs.TabPane>
       </Tabs>}
       {/* <Button block type="link" onClick={() => props.history.goBack()}>Cancel</Button> */}
@@ -64,10 +64,10 @@ const MyJobSign = (props) => {
   );
 };
 
-MyJobSign.propTypes = {
+MyTaskSign.propTypes = {
   // id: PropTypes.string.isRequired
 };
 
-MyJobSign.defaultProps = {};
+MyTaskSign.defaultProps = {};
 
-export default withRouter(MyJobSign);
+export default withRouter(MyTaskSign);

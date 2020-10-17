@@ -1,19 +1,19 @@
 import { getRepository } from 'typeorm';
-import { Job } from '../entity/Job';
+import { Task } from '../entity/Task';
 import { User } from '../entity/User';
 import { sendEmail } from '../services/emailService';
 
 
-export async function sendNewJobCreatedEmail(job: Job) {
-  const user = await getRepository(User).findOne(job.userId);
-  const { id: jobId, name: jobName } = job;
+export async function sendNewTaskCreatedEmail(task: Task) {
+  const user = await getRepository(User).findOne(task.userId);
+  const { id: taskId, name: taskName } = task;
 
   await sendEmail({
     to: user.email,
-    template: 'jobCreated',
+    template: 'taskCreated',
     vars: {
-      jobId,
-      jobName,
+      taskId,
+      taskName,
     },
     shouldBcc: true
   });

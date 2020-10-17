@@ -10,15 +10,15 @@ import StepButtonSet from './StepBottonSet';
 
 const { Text } = Typography;
 
-const JobFieldsEditor = (props) => {
-  const { job, onFinish, disabled, onBack, isActive } = props;
+const TaskFieldsEditor = (props) => {
+  const { task, onFinish, disabled, onBack, isActive } = props;
 
   const handleSubmit = async (values) => {
-    const changedJob = merge({}, job, values);
-    onFinish(changedJob);
+    const changedTask = merge({}, task, values);
+    onFinish(changedTask);
   }
 
-  if (!job || !isActive) {
+  if (!task || !isActive) {
     return null;
   }
 
@@ -26,9 +26,9 @@ const JobFieldsEditor = (props) => {
     layout="vertical"
     onFinish={handleSubmit}
     style={{ textAlign: 'left' }}
-    initialValues={job}
+    initialValues={task}
   >
-    {job.fields.filter(field => !field.officialOnly).map((field, i) => {
+    {task.fields.filter(field => !field.officialOnly).map((field, i) => {
       const { name, description, type, required } = field;
       const formItemProps = {
         label: <>{varNameToLabelName(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
@@ -60,13 +60,13 @@ const JobFieldsEditor = (props) => {
   </Form>
 };
 
-JobFieldsEditor.propTypes = {
-  job: PropTypes.any.isRequired,
+TaskFieldsEditor.propTypes = {
+  task: PropTypes.any.isRequired,
   disabled: PropTypes.bool.isRequired,
 };
 
-JobFieldsEditor.defaultProps = {
+TaskFieldsEditor.defaultProps = {
   disabled: false
 };
 
-export default withRouter(JobFieldsEditor);
+export default withRouter(TaskFieldsEditor);

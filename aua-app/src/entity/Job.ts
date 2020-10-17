@@ -1,14 +1,14 @@
 import { Column, PrimaryGeneratedColumn, Entity, OneToMany } from 'typeorm';
-import { JobStatus } from '../types/JobStatus';
+import { TaskStatus } from '../types/TaskStatus';
 import { FeedbackDoc } from '../types/FeedbackDoc';
 import { GenDoc } from '../types/GenDoc';
 import { SignDoc } from '../types/SignDoc';
 import { UploadDoc } from '../types/UploadDoc';
 import { stringType } from 'aws-sdk/clients/iam';
-import { JobDoc } from '../types/JobDoc';
+import { TaskDoc } from '../types/TaskDoc';
 
 @Entity()
-export class Job {
+export class Task {
   @PrimaryGeneratedColumn('uuid')
   id?: string;
 
@@ -24,11 +24,11 @@ export class Job {
   @Column()
   forWhom: string;
 
-  @Column({ default: JobStatus.TODO })
-  status: JobStatus;
+  @Column({ default: TaskStatus.TODO })
+  status: TaskStatus;
 
   @Column('uuid')
-  jobTemplateId: string;
+  taskTemplateId: string;
 
   @Column('uuid')
   portfolioId: string;
@@ -55,7 +55,7 @@ export class Job {
   // feedbackDocs: string[];
 
   @Column({ type: 'json', default: [] })
-  docs: JobDoc[];
+  docs: TaskDoc[];
 }
 
 

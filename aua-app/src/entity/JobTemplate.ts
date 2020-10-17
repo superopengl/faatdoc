@@ -1,7 +1,7 @@
 import { Column, PrimaryColumn, Entity, Index } from 'typeorm';
 
 @Entity()
-export class JobTemplate {
+export class TaskTemplate {
   @PrimaryColumn('uuid')
   id: string;
 

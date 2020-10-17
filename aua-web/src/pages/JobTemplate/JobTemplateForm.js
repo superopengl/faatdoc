@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { Input, Space, Select, Typography, Checkbox, Form, Button, Spin } from 'antd';
-import { saveJobTemplate, getJobTemplate } from 'services/jobTemplateService';
+import { saveTaskTemplate, getTaskTemplate } from 'services/taskTemplateService';
 import { notify } from 'util/notify';
 import FieldEditor from 'components/FieldEditor';
 import { listDocTemplate } from 'services/docTemplateService';
@@ -17,7 +17,7 @@ const DEFAULT_ENTITY = {
   fields: []
 }
 
-const JobTemplateForm = (props) => {
+const TaskTemplateForm = (props) => {
 
   const { id } = props;
 
@@ -29,7 +29,7 @@ const JobTemplateForm = (props) => {
   const loadEntity = async () => {
     setLoading(true);
     if (id) {
-      const entity = await getJobTemplate(id);
+      const entity = await getTaskTemplate(id);
       setEntity(entity);
     }
 
@@ -50,10 +50,10 @@ const JobTemplateForm = (props) => {
       ...entity,
       ...values,
     }
-    await saveJobTemplate(entityToSave);
+    await saveTaskTemplate(entityToSave);
     await loadEntity();
     props.onOk();
-    notify.success(<>Successfully saved job template <strong>{values.name}</strong></>)
+    notify.success(<>Successfully saved task template <strong>{values.name}</strong></>)
   }
 
   const handleClose = () => {
@@ -103,8 +103,8 @@ const JobTemplateForm = (props) => {
         initialValues={entity}
         form={form}
       >
-        <Form.Item label="Job Template Name" name="name" rules={[{ required: true, message: ' ', whitespace: true, max: 100 }]}>
-          <Input placeholder="Job Template Name" />
+        <Form.Item label="Task Template Name" name="name" rules={[{ required: true, message: ' ', whitespace: true, max: 100 }]}>
+          <Input placeholder="Task Template Name" />
         </Form.Item>
         {/* <Form.Item label="Upload documents is required?" name="hasUploadDocs" valuePropName="checked">
           <Checkbox>Upload documents is required?</Checkbox>
@@ -140,11 +140,11 @@ const JobTemplateForm = (props) => {
   );
 };
 
-JobTemplateForm.propTypes = {
+TaskTemplateForm.propTypes = {
   id: PropTypes.string,
 };
 
-JobTemplateForm.defaultProps = {
+TaskTemplateForm.defaultProps = {
 };
 
-export default withRouter(JobTemplateForm);
+export default withRouter(TaskTemplateForm);

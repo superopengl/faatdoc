@@ -2,74 +2,74 @@
 import { getRepository, In } from 'typeorm';
 import { assert } from './assert';
 import * as _ from 'lodash';
-import { Job } from '../entity/Job';
+import { Task } from '../entity/Task';
 import { GenDoc } from '../types/GenDoc';
 import { getUtcNow } from './getUtcNow';
-import { JobTemplate } from '../entity/JobTemplate';
+import { TaskTemplate } from '../entity/TaskTemplate';
 import { Portfolio } from '../entity/Portfolio';
-import { JobStatus } from '../types/JobStatus';
+import { TaskStatus } from '../types/TaskStatus';
 import { guessDisplayNameFromFields } from './guessDisplayNameFromFields';
 import { v4 as uuidv4 } from 'uuid';
 import { DocTemplate } from '../entity/DocTemplate';
-import { JobDoc } from '../types/JobDoc';
+import { TaskDoc } from '../types/TaskDoc';
 
 
-function prefillFieldsWithProtofolio(jobTemplateFields, portfolioFields) {
-  if (!portfolioFields) return jobTemplateFields;
+function prefillFieldsWithProtofolio(taskTemplateFields, portfolioFields) {
+  if (!portfolioFields) return taskTemplateFields;
 
   const map = new Map(portfolioFields.map(({ name, value }) => [name, value]));
-  const fields = jobTemplateFields.map(jobTemplate => (
+  const fields = taskTemplateFields.map(taskTemplate => (
     {
-      ...jobTemplate,
-      value: map.get(jobTemplate.name)
+      ...taskTemplate,
+      value: map.get(taskTemplate.name)
     }
   ));
 
   return fields;
 }
 
-function mapDocTemplatesToGenDocs(docTemplates: DocTemplate[]): JobDoc[] {
+function mapDocTemplatesToGenDocs(docTemplates: DocTemplate[]): TaskDoc[] {
   return docTemplates.map(x => {
-    const jobDoc = new JobDoc();
-    jobDoc.docTemplateId = x.id;
+    const taskDoc = new TaskDoc();
+    taskDoc.docTemplateId = x.id;
     // docTemplateName: x.name,
     // docTemplateDescription: x.description,
-    jobDoc.variables = x.variables.map(name => ({ name, value: undefined }));
-    jobDoc.fileName = `${x.name}.pdf`;
-    return jobDoc;
+    taskDoc.variables = x.variables.map(name => ({ name, value: undefined }));
+    taskDoc.fileName = `${x.name}.pdf`;
+    return taskDoc;
   });
 }
 
-export const generateJobByJobTemplateAndPortfolio = async (jobTemplateId, portfolioId, genName: (job: JobTemplate, porto: Portfolio) => string) => {
-  assert(jobTemplateId, 400, 'jobTemplateId is not specified');
-  assert(portfolioId, 400, 'jobTemplateId is not specified');
+export const generateTaskByTaskTemplateAndPortfolio = async (taskTemplateId, portfolioId, genName: (task: TaskTemplate, porto: Portfolio) => string) => {
+  assert(taskTemplateId, 400, 'taskTemplateId is not specified');
+  assert(portfolioId, 400, 'taskTemplateId is not specified');
 
-  const jobTemplateRepo = getRepository(JobTemplate);
-  const jobTemplate = await jobTemplateRepo.findOne(jobTemplateId);
-  assert(jobTemplate, 404, 'jobTemplate is not found');
+  const taskTemplateRepo = getRepository(TaskTemplate);
+  const taskTemplate = await taskTemplateRepo.findOne(taskTemplateId);
+  assert(taskTemplate, 404, 'taskTemplate is not found');
 
   const portfolioRepo = getRepository(Portfolio);
   const portfolio = await portfolioRepo.findOne(portfolioId);
   assert(portfolio, 404, 'portfolio is not found');
 
-  const docTemplates = jobTemplate.docTemplateIds.length ?
-    await getRepository(DocTemplate).find({ where: { id: In(jobTemplate.docTemplateIds) } }) :
+  const docTemplates = taskTemplate.docTemplateIds.length ?
+    await getRepository(DocTemplate).find({ where: { id: In(taskTemplate.docTemplateIds) } }) :
     [];
 
-  const job = new Job();
+  const task = new Task();
 
-  const fields = prefillFieldsWithProtofolio(jobTemplate.fields, portfolio.fields);
+  const fields = prefillFieldsWithProtofolio(taskTemplate.fields, portfolio.fields);
 
-  // job.id = uuidv4();
-  job.name = genName(jobTemplate, portfolio);
-  job.forWhom = guessDisplayNameFromFields(portfolio.fields);
-  job.userId = portfolio.userId;
-  job.jobTemplateId = jobTemplateId;
-  job.portfolioId = portfolioId;
-  job.fields = fields;
-  job.docs = mapDocTemplatesToGenDocs(docTemplates);
-  job.lastUpdatedAt = getUtcNow();
-  job.status = JobStatus.TODO;
+  // task.id = uuidv4();
+  task.name = genName(taskTemplate, portfolio);
+  task.forWhom = guessDisplayNameFromFields(portfolio.fields);
+  task.userId = portfolio.userId;
+  task.taskTemplateId = taskTemplateId;
+  task.portfolioId = portfolioId;
+  task.fields = fields;
+  task.docs = mapDocTemplatesToGenDocs(docTemplates);
+  task.lastUpdatedAt = getUtcNow();
+  task.status = TaskStatus.TODO;
 
-  return job;
+  return task;
 };
