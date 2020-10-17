@@ -14,8 +14,11 @@ import { generateJobByJobTemplateAndPortfolio } from '../utils/generateJobByJobT
 import { getUtcNow } from '../utils/getUtcNow';
 import { guessDisplayNameFromFields } from '../utils/guessDisplayNameFromFields';
 import { Portfolio } from '../entity/Portfolio';
-import { File } from '../entity/File';
 import * as _ from 'lodash';
+import { sendNewJobCreatedEmail } from '../utils/sendNewJobCreatedEmail';
+import { sendCompletedEmail } from '../utils/sendCompletedEmail';
+import { sendArchiveEmail } from '../utils/sendArchiveEmail';
+import { sendRequireSignEmail } from '../utils/sendRequireSignEmail';
 
 export const generateJob = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
@@ -29,75 +32,6 @@ export const generateJob = handlerWrapper(async (req, res) => {
 
   res.json(Job);
 });
-
-async function sendNewJobCreatedEmail(job: Job) {
-  const user = await getRepository(User).findOne(job.userId);
-  const { id: jobId, name: jobName } = job;
-
-  await sendEmail({
-    to: user.email,
-    template: 'jobCreated',
-    vars: {
-      jobId,
-      jobName,
-    },
-    shouldBcc: true
-  });
-}
-
-async function sendRequireSignEmail(job: Job) {
-  const user = await getRepository(User).findOne(job.userId);
-  const { id: jobId, name: jobName } = job;
-
-  await sendEmail({
-    to: user.email,
-    template: 'jobToSign',
-    vars: {
-      jobId,
-      jobName,
-    },
-    shouldBcc: true
-  });
-}
-
-async function sendArchiveEmail(job: Job) {
-  const user = await getRepository(User).findOne(job.userId);
-  const { id: jobId, name: jobName } = job;
-
-  await sendEmail({
-    to: user.email,
-    template: 'jobArchived',
-    vars: {
-      jobId,
-      jobName,
-    },
-    shouldBcc: true
-  });
-}
-
-async function sendCompletedEmail(job: Job) {
-  const user = await getRepository(User).findOne(job.userId);
-  const { id: jobId, docs: jobDocs, name: jobName } = job;
-  const fileIds = (jobDocs || []).filter(d => d.isFeedback).map(d => d.fileId).filter(x => x);
-  const attachments = fileIds.length ?
-    await getRepository(File)
-      .createQueryBuilder('x')
-      .where(`x.id IN (:...ids)`, { ids: fileIds })
-      .select(['x.fileName as filename', 'x.location as path'])
-      .execute() :
-    undefined;
-
-  await sendEmail({
-    to: user.email,
-    template: 'jobComplete',
-    vars: {
-      jobId,
-      jobName,
-    },
-    attachments,
-    shouldBcc: true
-  });
-}
 
 async function handleJobStatusChange(oldStatus: JobStatus, job: Job) {
   const { status } = job;
@@ -118,7 +52,6 @@ async function handleJobStatusChange(oldStatus: JobStatus, job: Job) {
     // Archived
     await sendArchiveEmail(job);
   }
-
 }
 
 export const saveJob = handlerWrapper(async (req, res) => {

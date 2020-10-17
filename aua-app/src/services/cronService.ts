@@ -15,6 +15,7 @@ import { JobTemplate } from '../entity/JobTemplate';
 import { Portfolio } from '../entity/Portfolio';
 import { User } from '../entity/User';
 import * as os from 'os';
+import { sendNewJobCreatedEmail } from '../utils/sendNewJobCreatedEmail';
 
 const startImmidiatly = true;
 const tz = 'Australia/Sydney';
@@ -72,6 +73,8 @@ export async function executeRecurring(recurringId) {
   job.status = JobStatus.TODO;
 
   trySetJobDueDateField(job, recurring.dueDay);
+
+  sendNewJobCreatedEmail(job);
 
   await getRepository(Job).save(job);
 
