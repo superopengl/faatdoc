@@ -40,6 +40,7 @@ dependencies:
   react-time-ago: 6.0.1_react-dom@16.13.1+react@16.13.1
   react-to-print: 2.9.0_react-dom@16.13.1+react@16.13.1
   reactjs-localstorage: 1.0.1
+  rxjs: 6.6.3
   styled-components: 5.1.1_479e60ee9c1aa71dc1eb81036e3619dc
   tfn: 1.0.0
   uniqolor: 1.0.1
@@ -11762,6 +11763,14 @@ packages:
       npm: '>=2.0.0'
     resolution:
       integrity: sha512-BHdBMVoWC2sL26w//BCu3YzKT4s2jip/WhwsGEDmeKYBhKDZeYezVUnHatYB7L85v5xs0BAQmg6BEYJEKxBabg==
+  /rxjs/6.6.3:
+    dependencies:
+      tslib: 1.14.1
+    dev: false
+    engines:
+      npm: '>=2.0.0'
+    resolution:
+      integrity: sha512-trsQc+xYYXZ3urjOiJOuCOa5N3jAZ3eiSpQB5hIT8zGlL2QfnHLJ2r7GMkBGuIausdJN1OneaI6gQlsqNHHmZQ==
   /safe-buffer/5.1.2:
     dev: false
     resolution:
@@ -12919,6 +12928,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-+Zw5lu0D9tvBMjGP8LpvMb0u2WW2QV3y+D8mO6J+cNzCYIN4sVy43Bf9vl92nqFahutN0I8zHa7cc4vihIshnw==
+  /tslib/1.14.1:
+    dev: false
+    resolution:
+      integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
   /tslib/2.0.2:
     dev: false
     resolution:
@@ -13934,6 +13947,7 @@ specifiers:
   react-time-ago: ^6.0.1
   react-to-print: ^2.9.0
   reactjs-localstorage: ^1.0.1
+  rxjs: ^6.6.3
   styled-components: ^5.1.0
   tfn: ^1.0.0
   uniqolor: ^1.0.1

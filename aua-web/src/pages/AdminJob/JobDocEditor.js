@@ -49,8 +49,6 @@ const PendingDoc = styled.div`
   }
 `;
 
-
-
 export const JobDocEditor = (props) => {
   const { value, onChange } = props;
 
@@ -139,7 +137,7 @@ export const JobDocEditor = (props) => {
     {
       title: 'Document',
       dataIndex: 'fileId',
-      render: (value, doc) => value ? <FileLink id={value} name={doc.fileName} /> :
+      render: (fileId, doc) => fileId ? <FileLink id={fileId} name={doc.fileName} /> :
         <Tooltip title="Generate from the doc template">
           <PendingDoc>
             <Space style={{ width: '100%', alignItems: 'center' }} onClick={() => showGenDocModalSpecific(doc.docTemplateId)}>
@@ -196,7 +194,6 @@ export const JobDocEditor = (props) => {
         <Tooltip title="Delete document">
           <Button shape="circle" onClick={() => handleDeleteDoc(doc)} danger icon={<DeleteOutlined />}></Button>
         </Tooltip>
-
       </Space>
     },
   ];

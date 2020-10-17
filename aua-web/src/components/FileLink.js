@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Typography, Spin, Space } from 'antd';
+import { Typography, Spin, Space } from 'antd';
 import { getFile } from 'services/fileService';
 import { FileIcon } from './FileIcon';
+import { from, EMPTY } from 'rxjs';
 
-const { Text, Link } = Typography;
-
+const { Link } = Typography;
 
 const FileLink = props => {
   const { placeholder, name, id, location } = props;
@@ -13,22 +13,29 @@ const FileLink = props => {
   const [fileName, setFileName] = React.useState(placeholder || name);
   const [loading, setLoading] = React.useState(true);
 
-  const loadEntity = async () => {
+  const loadEntity = () => {
     if (location) {
       setFileUrl(location);
       setLoading(false);
     } else if (id) {
       setLoading(true);
-      const file = await getFile(id);
-      setFileName(file.fileName);
-      setFileUrl(file.location);
-      setLoading(false);
+      const file$ = from(getFile(id)).subscribe(file => {
+        setFileName(file.fileName);
+        setFileUrl(file.location);
+        setLoading(false);
+      });
+      return file$;
     }
+
+    return EMPTY;
   }
 
   React.useEffect(() => {
-    loadEntity()
-  }, [location, id]);
+    const s$ = loadEntity();
+    return () => {
+      s$.unsubscribe();
+    }
+  }, [id]);
 
   return <Spin spinning={loading}>
     <Link href={fileUrl} target="_blank" style={{ width: '100%' }}>
