@@ -78,7 +78,7 @@ const DocTemplateForm = (props) => {
       </Form.Item>
       <Button style={{ position: 'absolute', right: 0, top: 0, width: 100 }} htmlType="submit" type="primary">Save</Button>
       <Form.Item name="description" rules={[{ required: true, message: ' ' }]}>
-        <Input.TextArea allowClear autoSize={{minRows: 3}}/>
+        <Input.TextArea allowClear autoSize={{minRows: 3}} placeholder="Doc template description. This will be shown on the create task wizard to help users fill required fields to generate this document."/>
       </Form.Item>
       <Paragraph type="secondary">
         Refer to <a href="https://www.markdownguide.org/basic-syntax/" target="_blank" rel="noopener noreferrer">https://www.markdownguide.org/basic-syntax/</a> for Markdown basic syntax. Use double curly braces to express the field variables like <Text code>{'{{givenName}}'}</Text>, <Text code>{'{{now}}'}</Text>.

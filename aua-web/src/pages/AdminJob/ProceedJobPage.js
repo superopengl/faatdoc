@@ -25,6 +25,18 @@ const ContainerStyled = styled.div`
   // max-width: 900px;
   width: 100%;
   display: flex;
+
+  .ant-page-header-heading-left {
+    flex: 1;
+  }
+
+  .ant-page-header-heading-title {
+    width: 100%;
+
+    .job-name-input {
+      font-weight: 700;
+    }
+  }
 `;
 
 
@@ -201,7 +213,9 @@ const ProceedJobPage = (props) => {
       >
         <PageHeader
           onBack={() => handleCancel()}
-          title={job.name}
+          title={<Form.Item name="name" rules={[{ required: true, message: ' ' }]} style={{margin: 0, width: '100%'}}>
+            <Input className="job-name-input" placeholder="Task name" disabled={loading} />
+          </Form.Item>}
           // subTitle={<JobProgressBar status={job.status} width={60} />}
           extra={[
             <Space key="1" style={{ width: '100%', justifyContent: 'flex-end' }}>
