@@ -3,7 +3,7 @@ import { CronInput } from 'components/CronInput';
 import { PortfolioAvatar } from 'components/PortfolioAvatar';
 import PropTypes from 'prop-types';
 import React from 'react';
-import 'react-chat-elements/dist/main.css';
+// import 'pages/AdminTask/node_modules/react-chat-elements/dist/main.css';
 import { withRouter } from 'react-router-dom';
 import { listTaskTemplate } from 'services/taskTemplateService';
 import { listPortfolio } from 'services/portfolioService';
