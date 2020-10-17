@@ -10,6 +10,8 @@ export const SampleMarkdown=`
 <h2 align="center"> h2 Center Heading </h2>
 <h3 align="center"> h3 Center Heading </h3>
 <h4 align="center"> h4 Center Heading </h4>
+<h5 align="center"> h5 Center Heading </h5>
+<h6 align="center"> h6 Center Heading </h6>
 
 ## Horizontal Rules
 

@@ -252,7 +252,7 @@ const ProceedJobPage = (props) => {
         </Row>
         <Row>
           <Col span={24}>
-            <JobDocEditor value={job.docs} onChange={handleJobDocsChange} />
+            <JobDocEditor value={job.docs} fields={job.fields} onChange={handleJobDocsChange} />
           </Col>
         </Row>
       </Form>

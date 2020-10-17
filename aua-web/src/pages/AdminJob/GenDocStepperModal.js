@@ -57,7 +57,7 @@ const GenDocStepperModal = props => {
     const initialValues = docTemplate.variables.filter(x => x !== 'now').reduce((pre, cur) => {
       pre[cur] = fields.find(f => f.name === cur)?.value;
       return pre;
-    }, {})
+    }, {});
     setInitialValues(initialValues);
     stepperRef.current.nextStep();
   }

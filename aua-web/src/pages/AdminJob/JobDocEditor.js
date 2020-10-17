@@ -50,7 +50,7 @@ const PendingDoc = styled.div`
 `;
 
 export const JobDocEditor = (props) => {
-  const { value, onChange } = props;
+  const { value, fields, onChange } = props;
 
   const [docList, setDocList] = React.useState(value);
   const [loading, setLoading] = React.useState(false);
@@ -227,6 +227,7 @@ export const JobDocEditor = (props) => {
       />
       <GenDocStepperModal
         visible={genDocModalVisible}
+        fields={fields}
         onChange={handleGenDocDone}
         docTemplateId={docTemplateId}
         onCancel={() => setGenDocModalVisible(false)}
