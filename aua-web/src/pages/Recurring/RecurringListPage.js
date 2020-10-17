@@ -197,9 +197,12 @@ const RecurringListPage = (props) => {
     e.stopPropagation();
     const { id } = item;
     const job = await runRecurring(id);
-    notify.success(
+    const notice = notify.success(
       'Successfully run the recurring',
-      <Text>The job <TextLink strong onClick={() => props.history.push(`/job/${job.id}/proceed`)}>{job.name}</TextLink> was created</Text>,
+      <Text>The job <TextLink strong onClick={() => {
+        notice.close();
+        props.history.push(`/job/${job.id}/proceed`);
+      }}>{job.name}</TextLink> was created</Text>,
       15
     );
   }
