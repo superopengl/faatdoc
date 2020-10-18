@@ -48,7 +48,7 @@ class HomeTeamArea extends React.Component {
     return (
       <HomeRowArea {...props}>
         <InfoCard >
-          <StyledAvatar src="https://static.wixstatic.com/media/114f75_881e837b764944f586ec64c38ee2e3ed~mv2.jpg/v1/fill/w_294,h_374,al_c,q_80,usm_0.66_1.00_0.01/4c3e6833147e3ce125b63c9852d607e4_edited_.webp" />
+          <StyledAvatar src="/images/avatar-zhou.jpg" />
           <section>
             <Title level={3}>Jinlin Zhou</Title>
             <p>
