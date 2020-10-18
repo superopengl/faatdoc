@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Typography, Spin, Space } from 'antd';
 import { getFile } from 'services/fileService';
 import { FileIcon } from './FileIcon';
-import { from, EMPTY } from 'rxjs';
+import { from, Subscription } from 'rxjs';
 
 const { Link } = Typography;
 
@@ -27,7 +27,7 @@ const FileLink = props => {
       return file$;
     }
 
-    return EMPTY;
+    return Subscription.EMPTY;
   }
 
   React.useEffect(() => {
