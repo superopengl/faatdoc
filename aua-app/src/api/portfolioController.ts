@@ -7,6 +7,7 @@ import { assert, assertRole } from '../utils/assert';
 import { handlerWrapper } from '../utils/asyncHandler';
 import { getUtcNow } from '../utils/getUtcNow';
 import { guessDisplayNameFromFields } from '../utils/guessDisplayNameFromFields';
+import { sendNewPortfolioEmail } from '../utils/sendNewPortfolioEmail';
 
 export const savePortfolio = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
@@ -15,6 +16,7 @@ export const savePortfolio = handlerWrapper(async (req, res) => {
   const { user: { id: userId } } = req as any;
 
   const { id, fields, type } = req.body;
+  const isNew = !id;
   portfolio.id = id || uuidv4();
   portfolio.userId = userId;
   portfolio.name = guessDisplayNameFromFields(fields);
@@ -24,6 +26,8 @@ export const savePortfolio = handlerWrapper(async (req, res) => {
 
   const repo = getRepository(Portfolio);
   await repo.save(portfolio);
+
+  sendNewPortfolioEmail(portfolio);
 
   res.json();
 });

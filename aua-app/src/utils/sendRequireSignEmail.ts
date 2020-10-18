@@ -6,12 +6,13 @@ import { sendEmail } from '../services/emailService';
 
 export async function sendRequireSignEmail(task: Task) {
   const user = await getRepository(User).findOne(task.userId);
-  const { id: taskId, name: taskName } = task;
+  const { id: taskId, name: taskName, forWhom } = task;
 
   await sendEmail({
     to: user.email,
     template: 'taskToSign',
     vars: {
+      forWhom,
       taskId,
       taskName,
     },
