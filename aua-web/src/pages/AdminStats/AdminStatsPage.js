@@ -29,9 +29,9 @@ const LayoutStyled = styled(Layout)`
   height: 100%;
 
   .task-count .ant-badge-count {
-    background-color: #143e86;
+    background-color: #183e91;
     color: #eeeeee;
-    // box-shadow: 0 0 0 1px #143e86 inset;
+    // box-shadow: 0 0 0 1px #183e91 inset;
   }
 `;
 

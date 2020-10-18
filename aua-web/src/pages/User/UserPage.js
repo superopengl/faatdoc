@@ -58,7 +58,7 @@ const UserPage = () => {
     {
       title: 'Login Type',
       dataIndex: 'loginType',
-      render: (text) => text === 'local' ? <Tag color="#333333">Local</Tag> : <Tag icon={<GoogleOutlined />} color="#143e86">Google</Tag>
+      render: (text) => text === 'local' ? <Tag color="#333333">Local</Tag> : <Tag icon={<GoogleOutlined />} color="#183e91">Google</Tag>
     },
     {
       title: 'Last Logged In At',

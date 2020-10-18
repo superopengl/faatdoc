@@ -35,11 +35,11 @@ const LayoutStyled = styled(Layout)`
 
 const StyledSpace = styled(Space)`
 svg, h3 {
-color: #143e86 !important;
+color: #183e91 !important;
 }
 
 .ant-card {
-  border-color: #143e86;
+  border-color: #183e91;
 }
 `
 

@@ -1,7 +1,7 @@
 const CracoLessPlugin = require('craco-less');
 
 const modifyVars = {
-  '@primary-color': '#143e86',
+  '@primary-color': '#183e91',
   '@font-size-base': '14px',
   '@height-base': '40px',
   '@height-lg': '48px',

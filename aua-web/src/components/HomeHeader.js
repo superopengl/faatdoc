@@ -7,7 +7,7 @@ import {
   SnippetsOutlined, TeamOutlined, ToolOutlined,
   UserAddOutlined, UserOutlined, ReconciliationOutlined
 } from '@ant-design/icons';
-import { Avatar, Badge, Button, Drawer, Layout, Menu, Modal, Typography } from 'antd';
+import { Avatar, Badge, Button, Drawer, Layout, Menu, Modal, Typography, Image } from 'antd';
 import React from 'react';
 import MediaQuery from 'react-responsive';
 import { Link, withRouter } from 'react-router-dom';
@@ -127,7 +127,7 @@ const HomeHeaderRaw = props => {
               <Menu.Item key="user"><Link to="/user">Users</Link></Menu.Item>
               <Menu.Item key="stats"><Link to="/stats">Statistics</Link></Menu.Item>
             </Menu.SubMenu>}
-            {!isGuest && <Menu.SubMenu key="me" title={<Avatar size={40} icon={<UserOutlined style={{ fontSize: 20 }} />} style={{ backgroundColor: isAdmin ? '#FF4D4F' : isAgent ? '#000000' : '#143e86' }} />}>
+            {!isGuest && <Menu.SubMenu key="me" title={<Avatar size={40} icon={<UserOutlined style={{ fontSize: 20 }} />} style={{ backgroundColor: isAdmin ? '#FF4D4F' : isAgent ? '#000000' : '#183e91' }} />}>
               {/* {isAdmin && <Menu.Item key="impersonate"><Link to="/impersonate">Impersonate</Link></Menu.Item>} */}
               {canChangePassword && <Menu.Item key="changePassword"><Link to="/change_password">Change Password</Link></Menu.Item>}
               <Menu.Item key="logout" onClick={handleLogout}>Log Out</Menu.Item>

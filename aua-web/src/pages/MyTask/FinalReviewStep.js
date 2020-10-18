@@ -24,7 +24,7 @@ const TaskReviewItem = props => {
       content={<PopoverContent>{description}</PopoverContent>}
       trigger="click"
     >
-      <Button type="link" style={{position: 'relative', top: 4}} icon={<BsFillInfoCircleFill size={20} style={{ fill: '#143e86' }} />} />
+      <Button type="link" style={{position: 'relative', top: 4}} icon={<BsFillInfoCircleFill size={20} style={{ fill: '#183e91' }} />} />
     </Popover>}
   </Space>
 }
