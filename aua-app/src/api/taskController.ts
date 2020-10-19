@@ -114,7 +114,6 @@ const defaultSearch: ISearchTaskQuery = {
   orderDirection: 'DESC'
 };
 
-
 export const searchTask = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent');
   const option: ISearchTaskQuery = { ...defaultSearch, ...req.body };
@@ -227,7 +226,6 @@ export const deleteTask = handlerWrapper(async (req, res) => {
   res.json();
 });
 
-
 export const assignTask = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin');
   const { id } = req.params;
@@ -260,7 +258,6 @@ export const signTaskDoc = handlerWrapper(async (req, res) => {
 
   res.json();
 });
-
 
 async function sendTaskMessage(Task, senderId, content) {
   const user = await getRepository(User).findOne(Task.userId);
@@ -322,14 +319,38 @@ export const listTaskNotifies = handlerWrapper(async (req, res) => {
   res.json(list);
 });
 
-
 export const markTaskNotifyRead = handlerWrapper(async (req, res) => {
-  assertRole(req, 'client');
-  const { id } = req.params;
-  const { user: { id: userId } } = req as any;
-
+  assertRole(req, 'admin', 'agent', 'client');
+  const { id: taskId } = req.params;
+  const { user: { id: userId, role } } = req as any;
+  const repo = getRepository(Message);
+  const now = getUtcNow();
   // Mark notification read
-  await getRepository(Message).update({ taskId: id, clientUserId: userId }, { readAt: getUtcNow() });
+  let query;
+  switch (role) {
+    case 'client':
+      // The messages received by this client
+      query = {
+        taskId,
+        clientUserId: userId,
+        sender: Not(userId)
+      };
+      break;
+    case 'admin':
+    case 'agent':
+      const task = await getRepository(Task).findOne(taskId);
+      const clientUserId = task.userId;
+      query = {
+        taskId,
+        clientUserId,
+        sender: clientUserId
+      };
+      break;
+    default:
+      assert(false, 500, 'Impossible code path');
+  }
+
+  await getRepository(Message).update(query, { readAt: now });
 
   res.json();
 });

@@ -21,11 +21,11 @@ export async function searchTask(query) {
 }
 
 export async function signTaskDoc(id, fileIds) {
-  return httpPost(`task/${id}/sign`, {files: fileIds});
+  return httpPost(`task/${id}/sign`, { files: fileIds });
 }
 
 export async function generateTask(taskTemplateId, portfolioId) {
-  return httpPost('task/generate', {taskTemplateId, portfolioId});
+  return httpPost('task/generate', { taskTemplateId, portfolioId });
 }
 
 export async function assignTask(taskId, agentId) {
@@ -42,6 +42,7 @@ export async function markTaskNotifyRead(taskId) {
 
 export async function notifyTask(taskId, msg) {
   const content = msg?.trim();
-  if (!content) return;
-  return httpPost(`task/${taskId}/notify`, { content });
+  if (content) {
+    return httpPost(`task/${taskId}/notify`, { content });
+  }
 }

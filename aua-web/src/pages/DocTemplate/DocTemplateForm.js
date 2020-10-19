@@ -10,6 +10,7 @@ import 'react-markdown-editor-lite/lib/index.css';
 import { Spin } from 'antd';
 import { useWindowHeight } from '@react-hook/window-size'
 import { SampleMarkdown } from './SampleMarkdown';
+import { BuiltInFieldDef } from 'components/FieldDef';
 
 const mdParser = new MarkdownIt({html: true, linkify: true});
 const { Paragraph, Text } = Typography;
@@ -81,7 +82,7 @@ const DocTemplateForm = (props) => {
         <Input.TextArea allowClear autoSize={{minRows: 3}} placeholder="Doc template description. This will be shown on the create task wizard to help users fill required fields to generate this document."/>
       </Form.Item>
       <Paragraph type="secondary">
-        Refer to <a href="https://www.markdownguide.org/basic-syntax/" target="_blank" rel="noopener noreferrer">https://www.markdownguide.org/basic-syntax/</a> for Markdown basic syntax. Use double curly braces to express the field variables like <Text code>{'{{givenName}}'}</Text>, <Text code>{'{{now}}'}</Text>.
+        Refer to <a href="https://www.markdownguide.org/basic-syntax/" target="_blank" rel="noopener noreferrer">https://www.markdownguide.org/basic-syntax/</a> for Markdown basic syntax. Use double curly braces to express the field variables. The variables that can be automatically filled from portfolios are {BuiltInFieldDef.map(f => <><Text code>{`{{${f.name}}}`}</Text>, </>)}<Text code>{'{{now}}'}</Text>.
         </Paragraph>
       <Form.Item name="md" rules={[{ required: true, message: ' ' }]}>
         <DocMarkdownEditor

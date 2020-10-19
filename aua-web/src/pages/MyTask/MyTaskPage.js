@@ -78,7 +78,7 @@ const MyTaskPage = (props) => {
     <LayoutStyled>
       <HomeHeader />
       <ContainerStyled>
-        {loading ? <Spin /> : <Layout style={{ backgroundColor: '#ffffff', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
+        {loading ? <Spin /> : <Layout style={{ backgroundColor: '#ffffff', height: '100%', justifyContent: 'center' }}>
           <Layout.Content style={{ padding: 0, maxWidth: 500, margin: 0, width: '100%' }}>
             {!isNew && <Space style={{ width: '100%', justifyContent: 'space-between', marginBottom: 16 }}>
               <TaskStatus status={task.status} avatar={false} portfolioId={task.portfolioId} width={60} />

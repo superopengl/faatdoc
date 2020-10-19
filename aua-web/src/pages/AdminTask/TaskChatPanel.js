@@ -78,7 +78,7 @@ const TaskChatPanel = (props) => {
 
   React.useEffect(() => {
     loadList();
-    if (visible && context.user.role === 'client') {
+    if (visible) {
       markTaskNotifyRead(taskId);
     }
     ws.current = new ChatService(taskId);

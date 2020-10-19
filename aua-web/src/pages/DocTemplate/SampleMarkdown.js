@@ -89,7 +89,7 @@ Right aligned columns
 
 ## Variables
 
-Company name: {{company}}
-Print name: {{givenName}} {{surname}}
+Company name: {{Company}}
+Print name: {{Given_Name}} {{Surname}}
 Date: {{now}}
 `;
