@@ -8,6 +8,7 @@ import { openFile, searchFile } from 'services/fileService';
 import { signTaskDoc } from 'services/taskService';
 import styled from 'styled-components';
 import * as _ from 'lodash';
+import { withRouter } from 'react-router-dom';
 
 const { Link: TextLink , Text} = Typography;
 
@@ -121,6 +122,7 @@ const SignDocEditor = (props) => {
           <Button htmlType="submit" type="primary" block disabled={!canSign}>{canSign ? 'e-Sign All Documents' : 'Please view all documents before sign'}</Button>
         </Form.Item>
       </Form>}
+      {isSigned && <Button block type="primary" onClick={() => props.history.goBack()}>OK</Button>}
       <Modal
         visible={fileToSign}
         destroyOnClose={true}
@@ -155,4 +157,4 @@ SignDocEditor.propTypes = {
 
 SignDocEditor.defaultProps = {};
 
-export default SignDocEditor;
+export default withRouter(SignDocEditor);
