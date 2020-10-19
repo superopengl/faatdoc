@@ -1,10 +1,5 @@
-import { Column, PrimaryGeneratedColumn, Entity, OneToMany } from 'typeorm';
+import { Column, PrimaryGeneratedColumn, Entity } from 'typeorm';
 import { TaskStatus } from '../types/TaskStatus';
-import { FeedbackDoc } from '../types/FeedbackDoc';
-import { GenDoc } from '../types/GenDoc';
-import { SignDoc } from '../types/SignDoc';
-import { UploadDoc } from '../types/UploadDoc';
-import { stringType } from 'aws-sdk/clients/iam';
 import { TaskDoc } from '../types/TaskDoc';
 
 @Entity()

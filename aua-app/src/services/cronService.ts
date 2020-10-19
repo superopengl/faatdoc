@@ -4,7 +4,6 @@ import { CronTask } from 'cron';
 import { SysLog } from '../entity/SysLog';
 import { generateTaskByTaskTemplateAndPortfolio } from '../utils/generateTaskByTaskTemplateAndPortfolio';
 import { assert } from '../utils/assert';
-import { v4 as uuidv4 } from 'uuid';
 import { TaskStatus } from '../types/TaskStatus';
 import { Task } from '../entity/Task';
 import errorToJSON from 'error-to-json';
@@ -67,7 +66,7 @@ export async function executeRecurring(recurringId) {
   const task = await generateTaskByTaskTemplateAndPortfolio(
     taskTemplateId,
     portfolioId,
-    (j, p) => nameTemplate.replace('{{createdDate}}', moment().format('DD MMM YYYY'))
+    () => nameTemplate.replace('{{createdDate}}', moment().format('DD MMM YYYY'))
   );
 
   task.status = TaskStatus.TODO;
@@ -108,24 +107,6 @@ function createCronTask(cron, onRunFn) {
 
 function startSingleRecurring(recurring: Recurring): CronTask {
   const { id, cron, taskTemplateId, portfolioId } = recurring;
-  const task = createCronTask(
-    cron,
-    async () => {
-      const task = await executeRecurring(id);
-
-      const log = new SysLog();
-      log.level = 'info';
-      log.message = 'Recurring complete';
-      log.data = {
-        recurringId: id,
-        taskTemplateId,
-        portfolioId,
-        createdTaskId: task.id
-      };
-
-      logging(log);
-    }
-  );
 
   const log = new SysLog();
   log.level = 'info';

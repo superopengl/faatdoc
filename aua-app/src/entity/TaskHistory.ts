@@ -1,9 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { TaskStatus } from '../types/TaskStatus';
-import { FeedbackDoc } from '../types/FeedbackDoc';
-import { GenDoc } from '../types/GenDoc';
-import { SignDoc } from '../types/SignDoc';
-import { UploadDoc } from '../types/UploadDoc';
 import { TaskDoc } from '../types/TaskDoc';
 
 @Entity()

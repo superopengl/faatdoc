@@ -4,7 +4,6 @@ import React from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { SyncOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
-import { GlobalContext } from 'contexts/GlobalContext';
 import { getStats } from 'services/statsService';
 import { MdOpenInNew } from 'react-icons/md';
 import { DonutChart } from "bizcharts";
@@ -88,7 +87,6 @@ const AdminStatsPage = () => {
 
   const [loading, setLoading] = React.useState(true);
   const [stats, setStats] = React.useState();
-  const context = React.useContext(GlobalContext);
 
   const loadEntity = async () => {
     setLoading(true);

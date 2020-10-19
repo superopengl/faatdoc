@@ -4,7 +4,6 @@ import Text from 'antd/lib/typography/Text';
 import HomeHeader from 'components/HomeHeader';
 import { TaskStatus } from 'components/TaskStatus';
 import { TimeAgo } from 'components/TimeAgo';
-import SignDocEditor from 'pages/MyTask/SignDocEditor';
 import React from 'react';
 import Highlighter from "react-highlight-words";
 import { Link } from 'react-router-dom';

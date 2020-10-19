@@ -44,7 +44,6 @@ dependencies:
   styled-components: 5.1.1_479e60ee9c1aa71dc1eb81036e3619dc
   tfn: 1.0.0
   uniqolor: 1.0.1
-  uuid: 8.3.0
   validator: 13.1.1
 devDependencies:
   babel-plugin-import: 1.13.0
@@ -13255,11 +13254,6 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
-  /uuid/8.3.0:
-    dev: false
-    hasBin: true
-    resolution:
-      integrity: sha512-fX6Z5o4m6XsXBdli9g7DtWgAx+osMsRRZFKma1mIUsLCz6vRvv+pz5VNbyu9UEDzpMWulZfvpgb/cmDXVulYFQ==
   /v8-compile-cache/2.1.1:
     dev: false
     resolution:
@@ -13951,5 +13945,4 @@ specifiers:
   styled-components: ^5.1.0
   tfn: ^1.0.0
   uniqolor: ^1.0.1
-  uuid: ^8.3.0
   validator: ^13.1.1

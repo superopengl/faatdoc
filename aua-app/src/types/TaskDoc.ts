@@ -1,8 +1,3 @@
-import { Column, PrimaryGeneratedColumn, Entity, ManyToOne } from 'typeorm';
-import { Task } from '../entity/Task';
-import { getUtcNow } from '../utils/getUtcNow';
-
-
 export class TaskDoc {
   // @PrimaryGeneratedColumn('uuid')
   // id?: string;

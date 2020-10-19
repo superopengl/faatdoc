@@ -1,16 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { Input, Space, Select, Typography, Checkbox, Form, Button, Spin } from 'antd';
+import { Input, Space, Select, Form, Button, Spin } from 'antd';
 import { saveTaskTemplate, getTaskTemplate } from 'services/taskTemplateService';
 import { notify } from 'util/notify';
 import FieldEditor from 'components/FieldEditor';
 import { listDocTemplate } from 'services/docTemplateService';
 import * as _ from 'lodash';
-import { BuiltInFieldDef } from 'components/FieldDef';
-
-const { Text } = Typography;
-
 
 const DEFAULT_ENTITY = {
   docTemplateIds: [],
@@ -60,10 +56,6 @@ const TaskTemplateForm = (props) => {
     props.onClose();
   }
 
-  const getFieldTypeByVarName = (varName) => {
-    const builtInField = BuiltInFieldDef.find(x => x.name === varName);
-    return builtInField?.inputType || 'text';
-  }
 
   // const handleFormValueChange = (changed, values) => {
   //   const { docTemplateIds, fields } = values;

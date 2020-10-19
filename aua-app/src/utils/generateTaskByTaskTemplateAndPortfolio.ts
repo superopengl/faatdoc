@@ -3,13 +3,11 @@ import { getRepository, In } from 'typeorm';
 import { assert } from './assert';
 import * as _ from 'lodash';
 import { Task } from '../entity/Task';
-import { GenDoc } from '../types/GenDoc';
 import { getUtcNow } from './getUtcNow';
 import { TaskTemplate } from '../entity/TaskTemplate';
 import { Portfolio } from '../entity/Portfolio';
 import { TaskStatus } from '../types/TaskStatus';
 import { guessDisplayNameFromFields } from './guessDisplayNameFromFields';
-import { v4 as uuidv4 } from 'uuid';
 import { DocTemplate } from '../entity/DocTemplate';
 import { TaskDoc } from '../types/TaskDoc';
 

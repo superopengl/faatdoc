@@ -1,5 +1,5 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Layout, Row, Col, Space, Card, Spin, Typography } from 'antd';
+import { Button, Layout, Row, Col, Space, Spin, Typography } from 'antd';
 import Text from 'antd/lib/typography/Text';
 import HomeHeader from 'components/HomeHeader';
 import React from 'react';

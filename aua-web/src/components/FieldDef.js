@@ -1,8 +1,8 @@
 import * as moment from 'moment';
 import { varNameToLabelName } from 'util/varNameToLabelName';
 import { labelNameToVarName } from 'util/labelNameToVarName';
-import {isValidABN, isValidACN, isValidABNorACN} from "abnacn-validator";
-import tfn, * as tfc from 'tfn';
+import {isValidABN, isValidACN} from "abnacn-validator";
+import * as tfn from 'tfn';
 
 const isValidTfn = (text) => tfn(text).valid;
 

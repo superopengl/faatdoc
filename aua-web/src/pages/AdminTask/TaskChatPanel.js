@@ -1,5 +1,5 @@
 import { SendOutlined } from '@ant-design/icons';
-import { Button, Divider, Form, Input, Typography } from 'antd';
+import { Button, Form, Input } from 'antd';
 import { GlobalContext } from 'contexts/GlobalContext';
 import * as moment from 'moment';
 import PropTypes from 'prop-types';
@@ -11,7 +11,6 @@ import { ChatService } from 'services/ChatService';
 import styled from 'styled-components';
 import { listTaskNotifies, notifyTask, markTaskNotifyRead } from '../../services/taskService';
 
-const {Title} = Typography;
 
 const Container = styled.div`
 // background-color: rgba(0,0,0,0.05);

@@ -77,6 +77,7 @@ export const TaskDocEditor = (props) => {
       }
       default: {
         setLoading(false);
+        break;
       }
     }
   };

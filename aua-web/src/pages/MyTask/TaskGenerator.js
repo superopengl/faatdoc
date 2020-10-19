@@ -38,7 +38,6 @@ const StyledTitleRow = styled.div`
 const TaskGenerator = props => {
   const { portfolioId } = props;
 
-  const [] = React.useState(0);
   const [loading, setLoading] = React.useState(true);
   const [taskTemplateList, setTaskTemplateList] = React.useState([]);
   const [portfolioList, setPortfolioList] = React.useState([]);

@@ -12,7 +12,7 @@ const { Title, Paragraph } = Typography;
 
 
 const GenDocLinkStep = props => {
-  const { doc, variableDic, onFinish, onBack, onSkip, isActive } = props;
+  const { doc, variableDic, onFinish, onBack, isActive } = props;
   const [loading, setLoading] = React.useState(isActive);
   const [docTemplate, setDocTemplate] = React.useState();
   const [pdfFile, setPdfFile] = React.useState({

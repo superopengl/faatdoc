@@ -1,4 +1,4 @@
-import { Button, Layout, Modal, Space, Typography, Row, Col, Spin, Tabs } from 'antd';
+import { Button, Layout, Modal, Space, Typography, Spin, Tabs } from 'antd';
 import HomeHeader from 'components/HomeHeader';
 import React from 'react';
 import { withRouter, Link } from 'react-router-dom';
@@ -8,13 +8,11 @@ import { PlusOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import { Divider } from 'antd';
 import MyTaskList from 'pages/MyTask/MyTaskList';
-import { Alert } from 'antd';
-import { GlobalContext } from 'contexts/GlobalContext';
 import { PortfolioAvatar } from 'components/PortfolioAvatar';
 import { groupBy } from 'lodash';
 import { Empty } from 'antd';
 
-const { Title, Paragraph } = Typography;
+const { Paragraph } = Typography;
 
 
 const ContainerStyled = styled.div`
@@ -28,9 +26,6 @@ const ContainerStyled = styled.div`
   }
 `;
 
-const StyledCol = styled(Col)`
-// margin-bottom: 2rem;
-`
 
 const LayoutStyled = styled(Layout)`
   margin: 0 auto 0 auto;
@@ -48,14 +43,8 @@ const LayoutStyled = styled(Layout)`
 const ClientDashboardPage = (props) => {
 
   const [loading, setLoading] = React.useState(true);
-  const [toSignTaskList, setToSignTaskList] = React.useState([]);
-  const [unreadTaskList, setUnreadTaskList] = React.useState([]);
-  const [completeList, setCompleteList] = React.useState([]);
-  const [todoList, setTodoList] = React.useState([]);
   const [portfolioList, setPortfolioList] = React.useState([]);
   const [taskListByPortfolioMap, setTaskListByPortfolioMap] = React.useState({});
-  const context = React.useContext(GlobalContext);
-  const [] = React.useState(false);
 
   const loadList = async () => {
     setLoading(true);
@@ -65,10 +54,6 @@ const ClientDashboardPage = (props) => {
     setTaskListByPortfolioMap(groupBy(list, 'portfolioId'));
 
     setPortfolioList(portfolioList);
-    setToSignTaskList(list.filter(x => x.status === 'to_sign'));
-    setUnreadTaskList(list.filter(x => x.lastUnreadMessageAt));
-    setCompleteList(list.filter(x => x.status === 'complete'));
-    setTodoList(list.filter(x => x.status === 'todo'));
     setLoading(false);
     if (!portfolioList.length) {
       showNoPortfolioWarn();
@@ -103,10 +88,6 @@ const ClientDashboardPage = (props) => {
     props.history.push(`/tasks/${task.id}?${task.lastUnreadMessageAt ? 'chat=1' : ''}`)
   }
 
-  const hasPortfolio = !!portfolioList.length;
-  const hasNotableTasks = toSignTaskList.length || unreadTaskList.length || completeList.length;
-  const showsTodoList = !hasNotableTasks && todoList.length > 0;
-  const hasNothing = !hasNotableTasks && !todoList.length
 
   return (
     <LayoutStyled>

@@ -9,7 +9,6 @@ import { UserStatus } from '../types/UserStatus';
 import { computeUserSecret } from '../utils/computeUserSecret';
 import { handlerWrapper } from '../utils/asyncHandler';
 import { sendEmail } from '../services/emailService';
-import { logError } from '../utils/logger';
 import { getUtcNow } from '../utils/getUtcNow';
 import { Role } from '../types/Role';
 import * as jwt from 'jsonwebtoken';

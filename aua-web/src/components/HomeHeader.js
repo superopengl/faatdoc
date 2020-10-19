@@ -7,7 +7,7 @@ import {
   SnippetsOutlined, TeamOutlined, ToolOutlined,
   UserAddOutlined, UserOutlined, ReconciliationOutlined
 } from '@ant-design/icons';
-import { Avatar, Badge, Button, Drawer, Layout, Menu, Modal, Typography, Image } from 'antd';
+import { Avatar, Badge, Button, Drawer, Layout, Menu, Modal, Typography } from 'antd';
 import React from 'react';
 import MediaQuery from 'react-responsive';
 import { Link, withRouter } from 'react-router-dom';

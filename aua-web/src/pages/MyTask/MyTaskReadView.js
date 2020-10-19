@@ -1,14 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
-import { Layout } from 'antd';
 import FinalReviewStep from './FinalReviewStep';
 import { Button } from 'antd';
 import { Divider } from 'antd';
-
-
-
 
 const MyTaskReadView = (props) => {
   const { value, showsSignDoc } = props;

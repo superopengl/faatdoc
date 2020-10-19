@@ -1,8 +1,7 @@
-import { Modal, Space, Card } from 'antd';
+import { Space, Card } from 'antd';
 import Text from 'antd/lib/typography/Text';
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { deleteTask } from '../../services/taskService';
 import styled from 'styled-components';
 import { Draggable } from 'react-beautiful-dnd';
 import { PortfolioAvatar } from 'components/PortfolioAvatar';
@@ -23,7 +22,7 @@ box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 
 const TaskCard = (props) => {
 
-  const { task, index, onChange } = props;
+  const { task, index } = props;
   const { id, name, forWhom, email, lastUnreadMessageAt, taskTemplateName } = task;
 
   const getItemStyle = (isDragging, draggableStyle) => ({

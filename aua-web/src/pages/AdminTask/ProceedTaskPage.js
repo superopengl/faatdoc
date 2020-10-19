@@ -11,7 +11,7 @@ import { varNameToLabelName } from 'util/varNameToLabelName';
 import { DateInput } from 'components/DateInput';
 import { RangePickerInput } from 'components/RangePickerInput';
 import { Select } from 'antd';
-import { SyncOutlined, MessageFilled, MessageOutlined } from '@ant-design/icons';
+import { SyncOutlined, MessageOutlined } from '@ant-design/icons';
 import { notify } from 'util/notify';
 import { merge } from 'lodash';
 import { TaskDocEditor } from './TaskDocEditor';

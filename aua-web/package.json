@@ -48,7 +48,6 @@
     "styled-components": "^5.1.0",
     "tfn": "^1.0.0",
     "uniqolor": "^1.0.1",
-    "uuid": "^8.3.0",
     "validator": "^13.1.1"
   },
   "scripts": {
