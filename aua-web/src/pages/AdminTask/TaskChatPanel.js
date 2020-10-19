@@ -14,7 +14,8 @@ import { listTaskNotifies, notifyTask, markTaskNotifyRead } from '../../services
 const {Title} = Typography;
 
 const Container = styled.div`
-
+background-color: rgba(0,0,0,0.05);
+min-width: 200px;
 .message-list {
   display: flex;
   flex-direction: column-reverse;
@@ -123,7 +124,7 @@ const TaskChatPanel = (props) => {
   }
 
   return <Container>
-    <div className="message-list" style={{ paddingBottom: 20, verticalAlign: 'bottom' }}>
+    <div className="message-list" style={{ padding: 16, verticalAlign: 'bottom' }}>
       {list.map((x, i) => {
         const MessageComponent = x.sender === myUserId ? SentMessage : ReceivedMessage;
         return <div key={i}>
@@ -136,7 +137,7 @@ const TaskChatPanel = (props) => {
           /></div>
       })}
     </div>
-    <div>
+    <div style={{padding: 16}}>
       {readonly ? null : <Form onFinish={sendMessage}
         form={form}>
         <Form.Item name="content" style={{ marginBottom: 4 }}>
@@ -154,7 +155,7 @@ const TaskChatPanel = (props) => {
         {/* <Space>
         <Button icon={<ArrowLeftOutlined />} onClick={() => handleGoBack()}></Button>
       </Space> */}
-        <Button type="primary" icon={<SendOutlined />} htmlType="submit" disabled={loading} >Send</Button>
+        <Button type="primary" block icon={<SendOutlined />} htmlType="submit" disabled={loading} >Send</Button>
       </Form>}
     </div>
   </Container>

@@ -147,7 +147,7 @@ const TaskFormWizard = props => {
 
 
   return <Spin spinning={loading}>
-    <StepWizard ref={generatorRef} >
+    <StepWizard ref={generatorRef}>
       {!task && <TaskGenerator onChange={handleTaskGenerated} />}
       {task && <><Space size="large" direction="vertical" style={{ width: '100%' }}>
         <div style={{ textAlign: 'center', fontSize: '2rem' }}>

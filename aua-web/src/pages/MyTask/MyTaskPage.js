@@ -2,26 +2,31 @@ import React from 'react';
 
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
-import { Layout, Spin, Affix, Button } from 'antd';
+import { Layout, Spin, Space, Button } from 'antd';
 import HomeHeader from 'components/HomeHeader';
 import { getTask } from 'services/taskService';
 import MyTaskSign from './MyTaskSign';
 import TaskFormWizard from './TaskFormWizard';
 import MyTaskReadView from './MyTaskReadView';
 import * as queryString from 'query-string';
-import { MessageOutlined } from '@ant-design/icons';
+import { MessageFilled, MessageOutlined } from '@ant-design/icons';
 import TaskChat from 'pages/AdminTask/TaskChat';
 import TaskChatPanel from 'pages/AdminTask/TaskChatPanel';
 
-const ContainerStyled = styled.div`
+const ContainerStyled = styled(Layout.Content)`
 margin: 4rem auto 0 auto;
 padding: 2rem 1rem;
 // text-align: center;
 max-width: 1000px;
 width: 100%;
+height: 100%;
 
 .ant-layout-sider-zero-width-trigger {
   top: 0;
+  left: -60px;
+  width: 40px;
+  border: 1px solid rgb(217,217,217);
+  border-radius:4px;
 }
 `;
 
@@ -40,6 +45,7 @@ const MyTaskPage = (props) => {
   const [chatVisible, setChatVisible] = React.useState(Boolean(chat));
   const [loading, setLoading] = React.useState(true);
   const [task, setTask] = React.useState();
+  const [container, setContainer] = React.useState(null);
 
   const loadEntity = async () => {
     setLoading(true);
@@ -61,6 +67,10 @@ const MyTaskPage = (props) => {
     props.history.goBack();
   }
 
+  const toggleChatPanel = () => {
+    setChatVisible(!chatVisible);
+  }
+
   const showsEditableForm = isNew || task?.status === 'todo';
   const showsSign = task?.status === 'to_sign';
   const showsChat = !!task?.id;
@@ -69,16 +79,16 @@ const MyTaskPage = (props) => {
     <LayoutStyled>
       <HomeHeader />
       <ContainerStyled>
-        <Layout>
-          <Layout.Content style={{padding: 16}}>
+        <Layout style={{ backgroundColor: '#ffffff', height: '100%' }}>
+          <Layout.Content style={{ padding: '0 0 0 16px', maxWidth: 500, marginLeft: 'auto', marginRight: 'auto' }}>
+            <Space style={{ width: '100%', justifyContent: 'flex-end' }}><Button size="large" icon={<MessageFilled />} onClick={() => toggleChatPanel()}></Button></Space>
             {loading ? <Spin /> :
               showsEditableForm ? <TaskFormWizard onOk={onOk} onCancel={onCancel} value={task} /> :
                 showsSign ? <MyTaskSign value={task} /> :
                   <MyTaskReadView value={task} />}
-
           </Layout.Content>
-          {showsChat && <Layout.Sider reverseArrow={true} collapsedWidth={0} width={400} collapsible={true} theme="light" style={{padding: 16}}>
-            <TaskChatPanel onClose={() => setChatVisible(false)} taskId={task.id} />
+          {showsChat && <Layout.Sider collapsed={chatVisible} reverseArrow={true} collapsedWidth={0} width={400} collapsible={false} theme="light" style={{ marginLeft: 2, height: '100%' }}>
+            <TaskChatPanel onClose={() => toggleChatPanel(false)} taskId={task.id} />
           </Layout.Sider>}
         </Layout>
       </ContainerStyled>
