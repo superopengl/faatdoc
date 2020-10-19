@@ -19,107 +19,162 @@ h3 {
 }
 `;
 const { Title } = Typography;
-const TermAndConditionPage = () => (
+const TermAndConditionPage = () => <>
   <ContainerStyled>
-    <div style={{width: '100%', textAlign: 'center', marginBottom: '2rem'}}><Logo /></div>
+    <div style={{ width: '100%', textAlign: 'center', marginBottom: '2rem' }}><Logo /></div>
     <Title style={{ textAlign: 'center' }}>AU Accounting Office Pty Ltd - Terms and Conditions</Title>
-    <p>These Membership Terms set out the membership agreement between AU Accounting Office Pty Ltd, ABN 85 642 238 239 ("us", "our" or "we") and each person ("you" or "your") applying to be a Member of AU Accounting Office Pty Ltd. </p>
-<Divider/>
-<Title level={2} id="definitions">Definitions</Title>
-<p>Unless the context otherwise requires: </p>
-<ul>
-<li>"Member" means a person accepted by us as a current member of AU Accounting Office Pty Ltd. </li>
-<li>"Member Benefit" means a benefit available to a Member of that Membership Type. </li>
-<li>"Member Details" means the details provided by a Member to AU Accounting Office Pty Ltd about the Member and their preferences for interacting with AU Accounting Office Pty Ltd. </li>
-<li>"Membership Account" means a Member's individual account showing the Member's activity including transactions and Member Benefits obtained by the Member. </li>
-<li>"Membership Type" means a category of membership to AU Accounting Office Pty Ltd as identified from time to time on AU Accounting Office Pty Ltd Website.</li>
-<li>"AU Accounting Office Pty Ltd Website" means the website located at www.ubcallied.com.au or such other website we designate as AU Accounting Office Pty Ltd Website. </li>
-<li>"Third Party Supplies" means goods and services that a Member is able to procure from a third party supplier as a Member Benefit under an agreement between the Member and that supplier. </li>
-</ul>
-<Divider/>
-<Title level={2} id="what-is-aua-allied-pty-ltd-">What is AU Accounting Office Pty Ltd?</Title>
-<p>AU Accounting Office Pty Ltd, partnered with ISouth BC, is a sports club fostering harmony in the Asian community. It is also the one that contains a social club platform for all ways of lifestyle enjoyment. </p>
-<p>Our business mission is to create an all-round interactive platform for merchants (or Third Party Supplies) and our members to have a luxury and sportive life enjoyment.</p>
-<p>With our annual membership card, you can go to our cooperative merchants (Third Party Supplies) and enjoy special discounts (based on the latest offer available by our merchants). </p>
-<Divider/>
-<Title level={2} id="agreement-to-and-amendment-of-terms">Agreement to and amendment of terms</Title>
-<p>In applying to be a Member of AU Accounting Office Pty Ltd, you must agree to the Membership Terms.</p>
-<p>We may amend these Membership Terms by notifying you more than 14 days before the effective date of the change e.g., (by email or posting a notification to a Membership Account) and posting the amendment on AU Accounting Office Pty Ltd Website. </p>
-<p>Amendments to the Membership Terms apply to each current Member. If we amend the Membership Terms, a person's continued membership of AU Accounting Office Pty Ltd will be evidence the Member agrees to the amendment. If a Member does not agree an amendment, the Member may terminate their membership by giving us written notice of termination. </p>
-<Divider/>
-<Title level={2} id="membership">Membership</Title>
-<Title level={3} id="eligibility-and-applying-for-membership">Eligibility and Applying for Membership</Title>
-<p>To be eligible to apply to be a Member you must meet the applicable eligibility criteria on AU Accounting Office Pty Ltd Website, complete a membership application, pay the application fee (if applicable), and agree to the Membership Terms. In order to assess if you meet the eligibility criteria, we may require you to provide further information to support your application or contact a relevant third party. </p>
-<p>We have the discretion, acting reasonably, to accept or reject any membership application. </p>
-<p>If we accept your membership application, your membership will not start until you complete all required membership registration requirements including paying any membership fee (if applicable). </p>
-<p>Membership is personal to the person accepted as a Member and cannot be transferred. </p>
-<Title level={3} id="member-obligations">Member Obligations</Title>
-<p>Each Member must act honestly, fairly and reasonably in all matters connected with AU Accounting Office Pty Ltd. Without limiting this obligation, each Member:</p>
-<ul>
-<li>must promptly tell AU Accounting Office Pty Ltd if there is a change to details submitted in their membership application or Member Details;</li>
-<li>must not attempt to transfer or otherwise deal with any Member Benefit other than in accordance with the Membership Terms; </li>
-<li>must not abuse or misuse any Member Benefit or use it for any inappropriate, illegal or unlawful activity; </li>
-<li>must comply with any applicable acceptable use, rules of participation or similar policy in place for using a Member Benefit; </li>
-<li>must not engage in any behavior in communicating with another Member that could reasonably be interpreted as intended to bully, intimidate or harass a person; </li>
-<li>must not in using a forum provided by AU Accounting Office Pty Ltd post content that could reasonably be interpreted to be defamatory, malicious, hate speech, threatening or pornographic, incite violence or contains nudity or graphic or gratuitous violence; </li>
-<li>must not undertake any action that could damage the reputation of AU Accounting Office Pty Ltd; </li>
-<li>must not make representations on behalf of AU Accounting Office Pty Ltd without prior approval in writing. For example, a Member must not organise an event in the name of AU Accounting Office Pty Ltd without prior written approval; </li>
-<li>must regularly check their Membership Account and promptly notify us of any discrepancies in their Membership Account and in any case within three months after the relevant transaction; and </li>
-<li>give us such information as we reasonably request (e.g., to assist us to verify eligibility for any Member Benefit). </li>
-</ul>
-<Title level={3} id="termination-of-membership">Termination of membership</Title>
-<p>Once you are a member of AU Accounting Office Pty Ltd you are entitled to remain a member until you or we terminate your membership in accordance with this clause. </p>
-<p>A Member may terminate membership of AU Accounting Office Pty Ltd at any time by advising us in writing.</p>
-<p>If a Member breaches the Membership Terms and we, acting reasonably, consider that it is a serious breach, then we may at our discretion give the Member a warning, suspend the person's membership for a period or terminate the person's membership. </p>
-<p>We may terminate membership of AU Accounting Office Pty Ltd at any time if we decide to cease operation of business or a substantial part of the business of AU Accounting Office Pty Ltd. In this case we terminate membership by issuing a notice in writing to each current Member. Notice may be sent to the Member's email address in Member Details or posted to the Member's Account. </p>
-<p>Termination of membership will not entitle the Member to a refund of any application fee. Any refund for Third Party Supplies will be governed by the agreement between the Member and the supplier of the Third Party Supplies. </p>
-<Divider/>
-<Title level={2} id="membership-types-and-benefits">Membership Types and Benefits</Title>
-<Title level={3} id="membership-types">Membership Types</Title>
-<ul>
-<li>An individual member can only be a Member of one Membership Type at any one time. </li>
-<li>A Merchant/Business member (Third Party Supplies) may upgrade their Membership Type from a lower type to a higher type by notifying us, by completing the online form and paying the relevant fees. </li>
-</ul>
-<Title level={3} id="member-benefits">Member Benefits</Title>
-<p>Member Benefits for each Membership Types are set out on AU Accounting Office Pty Ltd Website. We may change the Member Benefits that we offer at any time in accordance with our assessment of membership preferences, availability and cost. </p>
-<p>Each Member Benefit is available on the specific terms identified for that Member Benefit. If a Member selects a Member Benefit the Member is taken to have agreed to the terms applying to that Member Benefit. </p>
-<p>On occasion, special offers such as special events and competitions may be made available to Members. Each special offer is provided on the terms identified for that special offer. </p>
-<p>A Member may need to complete an application or other process and pay fees to be entitled to a Member Benefit.</p>
-<p>A Member Benefit may be a Third Party Supply. To the extent permitted by law, we have no liability whatsoever to any Member for provision, non provision or any defect with the Third Party Supply. </p>
-<p>On occasion, there may be an outage on AU Accounting Office Pty Ltd Website and/or portal (e.g., when maintenance is conducted). During this time, Member Benefits, Membership Accounts and access to web-based resources and services may not be available. </p>
-<Divider/>
-<Title level={2} id="liability">Liability</Title>
-<p>To the extent permitted by law, we have no liability to you whatsoever in contract, tort (including negligence), statute or otherwise for conduct of a Member (e.g., in the website provided by AU Accounting Office Pty Ltd), conduct of an organisation interacting with AU Accounting Office Pty Ltd or in relation to a Third Party Supply. </p>
-<p>Members are advised to check the accuracy and currency of content on AU Accounting Office Pty Ltd Website before relying on it. For example, there may be a time lag between a detail changing and AU Accounting Office Pty Ltd Website being updated. In some cases we may also rely on third parties for content displayed on AU Accounting Office Pty Ltd Website which we have not verified. While we aim to address any currency and accuracy issues promptly upon becoming aware of them, to the extent permitted by law, we have no liability to you whatsoever in contract, tort (including negligence), statute or otherwise for any reliance you place on content on AU Accounting Office Pty Ltd Website. </p>
-<p>The Membership Terms are subject to any rights or remedies you have under law, including under the Australian Consumer Law, that cannot be excluded, restricted or modified. </p>
-<Divider/>
-<Title level={2} id="dealing-with-problems-and-concerns">Dealing with Problems and Concerns</Title>
-<p>If a Member has a complaint or concern with AU Accounting Office Pty Ltd, a Member Benefit or the conduct of another Member please contact AU Accounting Office Pty Ltd promptly about the matter. We will work with you in good faith to try to resolve the issue and take appropriate action. </p>
-<Divider/>
-<Title level={2} id="privacy">Privacy</Title>
-<p>The privacy of your personal information is important to us. A Member's Personal Information will be handled in accordance with the Privacy Policy available on AU Accounting Office Pty Ltd Website or on request.</p>
-<p>By agreeing to these terms and conditions you agree to the collection, disclosure and use of your personal information as described in our Privacy Policy. </p>
-<p>If you apply for a Third Party Supply, your agreement with the third party supplier will govern how they are permitted to deal with your personal information. </p>
-<p>If you wish to contact us about your personal information please use the contact details on AU Accounting Office Pty Ltd Website or email us at <a href="mailto:office.aua.allied@gmail.com">office.aua.allied@gmail.com</a> </p>
-<p>You can also email us at <a href="mailto:office.aua.allied@gmail.com">office.aua.allied@gmail.com</a> for details about how you may seek to access or correct your personal information that we hold, how you may complain about a breach by us of the Australian Privacy Principles and how we will deal with any complaint. </p>
-<Divider/>
-<Title level={2} id="use-of-content">Use of Content</Title>
-<p>Intellectual property rights in content posted on gallery and on AU Accounting Office Pty Ltd Website is owned by us and by third party licensors. You may view that content but you must not reproduce, communicate, reuse or adapt that content in any way, other than as expressly authorised by us. This clause does not apply to content provided by you. </p>
-<p>You must not provide content if you do not have the right to do so or if you do not wish us to be able to use that content as set out in the Membership Terms. If you have posted content that you wish us to remove, you should contact us as soon as possible and we will endeavor to remove the content. However, we cannot control and we are not responsible for the use that anyone makes of that content prior to its removal.</p>
-<Divider/>
-<Title level={2} id="consent-to-receive-direct-marketing-and-other-marketing-communications">Consent To Receive Direct Marketing And Other Marketing Communications</Title>
-<p>If you have consented to us doing so, we may send you marketing communications and material about AU Accounting Office Pty Ltd by email, text message or other digital service (such as through an application installed on a mobile device), phone or post. Your consent may have been given by opting in to receive these marketing communications in your membership application or you may have subsequently given your consent.</p>
-<p>You may withdraw your consent and opt out of receiving marketing communications at any time by notifying us or by following the opt-out process in a marketing communication. </p>
-<Divider/>
-<Title level={2} id="notices-and-communication">Notices And Communication</Title>
-<p>Unless we determine that another means of communication is more appropriate, we may communicate with you using email sent to the email address in your Member Details or by posting a notice to your Member Account. You should communicate with us using the applicable contact details on AU Accounting Office Pty Ltd Website. </p>
-<Divider/>
-<Title level={2} id="general">General</Title>
-<p>The Membership Terms and any other documents referred to in the Membership Terms form the entire agreement between you and us about the subject matter of the membership agreement and supersedes all other representations, negotiations, arrangements, understandings or agreements and all other communications.</p>
-
+    <html><head></head><body><Title level={2}>1. Scope</Title>
+      <p>These general terms apply to all professional relationships between AU ACCOUNTING OFFICE and its Client, notwithstanding any Client’s general terms even if more recent, unless explicitly accepted, totally or partially, in writing by AU ACCOUNTING OFFICE.</p>
+      <p>In case of contradiction between the Engagement Letter and the General Terms, the Engagement Letter shall prevail.</p>
+      <Title level={2}>2.Formation of the services contract</Title>
+      <p>The services Contract between AU ACCOUNTING OFFICE and the Client is deemed to have been entered into either when AU ACCOUNTING OFFICE receives the Engagement Letter, duly signed by the Client, or at the moment AU ACCOUNTING OFFICE starts to perform any Services upon request of the Client, if this takes place at an earlier moment. As long as AU ACCOUNTING OFFICE does not receive any Engagement Letter duly signed by the Client, all professional relationships between AU ACCOUNTING OFFICE and the Client will in any case be governed by the Services Contract, as from the moment that and insofar as such Services Contract has been delivered to the Client either by letter, telefax, email, verbal or by hand, against acknowledgement of the receipt.</p>
+      <Title level={2}>3.Information supplied by the client to AU ACCOUNTING OFFICE</Title>
+      <p>To enable AU ACCOUNTING OFFICE to perform the Services, the Client shall provide it in due time with assistance as well as with correct, complete and reliable data and documents, even if such information originates from third parties. This undertaking is applicable irrespective if the Client makes such data and documents available to AU ACCOUNTING OFFICE in so called “hard-copy” format or through the AU ACCOUNTING OFFICE platform.</p>
+      <p>AU ACCOUNTING OFFICE has no obligation to verify the completeness, accuracy and reliability of such data and documents.</p>
+      <p>AU ACCOUNTING OFFICE may claim additional fees and/or outlays resulting from any delay in performing the Services, as a consequence of the Client having failed to comply with the provisions of this.</p>
+      <p>The Client shall inform AU ACCOUNTING OFFICE of any information or developments which may come to its notice and which might have a bearing on the Services.</p>
+      <p>The Client will provide AU ACCOUNTING OFFICE with copies of all above mentioned data and documents or shall communicate such data and documents through our platform. The Client undertakes to keep the original data and documents and undertakes to keep them safe. If necessary of the performance of the Services, data and documents are provided in original by the Client to AU ACCOUNTING OFFICE, the Client must keep a copy thereof.</p>
+      <p>AU ACCOUNTING OFFICE may rely on any instructions or requests made or notices given or information supplied, whether orally or in writing, by any person whom it knows to be or reasonably believes to be authorized by the Client to communicate with it for such purposes.
+AU ACCOUNTING OFFICE may receive information from the Client or from other sources in the course of delivering the Services.</p>
+      <Title level={2}>4.Performance of the engagement</Title>
+      <p>AU ACCOUNTING OFFICE decides how and by whom the Services will be performed. The Services shall be delivered with reasonable skill and care based on the information supplied to us. Where individuals to be involved in delivering the Services are named in the Engagement Letter, AU ACCOUNTING OFFICE shall use reasonable endeavours to ensure that they are effectively involved. AU ACCOUNTING OFFICE may substitute those identified for others of equal or similar skills.</p>
+      <p>Our employees are and remain in all respects employees of AU ACCOUNTING OFFICE. We are responsible for the payment of the wages, social contributions, any contributions relating to any other social regulation and any other legal or other liabilities which we agreed upon with our staff or which the law obliges us to pay. If the Client gives instructions to our employees, such instructions must be expressly and specifically defined in the Services Contract and may not erode in any way AU ACCOUNTING OFFICE’ authority as an employer or, in case such instructions relate to welfare at work such instructions may not intervene in the existing agreements between AU ACCOUNTING OFFICE and its employees, which are and remain an exclusive matter of AU ACCOUNTING OFFICE.</p>
+      <p>The approach, method of working or scope of the mission and/or resulting activities can, from time to time, be modified or extended by mutual agreement. If such modification or extension results in additional work, AU ACCOUNTING OFFICE shall inform the Client. The case arising, additional fees and outlays can be charged to the Client.</p>
+      <p>AU ACCOUNTING OFFICE shall not be under any obligation to update any advice, or any product of the Services, oral or written, for events occurring after the advice, report or product concerned has been issued in final form except where we have expressly agreed to provide such an update during the term or our engagement as a result of changes to e.g. regulation, jurisprudence or doctrine.</p>
+      <p>The Client remains notably responsible for:</p>
+      <ul>
+        <li>the management, conduct and operation of its business and affairs;</li>
+        <li>making decisions which could possibly influence the performance of our services or the result thereof;</li>
+        <li>making decisions as to what extent Client wishes to rely on our advice, recommendations and other results of our Services, on their use and the implementation (if any) necessary with regard to</li>
+      </ul>
+      <p>the performance of our Services, including the evaluation of the adequacy of the results of the Services performed for the Client’s benefit and accepting responsibility for the actions, if any, to be taken arising from the results of the Services.</p>
+      <p>Client management will designate a Project sponsor who has the requisite skills and competencies for overseeing the services being provided.</p>
+      <p>Unless otherwise explicitly agreed upon in writing, the performance of the engagement does not authorize AU ACCOUNTING OFFICE to represent the Client. Such representation authority requires a specific power of attorney, in writing, to be given by the Client to AU ACCOUNTING OFFICE, and accepted by the latter.</p>
+      <Title level={2}>5.Access to and use of the AUAO Web platform</Title>
+      <p>In the event that the Client gains access to the AUAO Web platform for its Authorized Users, the following applies:</p>
+      <p>Client register as a user in our platform to authorise AU ACCOUNTING OFFICE to be the accountant and tax agent to deal with all the tasks set up in each portfolio which is under the user’s name. One user can authorise multiple portfolios and the user may be different from each portfolio’s person or director/public officer of an entity. All the correspondents between each user and us regarding all portfolios are confirmed by email which is registered at the same time as the user.</p>
+      <p>The Client and its Authorized Users are only granted “read only” access, except in the case of customized management reporting. Hence, the Client and its Authorized Users can only upload data on the AUAO Web platform via a unique inbox upload system or via web scanning and can only consult such data without being entitled to change, adapt, or delete the data.</p>
+      <p>In the event that AU ACCOUNTING OFFICE provides the Client with access to a customized management reporting tool the Client and its Authorized Users are solely responsible for the use of this tool and the data they enter in the customized management reporting tool. The Client acknowledges and accepts that AU ACCOUNTING OFFICE does not warrant, nor can be held accountable for the use (data entry included) of this tool by the Client and its Authorized Users.</p>
+      <p>The Client acknowledges and accepts that it is the responsibility of the Client and its Authorized Users to take suitable steps to prevent that unauthorized users gain access to the AUAO Web platform, whereby, amongst other measures, they are to assume responsibility for maintaining the confidentiality of their login and password vis-à-vis each other and third parties and for not releasing such information to any such outside parties.</p>
+      <p>The data are non-transferable and shall not be used outside the organization of the Client and its Authorized Users. It shall be incumbent on the Client to prohibit the use of the AUAO Web platform by any (legal) person other than the Client and/or its Authorized Users and for any purposes other than those specified within the context of the contracted Services. The Client is not entitled to assign or transfer rights and/or duties to third parties (including to any subsidiary company, parent company, stockholders, agents, representatives, or subcontractors) without prior written consent from AU ACCOUNTING OFFICE. The platform only allows one unique email per each Authorized user, and the user is responsible on behalf of all the portfolios which are under the Authorized user.</p>
+      <p>It shall further be incumbent on the Client to ensure that the data be accurate, complete, and reliable, also in the case of information supplied by the Authorized Users, by third parties, or scrutinized by the Client himself. It shall be incumbent on the Client to invariably save and keep an original copy of all of the data, to make a back-up thereof at regular intervals, and to save and safeguard them by one or several secured venues. AU ACCOUNTING OFFICE shall under no circumstance be held liable for any loss of, or damage to, data or for ensuring that damaged data be restored and provided to the Client.</p>
+      <p>The Client acknowledges and accepts that AU ACCOUNTING OFFICE does not guarantee that the AUAO Web platform is virus-proof and that AU ACCOUNTING OFFICE cannot be held responsible and/or liable for any and all loss(es) or damage(s) caused by any virus. The AUAO Web platform contains ‘links’ to other websites that are not property of AU ACCOUNTING OFFICE. We caution and strongly urge the Client and every Authorized User to use his/her own reliable, adequate and appropriate anti-virus protection system.</p>
+      <p>The Client undertakes, both on its own behalf and on behalf of its Authorized Users, to fully abide by the policy, the rules and regulations, and directives as established by AU ACCOUNTING OFFICE with reference to security, technology, and risk management, as well as with reference to the use of the AUAO Web platform. In the event that the Client finds himself not in agreement with the changed or new policy, the rules and regulations, and directives as stated, it shall be incumbent on him to inform AU ACCOUNTING OFFICE without delay of its disagreement, at which time AU ACCOUNTING OFFICE shall be entitled to rescind the Client’s user right and that of its Authorized Users.</p>
+      <p>Furthermore, the Client agrees to inform AU ACCOUNTING OFFICE without delay of any and all situations or actions which the Client suspects or knows might or could compromise the security of the AUAO Web platform, such as unauthorized access to the password and login (“Login Data”) of an Authorized User.</p>
+      <p>The Client accepts that AU ACCOUNTING OFFICE shall have full access to the AUAO Web platform and to all functionalities thereof. As such, the Client acknowledges that AU ACCOUNTING OFFICE shall be entitled to consult, use, modify, adapt, or delete the data.</p>
+      <p>AU ACCOUNTING OFFICE recognizes the importance of a permanent and effective control on the confidentiality of the information on the AUAO Web platform and, hence, has taken several measures to protect and secure such information against unauthorized access. The AUAO Web platform is configured in such a way that access to it requires a complex password to serve in the authentication of Authorized Users, that firewalls control the access to the system, and that data is exchanged in a secured (encrypted) fashion.</p>
+      <p>Although AU ACCOUNTING OFFICE has taken reasonable steps to safeguard the continuity of the AUAO Web platform, AU ACCOUNTING OFFICE provides no warranty and assumes no liability whatsoever regarding suspension, interruption or temporary unavailability of the AUAO Web platform.</p>
+      <p>The AUAO Web platform is accessible via a web browser. As is the case with all other internet applications, technical factors such as bandwidth, network configurations, and laptop browser settings may affect the speed and the accessibility of the AUAO Web platform.</p>
+      <p>In view of such considerations, AU ACCOUNTING OFFICE cannot guarantee the Client and the Authorized Users constant availability of access to the AUAO Web platform at all times.</p>
+      <p>AU ACCOUNTING OFFICE does not offer any guarantee(s) or warranty(s) related to the possible incompatibility with, disruption of, or damage to the computers of the Authorized Users caused as a result of the latter’s browser settings and, furthermore, rejects any and all guarantee(s) with reference to the reliability of the operation and functioning of the Authorized Users’ browser in combination with the AUAO Web platform. Certain risks are inherent in the transmission of data over the Internet and in the technical processes required for such transmissions.</p>
+      <p>AU ACCOUNTING OFFICE reserves the right to suspend, restrict, block, remove, or de-activate access to the AUAO Web platform for any reason whatsoever (such as, but not limited to, maintenance, software adaptations, etc.), as well as in any and all instances where AU ACCOUNTING OFFICE suspects, or has gained knowledge, that the Client or Authorized Users are not duly abiding by their undertakings and obligations, either failing wholly or performing unsatisfactorily or being late in their compliance, or in the event of unauthorized use of the Web platform by the Client or its Authorized Users.</p>
+      <p>The user right(s) granted to the Client and its Authorized Users shall remain valid for, and be restricted to, the duration of the Services only, unless explicitly agreed to otherwise.</p>
+      <p>On termination of the Services, or on termination of the business relationship, the Client’s user right and the right of its Authorized Users to the AUAO Web platform shall be rescinded with immediate effect and without prior notice. In such event, AU ACCOUNTING OFFICE shall be fully entitled to block, remove, or de-activate the Client’s and its Authorized Users’ access, as well as all related accounts.</p>
+      <p>In the event that the Client wholly or partially fails to abide by one of its undertakings and obligations with regard to the AUAO Web platform and, as a result thereof, legal action has been, or is about to be, instituted by a third party against AU ACCOUNTING OFFICE, it shall be incumbent on the Client to hold AU ACCOUNTING OFFICE harmless from all loss(es) and damage(s), expenditures and liabilities sustained by AU ACCOUNTING OFFICE, resulting and forth flowing from, or related to, such failure and such action.</p>
+      <Title level={2}>6.Remote access and use of e-mail</Title>
+      <p>AU ACCOUNTING OFFICE is authorized to make use of Your local network and Your internet in order to connect to the AUAO network (also called “Remote Access via Internet “) during the performance of the Services. Immediately after connecting to Your local network, we will establish a direct connection (known as a VPN connection), which will create a separate network from your network. Any associated risks will be restricted to a minimum because of the security measures that we take (including a firewall, a virus scanner and anti-spyware scanner).We do not accept any liability for any damages resulting from the use of Remote Access via the Internet.</p>
+      <p>AU ACCOUNTING OFFICE is allowed to communicate to You by electronic mail. Consequently, You accept the risks inherent to this method of communication (including the security risks of interception of or unauthorized access to such communications, the risks of corruption of such communications and the risks of viruses or) and You shall perform virus checks.</p>
+      <Title level={2}>7.Confidentiality</Title>
+      <p>AU ACCOUNTING OFFICE shall treat information obtained either prior to or in the course of delivering the Services as confidential according to the legal and professional confidentiality standards applicable to accountants and tax advisers. This clause shall not prohibit AU ACCOUNTING OFFICE's disclosure of information if it is so required or permitted pursuant to legal or professional regulations, e.g., in disciplinary, civil or criminal proceedings or in the context of anti-money laundering legislation.</p>
+      <p>The Client acknowledges and agrees that information related to the Services (including confidential information) may be disclosed to AUAO International and other AUAO Persons that assist us:</p>
+      <ul>
+        <li>in the execution of the Services;</li>
+        <li>to support the maintenance of quality and professional standards in the delivery of services (e.g. through the involvement of professional practice and policy departments, the participation in quality assurance measures or the establishment and maintenance of knowledge databases);</li>
+        <li>in the execution of client and engagement acceptance procedures
+        (including but not limited to potential conflicts of interest checks)
+For the execution of the Services Contract, we may make use of computer software in order to facilitate the efficient management of data. Consequently, data which is supplied by You may be transferred to computer servers which are operated outside Belgium with the implementation of adequate access controls and under the authority of member firms belonging to the AUAO network.</li>
+      </ul>
+      <Title level={2}>8.Product of the services</Title>
+      <p>Any product of the Services released to You in any form or medium shall be supplied by us on the basis that it is for Your benefit and information only and that it shall not be copied, referred to or disclosed, in whole or in part, unless this is required by Belgian legislation (in such case You will inform us prior to any disclosure). The Services shall be delivered on the basis that You shall not quote our name or reproduce our logo in any form or medium without our prior written consent.</p>
+      <Title level={2}>9.Intellectual property</Title>
+      <p>AU ACCOUNTING OFFICE shall retain ownership of the copyright and all other intellectual property rights in the product of the Services, and ownership of our working papers. The Client shall acquire ownership of any product of the Services in its tangible form on payment of our Charges for any such product. For the purposes of the performance of our services, we shall be entitled to use, develop or share with each other knowledge, experience and skills of general application gained through performing the Services.</p>
+      <p>Every and all copyright(s) and all other intellectual property right(s) and every and all similar rights on the AUAO Web platform shall be and will remain the exclusive property of AU ACCOUNTING OFFICE or its licenser(s). The Client is not authorized to grant or sell licenses with regard to AUAO Web platform or make any other profitable use of the AUAO Web platform. The Client is not authorized to decompile or disassemble AUAO Web platform nor to subject it to reverse engineering, to change it in any way or to break in or gain access to areas of the AUAO Web platform for which AU ACCOUNTING OFFICE did not grant access.</p>
+      <Title level={2}>10.Prohibition of hiring of AU ACCOUNTING OFFICE’ employees</Title>
+      <p>During the whole term of the Services Contract, and for a period of 12 months as from the termination thereof, regardless of the reason of the termination, the Client shall not engage any member of the staff or independent worker of AU ACCOUNTING OFFICE, directly or indirectly involved in the execution of the Services, or let him/her carry out activities beyond the framework of the agreement between AU ACCOUNTING OFFICE and the Client, unless prior agreement has been obtained in writing from AU ACCOUNTING OFFICE.</p>
+      <p>Any infringement of this prohibition shall result in the payment of a once-only compensation of 3 months employee’s salary plus superannuation.</p>
+      <p>The same compensation is due by the Client who, with the intention to by-pass this prohibition, obtains the same result in any other way.</p>
+      <Title level={2}>11.Our charges</Title>
+      <p>AU ACCOUNTING OFFICE shall render fee notes in respect of the Services comprising fees, outlays and taxes thereon (where appropriate) (hereafter "our Charges"). Our Charges and any special payment terms shall be set out in the Engagement Letter.</p>
+      <p>Unless otherwise explicitly agreed upon in writing, fees shall be based on the degree of responsibility of the persons involved in delivering the Services, their skill and time spent in performing the Services. Outlays will include both directly incurred costs, including expenses incurred with third parties, and an amount that may be determined as a percentage of the fees, to cover incidental expenses, which are not charged directly to the engagement.</p>
+      <p>Our Charges may differ from estimates or quotations that may have been supplied, for example where additional fees and outlays arise from any delay as a result of failure to supply information required to enable AU ACCOUNTING OFFICE to perform the Services.</p>
+      <p>Where AU ACCOUNTING OFFICE is required to provide information in respect of the Client pursuant to a regulatory request, requirement or through any form of legal proceedings, the Client agrees to reimburse AU ACCOUNTING OFFICE for the costs AU ACCOUNTING OFFICE and its personnel incur in relation to such requirement, request or proceeding, where AU ACCOUNTING OFFICE’ actions were not also the subject of such requirement, request or proceeding.</p>
+      <Title level={2}>12.Payment and payment terms</Title>
+      <p>The Client shall pay our Charges, without any right of deduction or set-off, within the term indicated on the fee notes, but by no means later than thirty days after receipt of the fee notes. The date of receipt of the fee notes is fixed on the first day, following the date mentioned on the fee notes.</p>
+      <p>Unless otherwise explicitly agreed upon in writing, any payments by the Client are to be made in Euros.</p>
+      <p>In case of default, AU ACCOUNTING OFFICE is entitled to charge interest on any outstanding balances at the interest rate of 4% per annual.</p>
+      <p>By virtue of the law referred to above, any overdue payment will also entitle AU ACCOUNTING OFFICE, without issuing any default notice, to claim lump-sum damages for recovery outlays, which will amount to 15% of the fee notes except if AU ACCOUNTING OFFICE can prove that higher damages have been incurred.</p>
+      <p>Non-payment of our Charges by the expiry date entails the immediate collectability of all outstanding invoices, even the non-due invoices, without us having to take into account previously authorized payment conditions.</p>
+      <p>If the Services Contract is terminated or suspended, AU ACCOUNTING OFFICE shall be entitled to payment for outlays incurred to that time and to payment of fees for work done, plus taxes thereon (where appropriate). The fees for work done shall in this event be calculated by reference to the parameters referred to in article 8 of these General Terms, applicable at the time of performance of our Services.</p>
+      <p>Where there is more than one addressee of the Engagement Letter, unless provision is made in the Engagement Letter for payment of our Charges by one of the addressees or by a third party, all of the addressees shall each be fully jointly and severally liable to pay our Charges, as well as any related interest and damages.</p>
+      <Title level={2}>13.Knowledge and conflicts</Title>
+      <p>The Engagement Team shall not be required, expected or deemed to have knowledge of any information known to Other AUAO Persons which is not known to the Engagement Team or be required to obtain such information from Other AUAO Persons.</p>
+      <p>The Engagement Team shall not be required to make use of or to disclose to You any information, whether known to them personally or known to Other AUAO Persons, which is confidential to another client.</p>
+      <p>AUAO Persons may provide services or be approached to provide services for one or more parties with interests conflicting with Your interests or that have interests that compete with Yours (“Party or Parties with a Conflict of Interest”). If You know or become aware that a AUAO Person is advising or proposing to advise a Party or Parties with a Conflict of Interest, You must inform us promptly.</p>
+      <p>AUAO persons are and remain free to provide services to a Party or Parties with a Conflict of Interest. If the interests of the Party or Parties with a Conflict of Interest, specifically and directly with regard to the Services, are in conflict with Your interests and You have informed us thereof, then:</p>
+      <ul>
+        <li>The Engagement Team shall not provide services to the Party or Parties with a Conflict of Interest; and</li>
+        <li>Other AUAO persons shall only provide services to the Party or Parties with a Conflict of Interest when adequate Barriers have been implemented. The effectiveness of these Barriers means that we have taken sufficient steps to avoid any real risks of damaging our confidential relationship of trust with You.</li>
+      </ul>
+      <Title level={2}>14. Limitation of liability</Title>
+      <p>The liability of AU ACCOUNTING OFFICE in connection with the Services Contract is limited in accordance with the provisions of article 14.1.</p>
+      <h3>14.1 The aggregate liability of all AUAO Persons towards Client,</h3>
+      <ul>
+        <li>arising in any way and on any basis, and irrespective of its legal basis;</li>
+        <li>for any damage arising from or in connection with the Services Contract;</li>
+        <li>regardless of the cause of loss or damage, including our negligence and serious fault;</li>
+      </ul>
+      <p>is limited to an amount of 1 (one) time the fees charged by AU ACCOUNTING OFFICE for the delivery of the Services . However, if the Services relate to monthly, quarterly or yearly periodical activities, our aggregate liability, as defined above, will be limited to an amount of 1 (one) times the fees charged by AU ACCOUNTING OFFICE for the periodical activities executed over the last year.</p>
+      <p>The limitation of liability as set out above is not applicable in the event that AU ACCOUNTING OFFICE has committed a fault with fraudulent intent.</p>
+      <p>AUAO Persons cannot be held liable for indirect damages, such as but not limited to, financial and commercial losses, loss of profits, increase of general costs, interruption of the planning, disturbances and glitches in (accounting)software, loss of the expected profit, capital, clients, etc.</p>
+      <p>This article 14 does not prejudice in any way the exclusion and limitation of our liability with respect to AUAO Web platform as described in article 5.</p>
+      <p>Where more than one addressee has been indicated for the delivery of the Services, the limitation on our liability agreed in article 14.1 applies to all of them jointly and shall be apportioned by them amongst them. No addressee shall dispute or challenge the validity, enforceability or operation of this clause on the ground that no such apportionment has been so agreed or on the ground that the agreed share of limitation amount apportioned to any addressee is unreasonably low.</p>
+      <Title level={2}>15. Suspension and termination</Title>
+      <p>If the Client is in breach of either executing or fulfilling correctly and/or in due time any of its obligations, AU ACCOUNTING OFFICE is entitled to suspend the performance of the Services until the Client will have fully complied with its obligations. AU ACCOUNTING OFFICE is also entitled to suspend the performance of the Services if, for any other engagement contracted with AU ACCOUNTING OFFICE, the Client either has not executed, or has executed its obligations partially, incorrectly or with delay. AU ACCOUNTING OFFICE will under all circumstances remain entitled to the payment of its Charges as set out in article 11 of these General Terms.</p>
+      <p>Either party can terminate the Services Contract by giving a reasonable notice term. Notices must be notified to the other Party (ies) by registered mail. In case of immediate termination by the Client without observance of the notice term, he shall pay a compensation to AU ACCOUNTING OFFICE equal to the half of the fees for aforesaid notice term.</p>
+      <p>However, the Client is entitled to terminate the Services Contract immediately without observance of any notice term and without payment of any compensation to AU ACCOUNTING OFFICE, if:</p>
+      <ul>
+        <li>AU ACCOUNTING OFFICE fails seriously in the performance of their liabilities;</li>
+        <li>in case of composition, bankruptcy, winding-up or liquidation of AU ACCOUNTING OFFICE.</li>
+      </ul>
+      <p>AU ACCOUNTING OFFICE is entitled to terminate the Services Contract immediately without notice term, without proof of default, without being liable for any compensation whatsoever, and without prior judicial intervention in any of the following cases:</p>
+      <ul>
+        <li>the Client commits a breach of contract, such as, but not limited to, the provision of incorrect or incomplete information to AU ACCOUNTING OFFICE, the absence of payment of the fees after sending of a formal notice, or the non-respect of the undertakings with regard to AUAO Web platform;</li>
+        <li>AU ACCOUNTING OFFICE is no longer allowed to provide the Client with services as a result of mandatory rules such as, but not limited to, legislation relating to the independence of the network of the auditor and to anti-money laundering;</li>
+        <li>in case of composition, bankruptcy, winding-up or liquidation of the Client.</li>
+      </ul>
+      <p>AU ACCOUNTING OFFICE will in all circumstances remain entitled to the payment of the Charges relating to work done and of the fee notes for the services performed, as set out in article 11 of these General Terms.</p>
+      <p>If the Client breaches any of the obligations under the Services Contract and there is any claim made or threatened against AU ACCOUNTING OFFICE by a third party; the Client shall compensate AU ACCOUNTING OFFICE and hold AU ACCOUNTING OFFICE harmless for any loss, damage, expense or liability incurred by AU ACCOUNTING OFFICE, which results from or arises from or is connected with any such breach and any such claim.</p>
+      <Title level={2}>16. Disputes</Title>
+      <p>Any complaint related to the Services performed or to our Charges must be communicated in writing to AU ACCOUNTING OFFICE, either within 30 days as from the sending date, by AU ACCOUNTING OFFICE, of the information and/or documents disputed by the Client, or within 30 days upon discovery of the mistake, provided that the Client demonstrates that such mistake could not have been discovered earlier. Any such dispute does not suspend the Client's payment obligations.</p>
+      <p>If a complaint is considered to be well-founded, AU ACCOUNTING OFFICE may decide:</p>
+      <ul>
+        <li>either, to correct, free of any charge, the Services performed; or</li>
+        <li>to perform again, totally or partially, the Services disputed; or</li>
+        <li>to cancel, totally or partially, the engagement with a proportional refund of the Charges paid by the Client; or</li>
+        <li>to adjust the amount of the fee notes issued.</li>
+      </ul>
+      <p>Unless explicitly otherwise agreed upon in writing, the period during which any complaint can be made by the Client against AU ACCOUNTING OFFICE expires six months as from the moment the client knew of the facts giving rise to said complaint, or should reasonably have known thereof.</p>
+      <Title level={2}>17. Processing of personal data</Title>
+      <p>This article applies to the treatment of personal data in connection with the Services and/or the Engagement Letter.</p>
+      <p>You warrant that the personal data which You transfer to AUAO (i.e. AUAO, other AUAO Persons and/or third parties supporting AUAO) in connection with the execution of the Services and the Engagement Letter, will be processed by You in accordance with the provisions and principles of the GDPR.</p>
+      <p>AUAO acts as controller in connection with the Services, whereby AUAO also has to comply with certain legal obligations and regulations. AUAO will process the received personal data as controller based on the Engagement Letter and/or based on one of the legal obligations.</p>
+      <p>AUAO will take appropriate technical and organizational measures in order to protect the personal data against unauthorized or unlawful processing and against accidental loss, destruction of or damage to the personal data.</p>
+      <p>AUAO can transfer personal data for the execution of the Services to other AUAO Persons and/or to third parties that support AUAO who will also take necessary and appropriate technical and organizational measures to protect personal data. Moreover, the received personal data can, amongst others, be communicated to and used by other AUAO Persons and/or third parties that support AUAO in view of compliance and regulatory requirements (amongst others anti-money laundering legislation), risk management and quality control of the Services delivered by AUAO, as well as for client and relation management.</p>
+      <p>In the event of loss of personal data, data breach or performance of a data protection impact assessment, You will respond to any reasonable request for assistance from AUAO.</p>
+      <p>Parties shall notify each other promptly: (i) upon receiving a request from a data subject, or if they receive any claim, complaint or allegation relating to the processing of personal data; (ii) upon becoming aware of any breach leading to the destruction, loss or unlawful disclosure of personal data in their possession.</p>
+      <p>You will notify AUAO promptly if You acquire knowledge of an infringement regarding the processing of the aforementioned personal data.</p>
+      <Title level={2}>18. Independence of the AUAO network</Title>
+      <p>We have the responsibility to keep the independence of our clients.</p>
+      <Title level={2}>19. Waiver and severability</Title>
+      <p>Any failure by AU ACCOUNTING OFFICE to enforce one of its rights or prerogatives under the Services Contract, or any failure by AU ACCOUNTING OFFICE to react to a default or breach by the Client of all or any parts of the provisions of the Services Contract shall not constitute a waiver by AU ACCOUNTING OFFICE of any of its rights there under.</p>
+      <p>Each clause or term of the Services Contract constitutes a separate and independent provision. If any of the provisions of the Services Contract is void or unenforceable, the remaining provisions shall continue in full force and effect.</p>
+      <Title level={2}>20. Circumstances beyond your or our control</Title>
+      <p>AU ACCOUNTING OFFICE is not bound to carry out its obligations mentioned under this Services Contract if its enforcement is hindered by an event of force majeure. Following circumstances shall be considered as force majeure, without being limitative: a state intervention, weather conditions, breakdowns and disruptions in telecommunication and internet connections, disruptions in (accountancy) software, delay or breach of AU ACCOUNTING OFFICE’s subcontractors in the performance of their obligations or strikes or similar circumstances which results in the Services not being provided or being provided with delay and/or being provided partially. AU ACCOUNTING OFFICE is under no obligation to prove that such circumstances were unforeseeable and unavoidable.</p>
+      <Title level={2}>21. Applicable law and jurisdictions</Title>
+      <p>The professional relationships between the Parties to which these General Terms apply will be governed exclusively by law. All disputes related thereto will be submitted exclusively to the courts within the judicial area in which AU ACCOUNTING OFFICE has its registered office.</p>
+    </body></html>
   </ContainerStyled>
-
-);
+</>;  
 
 TermAndConditionPage.propTypes = {};
 
