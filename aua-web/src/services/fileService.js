@@ -10,7 +10,7 @@ export async function searchFile(ids) {
 
 export async function downloadFile(taskId, fileId) {
   if (!taskId || !fileId) throw new Error('Missing taskId and fileId');
-  return request('GET', `file/download/task/${taskId}/file/${fileId}`, null, null, 'blob');
+  return request('GET', `file/download/tasks/${taskId}/file/${fileId}`, null, null, 'blob');
 }
 
 export async function openFile(taskId, fileId) {

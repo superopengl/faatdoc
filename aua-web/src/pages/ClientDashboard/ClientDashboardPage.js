@@ -79,7 +79,7 @@ const ClientDashboardPage = (props) => {
   }, []);
 
   const goToEditTask = (id) => {
-    props.history.push(`/task/${id || 'new'}`);
+    props.history.push(`/tasks/${id || 'new'}`);
   }
 
 
@@ -90,7 +90,7 @@ const ClientDashboardPage = (props) => {
       content: 'Please create portfolio before creating task. Go to create protofolio now?',
       okText: 'Yes, go to create portfolio',
       maskClosable: true,
-      onOk: () => props.history.push('/portfolio?create=1')
+      onOk: () => props.history.push('/portfolios?create=1')
     });
   }
 
@@ -105,11 +105,11 @@ const ClientDashboardPage = (props) => {
 
 
   const handleGoToTaskWithMessage = task => {
-    props.history.push(`/task/${task.id}?chat=true`)
+    props.history.push(`/tasks/${task.id}?chat=true`)
   }
 
   const handleGoToTask = task => {
-    props.history.push(`/task/${task.id}`)
+    props.history.push(`/tasks/${task.id}`)
   }
 
   const hasPortfolio = !!portfolioList.length;
@@ -122,52 +122,21 @@ const ClientDashboardPage = (props) => {
       <HomeHeader></HomeHeader>
       <ContainerStyled>
         <Space style={{ width: '100%', justifyContent: 'space-between' }}>
-          <Link to="/task">All tasks</Link>
+          <Link to="/tasks">All tasks</Link>
           <Button type="primary" onClick={createNewTask} icon={<PlusOutlined />}>New Task</Button>
         </Space>
         <Divider />
-        <Tabs type="card">
-          {portfolioList.map((p, i) => <Tabs.TabPane key={i} tab={<Space size="small" direction="vertical" style={{ alignItems: 'center' }}>
-            <PortfolioAvatar value={p.name} email={context.user.email} size={36} />
-            {p.name}
-          </Space>}>
-            <MyTaskList data={taskListByPortfolioMap[p.id]} onItemClick={handleGoToTask} avatar={false} />
-          </Tabs.TabPane>)}
-        </Tabs>
-        {/* <Row gutter={80}>
-          <StyledCol span={24}>
-            <Space size="small" direction="vertical" style={{ width: '100%' }}>
-
-              {loading ? <Spin style={{ width: '100%', margin: '2rem auto' }} /> : <>
-                {!hasPortfolio && <>
-                  <Title type="secondary" level={4}>My Portfolio</Title>
-                  <Paragraph >Portfolios are predefined information that can be used to automatically fill in your task application. You can save the information like name, phone, address, TFN, and etc. for future use.</Paragraph>
-                  <Link to="/portfolio?create=1"><Button size="large" type="primary" ghost block icon={<PlusOutlined />}>New Portfolio</Button></Link>
-                  <Divider />
-                </>}
-                {toSignTaskList.length > 0 && <>
-                  <Title type="secondary" level={4}>Require Sign</Title>
-                  <MyTaskList data={toSignTaskList} onItemClick={handleGoToTask} />
-                  <Divider />
-                </>}
-                {unreadTaskList.length > 0 && <>
-                  <Title type="secondary" level={4}>Tasks with Unread Messages</Title>
-                  <MyTaskList data={unreadTaskList} onItemClick={handleGoToTaskWithMessage} />
-                  <Divider />
-                </>}
-                {completeList.length > 0 && <>
-                  <Title type="secondary" level={4}>Recent Completed Tasks</Title>
-                  <MyTaskList data={completeList} onItemClick={handleGoToTask} />
-                  <Divider />
-                </>}
-                {showsTodoList && <>
-                  <Title type="secondary" level={4}>Todo Tasks</Title>
-                  <MyTaskList data={todoList} onItemClick={handleGoToTask} />
-                </>}
-              </>}
-            </Space>
-          </StyledCol>
-        </Row> */}
+        <Paragraph type="secondary">This page lists out all tasks grouped by portfolio. You can go to the <Link to="/tasks">Tasks</Link> page to see all the tasks and go to the <Link to="/portfolios">Portfolios</Link> page to manage all your portfolios.</Paragraph>
+        <Spin spinning={loading}>
+          <Tabs type="card" tabBarExtraContent={<Button onClick={() => props.history.push(`/portfolios?create=1`)} icon={<PlusOutlined />}>New Portfolio</Button>}>
+            {portfolioList.map((p, i) => <Tabs.TabPane key={i} tab={<Space size="small" direction="vertical" style={{ alignItems: 'center' }}>
+              <PortfolioAvatar value={p.name} email={context.user.email} size={36} />
+              {p.name}
+            </Space>}>
+              <MyTaskList data={taskListByPortfolioMap[p.id]} onItemClick={handleGoToTask} avatar={false} />
+            </Tabs.TabPane>)}
+          </Tabs>
+        </Spin>
       </ContainerStyled>
     </LayoutStyled >
   );

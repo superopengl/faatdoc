@@ -64,11 +64,11 @@ const PortfolioPage = props => {
   }, [])
 
   const handleEdit = id => {
-    props.history.push(`/portfolio/${id}`);
+    props.history.push(`/portfolios/${id}`);
   }
 
   const handleCreateNew = (type) => {
-    props.history.push(`/portfolio/new/${type}`);
+    props.history.push(`/portfolios/new/${type}`);
   }
 
   const handleDelete = (e, item) => {

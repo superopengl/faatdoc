@@ -104,14 +104,14 @@ const AdminBoardPage = props => {
   }
 
   const handleCreateTask = () => {
-    props.history.push('/task/new');
+    props.history.push('/tasks/new');
   }
   return (
     <LayoutStyled>
       <HomeHeader></HomeHeader>
       <ContainerStyled>
         <Space style={{ width: '100%', justifyContent: 'flex-end', marginBottom: '1rem' }}>
-          <Link to="/task"><Button type="link">All Tasks</Button></Link>
+          <Link to="/tasks"><Button type="link">All Tasks</Button></Link>
           <Button type="primary" onClick={() => handleCreateTask()} icon={<PlusOutlined />}>New Task</Button>
         </Space>
         <DragDropContext onDragEnd={onDragEnd}>

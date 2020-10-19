@@ -14,11 +14,11 @@ const MyTaskList = (props) => {
   const { data, loading, onItemClick, avatar } = props;
 
   // const goToEditTask = (id) => {
-  //   props.history.push(`/task/${id || 'new'}`);
+  //   props.history.push(`/tasks/${id || 'new'}`);
   // }
 
   // const goToViewTask = (id) => {
-  //   props.history.push(`/task/${id}/view`);
+  //   props.history.push(`/tasks/${id}/view`);
   // }
 
   const actionOnTask = task => {

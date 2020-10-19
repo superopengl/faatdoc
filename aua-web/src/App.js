@@ -28,7 +28,6 @@ import ImpersonatePage from 'pages/Impersonate/ImpersonatePage';
 import { countUnreadMessage } from 'services/messageService';
 import PortfolioForm from 'pages/Portfolio/PortfolioForm';
 import DisclaimerPage from 'pages/DisclaimerPage';
-import MyTaskSign from 'pages/MyTask/MyTaskSign';
 import ClientDashboardPage from 'pages/ClientDashboard/ClientDashboardPage';
 import AdminStatsPage from 'pages/AdminStats/AdminStatsPage';
 import AdminBoardPage from 'pages/AdminBoard/AdminBoardPage';
@@ -90,9 +89,9 @@ class App extends React.Component {
             <RoleRoute visible={isAdmin || isAgent} loading={loading} exact path="/stats" component={AdminStatsPage} />
             <RoleRoute visible={isAdmin || isAgent} loading={loading} exact path="/board" component={AdminBoardPage} />
             <RoleRoute visible={isClient} loading={loading} exact path="/landing" component={ClientDashboardPage} />
-            <RoleRoute visible={isClient} loading={loading} exact path="/portfolio" component={PortfolioPage} />
-            <RoleRoute visible={isClient} loading={loading} exact path="/portfolio/:id" component={PortfolioForm} />
-            <RoleRoute visible={isClient} loading={loading} exact path="/portfolio/new/:type" component={PortfolioForm} />
+            <RoleRoute visible={isClient} loading={loading} exact path="/portfolios" component={PortfolioPage} />
+            <RoleRoute visible={isClient} loading={loading} exact path="/portfolios/:id" component={PortfolioForm} />
+            <RoleRoute visible={isClient} loading={loading} exact path="/portfolios/new/:type" component={PortfolioForm} />
             <RoleRoute loading={loading} path="/reset_password" exact component={ResetPasswordPage} />
             <RoleRoute visible={isAdmin} loading={loading} exact path="/task_template" component={TaskTemplatePage} />
             <RoleRoute visible={isAdmin} loading={loading} exact path="/task_template/:id" component={TaskTemplatePage} />
@@ -101,10 +100,10 @@ class App extends React.Component {
             <RoleRoute visible={isAdmin} loading={loading} exact path="/recurring" component={RecurringListPage} />
             <RoleRoute visible={isAdmin} loading={loading} exact path="/impersonate" component={ImpersonatePage} />
             <RoleRoute visible={!isGuest} loading={loading} path="/message" exact component={MessagePage} />
-            <RoleRoute visible={!isGuest} loading={loading} path="/task/new" exact component={MyTaskPage} />
-            <RoleRoute visible={!isGuest} loading={loading} path="/task/:id" exact component={MyTaskPage} />
-            <RoleRoute visible={isAdmin || isAgent || isClient} loading={loading} path="/task" exact component={isClient ? MyTaskListPage : AdminTaskListPage} />
-            <RoleRoute visible={isAdmin || isAgent} loading={loading} path="/task/:id/proceed" exact component={ProceedTaskPage} />
+            <RoleRoute visible={!isGuest} loading={loading} path="/tasks/new" exact component={MyTaskPage} />
+            <RoleRoute visible={!isGuest} loading={loading} path="/tasks/:id" exact component={MyTaskPage} />
+            <RoleRoute visible={isAdmin || isAgent || isClient} loading={loading} path="/tasks" exact component={isClient ? MyTaskListPage : AdminTaskListPage} />
+            <RoleRoute visible={isAdmin || isAgent} loading={loading} path="/tasks/:id/proceed" exact component={ProceedTaskPage} />
             <RoleRoute visible={!isGuest} loading={loading} path="/change_password" exact component={ChangePasswordPage} />
             <RoleRoute loading={loading} path="/terms_and_conditions" exact component={TermAndConditionPage} />
             <RoleRoute loading={loading} path="/privacy_policy" exact component={PrivacyPolicyPage} />

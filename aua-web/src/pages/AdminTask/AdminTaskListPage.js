@@ -134,7 +134,7 @@ const AdminTaskListPage = (props) => {
       render: (text, record) => (
         <Space size="small">
           <Tooltip placement="bottom" title="Proceed task">
-            <Link to={`/task/${record.id}/proceed`}><Button shape="circle" icon={<EditOutlined />}></Button></Link>
+            <Link to={`/tasks/${record.id}/proceed`}><Button shape="circle" icon={<EditOutlined />}></Button></Link>
           </Tooltip>
           <Tooltip placement="bottom" title="Delete task">
             <Button shape="circle" danger onClick={e => handleDelete(e, record)} icon={<DeleteOutlined />}></Button>
@@ -235,7 +235,7 @@ const AdminTaskListPage = (props) => {
   }
 
   const handleCreateTask = () => {
-    props.history.push('/task/new');
+    props.history.push('/tasks/new');
   }
 
   React.useEffect(() => {
@@ -295,7 +295,7 @@ const AdminTaskListPage = (props) => {
             onChange={handleTableChange}
             onRow={(record) => ({
               onDoubleClick: () => {
-                props.history.push(`/task/${record.id}/proceed`);
+                props.history.push(`/tasks/${record.id}/proceed`);
               }
             })}
           ></Table>

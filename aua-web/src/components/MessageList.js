@@ -74,7 +74,7 @@ const MessageList = (props) => {
 
   const handleItemClick = (item) => {
     const { taskId } = item;
-    const url = isClient ? `/task/${taskId}?chat=true` : `/task/${taskId}/proceed`;
+    const url = isClient ? `/tasks/${taskId}?chat=true` : `/tasks/${taskId}/proceed`;
     props.history.push(url);
   }
   // const handleRead = async (e, item) => {
@@ -88,7 +88,7 @@ const MessageList = (props) => {
 
   // const handleGoToTask = (e, taskId) => {
   //   e.stopPropagation();
-  //   const url = isClient ? `/task/${taskId}?chat=true` : `/task/${taskId}/proceed`;
+  //   const url = isClient ? `/tasks/${taskId}?chat=true` : `/tasks/${taskId}/proceed`;
   //   props.history.push(url);
   //   Modal.destroyAll();
   // }

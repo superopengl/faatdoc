@@ -127,7 +127,7 @@ const TaskChatPanel = (props) => {
   }
 
   return <Container>
-    <div className="message-list" style={{ padding: 16, verticalAlign: 'bottom' }}>
+    <div className="message-list" style={{ padding: '0 16px 16px', verticalAlign: 'bottom' }}>
       {list.map((x, i) => {
         const MessageComponent = x.sender === myUserId ? SentMessage : ReceivedMessage;
         return <div key={i}>

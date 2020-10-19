@@ -85,7 +85,7 @@ const PortfolioForm = (props) => {
     setLoading(true);
     await savePortfolio(payload);
     setLoading(false);
-    props.history.push(`/portfolio`);
+    props.history.push(`/portfolios`);
   }
 
   const handleCancel = () => {

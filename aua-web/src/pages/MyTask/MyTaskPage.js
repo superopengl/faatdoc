@@ -60,7 +60,7 @@ const MyTaskPage = (props) => {
   }, [])
 
   const onOk = () => {
-    props.history.push('/task');
+    props.history.push('/tasks');
   }
   const onCancel = () => {
     props.history.goBack();
@@ -72,18 +72,18 @@ const MyTaskPage = (props) => {
 
   const showsEditableForm = isNew || task?.status === 'todo';
   const showsSign = task?.status === 'to_sign';
-  const showsChat = !!task?.id;
+  const showsChat = !isNew;
 
   return (<>
     <LayoutStyled>
       <HomeHeader />
       <ContainerStyled>
-        {loading ? <Spin /> : <Layout style={{ backgroundColor: '#ffffff', height: '100%', justifyContent: 'center' }}>
-          <Layout.Content style={{ padding: '0 0 0 16px', maxWidth: 500, margin: 0 }}>
-            <Space style={{ width: '100%', justifyContent: 'space-between', marginBottom: 16 }}>
+        {loading ? <Spin /> : <Layout style={{ backgroundColor: '#ffffff', height: '100%', alignItems: 'center' }}>
+          <Layout.Content style={{ padding: 0, maxWidth: 500, margin: 0, width: '100%' }}>
+            {!isNew && <Space style={{ width: '100%', justifyContent: 'space-between', marginBottom: 16 }}>
               <TaskStatus status={task.status} avatar={false} width={60} />
               <Button type={chatVisible ? 'secondary' : 'primary'} size="large" icon={<MessageFilled />} onClick={() => toggleChatPanel()}></Button>
-            </Space>
+            </Space>}
             {showsEditableForm ? <TaskFormWizard onOk={onOk} onCancel={onCancel} value={task} /> :
               showsSign ? <MyTaskSign value={task} /> :
                 <MyTaskReadView value={task} />}

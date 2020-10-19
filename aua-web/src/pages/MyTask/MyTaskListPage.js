@@ -63,7 +63,7 @@ const MyTaskListPage = (props) => {
   }, [])
 
   const goToEditTask = (id) => {
-    props.history.push(`/task/${id || 'new'}`);
+    props.history.push(`/tasks/${id || 'new'}`);
   }
 
 
@@ -74,7 +74,7 @@ const MyTaskListPage = (props) => {
         maskClosable: true,
         content: 'Please create portfolio before creating task. Go to create protofolio now?',
         okText: 'Yes, go to create portfolio',
-        onOk: () => props.history.push('/portfolio')
+        onOk: () => props.history.push('/portfolios')
       });
       return;
     }

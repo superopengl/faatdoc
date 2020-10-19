@@ -98,7 +98,7 @@ const TaskFormWizard = props => {
   }
 
   const goToTaskList = () => {
-    props.history.push(`/task`);
+    props.history.push(`/tasks`);
   }
 
   const handlePostSubmit = async () => {

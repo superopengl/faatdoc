@@ -52,7 +52,7 @@ const MessagePage = () => {
       <ContainerStyled>
         <Space size="small" direction="vertical" style={{ width: '100%' }}>
           <StyledTitleRow>
-            <Title level={2} style={{ margin: 'auto' }}>{isClient ? 'Messages' : 'Sent Out Messages'}</Title>
+            <Title level={2} style={{ margin: 'auto' }}>Messages</Title>
           </StyledTitleRow>
           {isClient && <Paragraph type="secondary">Messages are the comments and adviced actions by your agent against your specific task. All the notifications here are associated with certain tasks. Please use the contact methods on the homepage for any inquiry that is not relavant to task.</Paragraph>}
           {!isClient && <Paragraph type="secondary">You can see if the notification has been read by the clients. The status of the message can only change to 'read' when the client has opened it.</Paragraph>}

@@ -28,7 +28,7 @@ const TaskCard = (props) => {
 
 
   const handleEditTask = (id) => {
-    props.history.push(`/task/${id}/proceed`);
+    props.history.push(`/tasks/${id}/proceed`);
   }
 
   return <Draggable draggableId={id} index={index}>
@@ -54,7 +54,7 @@ const TaskCard = (props) => {
             </Space>
             {/* <div style={{ display: 'flex', position: 'absolute', right: 0, bottom: 0 }}>
               <Tooltip placement="bottom" title="Proceed task">
-                <Link to={`/task/${id}/proceed`}><Button type="link" icon={<EditOutlined />}></Button></Link>
+                <Link to={`/tasks/${id}/proceed`}><Button type="link" icon={<EditOutlined />}></Button></Link>
               </Tooltip>
               <Tooltip placement="bottom" title="Delete task">
                 <Button type="link" danger onClick={handleDelete} icon={<DeleteOutlined />}></Button>

@@ -201,7 +201,7 @@ const RecurringListPage = (props) => {
       'Successfully run the recurring',
       <Text>The task <TextLink strong onClick={() => {
         notice.close();
-        props.history.push(`/task/${task.id}/proceed`);
+        props.history.push(`/tasks/${task.id}/proceed`);
       }}>{task.name}</TextLink> was created</Text>,
       15
     );

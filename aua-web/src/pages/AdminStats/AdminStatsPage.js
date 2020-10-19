@@ -117,7 +117,7 @@ const AdminStatsPage = () => {
             <StatCard title="Portfolio" value={stats?.portfolio} loading={loading} />
           </Col>
           <Col {...span} >
-            <StatCard title={<Link to="/task">Task <MdOpenInNew /></Link>} value={stats?.task} loading={loading} color={['#91d5ff', '#ff7875', '#1890ff', '#87e8de', '#b37feb']}/>
+            <StatCard title={<Link to="/tasks">Task <MdOpenInNew /></Link>} value={stats?.task} loading={loading} color={['#91d5ff', '#ff7875', '#1890ff', '#87e8de', '#b37feb']}/>
           </Col>
         </Row>
       </ContainerStyled>
