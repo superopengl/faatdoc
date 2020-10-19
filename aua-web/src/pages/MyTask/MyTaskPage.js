@@ -9,9 +9,9 @@ import MyTaskSign from './MyTaskSign';
 import TaskFormWizard from './TaskFormWizard';
 import MyTaskReadView from './MyTaskReadView';
 import * as queryString from 'query-string';
-import { MessageFilled, MessageOutlined } from '@ant-design/icons';
-import TaskChat from 'pages/AdminTask/TaskChat';
+import { MessageFilled } from '@ant-design/icons';
 import TaskChatPanel from 'pages/AdminTask/TaskChatPanel';
+import { TaskStatus } from 'components/TaskStatus';
 
 const ContainerStyled = styled(Layout.Content)`
 margin: 4rem auto 0 auto;
@@ -45,7 +45,6 @@ const MyTaskPage = (props) => {
   const [chatVisible, setChatVisible] = React.useState(Boolean(chat));
   const [loading, setLoading] = React.useState(true);
   const [task, setTask] = React.useState();
-  const [container, setContainer] = React.useState(null);
 
   const loadEntity = async () => {
     setLoading(true);
@@ -79,18 +78,20 @@ const MyTaskPage = (props) => {
     <LayoutStyled>
       <HomeHeader />
       <ContainerStyled>
-        <Layout style={{ backgroundColor: '#ffffff', height: '100%' }}>
-          <Layout.Content style={{ padding: '0 0 0 16px', maxWidth: 500, marginLeft: 'auto', marginRight: 'auto' }}>
-            <Space style={{ width: '100%', justifyContent: 'flex-end' }}><Button size="large" icon={<MessageFilled />} onClick={() => toggleChatPanel()}></Button></Space>
-            {loading ? <Spin /> :
-              showsEditableForm ? <TaskFormWizard onOk={onOk} onCancel={onCancel} value={task} /> :
-                showsSign ? <MyTaskSign value={task} /> :
-                  <MyTaskReadView value={task} />}
+        {loading ? <Spin /> : <Layout style={{ backgroundColor: '#ffffff', height: '100%', justifyContent: 'center' }}>
+          <Layout.Content style={{ padding: '0 0 0 16px', maxWidth: 500, margin: 0 }}>
+            <Space style={{ width: '100%', justifyContent: 'space-between', marginBottom: 16 }}>
+              <TaskStatus status={task.status} avatar={false} width={60} />
+              <Button type={chatVisible ? 'secondary' : 'primary'} size="large" icon={<MessageFilled />} onClick={() => toggleChatPanel()}></Button>
+            </Space>
+            {showsEditableForm ? <TaskFormWizard onOk={onOk} onCancel={onCancel} value={task} /> :
+              showsSign ? <MyTaskSign value={task} /> :
+                <MyTaskReadView value={task} />}
           </Layout.Content>
-          {showsChat && <Layout.Sider collapsed={chatVisible} reverseArrow={true} collapsedWidth={0} width={400} collapsible={false} theme="light" style={{ marginLeft: 2, height: '100%' }}>
-            <TaskChatPanel onClose={() => toggleChatPanel(false)} taskId={task.id} />
+          {showsChat && <Layout.Sider collapsed={!chatVisible} reverseArrow={true} collapsedWidth={0} width={400} collapsible={false} theme="light" style={{ marginLeft: 2, height: '100%' }}>
+            <TaskChatPanel taskId={task.id} />
           </Layout.Sider>}
-        </Layout>
+        </Layout>}
       </ContainerStyled>
     </LayoutStyled>
   </>

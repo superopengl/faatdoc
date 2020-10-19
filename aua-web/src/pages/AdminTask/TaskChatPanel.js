@@ -14,7 +14,10 @@ import { listTaskNotifies, notifyTask, markTaskNotifyRead } from '../../services
 const {Title} = Typography;
 
 const Container = styled.div`
-background-color: rgba(0,0,0,0.05);
+// background-color: rgba(0,0,0,0.05);
+margin-left: 16px;
+border-left: 1px solid rgba(0, 0, 0, 0.06) ;
+
 min-width: 200px;
 .message-list {
   display: flex;
@@ -63,7 +66,7 @@ const SentMessage = (props) => <StyledSentMessageBox {...props} position="right"
 const ReceivedMessage = (props) => <StyledReceivedMessageBox {...props} position="left" />
 
 const TaskChatPanel = (props) => {
-  const { taskId, visible, onClose, readonly } = props;
+  const { taskId, visible, readonly } = props;
   // const { name, id, fields } = value || {};
 
   const context = React.useContext(GlobalContext);

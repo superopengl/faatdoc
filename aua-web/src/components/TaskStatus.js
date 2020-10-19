@@ -54,9 +54,10 @@ export const TaskStatus = ({ status, shape, name, avatar, ...props }) => {
 
 TaskStatus.propTypes = {
   status: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   shape: PropTypes.string.isRequired,
   avatar: PropTypes.bool.isRequired,
+  width: PropTypes.number,
 };
 
 TaskStatus.defaultProps = {
