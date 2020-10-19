@@ -18,6 +18,11 @@ const { Title } = Typography;
 
 const ContainerStyled = styled.div`
   margin: 6rem 1rem 2rem 1rem;
+
+  .ant-table-row.unread {
+    font-weight: bold;
+    background-color: rgb(255,255,220);
+  }
 `;
 
 const StyledTitleRow = styled.div`
@@ -118,6 +123,14 @@ const AdminTaskListPage = (props) => {
     {
       title: 'Last Update At',
       dataIndex: 'lastUpdatedAt',
+      sorter: () => 0, // Server end sorting. moment(a.createdAt).toDate() - moment(b.createdAt).toDate(),
+      render: (text) => {
+        return <TimeAgo value={text} />;
+      }
+    },
+    {
+      title: 'Last Unread Message',
+      dataIndex: 'lastUnreadMessageAt',
       sorter: () => 0, // Server end sorting. moment(a.createdAt).toDate() - moment(b.createdAt).toDate(),
       render: (text) => {
         return <TimeAgo value={text} />;
@@ -297,9 +310,10 @@ const AdminTaskListPage = (props) => {
             loading={loading}
             pagination={queryInfo}
             onChange={handleTableChange}
+            rowClassName={(record) => record.lastUnreadMessageAt ? 'unread' : ''}
             onRow={(record) => ({
               onDoubleClick: () => {
-                props.history.push(`/tasks/${record.id}/proceed`);
+                props.history.push(`/tasks/${record.id}/proceed?${record.lastUnreadMessageAt ? 'chat=1' : ''}`);
               }
             })}
           ></Table>

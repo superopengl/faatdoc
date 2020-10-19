@@ -62,11 +62,6 @@ const MyTaskListPage = (props) => {
     loadList();
   }, [])
 
-  const goToEditTask = (id) => {
-    props.history.push(`/tasks/${id || 'new'}`);
-  }
-
-
   const createNewTask = () => {
     if (!portfolioList.length) {
       Modal.confirm({
@@ -78,11 +73,11 @@ const MyTaskListPage = (props) => {
       });
       return;
     }
-    goToEditTask();
+    props.history.push(`/tasks/new`);
   }
 
   const handleItemClick = task => {
-    goToEditTask(task.id);
+    props.history.push(`/tasks/${task.id}?${task.lastUnreadMessageAt ? 'chat=1' : ''}`);
   }
 
 

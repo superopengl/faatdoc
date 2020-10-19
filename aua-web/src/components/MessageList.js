@@ -74,7 +74,7 @@ const MessageList = (props) => {
 
   const handleItemClick = (item) => {
     const { taskId } = item;
-    const url = isClient ? `/tasks/${taskId}?chat=true` : `/tasks/${taskId}/proceed`;
+    const url = isClient ? `/tasks/${taskId}?chat=1` : `/tasks/${taskId}/proceed?chat=1`;
     props.history.push(url);
   }
 

@@ -14,12 +14,17 @@ box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 .ant-card-body {
   padding: 16px;
 }
+
+&.unread {
+  background-color: rgb(255,255,220);
+  font-weight: 600;
+}
 `;
 
 const TaskCard = (props) => {
 
   const { task, index, onChange } = props;
-  const { id, name, forWhom, email, taskTemplateName } = task;
+  const { id, name, forWhom, email, lastUnreadMessageAt, taskTemplateName } = task;
 
   const getItemStyle = (isDragging, draggableStyle) => ({
     // background: isDragging ? "#C0C0C0" : "",
@@ -28,7 +33,7 @@ const TaskCard = (props) => {
 
 
   const handleEditTask = (id) => {
-    props.history.push(`/tasks/${id}/proceed`);
+    props.history.push(`/tasks/${id}/proceed?${lastUnreadMessageAt ? 'chat=1' : ''}`);
   }
 
   return <Draggable draggableId={id} index={index}>
@@ -38,9 +43,9 @@ const TaskCard = (props) => {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}>
-          <StyledCard hoverable onDoubleClick={() => handleEditTask(id)}>
+          <StyledCard hoverable onDoubleClick={() => handleEditTask(id)} className={lastUnreadMessageAt ? 'unread' : ''}>
             <Space direction="vertical" style={{ width: '100%' }}>
-              {name}
+              <Text>{name}</Text>
               <Text type="secondary">{taskTemplateName}</Text>
               <Space style={{ width: '100%', justifyContent: 'space-between' }}>
                 <Space style={{ lineHeight: '0.5rem', padding: 0 }}>

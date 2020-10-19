@@ -17,6 +17,7 @@ import { merge } from 'lodash';
 import { TaskDocEditor } from './TaskDocEditor';
 import TaskChatPanel from './TaskChatPanel';
 import { TaskStatus } from 'components/TaskStatus';
+import * as queryString from 'query-string';
 
 const { Text } = Typography;
 const ContainerStyled = styled.div`
@@ -94,12 +95,13 @@ const StatusSelect = styled(Select)`
 const ProceedTaskPage = (props) => {
   const id = props.match.params.id;
   // const { name, id, fields } = value || {};
+  const { chat } = queryString.parse(props.location.search);
 
   const [loading, setLoading] = React.useState(true);
   const [drawerVisible, setDrawerVisible] = React.useState(false);
   const [editingFields, setEditingFields] = React.useState();
   const [form] = Form.useForm();
-  const [chatVisible, setChatVisible] = React.useState(false);
+  const [chatVisible, setChatVisible] = React.useState(Boolean(chat));
 
   const [task, setTask] = React.useState();
 
@@ -233,7 +235,7 @@ const ProceedTaskPage = (props) => {
                       .filter(x => x.value !== status)
                       .map((x, i) => <Select.Option key={i} value={x.value}>{x.label}</Select.Option>)}
                   </StatusSelect>
-                  <Button type="primary" ghost={!chatVisible} disabled={loading} icon={<MessageFilled />} onClick={() => toggleChatPanel()}></Button>
+                  <Button type="primary" ghost={chatVisible} disabled={loading} icon={<MessageFilled />} onClick={() => toggleChatPanel()}></Button>
                 </Space>,
               ]}
             >
@@ -277,7 +279,7 @@ const ProceedTaskPage = (props) => {
             </Row>
           </Form>
         </Layout.Content>
-        <Layout.Sider collapsed={chatVisible} reverseArrow={true} collapsedWidth={0} width={400} collapsible={false} theme="light" style={{ marginLeft: 2, height: '100%' }}>
+        <Layout.Sider collapsed={!chatVisible} reverseArrow={true} collapsedWidth={0} width={400} collapsible={false} theme="light" style={{ marginLeft: 2, height: '100%' }}>
           <TaskChatPanel taskId={task.id} />
         </Layout.Sider>
       </Layout>}

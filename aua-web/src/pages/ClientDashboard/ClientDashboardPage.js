@@ -100,7 +100,7 @@ const ClientDashboardPage = (props) => {
   }
 
   const handleGoToTask = task => {
-    props.history.push(`/tasks/${task.id}`)
+    props.history.push(`/tasks/${task.id}?${task.lastUnreadMessageAt ? 'chat=1' : ''}`)
   }
 
   const hasPortfolio = !!portfolioList.length;
@@ -123,7 +123,8 @@ const ClientDashboardPage = (props) => {
             {portfolioList.map((p, i) => <Tabs.TabPane key={i} tab={<Space size="small" direction="vertical" style={{ alignItems: 'center' }}>
               <PortfolioAvatar value={p.name} id={p.id} size={36} />
               {p.name}
-            </Space>}>
+            </Space>}
+          >
               {taskListByPortfolioMap[p.id]?.length > 0 ?
                 <MyTaskList data={taskListByPortfolioMap[p.id]} onItemClick={handleGoToTask} avatar={false} /> :
                 <Space size="large" style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }} direction="vertical">
