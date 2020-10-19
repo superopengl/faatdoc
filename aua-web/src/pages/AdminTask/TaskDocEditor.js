@@ -203,7 +203,7 @@ export const TaskDocEditor = (props) => {
   return (
     <Container className="clearfix">
       <Space style={{ width: '100%', margin: '1rem auto', justifyContent: 'flex-end' }}>
-        <Button disabled={loading} icon={<FileAddOutlined />} onClick={() => showGenDocModalAny()}>Add from Doc Template</Button>
+        <Button type="primary" ghost disabled={loading} icon={<FileAddOutlined />} onClick={() => showGenDocModalAny()}>Add from Doc Template</Button>
         <Upload
           multiple={true}
           action={`${process.env.REACT_APP_AUA_API_ENDPOINT}/file`}
@@ -214,7 +214,7 @@ export const TaskDocEditor = (props) => {
           showUploadList={false}
           disabled={loading}
         >
-          <Button disabled={loading} icon={<UploadOutlined />}>Upload</Button>
+          <Button type="primary" ghost disabled={loading} icon={<UploadOutlined />}>Upload</Button>
         </Upload>
       </Space>
       {/* <Text code style={{ whiteSpace: 'pre-line' }}>{JSON.stringify(docList, null, 2)}</Text> */}

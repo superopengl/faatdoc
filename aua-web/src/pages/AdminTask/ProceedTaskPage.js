@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 import { Input, Button, Form, PageHeader, Space, Layout, Drawer, Typography, Radio, Row, Col, Spin } from 'antd';
 import HomeHeader from 'components/HomeHeader';
-
+import FieldEditor from 'components/FieldEditor';
 import { Divider } from 'antd';
 import { getTask, saveTask } from '../../services/taskService';
 import { varNameToLabelName } from 'util/varNameToLabelName';
@@ -16,6 +16,7 @@ import { notify } from 'util/notify';
 import { merge } from 'lodash';
 import { TaskDocEditor } from './TaskDocEditor';
 import TaskChatPanel from './TaskChatPanel';
+import { TaskStatus } from 'components/TaskStatus';
 
 const { Text } = Typography;
 const ContainerStyled = styled.div`
@@ -38,6 +39,12 @@ const ContainerStyled = styled.div`
   }
 `;
 
+
+const StyledDrawer = styled(Drawer)`
+.ant-drawer-content-wrapper {
+  max-width: 90vw;
+}
+`;
 
 const LayoutStyled = styled(Layout)`
   margin: 0 auto 0 auto;
@@ -89,13 +96,12 @@ const ProceedTaskPage = (props) => {
   // const { name, id, fields } = value || {};
 
   const [loading, setLoading] = React.useState(true);
-  const [, setDrawerVisible] = React.useState(false);
+  const [drawerVisible, setDrawerVisible] = React.useState(false);
   const [editingFields, setEditingFields] = React.useState();
   const [form] = Form.useForm();
   const [chatVisible, setChatVisible] = React.useState(false);
 
   const [task, setTask] = React.useState();
-  const [, setShowsNotify] = React.useState(false);
 
   const toggleChatPanel = () => {
     setChatVisible(!chatVisible);
@@ -153,6 +159,15 @@ const ProceedTaskPage = (props) => {
     }
   }
 
+  const handleFieldChange = async value => {
+    setEditingFields(value);
+  }
+
+  const handleSaveFieldChange = () => {
+    task.fields = editingFields;
+    setTask({ ...task });
+    setDrawerVisible(false);
+  }
 
   const status = task?.status;
   const defaultStatus = {
@@ -187,7 +202,7 @@ const ProceedTaskPage = (props) => {
   return (<LayoutStyled>
     <HomeHeader></HomeHeader>
     <ContainerStyled>
-      {!task ? <Spin/>  : <Layout style={{ backgroundColor: '#ffffff', height: '100%' }}>
+      {!task ? <Spin /> : <Layout style={{ backgroundColor: '#ffffff', height: '100%' }}>
         <Layout.Content style={{ padding: '0' }}>
           <Form
             form={form}
@@ -199,14 +214,14 @@ const ProceedTaskPage = (props) => {
           >
             <PageHeader
               onBack={() => handleCancel()}
-              title={<Form.Item name="name" rules={[{ required: true, message: ' ' }]} style={{ margin: 0, width: '100%' }}>
-                <Input className="task-name-input" placeholder="Task name" disabled={loading} />
-              </Form.Item>}
+              title={<TaskStatus status={task.status} avatar={false} width={60} />}
               // subTitle={<TaskProgressBar status={task.status} width={60} />}
               extra={[
                 <Space key="1" style={{ width: '100%', justifyContent: 'flex-end' }}>
-                  <Button disabled={loading} icon={<SyncOutlined />} onClick={() => loadEntity()}></Button>
-                  <Button disabled={loading} onClick={() => handleModifyFields()}>Modify Fields</Button>
+
+
+                  <Button type="primary" ghost disabled={loading} icon={<SyncOutlined />} onClick={() => loadEntity()}></Button>
+                  <Button type="primary" ghost disabled={loading} onClick={() => handleModifyFields()}>Modify Fields</Button>
                   <Button type="primary" htmlType="submit" disabled={loading}>Save</Button>
                   <StatusSelect value={statusValue}
                     labelInValue={true}
@@ -218,13 +233,18 @@ const ProceedTaskPage = (props) => {
                       .filter(x => x.value !== status)
                       .map((x, i) => <Select.Option key={i} value={x.value}>{x.label}</Select.Option>)}
                   </StatusSelect>
-                  <Button type={chatVisible ? 'secondary' : 'primary'} disabled={loading} icon={<MessageFilled />} onClick={() => toggleChatPanel()}></Button>
-                </Space>
+                  <Button type="primary" ghost={!chatVisible} disabled={loading} icon={<MessageFilled />} onClick={() => toggleChatPanel()}></Button>
+                </Space>,
               ]}
             >
             </PageHeader>
             <Divider />
             <Row gutter={20}>
+              <Col span={24}>
+                <Form.Item name="name" label="Task Name" rules={[{ required: true, message: ' ' }]}>
+                  <Input className="task-name-input" placeholder="Task name" disabled={loading} style={{fontWeight: 600}} />
+                </Form.Item>
+              </Col>
               {task.fields.map((field, i) => {
                 const { name, description, type } = field;
                 const formItemProps = {
@@ -262,6 +282,23 @@ const ProceedTaskPage = (props) => {
         </Layout.Sider>
       </Layout>}
     </ContainerStyled>
+
+    <StyledDrawer
+      title="Modify Task Fields"
+      placement="right"
+      closable={true}
+      visible={drawerVisible}
+      onClose={() => setDrawerVisible(false)}
+      destroyOnClose={true}
+      width={900}
+      footer={null}
+    >
+      <FieldEditor value={task?.fields} onChange={handleFieldChange} />
+      <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
+        <Button type="link" onClick={() => setDrawerVisible(false)}>Cancel</Button>
+        <Button type="primary" onClick={() => handleSaveFieldChange()}>Save</Button>
+      </Space>
+    </StyledDrawer>
   </LayoutStyled >
 
   );
