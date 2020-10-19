@@ -242,20 +242,18 @@ const ProceedTaskPage = (props) => {
             </PageHeader>
             <Divider />
             <Row gutter={20}>
-              <Col span={24}>
+              <Col style={{width: '50%', maxWidth: 500}}>
                 <Form.Item name="name" label="Task Name" rules={[{ required: true, message: ' ' }]}>
-                  <Input className="task-name-input" placeholder="Task name" disabled={loading} style={{fontWeight: 600}} />
+                  <Input className="task-name-input" placeholder="Task name" disabled={loading} style={{ fontWeight: 600 }} />
                 </Form.Item>
-              </Col>
-              {task.fields.map((field, i) => {
-                const { name, description, type } = field;
-                const formItemProps = {
-                  label: <>{varNameToLabelName(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
-                  name: ['fields', i, 'value']
-                  // rules: [{ required }]
-                }
-                return (
-                  <Col span={6} key={i}>
+                {task.fields.map((field, i) => {
+                  const { name, description, required, type } = field;
+                  const formItemProps = {
+                    label: <>{varNameToLabelName(name)}{description && <Text type="secondary"> ({description})</Text>}</>,
+                    name: ['fields', i, 'value'],
+                    rules: [{ required }]
+                  }
+                  return (
                     <Form.Item key={i} {...formItemProps}>
                       {type === 'text' ? <Input disabled={loading} /> :
                         type === 'year' ? <DateInput picker="year" placeholder="YYYY" disabled={loading} /> :
@@ -268,12 +266,10 @@ const ProceedTaskPage = (props) => {
                                   </Radio.Group> :
                                     null}
                     </Form.Item>
-                  </Col>
-                );
-              })}
-            </Row>
-            <Row>
-              <Col span={24}>
+                  );
+                })}
+              </Col>
+              <Col style={{flex: '1'}}>
                 <TaskDocEditor value={task.docs} fields={task.fields} onChange={handleTaskDocsChange} />
               </Col>
             </Row>
