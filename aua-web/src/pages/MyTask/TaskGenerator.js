@@ -98,7 +98,7 @@ const TaskGenerator = props => {
             <Radio.Group buttonStyle="outline" style={{ width: '100%' }} onChange={handlePortfolioChange}>
               {portfolioList.map((item, i) => <Radio.Button className="portfolio" key={i} value={item.id}>
                 <Space>
-                  <PortfolioAvatar value={item.name} size={40} />
+                  <PortfolioAvatar value={item.name} id={item.portfolioId} size={40} />
                   <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.2 }}>
                     <div>{item.name}</div>
                     {item.email && <Text type="secondary"><small>{item.email}</small></Text>}

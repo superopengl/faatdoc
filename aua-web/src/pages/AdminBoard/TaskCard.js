@@ -44,7 +44,7 @@ const TaskCard = (props) => {
               <Text type="secondary">{taskTemplateName}</Text>
               <Space style={{ width: '100%', justifyContent: 'space-between' }}>
                 <Space style={{ lineHeight: '0.5rem', padding: 0 }}>
-                  <PortfolioAvatar value={forWhom} size={32} />
+                  <PortfolioAvatar value={forWhom} id={task.portfolioId} size={32} />
                   <Space direction="vertical">
                     <small>{forWhom}</small>
                     <small>{email}</small>

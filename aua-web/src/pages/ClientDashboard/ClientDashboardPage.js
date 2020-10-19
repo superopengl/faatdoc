@@ -130,7 +130,7 @@ const ClientDashboardPage = (props) => {
         <Spin spinning={loading}>
           <Tabs type="card" tabBarExtraContent={<Button onClick={() => props.history.push(`/portfolios?create=1`)} icon={<PlusOutlined />}>New Portfolio</Button>}>
             {portfolioList.map((p, i) => <Tabs.TabPane key={i} tab={<Space size="small" direction="vertical" style={{ alignItems: 'center' }}>
-              <PortfolioAvatar value={p.name} email={context.user.email} size={36} />
+              <PortfolioAvatar value={p.name} id={p.id} size={36} />
               {p.name}
             </Space>}>
               <MyTaskList data={taskListByPortfolioMap[p.id]} onItemClick={handleGoToTask} avatar={false} />

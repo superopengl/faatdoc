@@ -35,7 +35,7 @@ function getLabelFromStatus(status) {
   return <small>{(status || '').replace(/_/g, ' ')}</small>
 }
 
-export const TaskStatus = ({ status, shape, name, avatar, ...props }) => {
+export const TaskStatus = ({ status, shape, name, portfolioId, avatar, ...props }) => {
   const label = getLabelFromStatus(status);
   if (shape === 'circle') {
     return <Progress
@@ -44,7 +44,7 @@ export const TaskStatus = ({ status, shape, name, avatar, ...props }) => {
       // steps={4}
       strokeWidth={3}
       status={progressStatus[status]}
-      format={() => avatar ? <PortfolioAvatar value={name} size={52} /> : <Text type="secondary"><small>{label}</small></Text>}
+      format={() => avatar ? <PortfolioAvatar value={name} id={portfolioId} size={52} /> : <Text type="secondary"><small>{label}</small></Text>}
       {...props}
     />
   }
@@ -55,6 +55,7 @@ export const TaskStatus = ({ status, shape, name, avatar, ...props }) => {
 TaskStatus.propTypes = {
   status: PropTypes.string.isRequired,
   name: PropTypes.string,
+  portfolioId: PropTypes.string,
   shape: PropTypes.string.isRequired,
   avatar: PropTypes.bool.isRequired,
   width: PropTypes.number,

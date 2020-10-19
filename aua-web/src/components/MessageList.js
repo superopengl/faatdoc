@@ -77,39 +77,6 @@ const MessageList = (props) => {
     const url = isClient ? `/tasks/${taskId}?chat=true` : `/tasks/${taskId}/proceed`;
     props.history.push(url);
   }
-  // const handleRead = async (e, item) => {
-  //   e.stopPropagation();
-  //   await readNotificationDetail(item.id);
-  //   item.readAt = new Date();
-  //   setList([...list]);
-  //   context.setNotifyCount(context.notifyCount - 1);
-  //   onItemRead(item);
-  // }
-
-  // const handleGoToTask = (e, taskId) => {
-  //   e.stopPropagation();
-  //   const url = isClient ? `/tasks/${taskId}?chat=true` : `/tasks/${taskId}/proceed`;
-  //   props.history.push(url);
-  //   Modal.destroyAll();
-  // }
-
-  // const readNotificationDetail = async (notificationId) => {
-  //   const item = await getNotification(notificationId);
-  //   const { content, createdAt, readAt, taskId, name, forWhom } = item;
-  //   Modal.destroyAll();
-  //   Modal.info({
-  //     icon: null,
-  //     title: <Space style={{ alignItems: 'flex-start' }}><PortfolioAvatar value={forWhom} size={32} /><Link onClick={e => handleGoToTask(e, taskId)}>{name} for {forWhom}<RiExternalLinkLine style={{ marginLeft: '0.5rem' }} /></Link></Space>,
-  //     width: 600,
-  //     maskClosable: true,
-  //     content: <>
-  //       <Space style={{ width: '100%', justifyContent: 'space-between' }}><TimeAgo value={createdAt} surfix="Sent at" /><TimeAgo value={readAt} surfix="Read at" /></Space>
-  //       <Divider />
-  //       <Paragraph style={{ whiteSpace: 'pre-line' }}>{content}</Paragraph>
-  //     </>
-  //   })
-  //   // await initloadList();
-  // }
 
   return (
     <InfiniteScroll

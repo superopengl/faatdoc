@@ -64,7 +64,7 @@ const MyTaskList = (props) => {
         <List.Item.Meta
           avatar={<div style={{ position: 'relative' }}>
             {getDotComponent(item)}
-            <TaskStatus key="1" status={item.status} width={60} name={item.forWhom} style={{ marginTop: 6 }} avatar={avatar} />
+            <TaskStatus key="1" status={item.status} width={60} name={item.forWhom} portfolioId={item.portfolioId} style={{ marginTop: 6 }} avatar={avatar} />
           </div>}
 
           title={<Text style={{ fontSize: '1rem' }}>{item.name}</Text>}

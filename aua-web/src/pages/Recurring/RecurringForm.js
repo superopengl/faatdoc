@@ -62,19 +62,19 @@ const RecurringForm = (props) => {
       <Space direction="vertical" size="small">
         <Form.Item label="Task Template" name="taskTemplateId" rules={[{ required: true, message: ' ' }]}>
           <Select allowClear>
-            {taskTemplateList.map((x, i) => (<Select.Option key={i} value={x.id}>
-              {x.name}
+            {taskTemplateList.map((t, i) => (<Select.Option key={i} value={t.id}>
+              {t.name}
             </Select.Option>))}
           </Select>
         </Form.Item>
         <Form.Item label="Client Portfolio" name="portfolioId" rules={[{ required: true, message: ' ' }]}>
           <StyledPortfolioSelect allowClear>
-            {portfolioList.map((x, i) => (<Select.Option key={i} value={x.id}>
+            {portfolioList.map((p, i) => (<Select.Option key={i} value={p.id}>
               <Space>
-                <PortfolioAvatar value={x.name} user={x.email} size={40} />
+                <PortfolioAvatar value={p.name} id={p.id} size={40} />
                 <div style={{display: 'flex', flexDirection: 'column'}}>
-                  <div style={{margin: 0, lineHeight: '1rem'}}>{x.name}</div>
-                  <Text style={{margin: 0, lineHeight: '0.8rem'}} type="secondary"><small>{x.email}</small></Text>
+                  <div style={{margin: 0, lineHeight: '1rem'}}>{p.name}</div>
+                  <Text style={{margin: 0, lineHeight: '0.8rem'}} type="secondary"><small>{p.email}</small></Text>
                 </div>
               </Space>
             </Select.Option>))}

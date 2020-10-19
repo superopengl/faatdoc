@@ -12,6 +12,7 @@ import { reactLocalStorage } from 'reactjs-localstorage';
 import { assignTask, deleteTask, searchTask } from '../../services/taskService';
 import { listAgents } from 'services/userService';
 import styled from 'styled-components';
+import { PortfolioAvatar } from 'components/PortfolioAvatar';
 
 const { Title } = Typography;
 
@@ -65,7 +66,7 @@ const AdminTaskListPage = (props) => {
       title: 'Status',
       dataIndex: 'status',
       sorter: () => 0,
-      render: (text, record) => <TaskStatus width={60} status={record.status} name={record.forWhom} avatar={false}></TaskStatus>,
+      render: (text, record) => <TaskStatus width={60} status={record.status} name={record.forWhom} portfolioId={record.portfolioId} avatar={false}></TaskStatus>,
       ellipsis: false
     },
     {
@@ -79,7 +80,10 @@ const AdminTaskListPage = (props) => {
       title: 'Portfolio',
       dataIndex: 'forWhom',
       sorter: () => 0,
-      render: (text) => <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text || ''} />
+      render: (text, record) => <Space direction="vertical" style={{alignItems: 'center', width: '100%'}}>
+      <PortfolioAvatar value={text} id={record.portfolioId} size={40}/>
+      <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text || ''} />
+      </Space>
     },
     {
       title: 'User',

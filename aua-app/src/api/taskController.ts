@@ -143,6 +143,7 @@ export const searchTask = handlerWrapper(async (req, res) => {
       `x.id as id`,
       `x.name as name`,
       `x."forWhom" as "forWhom"`,
+      `x."portfolioId" as "portfolioId"`,
       `u.email as email`,
       `x."createdAt" as "createdAt"`,
       `j.name as "taskTemplateName"`,
