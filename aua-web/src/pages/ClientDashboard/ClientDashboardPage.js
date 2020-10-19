@@ -125,13 +125,13 @@ const ClientDashboardPage = (props) => {
           <Link to="/task">All tasks</Link>
           <Button type="primary" onClick={createNewTask} icon={<PlusOutlined />}>New Task</Button>
         </Space>
-              <Divider />
+        <Divider />
         <Tabs type="card">
           {portfolioList.map((p, i) => <Tabs.TabPane key={i} tab={<Space size="small" direction="vertical" style={{ alignItems: 'center' }}>
             <PortfolioAvatar value={p.name} email={context.user.email} size={36} />
             {p.name}
           </Space>}>
-            <MyTaskList data={taskListByPortfolioMap[p.id]} onItemClick={handleGoToTask} />
+            <MyTaskList data={taskListByPortfolioMap[p.id]} onItemClick={handleGoToTask} avatar={false} />
           </Tabs.TabPane>)}
         </Tabs>
         {/* <Row gutter={80}>

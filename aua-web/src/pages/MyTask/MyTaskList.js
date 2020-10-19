@@ -6,11 +6,12 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { EditOutlined, ZoomInOutlined, HighlightOutlined } from '@ant-design/icons';
 import { Badge } from 'antd';
+import PropTypes from 'prop-types';
 
 
 const MyTaskList = (props) => {
 
-  const { data, loading, onItemClick } = props;
+  const { data, loading, onItemClick, avatar } = props;
 
   // const goToEditTask = (id) => {
   //   props.history.push(`/task/${id || 'new'}`);
@@ -63,7 +64,7 @@ const MyTaskList = (props) => {
         <List.Item.Meta
           avatar={<div style={{ position: 'relative' }}>
             {getDotComponent(item)}
-            <TaskStatus key="1" status={item.status} width={60} name={item.forWhom} style={{ marginTop: 6 }} />
+            <TaskStatus key="1" status={item.status} width={60} name={item.forWhom} style={{ marginTop: 6 }} avatar={avatar} />
           </div>}
 
           title={<Text style={{ fontSize: '1rem' }}>{item.name}</Text>}
@@ -83,8 +84,12 @@ const MyTaskList = (props) => {
   />
 };
 
-MyTaskList.propTypes = {};
+MyTaskList.propTypes = {
+  avatar: PropTypes.bool
+};
 
-MyTaskList.defaultProps = {};
+MyTaskList.defaultProps = {
+  avatar: true
+};
 
 export default withRouter(MyTaskList);
