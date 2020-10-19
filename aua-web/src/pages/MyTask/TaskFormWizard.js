@@ -15,7 +15,7 @@ import TaskNameStep from './TaskNameStep';
 const { Text } = Typography;
 
 const TaskFormWizard = props => {
-  const { value } = props;
+  const { value, portfolioId } = props;
 
   const [loading, setLoading] = React.useState(false);
   const [task, setTask] = React.useState(value);
@@ -148,7 +148,7 @@ const TaskFormWizard = props => {
 
   return <Spin spinning={loading}>
     <StepWizard ref={generatorRef}>
-      {!task && <TaskGenerator onChange={handleTaskGenerated} />}
+      {!task && <TaskGenerator onChange={handleTaskGenerated} portfolioId={portfolioId} />}
       {task && <><Space size="large" direction="vertical" style={{ width: '100%' }}>
         <div style={{ textAlign: 'center', fontSize: '2rem' }}>
           <Text type="secondary">{progess.current} / {progess.total}</Text>

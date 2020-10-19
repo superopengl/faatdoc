@@ -12,6 +12,7 @@ import { Alert } from 'antd';
 import { GlobalContext } from 'contexts/GlobalContext';
 import { PortfolioAvatar } from 'components/PortfolioAvatar';
 import { groupBy } from 'lodash';
+import { Empty } from 'antd';
 
 const { Title, Paragraph } = Typography;
 
@@ -78,11 +79,6 @@ const ClientDashboardPage = (props) => {
     loadList()
   }, []);
 
-  const goToEditTask = (id) => {
-    props.history.push(`/tasks/${id || 'new'}`);
-  }
-
-
   const showNoPortfolioWarn = () => {
     Modal.confirm({
       title: 'No portfolio',
@@ -94,18 +90,13 @@ const ClientDashboardPage = (props) => {
     });
   }
 
-  const createNewTask = e => {
+  const createNewTask = (e, portfolioId) => {
     e.stopPropagation();
     if (portfolioList.length) {
-      goToEditTask();
+      props.history.push(`/tasks/new?${portfolioId ? `portfolioId=${portfolioId}` : ''}`);
     } else {
       showNoPortfolioWarn();
     }
-  }
-
-
-  const handleGoToTaskWithMessage = task => {
-    props.history.push(`/tasks/${task.id}?chat=true`)
   }
 
   const handleGoToTask = task => {
@@ -133,7 +124,13 @@ const ClientDashboardPage = (props) => {
               <PortfolioAvatar value={p.name} id={p.id} size={36} />
               {p.name}
             </Space>}>
-              <MyTaskList data={taskListByPortfolioMap[p.id]} onItemClick={handleGoToTask} avatar={false} />
+              {taskListByPortfolioMap[p.id]?.length > 0 ?
+                <MyTaskList data={taskListByPortfolioMap[p.id]} onItemClick={handleGoToTask} avatar={false} /> :
+                <Space size="large" style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }} direction="vertical">
+                  <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="No tasks. Click below button to create a new task." />
+                  <Button type="primary" onClick={(e) => createNewTask(e, p.id)} icon={<PlusOutlined />}>Create New Task for {p.name}</Button>
+                </Space>}
+
             </Tabs.TabPane>)}
           </Tabs>
         </Spin>

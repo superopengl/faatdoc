@@ -41,7 +41,7 @@ const MyTaskPage = (props) => {
   const id = props.match.params.id;
   const isNew = !id || id === 'new';
 
-  const { chat } = queryString.parse(props.location.search);
+  const { chat, portfolioId } = queryString.parse(props.location.search);
   const [chatVisible, setChatVisible] = React.useState(Boolean(chat));
   const [loading, setLoading] = React.useState(true);
   const [task, setTask] = React.useState();
@@ -78,13 +78,13 @@ const MyTaskPage = (props) => {
     <LayoutStyled>
       <HomeHeader />
       <ContainerStyled>
-        {loading ? <Spin /> : <Layout style={{ backgroundColor: '#ffffff', height: '100%', alignItems: 'center' }}>
+        {loading ? <Spin /> : <Layout style={{ backgroundColor: '#ffffff', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
           <Layout.Content style={{ padding: 0, maxWidth: 500, margin: 0, width: '100%' }}>
             {!isNew && <Space style={{ width: '100%', justifyContent: 'space-between', marginBottom: 16 }}>
               <TaskStatus status={task.status} avatar={false} portfolioId={task.portfolioId} width={60} />
               <Button type={chatVisible ? 'secondary' : 'primary'} size="large" icon={<MessageFilled />} onClick={() => toggleChatPanel()}></Button>
             </Space>}
-            {showsEditableForm ? <TaskFormWizard onOk={onOk} onCancel={onCancel} value={task} /> :
+            {showsEditableForm ? <TaskFormWizard onOk={onOk} onCancel={onCancel} portfolioId={portfolioId} value={task} /> :
               showsSign ? <MyTaskSign value={task} /> :
                 <MyTaskReadView value={task} />}
           </Layout.Content>

@@ -36,6 +36,8 @@ const StyledTitleRow = styled.div`
 `
 
 const TaskGenerator = props => {
+  const { portfolioId } = props;
+
   const [] = React.useState(0);
   const [loading, setLoading] = React.useState(true);
   const [taskTemplateList, setTaskTemplateList] = React.useState([]);
@@ -46,10 +48,12 @@ const TaskGenerator = props => {
   const loadData = async () => {
     setLoading(true);
     const taskTemplateList = await listTaskTemplate() || [];
-    const portfolioList = await listPortfolio() || [];
-
     setTaskTemplateList(taskTemplateList);
-    setPortfolioList(portfolioList);
+
+    if (!portfolioId) {
+      const portfolioList = await listPortfolio() || [];
+      setPortfolioList(portfolioList);
+    }
     setLoading(false);
   }
 
@@ -58,8 +62,18 @@ const TaskGenerator = props => {
   }, []);
 
   const handleTaskTypeChange = e => {
-    wizardRef.current.nextStep();
-    setTaskTemplateId(e.target.value);
+    const taskTemplateId = e.target.value;
+    if (portfolioId) {
+      const data = {
+        taskTemplateId,
+        portfolioId
+      };
+      props.onChange(data);
+    } else {
+      wizardRef.current.nextStep();
+      setTaskTemplateId(taskTemplateId);
+    }
+
   }
 
   const handlePortfolioChange = e => {
@@ -88,27 +102,26 @@ const TaskGenerator = props => {
           <Space size="middle" direction="vertical" style={{ width: '100%' }}>
             <Text type="secondary">Choose task type</Text>
             <Radio.Group buttonStyle="outline" style={{ width: '100%' }} onChange={handleTaskTypeChange}>
-              {taskTemplateList.map((item, i) => <Radio.Button key={i} value={item.id}>{item.name}</Radio.Button>)}
+              {taskTemplateList.map((t, i) => <Radio.Button key={i} value={t.id}>{t.name}</Radio.Button>)}
             </Radio.Group>
           </Space>
         </div>
-        <div>
+        {!portfolioId && <div>
           <Space size="middle" direction="vertical" style={{ width: '100%' }}>
             <Text type="secondary">Choose portfolio to fill the task automatically</Text>
             <Radio.Group buttonStyle="outline" style={{ width: '100%' }} onChange={handlePortfolioChange}>
-              {portfolioList.map((item, i) => <Radio.Button className="portfolio" key={i} value={item.id}>
+              {portfolioList.map((p, i) => <Radio.Button className="portfolio" key={i} value={p.id}>
                 <Space>
-                  <PortfolioAvatar value={item.name} id={item.portfolioId} size={40} />
+                  <PortfolioAvatar value={p.name} id={p.id} size={40} />
                   <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.2 }}>
-                    <div>{item.name}</div>
-                    {item.email && <Text type="secondary"><small>{item.email}</small></Text>}
+                    <div>{p.name}</div>
+                    {p.email && <Text type="secondary"><small>{p.email}</small></Text>}
                   </div>
                 </Space>
               </Radio.Button>)}
             </Radio.Group>
           </Space>
-
-        </div>
+        </div>}
       </StepWizard>
     </Container>
   );
