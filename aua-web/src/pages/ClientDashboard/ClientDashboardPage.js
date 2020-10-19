@@ -119,12 +119,15 @@ const ClientDashboardPage = (props) => {
         <Divider />
         <Paragraph type="secondary">This page lists out all tasks grouped by portfolio. You can go to the <Link to="/tasks">Tasks</Link> page to see all the tasks and go to the <Link to="/portfolios">Portfolios</Link> page to manage all your portfolios.</Paragraph>
         <Spin spinning={loading}>
-          <Tabs type="card" tabBarExtraContent={<Button onClick={() => props.history.push(`/portfolios?create=1`)} icon={<PlusOutlined />}>New Portfolio</Button>}>
+          <Tabs
+            type="card"
+            tabBarExtraContent={<Button type="primary" ghost onClick={() => props.history.push(`/portfolios?create=1`)} icon={<PlusOutlined />}>New Portfolio</Button>}
+          >
             {portfolioList.map((p, i) => <Tabs.TabPane key={i} tab={<Space size="small" direction="vertical" style={{ alignItems: 'center' }}>
               <PortfolioAvatar value={p.name} id={p.id} size={36} />
               {p.name}
             </Space>}
-          >
+            >
               {taskListByPortfolioMap[p.id]?.length > 0 ?
                 <MyTaskList data={taskListByPortfolioMap[p.id]} onItemClick={handleGoToTask} avatar={false} /> :
                 <Space size="large" style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }} direction="vertical">

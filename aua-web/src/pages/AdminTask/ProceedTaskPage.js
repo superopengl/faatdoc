@@ -11,7 +11,7 @@ import { varNameToLabelName } from 'util/varNameToLabelName';
 import { DateInput } from 'components/DateInput';
 import { RangePickerInput } from 'components/RangePickerInput';
 import { Select } from 'antd';
-import { SyncOutlined, MessageFilled } from '@ant-design/icons';
+import { SyncOutlined, MessageFilled, MessageOutlined } from '@ant-design/icons';
 import { notify } from 'util/notify';
 import { merge } from 'lodash';
 import { TaskDocEditor } from './TaskDocEditor';
@@ -235,7 +235,7 @@ const ProceedTaskPage = (props) => {
                       .filter(x => x.value !== status)
                       .map((x, i) => <Select.Option key={i} value={x.value}>{x.label}</Select.Option>)}
                   </StatusSelect>
-                  <Button type="primary" ghost={chatVisible} disabled={loading} icon={<MessageFilled />} onClick={() => toggleChatPanel()}></Button>
+                  <Button type="primary" ghost={chatVisible} disabled={loading} icon={<MessageOutlined />} onClick={() => toggleChatPanel()}></Button>
                 </Space>,
               ]}
             >

@@ -72,7 +72,7 @@ export const TaskDocEditor = (props) => {
         const fileId = _.get(file, 'response.id');
         const fileName = _.get(file, 'response.fileName');
         if (fileId) {
-          setDocList([...docList, { fileId, fileName }]);
+          updateDocList([...docList, { fileId, fileName }]);
         }
       }
       default: {
