@@ -187,6 +187,7 @@ export const listTask = handlerWrapper(async (req, res) => {
       `j.id as id`,
       `j.name as name`,
       `j."forWhom" as "forWhom"`,
+      `j."portfolioId" as "portfolioId"`,
       `j."createdAt" as "createdAt"`,
       `j."lastUpdatedAt" as "lastUpdatedAt"`,
       `j."agentId" as "agentId"`,

@@ -1,4 +1,4 @@
-import { Button, Layout, Modal, Space, Typography, Row, Col, Spin } from 'antd';
+import { Button, Layout, Modal, Space, Typography, Row, Col, Spin, Tabs } from 'antd';
 import HomeHeader from 'components/HomeHeader';
 import React from 'react';
 import { withRouter, Link } from 'react-router-dom';
@@ -9,7 +9,9 @@ import styled from 'styled-components';
 import { Divider } from 'antd';
 import MyTaskList from 'pages/MyTask/MyTaskList';
 import { Alert } from 'antd';
-
+import { GlobalContext } from 'contexts/GlobalContext';
+import { PortfolioAvatar } from 'components/PortfolioAvatar';
+import { groupBy } from 'lodash';
 
 const { Title, Paragraph } = Typography;
 
@@ -50,6 +52,8 @@ const ClientDashboardPage = (props) => {
   const [completeList, setCompleteList] = React.useState([]);
   const [todoList, setTodoList] = React.useState([]);
   const [portfolioList, setPortfolioList] = React.useState([]);
+  const [taskListByPortfolioMap, setTaskListByPortfolioMap] = React.useState({});
+  const context = React.useContext(GlobalContext);
   const [] = React.useState(false);
 
   const loadList = async () => {
@@ -57,6 +61,7 @@ const ClientDashboardPage = (props) => {
     const portfolioList = await listPortfolio() || [];
     // const { data: toSignTaskList } = await searchTask({ status: ['to_sign'] });
     const list = await listTask();
+    setTaskListByPortfolioMap(groupBy(list, 'portfolioId'));
 
     setPortfolioList(portfolioList);
     setToSignTaskList(list.filter(x => x.status === 'to_sign'));
@@ -68,7 +73,6 @@ const ClientDashboardPage = (props) => {
       showNoPortfolioWarn();
     }
   }
-
 
   React.useEffect(() => {
     loadList()
@@ -113,23 +117,27 @@ const ClientDashboardPage = (props) => {
   const showsTodoList = !hasNotableTasks && todoList.length > 0;
   const hasNothing = !hasNotableTasks && !todoList.length
 
-  // if(hasNothing) {
-  //   props.history.push(`task`);
-  //   return null;
-  // }
-
   return (
     <LayoutStyled>
       <HomeHeader></HomeHeader>
       <ContainerStyled>
-        <Row gutter={80}>
+        <Space style={{ width: '100%', justifyContent: 'space-between' }}>
+          <Link to="/task">All tasks</Link>
+          <Button type="primary" onClick={createNewTask} icon={<PlusOutlined />}>New Task</Button>
+        </Space>
+              <Divider />
+        <Tabs type="card">
+          {portfolioList.map((p, i) => <Tabs.TabPane key={i} tab={<Space size="small" direction="vertical" style={{ alignItems: 'center' }}>
+            <PortfolioAvatar value={p.name} email={context.user.email} size={36} />
+            {p.name}
+          </Space>}>
+            <MyTaskList data={taskListByPortfolioMap[p.id]} onItemClick={handleGoToTask} />
+          </Tabs.TabPane>)}
+        </Tabs>
+        {/* <Row gutter={80}>
           <StyledCol span={24}>
             <Space size="small" direction="vertical" style={{ width: '100%' }}>
-              <Space style={{ width: '100%', justifyContent: 'space-between' }}>
-                <Link to="/task">All tasks</Link>
-                <Button type="link" onClick={createNewTask} style={{ padding: 0 }} icon={<PlusOutlined />}>Create New Task</Button>
-              </Space>
-              <Divider />
+
               {loading ? <Spin style={{ width: '100%', margin: '2rem auto' }} /> : <>
                 {!hasPortfolio && <>
                   <Title type="secondary" level={4}>My Portfolio</Title>
@@ -156,17 +164,10 @@ const ClientDashboardPage = (props) => {
                   <Title type="secondary" level={4}>Todo Tasks</Title>
                   <MyTaskList data={todoList} onItemClick={handleGoToTask} />
                 </>}
-                {/* {hasNothing && <Alert message="No news is good news" color="blue"/>} */}
               </>}
             </Space>
           </StyledCol>
-        </Row>
-        <Space size="large" direction="vertical" style={{ width: '100%' }}>
-          <Space style={{ width: '100%', justifyContent: 'flex-end' }} >
-            {/* <Button type="link" onClick={() => loadList()} icon={<SyncOutlined />}></Button> */}
-          </Space>
-
-        </Space>
+        </Row> */}
       </ContainerStyled>
     </LayoutStyled >
   );
