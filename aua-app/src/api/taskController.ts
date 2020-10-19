@@ -116,7 +116,7 @@ const defaultSearch: ISearchTaskQuery = {
 
 
 export const searchTask = handlerWrapper(async (req, res) => {
-  assertRole(req, 'admin', 'agent', 'client');
+  assertRole(req, 'admin', 'agent');
   const option: ISearchTaskQuery = { ...defaultSearch, ...req.body };
 
   const { text, status, page, assignee, orderDirection, orderField } = option;
@@ -139,6 +139,12 @@ export const searchTask = handlerWrapper(async (req, res) => {
   }
   query = query.innerJoin(q => q.from(TaskTemplate, 'j').select('*'), 'j', 'j.id = x."taskTemplateId"')
     .innerJoin(q => q.from(User, 'u').select('*'), 'u', 'x."userId" = u.id')
+    .leftJoin(q => q.from(Message, 'm')
+      .andWhere(`"readAt" IS NULL`)
+      .orderBy('"taskId"')
+      .addOrderBy('"createdAt"', 'DESC')
+      .distinctOn(['"taskId"'])
+      , 'm', `x.id = m."taskId" AND m."clientUserId" = u.id`)
     .select([
       `x.id as id`,
       `x.name as name`,
@@ -150,6 +156,7 @@ export const searchTask = handlerWrapper(async (req, res) => {
       `x.agentId as "agentId"`,
       `x.status as status`,
       `x."lastUpdatedAt" as "lastUpdatedAt"`,
+      `m."createdAt" as "lastUnreadMessageAt"`
       // `x."signedAt" as "signedAt"`,
     ]);
   if (text) {
