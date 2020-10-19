@@ -11,13 +11,18 @@ import MyTaskReadView from './MyTaskReadView';
 import * as queryString from 'query-string';
 import { MessageOutlined } from '@ant-design/icons';
 import TaskChat from 'pages/AdminTask/TaskChat';
+import TaskChatPanel from 'pages/AdminTask/TaskChatPanel';
 
 const ContainerStyled = styled.div`
 margin: 4rem auto 0 auto;
 padding: 2rem 1rem;
 // text-align: center;
-max-width: 500px;
+max-width: 1000px;
 width: 100%;
+
+.ant-layout-sider-zero-width-trigger {
+  top: 0;
+}
 `;
 
 
@@ -25,25 +30,6 @@ const LayoutStyled = styled(Layout)`
   margin: 0 auto 0 auto;
   background-color: #ffffff;
   height: 100%;
-`;
-
-const AffixContactButton = styled(Button)`
-width: 60px;
-height: 60px;
-display: flex;
-align-items: center;
-justify-content: center;
-border: none;
-background-color: rgba(255,77,79, 0.8);
-color: white;
-// box-shadow: 1px 1px 5px #222222;
-border: 2px solid white;
-
-&:focus,&:hover,&:active {
-color: white;
-background-color: rgba(20, 62, 134, 0.8);
-border: 2px solid white;
-}
 `;
 
 const MyTaskPage = (props) => {
@@ -77,32 +63,25 @@ const MyTaskPage = (props) => {
 
   const showsEditableForm = isNew || task?.status === 'todo';
   const showsSign = task?.status === 'to_sign';
+  const showsChat = !!task?.id;
 
   return (<>
     <LayoutStyled>
       <HomeHeader />
       <ContainerStyled>
-        {loading ? <Spin/> : 
-          showsEditableForm ? <TaskFormWizard
-            onOk={onOk}
-            onCancel={onCancel}
-            value={task} /> :
-            showsSign ? <MyTaskSign value={task} /> :
-              <MyTaskReadView value={task} />}
+        <Layout>
+          <Layout.Content style={{padding: 16}}>
+            {loading ? <Spin /> :
+              showsEditableForm ? <TaskFormWizard onOk={onOk} onCancel={onCancel} value={task} /> :
+                showsSign ? <MyTaskSign value={task} /> :
+                  <MyTaskReadView value={task} />}
 
-        
+          </Layout.Content>
+          {showsChat && <Layout.Sider reverseArrow={true} collapsedWidth={0} width={400} collapsible={true} theme="light" style={{padding: 16}}>
+            <TaskChatPanel onClose={() => setChatVisible(false)} taskId={task.id} />
+          </Layout.Sider>}
+        </Layout>
       </ContainerStyled>
-      {!!task?.id && <>
-      <TaskChat visible={chatVisible} onClose={() => setChatVisible(false)} taskId={task.id} />
-      <Affix style={{ position: 'fixed', bottom: 30, right: 30 }}>
-        <AffixContactButton type="primary" shape="circle" size="large"
-          onClick={() => setChatVisible(true)}
-          style={{ fontSize: 24 }}
-        >
-          <MessageOutlined />
-        </AffixContactButton>
-      </Affix>
-    </>}
     </LayoutStyled>
   </>
   );
