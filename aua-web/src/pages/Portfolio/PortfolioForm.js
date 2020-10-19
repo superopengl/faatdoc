@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
-import { Input, Button, Form, Checkbox, Space, Typography, Radio, Layout } from 'antd';
+import { Input, Button, Form, Checkbox, Space, Typography, Radio, Layout, Spin } from 'antd';
 import HomeHeader from 'components/HomeHeader';
 import { BuiltInFieldDef } from "components/FieldDef";
 import { varNameToLabelName } from 'util/varNameToLabelName';
@@ -104,7 +104,7 @@ const PortfolioForm = (props) => {
           <StyledTitleRow>
             <Title level={2} style={{ margin: 'auto' }}>{`${isNew ? 'New' : 'Edit'} Portfolio`}</Title>
           </StyledTitleRow>
-          {loading && 'loading...'}
+          {loading && <Spin/>}
           {!loading && <Form form={form} layout="vertical" onFinish={handleSubmit} style={{ textAlign: 'left' }} initialValues={initialValues}>
             {fieldDefs.map((fieldDef, i) => {
               const { name, description, rules, inputType, inputProps } = fieldDef;
