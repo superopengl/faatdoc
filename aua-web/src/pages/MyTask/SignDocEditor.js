@@ -105,7 +105,7 @@ const SignDocEditor = (props) => {
             description={<TimeAgo 
               direction="horizontal" 
               value={item.signedAt || item.lastReadAt} 
-              surfix={item.signedAt ? 'Signed:' : 'Last view:' }
+              prefix={item.signedAt ? 'Signed:' : 'Last view:' }
               defaultContent={<Text strong>Unread</Text>} 
               />}
           />

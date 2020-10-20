@@ -31,6 +31,8 @@ import DisclaimerPage from 'pages/DisclaimerPage';
 import ClientDashboardPage from 'pages/ClientDashboard/ClientDashboardPage';
 import AdminStatsPage from 'pages/AdminStats/AdminStatsPage';
 import AdminBoardPage from 'pages/AdminBoard/AdminBoardPage';
+import AdminBlogPage from 'pages/AdminBlog/AdminBlogPage';
+import BlogsPage from 'pages/BlogsPage';
 
 
 class App extends React.Component {
@@ -83,6 +85,8 @@ class App extends React.Component {
         <BrowserRouter basename="/">
           <Switch>
             <RoleRoute loading={loading} path="/" exact component={HomePage} />
+            <RoleRoute loading={loading} path="/blogs" exact component={BlogsPage} />
+            <RoleRoute visible={isAdmin} loading={loading} exact path="/blogs/admin" component={AdminBlogPage} />
             <RoleRoute visible={isGuest} loading={loading} exact path="/login" component={LogInPage} />
             <RoleRoute visible={isGuest} loading={loading} exact path="/signin" component={SignInPage} />
             <RoleRoute visible={isGuest} loading={loading} exact path="/forgot_password" component={ForgotPasswordPage} />

@@ -109,6 +109,7 @@ const HomeHeaderRaw = props => {
             selectedKeys={[current]}
             mode="horizontal" style={{ border: 0 }}>
             {isGuest && <Menu.Item key="home"><HashLink to="/#home">Home</HashLink></Menu.Item>}
+            {isGuest && <Menu.Item key="blog"><HashLink to="/blogs">Blog</HashLink></Menu.Item>}
             {isGuest && <Menu.Item key="services"><HashLink to="/#services">Services</HashLink></Menu.Item>}
             {isGuest && <Menu.Item key="team"><HashLink to="/#team">Team</HashLink></Menu.Item>}
             {isGuest && <Menu.Item key="signin"><Link to="/signin">Sign In</Link></Menu.Item>}
@@ -155,6 +156,7 @@ const HomeHeaderRaw = props => {
             mode="inline"
             style={{ border: 0 }}
           >
+            {isGuest && <Menu.Item key="blog"><LoginOutlined /> <Link to="/blogs">Blog</Link></Menu.Item>}
             {isGuest && <Menu.Item key="login"><LoginOutlined /> <Link to="/login">Log In</Link></Menu.Item>}
             {isGuest && <Menu.Item key="signin"><UserAddOutlined /> <Link to="/signin">Sign In</Link></Menu.Item>}
             {/* {isAdmin && <Menu.Item key="admin"><SettingOutlined /> <Link to="/admin">Admin</Link></Menu.Item>} */}

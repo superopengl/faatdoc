@@ -71,8 +71,8 @@ const FileIconWithOverlay = props => {
 
   return <Popover content={
     <Space direction="vertical">
-        <TimeAgo value={lastReadAt} surfix="Last read:" direction="horizontal" defaultContent="Unread"/>
-        <TimeAgo value={signedAt} surfix="Signed at:" direction="horizontal" defaultContent="Unsigned"/>
+        <TimeAgo value={lastReadAt} prefix="Last read:" direction="horizontal" defaultContent="Unread"/>
+        <TimeAgo value={signedAt} prefix="Signed at:" direction="horizontal" defaultContent="Unsigned"/>
     </Space>
   } trigger="click">
     <FileIconContainer>

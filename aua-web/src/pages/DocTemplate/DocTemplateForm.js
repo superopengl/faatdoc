@@ -11,24 +11,10 @@ import { Spin } from 'antd';
 import { useWindowHeight } from '@react-hook/window-size'
 import { SampleMarkdown } from './SampleMarkdown';
 import { BuiltInFieldDef } from 'components/FieldDef';
+import MarkdownEditor from 'components/MarkdownEditor';
 
-const mdParser = new MarkdownIt({html: true, linkify: true});
+const mdParser = new MarkdownIt({ html: true, linkify: true });
 const { Paragraph, Text } = Typography;
-
-const DocMarkdownEditor = props => {
-  const { value, style, onChange } = props;
-
-  const handleChange = e => {
-    onChange(e.text);
-  }
-
-  return <MdEditor
-    value={value}
-    style={style}
-    renderHTML={(text) => mdParser.render(text)}
-    onChange={handleChange}
-  />
-}
 
 const EMPTY_TEMPLATE = {
   name: '',
@@ -73,20 +59,19 @@ const DocTemplateForm = (props) => {
 
   return (
     // <Space direction="vertical" size="small" style={{ width: '100%' }}>
-    <Form onFinish={handleSave} initialValues={entity} style={{position: 'relative'}}>
+    <Form onFinish={handleSave} initialValues={entity} style={{ position: 'relative' }}>
       <Form.Item style={{ marginRight: 120 }} name="name" rules={[{ required: true, message: ' ', max: 100 }]}>
         <Input style={{ marginRight: '1rem' }} placeholder="Doc Template Name" />
       </Form.Item>
       <Button style={{ position: 'absolute', right: 0, top: 0, width: 100 }} htmlType="submit" type="primary">Save</Button>
       <Form.Item name="description" rules={[{ required: true, message: ' ' }]}>
-        <Input.TextArea allowClear autoSize={{minRows: 3}} placeholder="Doc template description. This will be shown on the create task wizard to help users fill required fields to generate this document."/>
+        <Input.TextArea allowClear autoSize={{ minRows: 3 }} placeholder="Doc template description. This will be shown on the create task wizard to help users fill required fields to generate this document." />
       </Form.Item>
       <Paragraph type="secondary">
         Refer to <a href="https://www.markdownguide.org/basic-syntax/" target="_blank" rel="noopener noreferrer">https://www.markdownguide.org/basic-syntax/</a> for Markdown basic syntax. Use double curly braces to express the field variables. The variables that can be automatically filled from portfolios are {BuiltInFieldDef.map(f => <><Text code>{`{{${f.name}}}`}</Text>, </>)}<Text code>{'{{now}}'}</Text>.
         </Paragraph>
       <Form.Item name="md" rules={[{ required: true, message: ' ' }]}>
-        <DocMarkdownEditor
-          style={{ height: windowHeight - 340 }}
+        <MarkdownEditor style={{ height: windowHeight - 340 }}
         />
       </Form.Item>
     </Form >

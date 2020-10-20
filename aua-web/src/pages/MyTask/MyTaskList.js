@@ -69,7 +69,7 @@ const MyTaskList = (props) => {
 
           title={<Text style={{ fontSize: '1rem' }}>{item.name}</Text>}
           description={<Space style={{ width: '100%', justifyContent: 'space-between' }}>
-            <TimeAgo value={item.lastUpdatedAt} surfix="Last Updated" accurate={true} />
+            <TimeAgo value={item.lastUpdatedAt} prefix="Last Updated" accurate={true} />
             <Space>
               <Button shape="circle" key="action" type="link" onClick={() => actionOnTask(item)} icon={getActionIcon(item.status)}></Button>
               {/* {item.status === 'draft' && <>

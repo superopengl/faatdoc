@@ -21,15 +21,15 @@ font-size: 0.8rem;
 `
 
 export const TimeAgo = props => {
-  const { surfix, value, defaultContent, direction, strong, extra, accurate } = props;
+  const { prefix, value, defaultContent, direction, strong, extra, accurate } = props;
   if (!value) {
     return defaultContent || null;
   }
   const m = moment(value);
-  const realSurfix = surfix?.trim() ? `${surfix.trim()} ` : null;
+  const realPrefix = prefix?.trim() ? `${prefix.trim()} ` : null;
   return <StyledSpace size="small" direction="horizontal">
     <Space direction={direction} size="small">
-      <Text strong={strong} type="secondary">{realSurfix}<ReactTimeAgo date={m.toDate()} /></Text>
+      <Text strong={strong} type="secondary">{realPrefix}<ReactTimeAgo date={m.toDate()} /></Text>
       {accurate && <Text strong={strong} type="secondary"><small>{m.format('DD MMM YYYY HH:mm')}</small></Text>}
     </Space>
     {extra}
@@ -37,7 +37,7 @@ export const TimeAgo = props => {
 }
 
 TimeAgo.propTypes = {
-  surfix: PropTypes.string,
+  prefix: PropTypes.string,
   value: PropTypes.any,
   defaultContent: PropTypes.any,
   direction: PropTypes.string,

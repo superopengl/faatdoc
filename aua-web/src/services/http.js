@@ -1,6 +1,7 @@
 import * as axios from 'axios';
 import * as _ from 'lodash';
 import { notify } from 'util/notify';
+import * as FormData from 'form-data';
 
 axios.defaults.withCredentials = true;
 
@@ -14,10 +15,10 @@ function trimTrailingSlash(str) {
 
 function getFullBaseUrl() {
   const url = trimTrailingSlash(process.env.REACT_APP_AUA_API_ENDPOINT);
-  if(url.charAt(0) === '/') {
+  if (url.charAt(0) === '/') {
     // Relative address
     return window.location.origin + url;
-  }else{
+  } else {
     // Absolute address
     return url;
   }
@@ -46,6 +47,31 @@ export async function request(method, path, queryParams, body, responseType = 'j
       data: body,
       responseType
     });
+
+    return response.data;
+  } catch (e) {
+    const code = _.get(e, 'response.status', null);
+    if (code === 401) {
+      notify.error('Session timeout.');
+      window.location = '/';
+      return;
+    }
+    const errorMessage = _.get(e, 'response.data.message') || _.get(e, 'response.data') || e.message;
+    notify.error('Error', errorMessage);
+    console.error(e.response);
+    throw e;
+  }
+}
+
+export async function uploadFile(fileBlob) {
+  try {
+    const form = new FormData();
+    form.append('file', fileBlob, fileBlob.name);
+    const response = await axios.post(
+      `${API_BASE_URL}/file`,
+      form,
+      // { headers: getHeaders(responseType) },
+    );
 
     return response.data;
   } catch (e) {
