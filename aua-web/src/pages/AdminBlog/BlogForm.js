@@ -2,21 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { Input, Button, Form, Typography } from 'antd';
-import { saveDocTemplate, getDocTemplate } from 'services/docTemplateService';
 import { notify } from 'util/notify';
-import MarkdownIt from 'markdown-it'
-import MdEditor from 'react-markdown-editor-lite'
-import 'react-markdown-editor-lite/lib/index.css';
-import { Spin } from 'antd';
 import { useWindowHeight } from '@react-hook/window-size'
-import { SampleMarkdown } from '../DocTemplate/SampleMarkdown';
-import { BuiltInFieldDef } from 'components/FieldDef';
 import { saveBlog } from 'services/blogService';
 import { SampleBlog } from './SampleBlog';
 import MarkdownEditor from '../../components/MarkdownEditor';
 
-const mdParser = new MarkdownIt({ html: true, linkify: true });
-const { Paragraph, Text } = Typography;
+const { Paragraph } = Typography;
 
 const EMPTY_BLOG_POST = {
   title: '',

@@ -1,6 +1,7 @@
 import {
-  DeleteOutlined, EditOutlined} from '@ant-design/icons';
-import { Button, Tooltip, List, Typography, Space } from 'antd';
+  DeleteOutlined, EditOutlined
+} from '@ant-design/icons';
+import { Button, Tooltip, List, Typography, Space, Divider } from 'antd';
 import { TimeAgo } from 'components/TimeAgo';
 import React from 'react';
 import MdEditor from 'react-markdown-editor-lite'
@@ -10,10 +11,11 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Card } from 'antd';
 
-const {Title} = Typography;
+const { Title } = Typography;
 
 const StyledList = styled(List)`
   .ant-list-item {
+    padding: 1.5rem 0;
     border: none;
   }
 
@@ -41,7 +43,7 @@ const previewConfig = {
 };
 
 export const BlogList = props => {
-  const {value, readonly, onEdit, onDelete} = props;
+  const { value, readonly, onEdit, onDelete } = props;
 
   const handleEdit = (e, item) => {
     e.stopPropagation();
@@ -63,27 +65,33 @@ export const BlogList = props => {
       renderItem={item => (
         <List.Item
           key={item.id}
-          actions={[
-            // <TimeAgo key="createdAt" value={item.createdAt} prefix="Created At: " accurate={false}/>,
-            <TimeAgo key="updatedAt" value={item.lastUpdatedAt} prefix="Updated At: " accurate={false}/>,
-            readonly ? null : <Tooltip key="delete" placement="bottom" title="Delete post">
-              <Button type="link" danger icon={<DeleteOutlined />} onClick={e => handleDelete(e, item)} />
-            </Tooltip>,
-            readonly ? null : <Tooltip key="edit" placement="bottom" title="Edit post">
-              <Button type="link" icon={<EditOutlined />} onClick={e => handleEdit(e, item)} />
-            </Tooltip>
-          ].filter(x => x)}
         >
-          <Card title={<Space>
+          <Card title={<Space direction="vertical" style={{ width: '100%' }}>
             <Title level={2}>{item.title}</Title>
-            </Space>}>
-          <MdEditor
-            value={item.md}
-            readOnly={true}
-            config={previewConfig}
-            // style={{ height: "500px" }}
-            renderHTML={(text) => mdParser.render(text)}
-          />
+            <Space style={{width: '100%', justifyContent: 'space-between'}}>
+              <Space>
+              <TimeAgo value={item.createdAt} prefix="Created At: " accurate={false} />
+              <Divider type="vertical"/>
+              <TimeAgo value={item.lastUpdatedAt} prefix="Updated At: " accurate={false} />
+              </Space>
+              {!readonly && <Space>
+                <Tooltip key="edit" placement="bottom" title="Edit post">
+                  <Button shape="circle"  icon={<EditOutlined />} onClick={e => handleEdit(e, item)} />
+                </Tooltip>
+                <Tooltip key="delete" placement="bottom" title="Delete post">
+                  <Button shape="circle" danger icon={<DeleteOutlined />} onClick={e => handleDelete(e, item)} />
+                </Tooltip>
+              </Space>}
+            </Space>
+          </Space>}
+          >
+            <MdEditor
+              value={item.md}
+              readOnly={true}
+              config={previewConfig}
+              // style={{ height: "500px" }}
+              renderHTML={(text) => mdParser.render(text)}
+            />
           </Card>
         </List.Item>
       )}
