@@ -4,11 +4,10 @@ import Text from 'antd/lib/typography/Text';
 import HomeHeader from 'components/HomeHeader';
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import { reactLocalStorage } from 'reactjs-localstorage';
 import { saveTask, searchTask } from '../../services/taskService';
 import styled from 'styled-components';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-import TaskCard from './TaskCard';
+import TaskCard from '../../components/TaskCard';
 import { Loading } from 'components/Loading';
 
 const { Title } = Typography;
@@ -76,7 +75,7 @@ const DEFAULT_QUERY_INFO = {
 const AdminBoardPage = props => {
   const [loading, setLoading] = React.useState(true);
   const [taskList, setTaskList] = React.useState([]);
-  const [queryInfo] = React.useState(reactLocalStorage.getObject('query', DEFAULT_QUERY_INFO, true))
+  const [queryInfo] = React.useState(DEFAULT_QUERY_INFO)
 
   const loadList = async () => {
     setLoading(true);

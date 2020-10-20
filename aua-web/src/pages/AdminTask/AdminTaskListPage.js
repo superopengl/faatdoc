@@ -1,4 +1,4 @@
-import { DeleteOutlined, EditOutlined, SearchOutlined, SyncOutlined, PlusOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, SearchOutlined, SyncOutlined, PlusOutlined, MessageOutlined } from '@ant-design/icons';
 import { Button, Input, Layout, Modal, Select, Space, Table, Tooltip, Typography } from 'antd';
 import Text from 'antd/lib/typography/Text';
 import HomeHeader from 'components/HomeHeader';
@@ -12,6 +12,7 @@ import { assignTask, deleteTask, searchTask } from '../../services/taskService';
 import { listAgents } from 'services/userService';
 import styled from 'styled-components';
 import { PortfolioAvatar } from 'components/PortfolioAvatar';
+import { UnreadMessageIcon } from 'components/UnreadMessageIcon';
 
 const { Title } = Typography;
 
@@ -56,14 +57,16 @@ const AdminTaskListPage = (props) => {
   const [queryInfo, setQueryInfo] = React.useState(reactLocalStorage.getObject('query', DEFAULT_QUERY_INFO, true))
 
   const columnDef = [
-
     {
       title: 'Task Name',
       dataIndex: 'name',
       // filteredValue: filteredInfo.name || null,
       sorter: () => 0,
       // onFilter: (value, record) => record.name.includes(value),
-      render: (text) => <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text || ''} />,
+      render: (text, item) => <>
+        <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text || ''} />
+        {item.lastUnreadMessageAt && <UnreadMessageIcon style={{marginLeft: 4}}/>}
+      </>,
       ellipsis: false,
     },
     {

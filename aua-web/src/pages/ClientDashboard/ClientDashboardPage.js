@@ -1,4 +1,4 @@
-import { Button, Layout, Modal, Space, Typography, Spin, Tabs } from 'antd';
+import { Button, Layout, Modal, Space, Typography, Tabs } from 'antd';
 import HomeHeader from 'components/HomeHeader';
 import React from 'react';
 import { withRouter, Link } from 'react-router-dom';

@@ -89,7 +89,7 @@ const MyTaskPage = (props) => {
               showsSign ? <MyTaskSign value={task} /> :
                 <MyTaskReadView value={task} />}
           </Layout.Content>
-          {showsChat && <Layout.Sider collapsed={!chatVisible} reverseArrow={true} collapsedWidth={0} width={400} collapsible={false} theme="light" style={{ marginLeft: 2, height: '100%' }}>
+          {showsChat && <Layout.Sider collapsed={!chatVisible} reverseArrow={true} collapsedWidth={0} width={400} collapsible={false} theme="light" style={{ paddingLeft: 30, height: '100%' }}>
             <TaskChatPanel taskId={task.id} />
           </Layout.Sider>}
         </Layout>}

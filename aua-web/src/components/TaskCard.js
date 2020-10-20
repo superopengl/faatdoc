@@ -6,6 +6,8 @@ import styled from 'styled-components';
 import { Draggable } from 'react-beautiful-dnd';
 import { PortfolioAvatar } from 'components/PortfolioAvatar';
 import PropTypes from 'prop-types';
+import { MailOutlined, MessageOutlined } from '@ant-design/icons';
+import { UnreadMessageIcon } from './UnreadMessageIcon';
 
 const StyledCard = styled(Card)`
 position: relative;
@@ -43,6 +45,7 @@ const TaskCard = (props) => {
           {...provided.dragHandleProps}
           style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}>
           <StyledCard hoverable onDoubleClick={() => handleEditTask(id)} className={lastUnreadMessageAt ? 'unread' : ''}>
+            {lastUnreadMessageAt && <UnreadMessageIcon style={{position: 'absolute', right: 16, top: 16}}/>}
             <Space direction="vertical" style={{ width: '100%' }}>
               <Text>{name}</Text>
               <Text type="secondary">{taskTemplateName}</Text>

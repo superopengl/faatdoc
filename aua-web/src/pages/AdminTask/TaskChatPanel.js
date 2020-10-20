@@ -14,8 +14,9 @@ import { listTaskNotifies, notifyTask, markTaskNotifyRead } from '../../services
 
 const Container = styled.div`
 // background-color: rgba(0,0,0,0.05);
-margin-left: 16px;
-border-left: 1px solid rgba(0, 0, 0, 0.06) ;
+// margin-left: 16px;
+// border-left: 1px solid rgba(0, 0, 0, 0.06) ;
+// padding-left: 16px;
 
 min-width: 200px;
 .message-list {
@@ -126,7 +127,7 @@ const TaskChatPanel = (props) => {
   }
 
   return <Container>
-    <div className="message-list" style={{ padding: '0 16px 16px', verticalAlign: 'bottom' }}>
+    <div className="message-list" style={{ padding: '0 0 16px', verticalAlign: 'bottom' }}>
       {list.map((x, i) => {
         const MessageComponent = x.sender === myUserId ? SentMessage : ReceivedMessage;
         return <div key={i}>
@@ -139,7 +140,7 @@ const TaskChatPanel = (props) => {
           /></div>
       })}
     </div>
-    <div style={{padding: 16}}>
+    <div style={{padding: '16px 0'}}>
       {readonly ? null : <Form onFinish={sendMessage}
         form={form}>
         <Form.Item name="content" style={{ marginBottom: 4 }}>

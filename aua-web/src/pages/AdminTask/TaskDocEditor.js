@@ -7,7 +7,7 @@ import { FileIcon } from '../../components/FileIcon';
 import FileLink from '../../components/FileLink';
 import {
   QuestionCircleOutlined, DeleteOutlined, FileAddOutlined, UploadOutlined,
-  HighlightOutlined, PushpinFilled, ExclamationCircleOutlined
+  HighlightOutlined, ExclamationCircleOutlined, FlagOutlined
 } from '@ant-design/icons';
 import { TimeAgo } from '../../components/TimeAgo';
 import { Table } from 'antd';
@@ -149,30 +149,6 @@ export const TaskDocEditor = (props) => {
           </PendingDoc>
         </Tooltip>
     },
-    // {
-    //   title: 'Doc Template',
-    //   render: (value, doc) => doc.docTemplateId ? <Space>
-    //     {doc.fileName?.replace(/\.pdf$/, '')}
-    //     {!doc.fileId && <Tooltip title="Generate from the doc template">
-    //       <Button shape="circle" onClick={() => showGenDocModalSpecific(doc.docTemplateId)} icon={<FileAddOutlined />}></Button>
-    //     </Tooltip>}
-    //   </Space> : null
-    //   //   render: (value, doc) => {
-    //   //   const { docTemplateId, fileName } = doc;
-    //   //   if (!docTemplateId) return null;
-    //   //   return <Button type="link" href={`/doc_template/${docTemplateId}`}>{fileName.replace(/\.pdf$/, '')}</Button>
-    //   // }
-    // },
-    // {
-    //   title: 'Require Sign?',
-    //   dataIndex: 'requiresSign',
-    //   render: (value, doc) => doc.signedAt ? null : <Switch defaultChecked={value} onChange={checked => handleReqireSign(doc, checked)} />
-    // },
-    // {
-    //   title: 'Feedback Doc?',
-    //   dataIndex: 'isFeedback',
-    //   render: (value, doc) => <Switch defaultChecked={value} onChange={checked => handleFeedbackDoc(doc, checked)} />
-    // },
     {
       title: 'Last Read At',
       dataIndex: 'lastReadAt',
@@ -190,7 +166,7 @@ export const TaskDocEditor = (props) => {
           <Button shape="circle" type={doc.requiresSign ? 'primary' : 'secondary'} onClick={() => toggleRequiresSign(doc)} icon={<HighlightOutlined />} disabled={!doc.fileId || doc.signedAt}></Button>
         </Tooltip>
         <Tooltip title={`${doc.isFeedback ? 'Exclude from' : 'Include into'} feedback documents`}>
-          <Button shape="circle" type={doc.isFeedback ? 'primary' : 'secondary'} onClick={() => toggleIsFeedback(doc)} icon={<PushpinFilled />} disabled={!doc.fileId}></Button>
+          <Button shape="circle" type={doc.isFeedback ? 'primary' : 'secondary'} onClick={() => toggleIsFeedback(doc)} icon={<FlagOutlined />} disabled={!doc.fileId}></Button>
         </Tooltip>
         <Tooltip title="Delete document">
           <Button shape="circle" onClick={() => handleDeleteDoc(doc)} danger icon={<DeleteOutlined />}></Button>
