@@ -18,6 +18,7 @@ import { TaskDocEditor } from './TaskDocEditor';
 import TaskChatPanel from './TaskChatPanel';
 import { TaskStatus } from 'components/TaskStatus';
 import * as queryString from 'query-string';
+import { Loading } from 'components/Loading';
 
 const { Text } = Typography;
 const ContainerStyled = styled.div`
@@ -204,7 +205,7 @@ const ProceedTaskPage = (props) => {
   return (<LayoutStyled>
     <HomeHeader></HomeHeader>
     <ContainerStyled>
-      {!task ? <Spin /> : <Layout style={{ backgroundColor: '#ffffff', height: '100%' }}>
+      {!task ? <Loading /> : <Layout style={{ backgroundColor: '#ffffff', height: '100%' }}>
         <Layout.Content style={{ padding: '0' }}>
           <Form
             form={form}

@@ -11,6 +11,7 @@ import MyTaskList from 'pages/MyTask/MyTaskList';
 import { PortfolioAvatar } from 'components/PortfolioAvatar';
 import { groupBy } from 'lodash';
 import { Empty } from 'antd';
+import { Loading } from 'components/Loading';
 
 const { Paragraph } = Typography;
 
@@ -99,7 +100,7 @@ const ClientDashboardPage = (props) => {
         </Space>
         <Divider />
         <Paragraph type="secondary">This page lists out all tasks grouped by portfolio. You can go to the <Link to="/tasks">Tasks</Link> page to see all the tasks and go to the <Link to="/portfolios">Portfolios</Link> page to manage all your portfolios.</Paragraph>
-        <Spin spinning={loading}>
+        <Loading loading={loading}>
           <Tabs
             type="card"
             tabBarExtraContent={<Button type="primary" ghost onClick={() => props.history.push(`/portfolios?create=1`)} icon={<PlusOutlined />}>New Portfolio</Button>}
@@ -118,7 +119,7 @@ const ClientDashboardPage = (props) => {
 
             </Tabs.TabPane>)}
           </Tabs>
-        </Spin>
+        </Loading>
       </ContainerStyled>
     </LayoutStyled >
   );

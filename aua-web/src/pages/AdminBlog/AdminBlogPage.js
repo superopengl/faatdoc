@@ -10,6 +10,7 @@ import { deleteBlog, listBlog } from 'services/blogService';
 import MarkdownIt from 'markdown-it'
 import 'react-markdown-editor-lite/lib/index.css';
 import BlogList from '../../components/BlogList';
+import { Loading } from 'components/Loading';
 
 const { Title } = Typography;
 
@@ -118,9 +119,9 @@ export const AdminBlogPage = () => {
           <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
             <Button type="primary" ghost icon={<PlusOutlined />} onClick={() => handleCreateNew()}>New Post</Button>
           </Space>
-          <Spin spinning={loading}>
+          <Loading loading={loading}>
             <BlogList value={list} readonly={false} onEdit={handleEdit} onDelete={handleDelete} />
-          </Spin>
+          </Loading>
 
         </Space>
         <StyledDrawer

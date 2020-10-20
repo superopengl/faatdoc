@@ -6,6 +6,7 @@ import 'react-markdown-editor-lite/lib/index.css';
 import { computeVariablesHash } from 'util/computeVariableHash';
 import FileLink from 'components/FileLink';
 import StepButtonSet from './StepBottonSet';
+import { Loading } from 'components/Loading';
 
 
 const { Title, Paragraph } = Typography;
@@ -72,14 +73,14 @@ const GenDocLinkStep = props => {
 
   const { name: docTemplateName, description: docTemplateDescription } = docTemplate;
 
-  return <Spin spinning={loading}>
+  return <Loading loading={loading}>
     <Space direction="vertical" style={{ width: '100%' }}>
       <Title level={4}>{docTemplateName}</Title>
       {docTemplateDescription && <Paragraph type="secondary">{docTemplateDescription}</Paragraph>}
       <FileLink placeholder={doc.fileName} id={pdfFile.id} name={pdfFile.fileName} location={pdfFile.location} />
       <StepButtonSet onBack={onBack} onNext={handleNext} loading={loading} />
     </Space>
-  </Spin>
+  </Loading>
 }
 
 GenDocLinkStep.propTypes = {

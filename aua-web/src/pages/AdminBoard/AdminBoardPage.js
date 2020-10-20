@@ -9,6 +9,7 @@ import { saveTask, searchTask } from '../../services/taskService';
 import styled from 'styled-components';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import TaskCard from './TaskCard';
+import { Loading } from 'components/Loading';
 
 const { Title } = Typography;
 
@@ -115,7 +116,7 @@ const AdminBoardPage = props => {
           <Button type="primary" onClick={() => handleCreateTask()} icon={<PlusOutlined />}>New Task</Button>
         </Space>
         <DragDropContext onDragEnd={onDragEnd}>
-          <Spin spinning={loading}>
+          <Loading loading={loading}>
             <StyledRow gutter={10}>
               {COLUMN_DEFS.map((s, i) => <Droppable droppableId={s.status} key={i}>
                 {(provided, snapshot) => (
@@ -139,7 +140,7 @@ const AdminBoardPage = props => {
                 )}
               </Droppable>)}
             </StyledRow>
-          </Spin>
+          </Loading>
         </DragDropContext>
       </ContainerStyled>
     </LayoutStyled>

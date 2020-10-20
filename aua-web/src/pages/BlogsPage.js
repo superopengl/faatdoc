@@ -8,6 +8,7 @@ import HomeServiceArea from 'components/homeAreas/HomeServiceArea';
 import HomeTeamArea from 'components/homeAreas/HomeTeamArea';
 import HomeFooter from 'components/HomeFooter';
 import HomeHeader from 'components/HomeHeader';
+import { Loading } from 'components/Loading';
 import React from 'react';
 import { AiOutlineMessage } from "react-icons/ai";
 import { listBlog } from 'services/blogService';
@@ -61,9 +62,9 @@ const BlogsPage = props => {
       {/* <BarStyled></BarStyled> */}
       <ContainerStyled>
         <Title level={2} style={{ textAlign: 'center' }}>All Blog Posts</Title>
-        <Spin spinning={loading}>
+        <Loading loading={loading}>
           <BlogList value={list} readonly={true} />
-        </Spin>
+        </Loading>
       </ContainerStyled>
     </LayoutStyled>
   );

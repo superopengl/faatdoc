@@ -7,6 +7,7 @@ import { Spin } from 'antd';
 import { listTaskTemplate } from 'services/taskTemplateService';
 import { listPortfolio } from 'services/portfolioService';
 import StepWizard from 'react-step-wizard';
+import { Loading } from 'components/Loading';
 
 const { Title, Text } = Typography;
 
@@ -84,7 +85,7 @@ const TaskGenerator = props => {
   }
 
   if (loading) {
-    return <Spin />
+    return <Loading />
   }
 
   return (

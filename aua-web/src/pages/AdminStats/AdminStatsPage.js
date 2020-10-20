@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { getStats } from 'services/statsService';
 import { MdOpenInNew } from 'react-icons/md';
 import { DonutChart } from "bizcharts";
+import { Loading } from 'components/Loading';
 
 const { Text } = Typography;
 
@@ -50,7 +51,7 @@ const StatCard = (props) => {
   const data = Object.entries(value || {}).map(([k, v]) => ({type: k, value: v}));
 
   return <Card title={title} style={{ marginTop: 20 }}>
-    {loading ? <Spin /> : <Space direction="vertical" style={{ width: '100%', alignItems: 'center' }}>
+    {loading ? <Loading /> : <Space direction="vertical" style={{ width: '100%', alignItems: 'center' }}>
       <DonutChart
         data={data || []}
         // title={{

@@ -9,6 +9,7 @@ import { useWindowHeight } from '@react-hook/window-size'
 import { SampleMarkdown } from './SampleMarkdown';
 import { BuiltInFieldDef } from 'components/FieldDef';
 import MarkdownEditor from 'components/MarkdownEditor';
+import { Loading } from 'components/Loading';
 
 const { Paragraph, Text } = Typography;
 
@@ -50,7 +51,7 @@ const DocTemplateForm = (props) => {
   }
 
   if (loading) {
-    return <Spin />
+    return <Loading />
   }
 
   return (

@@ -12,6 +12,7 @@ import * as queryString from 'query-string';
 import { MessageFilled } from '@ant-design/icons';
 import TaskChatPanel from 'pages/AdminTask/TaskChatPanel';
 import { TaskStatus } from 'components/TaskStatus';
+import { Loading } from 'components/Loading';
 
 const ContainerStyled = styled(Layout.Content)`
 margin: 4rem auto 0 auto;
@@ -78,7 +79,7 @@ const MyTaskPage = (props) => {
     <LayoutStyled>
       <HomeHeader />
       <ContainerStyled>
-        {loading ? <Spin /> : <Layout style={{ backgroundColor: '#ffffff', height: '100%', justifyContent: 'center' }}>
+        {loading ? <Loading /> : <Layout style={{ backgroundColor: '#ffffff', height: '100%', justifyContent: 'center' }}>
           <Layout.Content style={{ padding: 0, maxWidth: 500, margin: 0, width: '100%' }}>
             {!isNew && <Space style={{ width: '100%', justifyContent: 'space-between', marginBottom: 16 }}>
               <TaskStatus status={task.status} avatar={false} portfolioId={task.portfolioId} width={60} />

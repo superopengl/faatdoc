@@ -8,6 +8,7 @@ import { BuiltInFieldDef } from "components/FieldDef";
 import { varNameToLabelName } from 'util/varNameToLabelName';
 import { getPortfolio, savePortfolio } from 'services/portfolioService';
 import { DateInput } from 'components/DateInput';
+import { Loading } from 'components/Loading';
 
 const { Text, Title } = Typography;
 
@@ -104,7 +105,7 @@ const PortfolioForm = (props) => {
           <StyledTitleRow>
             <Title level={2} style={{ margin: 'auto' }}>{`${isNew ? 'New' : 'Edit'} Portfolio`}</Title>
           </StyledTitleRow>
-          {loading && <Spin/>}
+          {loading && <Loading/>}
           {!loading && <Form form={form} layout="vertical" onFinish={handleSubmit} style={{ textAlign: 'left' }} initialValues={initialValues}>
             {fieldDefs.map((fieldDef, i) => {
               const { name, description, rules, inputType, inputProps } = fieldDef;

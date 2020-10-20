@@ -5,6 +5,7 @@ import StepWizard from 'react-step-wizard';
 
 import { varNameToLabelName } from 'util/varNameToLabelName';
 import { getDocTemplate, genPdfFromDocTemplate, listDocTemplate } from 'services/docTemplateService';
+import { Loading } from 'components/Loading';
 
 const { Paragraph, Title } = Typography;
 
@@ -79,7 +80,7 @@ const GenDocStepperModal = props => {
     onCancel={onCancel}
     footer={null}
   >
-    {visible && <Spin spinning={loading}>
+    {visible && <Loading loading={loading}>
       <StepWizard ref={stepperRef} transitions={transitions}>
         <div>
           <Title level={4}>Choose a doc template</Title>
@@ -108,7 +109,7 @@ const GenDocStepperModal = props => {
           </Space>
         </div>
       </StepWizard>
-    </Spin>}
+    </Loading>}
   </Modal>
 }
 

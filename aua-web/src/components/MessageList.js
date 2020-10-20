@@ -7,6 +7,7 @@ import { countUnreadMessage } from 'services/messageService';
 import { GlobalContext } from 'contexts/GlobalContext';
 import InfiniteScroll from 'react-infinite-scroller';
 import { withRouter } from 'react-router-dom';
+import { Loading } from './Loading';
 
 const { Paragraph } = Typography;
 
@@ -85,7 +86,7 @@ const MessageList = (props) => {
       loadMore={() => handleFetchNextPageData()}
       hasMore={!loading && hasMore}
       useWindow={true}
-      loader={<Space key="loader" style={{ width: '100%', justifyContent: 'center' }}><Spin /></Space>}
+      loader={<Space key="loader" style={{ width: '100%', justifyContent: 'center' }}><Loading /></Space>}
     >
       <List
         itemLayout="horizontal"

@@ -11,6 +11,7 @@ import FinalReviewStep from './FinalReviewStep';
 import { withRouter } from 'react-router-dom';
 import { getPortfolio } from 'services/portfolioService';
 import TaskNameStep from './TaskNameStep';
+import { Loading } from 'components/Loading';
 
 const { Text } = Typography;
 
@@ -146,7 +147,7 @@ const TaskFormWizard = props => {
   console.log('wizard var dic', variableContextDic);
 
 
-  return <Spin spinning={loading}>
+  return <Loading loading={loading}>
     <StepWizard ref={generatorRef}>
       {!task && <TaskGenerator onChange={handleTaskGenerated} portfolioId={portfolioId} />}
       {task && <><Space size="large" direction="vertical" style={{ width: '100%' }}>
@@ -179,7 +180,7 @@ const TaskFormWizard = props => {
       </Space></>}
     </StepWizard>
 {/* <pre>{JSON.stringify(task, null, 2)}</pre> */}
-  </Spin>
+  </Loading>
 
 
 }

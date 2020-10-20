@@ -4,6 +4,7 @@ import { Typography, Spin, Space } from 'antd';
 import { getFile } from 'services/fileService';
 import { FileIcon } from './FileIcon';
 import { from, Subscription } from 'rxjs';
+import { Loading } from './Loading';
 
 const { Link } = Typography;
 
@@ -37,14 +38,14 @@ const FileLink = props => {
     }
   }, [id]);
 
-  return <Spin spinning={loading}>
+  return <Loading loading={loading}>
     <Link href={fileUrl} target="_blank" style={{ width: '100%' }}>
       <Space style={{ width: '100%', alignItems: 'center' }}>
         <FileIcon name={fileName} />
         {fileName}
       </Space>
     </Link>
-  </Spin>
+  </Loading>
 }
 
 FileLink.propTypes = {

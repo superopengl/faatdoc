@@ -7,6 +7,7 @@ import { notify } from 'util/notify';
 import FieldEditor from 'components/FieldEditor';
 import { listDocTemplate } from 'services/docTemplateService';
 import * as _ from 'lodash';
+import { Loading } from 'components/Loading';
 
 const DEFAULT_ENTITY = {
   docTemplateIds: [],
@@ -56,34 +57,8 @@ const TaskTemplateForm = (props) => {
     props.onClose();
   }
 
-
-  // const handleFormValueChange = (changed, values) => {
-  //   const { docTemplateIds, fields } = values;
-
-  //   const uniqueVariables = _.chain(docTemplateOptions)
-  //     .filter(x => docTemplateIds.includes(x.id))
-  //     .map(x => x.variables)
-  //     .flatten()
-  //     .filter(x => x !== 'now')
-  //     .uniq()
-  //     .value();
-  //   const fieldsToAdd = uniqueVariables
-  //     .filter(v => !fields.find(f => f.name === v))
-  //     .map(v => ({
-  //       name: v,
-  //       required: true,
-  //       type: getFieldTypeByVarName(v)
-  //     }));
-
-  //   if (fieldsToAdd.length) {
-  //     form.setFieldsValue({
-  //       fields: [...fields, ...fieldsToAdd]
-  //     });
-  //   }
-  // }
-
   if (loading) {
-    return <Spin />
+    return <Loading />
   }
 
   return (
