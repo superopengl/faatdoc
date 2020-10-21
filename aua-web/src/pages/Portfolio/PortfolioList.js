@@ -1,43 +1,36 @@
 import React from 'react';
-import styled from 'styled-components';
-import { Typography, Layout, Button, Modal, List, Space, Row } from 'antd';
+import { Typography, Button, Modal, List, Space, Row } from 'antd';
 import { PortfolioAvatar } from 'components/PortfolioAvatar';
 import Text from 'antd/lib/typography/Text';
 import { EditOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons';
-import { newPortfolioForUser, deletePortfolio, savePortfolio } from 'services/portfolioService';
+import { newPortfolioForUser, deletePortfolio, savePortfolio, listPortfolio, listPortfolioForUser } from 'services/portfolioService';
 import { TimeAgo } from 'components/TimeAgo';
 import { withRouter } from 'react-router-dom';
-import * as queryString from 'query-string';
 import ChoosePortfolioType from 'components/ChoosePortfolioType';
 import PropTypes from 'prop-types';
 import { GlobalContext } from 'contexts/GlobalContext';
 import PortfolioForm from '../../components/PortfolioForm';
 
-const { Title, Paragraph } = Typography;
 
 
-const StyledTitleRow = styled.div`
- display: flex;
- justify-content: space-between;
- align-items: center;
- width: 100%;
-`
+
 
 const PortfolioList = props => {
 
-  const { onLoadList, userId } = props;
+  const { userId, createMode } = props;
 
   const [list, setList] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
-  const [newModalVisible, setNewModalVisible] = React.useState(false);
+  const [newModalVisible, setNewModalVisible] = React.useState(createMode);
   const [formVisible, setFormVisible] = React.useState(false);
   const [newType, setNewType] = React.useState(false);
   const [portfolioId, setPortfolioId] = React.useState();
   const context = React.useContext(GlobalContext);
 
+
   const loadList = async () => {
     setLoading(true);
-    const data = await onLoadList();
+    const data = context.user.role === 'client' ? await listPortfolio() : await listPortfolioForUser(userId);
     setList(data);
     setLoading(false);
   }
@@ -94,11 +87,7 @@ const PortfolioList = props => {
 
   return (<>
     <Space size="small" direction="vertical" style={{ width: '100%' }}>
-      <StyledTitleRow>
-        <Title level={2} style={{ margin: 'auto' }}>Portfolios</Title>
-      </StyledTitleRow>
-      <Paragraph>Portfolios are predefined information that can be used to automatically fill in your task application. You can save the information like name, phone, address, TFN, and etc. for future usage.</Paragraph>
-      <Row style={{ flexDirection: 'row-reverse' }}>
+     <Row style={{ flexDirection: 'row-reverse' }}>
         <Button type="primary" ghost icon={<PlusOutlined />} onClick={() => setNewModalVisible(true)}>New Portfolio</Button>
       </Row>
       <List
@@ -152,9 +141,11 @@ const PortfolioList = props => {
 
 PortfolioList.propTypes = {
   userId: PropTypes.string,
-
+  createMode: PropTypes.bool,
 };
 
-PortfolioList.defaultProps = {};
+PortfolioList.defaultProps = {
+  createMode: false
+};
 
 export default withRouter(PortfolioList);

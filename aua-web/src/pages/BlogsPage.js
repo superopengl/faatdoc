@@ -61,7 +61,7 @@ const BlogsPage = props => {
       <HomeHeader></HomeHeader>
       {/* <BarStyled></BarStyled> */}
       <ContainerStyled>
-        <Title level={2} style={{ textAlign: 'center' }}>All Blog Posts</Title>
+        <Title level={2} style={{ textAlign: 'center' }}>Blog Posts</Title>
         <Loading loading={loading}>
           <BlogList value={list} readonly={true} />
         </Loading>

@@ -31,7 +31,7 @@ export const savePortfolio = handlerWrapper(async (req, res) => {
   res.json();
 });
 
-async function listMyPortfolio(userId) {
+async function listUserPortofolio(userId) {
   const list = await getRepository(Portfolio)
     .createQueryBuilder('x')
     .where({ userId, deleted: false })
@@ -60,10 +60,17 @@ async function listAdminPortfolio() {
 export const listPortfolio = handlerWrapper(async (req, res) => {
   assertRole(req, 'client', 'admin');
   const { user: { id, role } } = req as any;
-  const list = role === 'client' ? await listMyPortfolio(id) :
+  const list = role === 'client' ? await listUserPortofolio(id) :
     role === 'admin' ? await listAdminPortfolio() :
       [];
 
+  res.json(list);
+});
+
+export const listPortfolioForUser = handlerWrapper(async (req, res) => {
+  assertRole(req, 'agent', 'admin');
+  const { id } = req.params;
+  const list = await listUserPortofolio(id);
   res.json(list);
 });
 

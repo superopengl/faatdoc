@@ -19,3 +19,7 @@ export async function listPortfolio() {
 export async function newPortfolioForUser(portfolio, userId) {
   return httpPost(`user/${userId}/portfolio`, portfolio);
 }
+
+export async function listPortfolioForUser(userId) {
+  return httpGet(`user/${userId}/portfolio`);
+}

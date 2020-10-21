@@ -23,7 +23,7 @@ import {RoleRoute} from 'components/RoleRoute';
 import MyTaskPage from 'pages/MyTask/MyTaskPage';
 import RecurringListPage from 'pages/Recurring/RecurringListPage';
 import MessagePage from 'pages/Message/MessagePage';
-import UserPage from 'pages/User/UserPage';
+import UserListPage from 'pages/User/UserListPage';
 import ImpersonatePage from 'pages/Impersonate/ImpersonatePage';
 import { countUnreadMessage } from 'services/messageService';
 import PortfolioFormPage from 'pages/Portfolio/PortfolioFormPage';
@@ -100,7 +100,7 @@ class App extends React.Component {
             <RoleRoute visible={isAdmin} loading={loading} exact path="/task_template" component={TaskTemplatePage} />
             <RoleRoute visible={isAdmin} loading={loading} exact path="/task_template/:id" component={TaskTemplatePage} />
             <RoleRoute visible={isAdmin} loading={loading} exact path="/doc_template" component={DocTemplatePage} />
-            <RoleRoute visible={isAdmin} loading={loading} exact path="/user" component={UserPage} />
+            <RoleRoute visible={isAdmin} loading={loading} exact path="/user" component={UserListPage} />
             <RoleRoute visible={isAdmin} loading={loading} exact path="/recurring" component={RecurringListPage} />
             <RoleRoute visible={isAdmin} loading={loading} exact path="/impersonate" component={ImpersonatePage} />
             <RoleRoute visible={!isGuest} loading={loading} path="/message" exact component={MessagePage} />

@@ -17,6 +17,7 @@ import { GlobalContext } from 'contexts/GlobalContext';
 import ChoosePortfolioType from 'components/ChoosePortfolioType';
 import PortfolioForm from 'components/PortfolioForm';
 import { newPortfolioForUser } from 'services/portfolioService';
+import PortfolioList from 'pages/Portfolio/PortfolioList';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -39,11 +40,11 @@ const LayoutStyled = styled(Layout)`
 
 
 
-const UserPage = () => {
+const UserListPage = () => {
 
   const [portfolioFormVisible, setPortfolioFormVisible] = React.useState(false);
   const [newPortfolioType, setNewPortfolioType] = React.useState(false);
-  const [choosePortfolioVisible, setChoosePortfolioVisible] = React.useState(false);
+  const [portfolioModalVisible, setPortfolioModalVisible] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
   const [setPasswordVisible, setSetPasswordVisible] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState();
@@ -157,11 +158,11 @@ const UserPage = () => {
   const handlePortfolioForUser = async (e, user) => {
     e.stopPropagation();
     setCurrentUser(user);
-    setChoosePortfolioVisible(true);
+    setPortfolioModalVisible(true);
   }
 
   const handleChosePortfolioType = async (type) => {
-    setChoosePortfolioVisible(false);
+    setPortfolioModalVisible(false);
     setNewPortfolioType(type);
     setPortfolioFormVisible(true);
   }
@@ -273,35 +274,26 @@ const UserPage = () => {
           </Form.Item>
         </Form>
       </Modal>
-      <ChoosePortfolioType
-        visible={choosePortfolioVisible}
-        onOk={type => handleChosePortfolioType(type)}
-        onCancel={() => setChoosePortfolioVisible(false)}
-      />
       <Modal
-        visible={portfolioFormVisible}
+        visible={portfolioModalVisible}
         destroyOnClose={true}
         maskClosable={true}
-        onOk={() => setPortfolioFormVisible(false)}
-        onCancel={() => setPortfolioFormVisible(false)}
-        title={<>New Portoflio for <Text code>{currentUser?.email}</Text></>}
+        closable={true}
+        onOk={() => setPortfolioModalVisible(false)}
+        onCancel={() => setPortfolioModalVisible(false)}
+        title={<>Portoflios for <Text code>{currentUser?.email}</Text></>}
         footer={null}
         width={600}
       >
-        <PortfolioForm
-          type={newPortfolioType}
-          userId={currentUser?.id}
-          onCancel={() => setPortfolioFormVisible(false)}
-          onOk={portfolio => handleSubmitPortfolio(portfolio, currentUser.id)}
-        />
+        {currentUser && <PortfolioList userId={currentUser.id}/>}
       </Modal>
     </LayoutStyled >
 
   );
 };
 
-UserPage.propTypes = {};
+UserListPage.propTypes = {};
 
-UserPage.defaultProps = {};
+UserListPage.defaultProps = {};
 
-export default withRouter(UserPage);
+export default withRouter(UserListPage);

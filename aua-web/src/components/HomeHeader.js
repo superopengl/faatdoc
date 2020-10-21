@@ -5,7 +5,8 @@ import {
   LoginOutlined, LogoutOutlined, MenuOutlined,
   SecurityScanOutlined,
   SnippetsOutlined, TeamOutlined, ToolOutlined,
-  UserAddOutlined, UserOutlined, ReconciliationOutlined
+  UserAddOutlined, UserOutlined, ReconciliationOutlined,
+  PicLeftOutlined
 } from '@ant-design/icons';
 import { Avatar, Badge, Button, Drawer, Layout, Menu, Modal, Typography } from 'antd';
 import React from 'react';
@@ -111,7 +112,7 @@ const HomeHeaderRaw = props => {
             {isGuest && <Menu.Item key="home"><HashLink to="/#home">Home</HashLink></Menu.Item>}
             {isGuest && <Menu.Item key="services"><HashLink to="/#services">Services</HashLink></Menu.Item>}
             {isGuest && <Menu.Item key="team"><HashLink to="/#team">Team</HashLink></Menu.Item>}
-            {!isAdmin && <Menu.Item key="blog"><HashLink to="/blogs">Blog</HashLink></Menu.Item>}
+            {isGuest && <Menu.Item key="blog"><HashLink to="/blogs">Blog</HashLink></Menu.Item>}
             {isGuest && <Menu.Item key="signin"><Link to="/signin">Sign In</Link></Menu.Item>}
             {isGuest && <Menu.Item key="login"><Link to="/login">Log In</Link></Menu.Item>}
             {(isAdmin || isAgent) && <Menu.Item key="board"><Link to="/board">Board</Link></Menu.Item>}
@@ -157,7 +158,6 @@ const HomeHeaderRaw = props => {
             mode="inline"
             style={{ border: 0 }}
           >
-            {isAdmin && <Menu.Item key="blog_admin"><LoginOutlined /> <Link to="/blogs/admin">Blog</Link></Menu.Item>}
             {isGuest && <Menu.Item key="login"><LoginOutlined /> <Link to="/login">Log In</Link></Menu.Item>}
             {isGuest && <Menu.Item key="signin"><UserAddOutlined /> <Link to="/signin">Sign In</Link></Menu.Item>}
             {/* {isAdmin && <Menu.Item key="admin"><SettingOutlined /> <Link to="/admin">Admin</Link></Menu.Item>} */}
@@ -177,7 +177,7 @@ const HomeHeaderRaw = props => {
             {isGuest && <Menu.Item key="home"><HomeOutlined /> <HashLink to="/#home" onClick={onClose}>Home</HashLink></Menu.Item>}
             {isGuest && <Menu.Item key="services"><HeartOutlined /> <HashLink to="/#services" onClick={onClose}>Services</HashLink></Menu.Item>}
             {isGuest && <Menu.Item key="team"><TeamOutlined /> <HashLink to="/#team" onClick={onClose}>Team</HashLink></Menu.Item>}
-            {!isAdmin && <Menu.Item key="blog"><LoginOutlined /> <Link to="/blogs">Blog</Link></Menu.Item>}
+            {isGuest && <Menu.Item key="blog"><PicLeftOutlined /> <Link to="/blogs">Blog</Link></Menu.Item>}
             {!isGuest && <Menu.Item key="logout" onClick={handleLogout}><LogoutOutlined />{isAdmin ? ' Admin' : isAgent ? ' Agent' : null} Log Out</Menu.Item>}
           </Menu>
         </Drawer>
