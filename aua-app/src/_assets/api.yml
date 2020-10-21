@@ -179,6 +179,14 @@ paths:
       responses:
         200:
           description: OK
+  /user/:id/portfolio:
+    post:
+      operationId: savePortfolio
+      # security:
+      #   - authClient: []
+      responses:
+        200:
+          description: OK
   /user/:id/set_password:
     post:
       operationId: setUserPassword

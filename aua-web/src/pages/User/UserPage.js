@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import { Typography, Layout, Button, Table, Input, Modal, Form, Tooltip, Tag } from 'antd';
 import HomeHeader from 'components/HomeHeader';
 import {
-  DeleteOutlined, SafetyCertificateOutlined, UserAddOutlined, GoogleOutlined, SyncOutlined, QuestionOutlined
+  DeleteOutlined, SafetyCertificateOutlined, UserAddOutlined, GoogleOutlined, SyncOutlined, QuestionOutlined,
+  IdcardOutlined
 } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
 import { Space } from 'antd';
@@ -13,6 +14,9 @@ import { TimeAgo } from 'components/TimeAgo';
 import { FaTheaterMasks } from 'react-icons/fa';
 import { reactLocalStorage } from 'reactjs-localstorage';
 import { GlobalContext } from 'contexts/GlobalContext';
+import ChoosePortfolioType from 'components/ChoosePortfolioType';
+import PortfolioForm from 'components/PortfolioForm';
+import { newPortfolioForUser } from 'services/portfolioService';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -37,6 +41,9 @@ const LayoutStyled = styled(Layout)`
 
 const UserPage = () => {
 
+  const [portfolioFormVisible, setPortfolioFormVisible] = React.useState(false);
+  const [newPortfolioType, setNewPortfolioType] = React.useState(false);
+  const [choosePortfolioVisible, setChoosePortfolioVisible] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
   const [setPasswordVisible, setSetPasswordVisible] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState();
@@ -74,19 +81,24 @@ const UserPage = () => {
       title: 'Action',
       // fixed: 'right',
       // width: 200,
-      render: (text, record) => {
+      render: (text, user) => {
         return (
           <Space size="small" style={{ width: '100%' }}>
             <Tooltip placement="bottom" title="Set password">
-              <Button shape="circle" icon={<SafetyCertificateOutlined />} onClick={e => openSetPasswordModal(e, record)} />
+              <Button shape="circle" icon={<SafetyCertificateOutlined />} onClick={e => openSetPasswordModal(e, user)} />
             </Tooltip>
             <Tooltip placement="bottom" title="Impersonate">
-              <Button shape="circle" onClick={e => handleImpersonante(e, record)} disabled={context.user.email === record.email }>
+              <Button shape="circle" onClick={e => handleImpersonante(e, user)} disabled={context.user.email === user.email}>
                 <FaTheaterMasks style={{ position: 'relative', top: 1 }} size={20} />
               </Button>
             </Tooltip>
+            <Tooltip placement="bottom" title="Portfolio">
+              <Button shape="circle" onClick={e => handlePortfolioForUser(e, user)} disabled={user.role !== 'client'}>
+                <IdcardOutlined style={{ position: 'relative', top: 1 }} size={20} />
+              </Button>
+            </Tooltip>
             <Tooltip placement="bottom" title="Delete user">
-              <Button shape="circle" danger icon={<DeleteOutlined />} onClick={e => handleDelete(e, record)} disabled={record.email === 'admin@auao.com.au'}/>
+              <Button shape="circle" danger icon={<DeleteOutlined />} onClick={e => handleDelete(e, user)} disabled={user.email === 'admin@auao.com.au'} />
             </Tooltip>
           </Space>
         )
@@ -142,10 +154,32 @@ const UserPage = () => {
     })
   }
 
-  const openSetPasswordModal = async (e, item) => {
+  const handlePortfolioForUser = async (e, user) => {
+    e.stopPropagation();
+    setCurrentUser(user);
+    setChoosePortfolioVisible(true);
+  }
+
+  const handleChosePortfolioType = async (type) => {
+    setChoosePortfolioVisible(false);
+    setNewPortfolioType(type);
+    setPortfolioFormVisible(true);
+  }
+
+  const handleSubmitPortfolio = async (portfolio, userId) => {
+    try {
+      setLoading(true);
+      await newPortfolioForUser(portfolio, userId);
+      setPortfolioFormVisible(false);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const openSetPasswordModal = async (e, user) => {
     e.stopPropagation();
     setSetPasswordVisible(true);
-    setCurrentUser(item);
+    setCurrentUser(user);
   }
 
   const handleSetPassword = async (id, values) => {
@@ -238,6 +272,28 @@ const UserPage = () => {
             <Button block type="primary" htmlType="submit" disabled={loading}>Invite</Button>
           </Form.Item>
         </Form>
+      </Modal>
+      <ChoosePortfolioType
+        visible={choosePortfolioVisible}
+        onOk={type => handleChosePortfolioType(type)}
+        onCancel={() => setChoosePortfolioVisible(false)}
+      />
+      <Modal
+        visible={portfolioFormVisible}
+        destroyOnClose={true}
+        maskClosable={true}
+        onOk={() => setPortfolioFormVisible(false)}
+        onCancel={() => setPortfolioFormVisible(false)}
+        title={<>New Portoflio for <Text code>{currentUser?.email}</Text></>}
+        footer={null}
+        width={600}
+      >
+        <PortfolioForm
+          type={newPortfolioType}
+          userId={currentUser?.id}
+          onCancel={() => setPortfolioFormVisible(false)}
+          onOk={portfolio => handleSubmitPortfolio(portfolio, currentUser.id)}
+        />
       </Modal>
     </LayoutStyled >
 

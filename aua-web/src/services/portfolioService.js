@@ -15,3 +15,7 @@ export async function deletePortfolio(id) {
 export async function listPortfolio() {
   return httpGet('portfolio');
 }
+
+export async function newPortfolioForUser(portfolio, userId) {
+  return httpPost(`user/${userId}/portfolio`, portfolio);
+}

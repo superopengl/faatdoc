@@ -111,6 +111,7 @@ const HomeHeaderRaw = props => {
             {isGuest && <Menu.Item key="home"><HashLink to="/#home">Home</HashLink></Menu.Item>}
             {isGuest && <Menu.Item key="services"><HashLink to="/#services">Services</HashLink></Menu.Item>}
             {isGuest && <Menu.Item key="team"><HashLink to="/#team">Team</HashLink></Menu.Item>}
+            {!isAdmin && <Menu.Item key="blog"><HashLink to="/blogs">Blog</HashLink></Menu.Item>}
             {isGuest && <Menu.Item key="signin"><Link to="/signin">Sign In</Link></Menu.Item>}
             {isGuest && <Menu.Item key="login"><Link to="/login">Log In</Link></Menu.Item>}
             {(isAdmin || isAgent) && <Menu.Item key="board"><Link to="/board">Board</Link></Menu.Item>}
@@ -119,7 +120,6 @@ const HomeHeaderRaw = props => {
             {isClient && <Menu.Item key="portfolio"><Link to="/portfolios">Portfolios</Link></Menu.Item>}
             {/* {isAdmin && <Menu.Item key="clients"><Link to="/clients">Users</Link></Menu.Item>} */}
             {/* {isAdmin && <Menu.Item key="admin"><Link to="/admin">Admin</Link></Menu.Item>} */}
-            {!isAdmin && <Menu.Item key="blog"><HashLink to="/blogs">Blog</HashLink></Menu.Item>}
             {!isGuest && <Menu.Item key="message"><Link to="/message"><Badge count={notifyCount} showZero={false} offset={[10, 0]}>Messages</Badge></Link></Menu.Item>}
             {isAdmin && <Menu.SubMenu key="settings" title="Settings">
               <Menu.Item key="task_template"><Link to="/task_template">Task Templates</Link></Menu.Item>

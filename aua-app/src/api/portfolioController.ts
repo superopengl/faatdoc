@@ -10,15 +10,14 @@ import { guessDisplayNameFromFields } from '../utils/guessDisplayNameFromFields'
 import { sendNewPortfolioEmail } from '../utils/sendNewPortfolioEmail';
 
 export const savePortfolio = handlerWrapper(async (req, res) => {
-  assertRole(req, 'admin', 'client');
+  assertRole(req, 'admin', 'agent', 'client');
   const portfolio = new Portfolio();
 
-  const { user: { id: userId } } = req as any;
+  const { user: { id: userId, role } } = req as any;
 
   const { id, fields, type } = req.body;
-  const isNew = !id;
   portfolio.id = id || uuidv4();
-  portfolio.userId = userId;
+  portfolio.userId = role === 'client' ? userId : req.params.id;
   portfolio.name = guessDisplayNameFromFields(fields);
   portfolio.fields = fields;
   portfolio.type = type;
@@ -60,7 +59,7 @@ async function listAdminPortfolio() {
 
 export const listPortfolio = handlerWrapper(async (req, res) => {
   assertRole(req, 'client', 'admin');
-  const { user: {id, role }} = req as any;
+  const { user: { id, role } } = req as any;
   const list = role === 'client' ? await listMyPortfolio(id) :
     role === 'admin' ? await listAdminPortfolio() :
       [];

@@ -15,7 +15,7 @@ import PrivacyPolicyPage from 'pages/PrivacyPolicyPage';
 import MyTaskListPage from 'pages/MyTask/MyTaskListPage';
 import TaskTemplatePage from 'pages/TaskTemplate/TaskTemplatePage';
 import DocTemplatePage from 'pages/DocTemplate/DocTemplatePage';
-import PortfolioPage from 'pages/Portfolio/PortfolioPage';
+import PortfolioListPage from 'pages/Portfolio/PortfolioListPage';
 import AdminTaskListPage from 'pages/AdminTask/AdminTaskListPage';
 import ProceedTaskPage from 'pages/AdminTask/ProceedTaskPage';
 import { getAuthUser } from 'services/authService';
@@ -26,7 +26,7 @@ import MessagePage from 'pages/Message/MessagePage';
 import UserPage from 'pages/User/UserPage';
 import ImpersonatePage from 'pages/Impersonate/ImpersonatePage';
 import { countUnreadMessage } from 'services/messageService';
-import PortfolioForm from 'pages/Portfolio/PortfolioForm';
+import PortfolioFormPage from 'pages/Portfolio/PortfolioFormPage';
 import DisclaimerPage from 'pages/DisclaimerPage';
 import ClientDashboardPage from 'pages/ClientDashboard/ClientDashboardPage';
 import AdminStatsPage from 'pages/AdminStats/AdminStatsPage';
@@ -93,9 +93,9 @@ class App extends React.Component {
             <RoleRoute visible={isAdmin || isAgent} loading={loading} exact path="/stats" component={AdminStatsPage} />
             <RoleRoute visible={isAdmin || isAgent} loading={loading} exact path="/board" component={AdminBoardPage} />
             <RoleRoute visible={isClient} loading={loading} exact path="/landing" component={ClientDashboardPage} />
-            <RoleRoute visible={isClient} loading={loading} exact path="/portfolios" component={PortfolioPage} />
-            <RoleRoute visible={isClient} loading={loading} exact path="/portfolios/:id" component={PortfolioForm} />
-            <RoleRoute visible={isClient} loading={loading} exact path="/portfolios/new/:type" component={PortfolioForm} />
+            <RoleRoute visible={isClient} loading={loading} exact path="/portfolios" component={PortfolioListPage} />
+            <RoleRoute visible={!isGuest} loading={loading} exact path="/portfolios/:id" component={PortfolioFormPage} />
+            <RoleRoute visible={!isGuest} loading={loading} exact path="/portfolios/new/:type" component={PortfolioFormPage} />
             <RoleRoute loading={loading} path="/reset_password" exact component={ResetPasswordPage} />
             <RoleRoute visible={isAdmin} loading={loading} exact path="/task_template" component={TaskTemplatePage} />
             <RoleRoute visible={isAdmin} loading={loading} exact path="/task_template/:id" component={TaskTemplatePage} />
