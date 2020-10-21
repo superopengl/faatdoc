@@ -10,6 +10,7 @@ import { TimeAgo } from 'components/TimeAgo';
 import { withRouter } from 'react-router-dom';
 import * as queryString from 'query-string';
 import ChoosePortfolioType from 'components/ChoosePortfolioType';
+import PortfolioList from './PortfolioList';
 
 const { Title, Paragraph } = Typography;
 
@@ -81,49 +82,8 @@ const PortfolioListPage = props => {
     <LayoutStyled>
       <HomeHeader></HomeHeader>
       <ContainerStyled>
-        <Space size="small" direction="vertical" style={{ width: '100%' }}>
-          <StyledTitleRow>
-            <Title level={2} style={{ margin: 'auto' }}>Portfolios</Title>
-          </StyledTitleRow>
-          <Paragraph>Portfolios are predefined information that can be used to automatically fill in your task application. You can save the information like name, phone, address, TFN, and etc. for future usage.</Paragraph>
-          <Row style={{ flexDirection: 'row-reverse' }}>
-            <Button type="primary" ghost icon={<PlusOutlined />} onClick={() => setNewModalVisible(true)}>New Portfolio</Button>
-          </Row>
-          <List
-            itemLayout="horizontal"
-            dataSource={list}
-            renderItem={item => (
-              <List.Item
-                // style={{backgroundImage: 'linear-gradient(to right, white, #f5f5f5)'}}
-                key={item.id}
-                onClick={() => handleEdit(item.id)}
-              // title={item.name}
-              // actions={[
-              //   <Button key="edit" type="link" disabled={loading} icon={<EditOutlined />}></Button>,
-              // <Button key="delete" type="link" danger disabled={loading} onClick={e => handleDelete(e, item)} icon={<DeleteOutlined />}></Button>
-              // ]}
-              >
-                <List.Item.Meta
-                  avatar={<PortfolioAvatar style={{ marginTop: 6 }} value={item.name} id={item.id} />}
-                  title={<Text style={{ fontSize: '1.2rem' }}>{item.name}</Text>}
-                  description={<Space style={{ width: '100%', justifyContent: 'space-between' }}>
-                    <TimeAgo value={item.lastUpdatedAt} prefix="Last Updated" />
-                    <Space>
-                      <Button key="edit" shape="circle" disabled={loading} icon={<EditOutlined />}></Button>
-                      <Button key="delete" shape="circle" danger disabled={loading} onClick={e => handleDelete(e, item)} icon={<DeleteOutlined />}></Button>
-                    </Space>
-                  </Space>}
-                />
-              </List.Item>
-            )}
-          />
-        </Space>
+        <PortfolioList onLoadList={listPortfolio}/>
       </ContainerStyled>
-      <ChoosePortfolioType
-        visible={newModalVisible}
-        onOk={type => handleCreateNew(type)}
-        onCancel={() => setNewModalVisible(false)}
-      />
     </LayoutStyled >
   );
 };
