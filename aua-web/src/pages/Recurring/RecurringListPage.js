@@ -178,7 +178,7 @@ const RecurringListPage = (props) => {
     e.stopPropagation();
     const { id, taskTemplateName, portfolioName } = item;
     Modal.confirm({
-      title: <>To delete Recurring <strong>{taskTemplateName}</strong> for <strong>{portfolioName}</strong>?</>,
+      title: <>Delete Recurring <strong>{taskTemplateName}</strong> for <strong>{portfolioName}</strong>?</>,
       onOk: async () => {
         setLoading(true);
         await deleteRecurring(id);

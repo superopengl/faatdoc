@@ -120,7 +120,7 @@ const PortfolioList = props => {
     />
     <Modal
       visible={formVisible}
-      maskClosable={true}
+      maskClosable={false}
       destroyOnClose={true}
       footer={null}
       onOk={() => setFormVisible(false)}

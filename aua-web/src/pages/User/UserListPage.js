@@ -122,7 +122,7 @@ const UserListPage = () => {
     e.stopPropagation();
     const { id, email } = item;
     Modal.confirm({
-      title: <>To delete user <strong>{email}</strong>?</>,
+      title: <>Delete user <strong>{email}</strong>?</>,
       onOk: async () => {
         setLoading(true);
         await deleteUser(id);
@@ -235,7 +235,7 @@ const UserListPage = () => {
       <Modal
         visible={setPasswordVisible}
         destroyOnClose={true}
-        maskClosable={true}
+        maskClosable={false}
         onOk={() => setSetPasswordVisible(false)}
         onCancel={() => setSetPasswordVisible(false)}
         title={<>Reset Password</>}
@@ -257,7 +257,7 @@ const UserListPage = () => {
       <Modal
         visible={inviteVisible}
         destroyOnClose={true}
-        maskClosable={true}
+        maskClosable={false}
         onOk={() => setInviteVisible(false)}
         onCancel={() => setInviteVisible(false)}
         title={<>Invite User</>}
@@ -277,7 +277,7 @@ const UserListPage = () => {
       <Modal
         visible={portfolioModalVisible}
         destroyOnClose={true}
-        maskClosable={true}
+        maskClosable={false}
         closable={true}
         onOk={() => setPortfolioModalVisible(false)}
         onCancel={() => setPortfolioModalVisible(false)}

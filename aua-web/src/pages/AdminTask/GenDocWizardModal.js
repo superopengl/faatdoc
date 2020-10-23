@@ -58,7 +58,7 @@ const GenDocWizardModal = props => {
       visible={visible}
       title="Generate Doc"
       footer={null}
-      maskClosable={true}
+      maskClosable={false}
       destroyOnClose={true}
       onOk={() => setCurrentDocTemplateId(null)}
       onCancel={() => setCurrentDocTemplateId(null)}

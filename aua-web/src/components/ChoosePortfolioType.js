@@ -37,6 +37,7 @@ const ChoosePortfolioType = props => {
       title="Please choose portfolio type"
       visible={visible}
       destroyOnClose={true}
+      maskClosable={false}
       onOk={() => onCancel()}
       onCancel={() => onCancel()}
       footer={null}

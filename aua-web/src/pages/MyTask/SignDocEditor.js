@@ -126,7 +126,7 @@ const SignDocEditor = (props) => {
       <Modal
         visible={fileToSign}
         destroyOnClose={true}
-        maskClosable={true}
+        maskClosable={false}
         onOk={() => setFileToSign(null)}
         onCancel={() => setFileToSign(null)}
         footer={null}

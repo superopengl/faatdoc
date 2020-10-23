@@ -73,7 +73,7 @@ const GenDocStepperModal = props => {
   return <Modal
     visible={visible}
     title="Add Document from Doc Template"
-    maskClosable={true}
+    maskClosable={false}
     closable={true}
     destroyOnClose={true}
     onOk={onCancel}
