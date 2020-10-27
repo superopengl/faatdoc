@@ -12,6 +12,7 @@ import { PortfolioAvatar } from 'components/PortfolioAvatar';
 import { groupBy } from 'lodash';
 import { Empty } from 'antd';
 import { Loading } from 'components/Loading';
+import { Tooltip } from 'antd';
 
 const { Paragraph } = Typography;
 
@@ -103,7 +104,7 @@ const ClientDashboardPage = (props) => {
         <Loading loading={loading}>
           <Tabs
             type="card"
-            tabBarExtraContent={<Button type="primary" ghost onClick={() => props.history.push(`/portfolios?create=1`)} icon={<PlusOutlined />}>New Portfolio</Button>}
+            tabBarExtraContent={<Tooltip title="Create new portfolio"><Button type="link" onClick={() => props.history.push(`/portfolios?create=1`)} icon={<PlusOutlined />}/></Tooltip>}
           >
             {portfolioList.map((p, i) => <Tabs.TabPane key={i} tab={<Space size="small" direction="vertical" style={{ alignItems: 'center' }}>
               <PortfolioAvatar value={p.name} id={p.id} size={36} />
