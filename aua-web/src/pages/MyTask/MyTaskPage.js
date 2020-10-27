@@ -80,7 +80,7 @@ const MyTaskPage = (props) => {
       <HomeHeader />
       <ContainerStyled>
         {loading ? <Loading /> : <Layout style={{ backgroundColor: '#ffffff', height: '100%', justifyContent: 'center' }}>
-          <Layout.Content style={{ padding: 0, maxWidth: 500, margin: 0, width: '100%' }}>
+          <Layout.Content style={{ padding: 0, maxWidth: 500, margin: '0 auto', width: '100%' }}>
             {!isNew && <Space style={{ width: '100%', justifyContent: 'space-between', marginBottom: 16 }}>
               <TaskStatus status={task.status} avatar={false} portfolioId={task.portfolioId} width={60} />
               <Button type={chatVisible ? 'secondary' : 'primary'} size="large" icon={<MessageFilled />} onClick={() => toggleChatPanel()}></Button>

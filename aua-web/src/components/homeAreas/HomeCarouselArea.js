@@ -104,7 +104,7 @@ const HomeCarouselAreaRaw = props => {
                         onClick={renderProps.onClick}
                         disabled={renderProps.disabled}
                         style={{paddingTop: 6}}
-                      >Sign In with Google</SignInButton>
+                      >Continue with Google</SignInButton>
                     )}
                 />
               </Col>
