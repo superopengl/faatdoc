@@ -139,6 +139,7 @@ const TaskFormWizard = props => {
         onSkip={handleSkip}
         onBack={handleStepBack}
         onFinish={handleGenDocViewConfirmed}
+        skipLoading={true}
       />);
     });
     return steps;
@@ -160,10 +161,10 @@ const TaskFormWizard = props => {
             task={task}
             onFinish={handleUpdateTaskName}
           />
-          <TaskFieldsEditor task={task}
+          {task.fields.filter(field => !field.officialOnly).length > 0 && <TaskFieldsEditor task={task}
             onSkip={handleSkip}
             onBack={handleStepBack}
-            onFinish={handleTaskFieldsChange} />
+            onFinish={handleTaskFieldsChange} />}
           {getGenDocSteps()}
           <UploadDocStep
             task={task}

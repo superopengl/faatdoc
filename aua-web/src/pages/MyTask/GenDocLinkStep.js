@@ -13,7 +13,7 @@ const { Title, Paragraph } = Typography;
 
 
 const GenDocLinkStep = props => {
-  const { doc, variableDic, onFinish, onBack, isActive } = props;
+  const { doc, variableDic, onFinish, onBack, isActive, skipLoading } = props;
   const [loading, setLoading] = React.useState(isActive);
   const [docTemplate, setDocTemplate] = React.useState();
   const [pdfFile, setPdfFile] = React.useState({
@@ -73,7 +73,7 @@ const GenDocLinkStep = props => {
 
   const { name: docTemplateName, description: docTemplateDescription } = docTemplate;
 
-  return <Loading loading={loading}>
+  return <Loading loading={loading && !skipLoading}>
     <Space direction="vertical" style={{ width: '100%' }}>
       <Title level={4}>{docTemplateName}</Title>
       {docTemplateDescription && <Paragraph type="secondary">{docTemplateDescription}</Paragraph>}
@@ -87,11 +87,13 @@ GenDocLinkStep.propTypes = {
   doc: PropTypes.any.isRequired,
   variableDic: PropTypes.object.isRequired,
   disabled: PropTypes.bool.isRequired,
+  skipLoading: PropTypes.bool,
 };
 
 GenDocLinkStep.defaultProps = {
   disabled: false,
   variableDic: {},
+  skipLoading: false
 };
 
 export default GenDocLinkStep;
