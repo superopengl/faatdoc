@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
-import { Form, Space, Typography, Layout } from 'antd';
+import { Space, Typography, Layout } from 'antd';
 import HomeHeader from 'components/HomeHeader';
 import { getPortfolio, savePortfolio } from 'services/portfolioService';
 import PortfolioForm from '../../components/PortfolioForm';

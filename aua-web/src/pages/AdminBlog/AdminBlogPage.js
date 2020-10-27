@@ -1,13 +1,12 @@
 import {
   PlusOutlined
 } from '@ant-design/icons';
-import { Button, Drawer, Layout, Modal, Space, Spin, Typography } from 'antd';
+import { Button, Drawer, Layout, Modal, Space, Typography } from 'antd';
 import HomeHeader from 'components/HomeHeader';
 import BlogForm from './BlogForm';
 import React from 'react';
 import styled from 'styled-components';
 import { deleteBlog, listBlog } from 'services/blogService';
-import MarkdownIt from 'markdown-it'
 import 'react-markdown-editor-lite/lib/index.css';
 import BlogList from '../../components/BlogList';
 import { Loading } from 'components/Loading';

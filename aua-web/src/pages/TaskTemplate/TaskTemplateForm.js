@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { Input, Space, Select, Form, Button, Spin } from 'antd';
+import { Input, Space, Select, Form, Button } from 'antd';
 import { saveTaskTemplate, getTaskTemplate } from 'services/taskTemplateService';
 import { notify } from 'util/notify';
 import FieldEditor from 'components/FieldEditor';

@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { Typography, Layout } from 'antd';
 import HomeHeader from 'components/HomeHeader';
-import { listPortfolio } from 'services/portfolioService';
 import { withRouter } from 'react-router-dom';
 import * as queryString from 'query-string';
 import PortfolioList from './PortfolioList';

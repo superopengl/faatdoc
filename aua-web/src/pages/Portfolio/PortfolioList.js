@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Button, Modal, List, Space, Row } from 'antd';
+import { Button, Modal, List, Space, Row } from 'antd';
 import { PortfolioAvatar } from 'components/PortfolioAvatar';
 import Text from 'antd/lib/typography/Text';
 import { EditOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons';

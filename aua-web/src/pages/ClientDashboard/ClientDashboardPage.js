@@ -72,7 +72,6 @@ const ClientDashboardPage = (props) => {
       maskClosable: true,
       content: 'Please create portfolio before creating task. Go to create protofolio now?',
       okText: 'Yes, go to create portfolio',
-      maskClosable: true,
       onOk: () => props.history.push('/portfolios?create=1')
     });
   }

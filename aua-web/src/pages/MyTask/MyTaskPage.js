@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
-import { Layout, Spin, Space, Button } from 'antd';
+import { Layout, Space, Button } from 'antd';
 import HomeHeader from 'components/HomeHeader';
 import { getTask } from 'services/taskService';
 import MyTaskSign from './MyTaskSign';

@@ -14,9 +14,6 @@ import { TimeAgo } from 'components/TimeAgo';
 import { FaTheaterMasks } from 'react-icons/fa';
 import { reactLocalStorage } from 'reactjs-localstorage';
 import { GlobalContext } from 'contexts/GlobalContext';
-import ChoosePortfolioType from 'components/ChoosePortfolioType';
-import PortfolioForm from 'components/PortfolioForm';
-import { newPortfolioForUser } from 'services/portfolioService';
 import PortfolioList from 'pages/Portfolio/PortfolioList';
 
 const { Title, Text, Paragraph } = Typography;
@@ -42,8 +39,8 @@ const LayoutStyled = styled(Layout)`
 
 const UserListPage = () => {
 
-  const [portfolioFormVisible, setPortfolioFormVisible] = React.useState(false);
-  const [newPortfolioType, setNewPortfolioType] = React.useState(false);
+  const [] = React.useState(false);
+  const [] = React.useState(false);
   const [portfolioModalVisible, setPortfolioModalVisible] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
   const [setPasswordVisible, setSetPasswordVisible] = React.useState(false);
@@ -161,21 +158,7 @@ const UserListPage = () => {
     setPortfolioModalVisible(true);
   }
 
-  const handleChosePortfolioType = async (type) => {
-    setPortfolioModalVisible(false);
-    setNewPortfolioType(type);
-    setPortfolioFormVisible(true);
-  }
 
-  const handleSubmitPortfolio = async (portfolio, userId) => {
-    try {
-      setLoading(true);
-      await newPortfolioForUser(portfolio, userId);
-      setPortfolioFormVisible(false);
-    } finally {
-      setLoading(false);
-    }
-  }
 
   const openSetPasswordModal = async (e, user) => {
     e.stopPropagation();

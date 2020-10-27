@@ -3,7 +3,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { Radio, Space, Typography } from 'antd';
 import { PortfolioAvatar } from 'components/PortfolioAvatar';
-import { Spin } from 'antd';
 import { listTaskTemplate } from 'services/taskTemplateService';
 import { listPortfolio } from 'services/portfolioService';
 import StepWizard from 'react-step-wizard';
