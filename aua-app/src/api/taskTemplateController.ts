@@ -13,6 +13,8 @@ export const saveTaskTemplate = handlerWrapper(async (req, res) => {
 
   const { id, name, docTemplateIds, fields } = req.body;
   assert(name, 400, 'name is empty');
+  assert(fields?.length || docTemplateIds?.length, 400, 'Neither fields nor doc templates is specified.');
+
   taskTemplate.id = id || uuidv4();
   taskTemplate.name = name;
   taskTemplate.docTemplateIds = docTemplateIds;

@@ -89,9 +89,8 @@ export const saveTask = handlerWrapper(async (req, res) => {
   task.status = status;
   task.lastUpdatedAt = getUtcNow();
 
-  await handleTaskStatusChange(oldStatus, task);
-
   await repo.save(task);
+  await handleTaskStatusChange(oldStatus, task);
 
   res.json();
 });
