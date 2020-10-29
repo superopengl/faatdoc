@@ -215,7 +215,21 @@ export const inviteUser = handlerWrapper(async (req, res) => {
 
   const user = createUserEntity(email, uuidv4(), role || 'client');
 
-  await setUserToResetPasswordStatus(user);
+  const resetPasswordToken = uuidv4();
+  user.resetPasswordToken = resetPasswordToken;
+  user.status = UserStatus.ResetPassword;
+
+  const url = `${process.env.AUA_DOMAIN_NAME}/reset_password/${resetPasswordToken}/`;
+  await sendEmail({
+    to: user.email,
+    template: 'inviteUser',
+    vars: {
+      url
+    },
+    shouldBcc: false
+  });
+
+  await getRepository(User).save(user);
 
   res.json();
 });
