@@ -143,7 +143,7 @@ const ProceedTaskPage = (props) => {
   }
 
   const handleCancel = () => {
-    props.history.goBack();
+    props.history.push('/tasks');
   }
 
 
