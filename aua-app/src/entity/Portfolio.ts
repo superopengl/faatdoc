@@ -7,6 +7,7 @@ export class Portfolio {
   id: string;
 
   @Column('uuid')
+  @Index()
   userId: string;
 
   @Column({ default: () => `timezone('UTC', now())` })

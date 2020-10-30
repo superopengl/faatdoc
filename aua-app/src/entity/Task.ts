@@ -1,4 +1,4 @@
-import { Column, PrimaryGeneratedColumn, Entity } from 'typeorm';
+import { Column, PrimaryGeneratedColumn, Entity, Index } from 'typeorm';
 import { TaskStatus } from '../types/TaskStatus';
 import { TaskDoc } from '../types/TaskDoc';
 
@@ -33,6 +33,7 @@ export class Task {
   agentId?: string;
 
   @Column('uuid')
+  @Index()
   userId: string;
 
   @Column({ type: 'json' })
