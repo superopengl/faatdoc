@@ -147,7 +147,7 @@ export const BuiltInFieldDef = [
   {
     name: 'ABN',
     inputType: 'text',
-    rules: [{ required: false, validator: (rule, value) => isValidABN(value) ? Promise.resolve() : Promise.reject('Invalid ABN') }],
+    rules: [{ required: false, validator: (rule, value) => !value || isValidABN(value) ? Promise.resolve() : Promise.reject('Invalid ABN') }],
     inputProps: {
       maxLength: 20,
       allowClear: true,
@@ -158,7 +158,7 @@ export const BuiltInFieldDef = [
   {
     name: 'ACN',
     inputType: 'text',
-    rules: [{ required: false, validator: (rule, value) => isValidACN(value) ? Promise.resolve() : Promise.reject('Invalid ACN') }],
+    rules: [{ required: false, validator: (rule, value) => !value || isValidACN(value) ? Promise.resolve() : Promise.reject('Invalid ACN') }],
     inputProps: {
       maxLength: 20,
       allowClear: true,
