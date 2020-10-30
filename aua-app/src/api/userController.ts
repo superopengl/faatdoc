@@ -10,6 +10,8 @@ import { handlerWrapper } from '../utils/asyncHandler';
 import { computeUserSecret } from '../utils/computeUserSecret';
 import { validatePasswordStrength } from '../utils/validatePasswordStrength';
 import { sendEmail } from '../services/emailService';
+import { TaskStatus } from '../types/TaskStatus';
+import { Task } from '../entity/Task';
 
 export const getProfile = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
@@ -76,6 +78,8 @@ export const deleteUser = handlerWrapper(async (req, res) => {
   const user = await repo.findOne({ id, email: Not('admin@auao.com.au') });
 
   if (user) {
+    await getRepository(Portfolio).update({userId: id}, {deleted: true});
+    await getRepository(Task).update({userId: id}, {status: TaskStatus.ARCHIVE});
     await repo.delete(id);
     await sendEmail({
       to: user.email,
