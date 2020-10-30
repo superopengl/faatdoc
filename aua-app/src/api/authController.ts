@@ -224,6 +224,7 @@ export const inviteUser = handlerWrapper(async (req, res) => {
     to: user.email,
     template: 'inviteUser',
     vars: {
+      email: user.email,
       url
     },
     shouldBcc: false

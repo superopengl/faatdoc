@@ -3,6 +3,7 @@ import { varNameToLabelName } from 'util/varNameToLabelName';
 import { labelNameToVarName } from 'util/labelNameToVarName';
 import {isValidABN, isValidACN} from "abnacn-validator";
 import * as tfn from 'tfn';
+import { FaTruckMonster } from 'react-icons/fa';
 
 const isValidTfn = (text) => tfn(text).valid;
 
@@ -141,23 +142,23 @@ export const BuiltInFieldDef = [
       allowClear: true,
       placeholder: '',
     },
-    portfolioType: ['individual'],
+    portfolioType: ['individual', 'business'],
   },
   {
     name: 'ABN',
     inputType: 'text',
-    rules: [{ required: true, validator: (rule, value) => isValidABN(value) ? Promise.resolve() : Promise.reject('Invalid ABN') }],
+    rules: [{ required: false, validator: (rule, value) => isValidABN(value) ? Promise.resolve() : Promise.reject('Invalid ABN') }],
     inputProps: {
       maxLength: 20,
       allowClear: true,
       placeholder: '',
     },
-    portfolioType: ['business'],
+    portfolioType: ['individual', 'business'],
   },
   {
     name: 'ACN',
     inputType: 'text',
-    rules: [{ required: true, validator: (rule, value) => isValidACN(value) ? Promise.resolve() : Promise.reject('Invalid ACN') }],
+    rules: [{ required: false, validator: (rule, value) => isValidACN(value) ? Promise.resolve() : Promise.reject('Invalid ACN') }],
     inputProps: {
       maxLength: 20,
       allowClear: true,

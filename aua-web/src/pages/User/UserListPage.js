@@ -200,6 +200,8 @@ const UserListPage = () => {
           </Space>
           <Table columns={columnDef}
             dataSource={list}
+            size="small"
+
             // scroll={{x: 1000}}
             rowKey="id"
             loading={loading}

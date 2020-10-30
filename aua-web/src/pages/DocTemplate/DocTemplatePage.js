@@ -154,6 +154,7 @@ export const DocTemplatePage = () => {
             <Button type="primary" ghost icon={<PlusOutlined />} onClick={() => handleCreateNew()}>New Doc Template</Button>
           </Space>
           <Table columns={columnDef}
+            size="small"
             dataSource={list}
             rowKey="id"
             loading={loading}

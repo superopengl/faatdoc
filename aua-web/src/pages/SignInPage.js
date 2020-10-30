@@ -59,10 +59,7 @@ const SignInPage = (props) => {
         icon: null,
         content: <>
           <p>
-            Congratulations and thank you very much for signing up AU Accouting Office. Your registration email as well as the login user is <strong>{user?.email}</strong>.
-          </p>
-          <p>
-            You can login with the registration email anytime.
+            Congratulations and thank you very much for signing up AU Accouting Platform. The confirmation email has been sent. Please verify your email within 24 hours.
           </p>
         </>,
         onOk() {

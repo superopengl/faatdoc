@@ -14,7 +14,7 @@ import { CronLock } from '../entity/CronLock';
 
 export const saveRecurring = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin');
-  const { id, nameTemplate, portfolioId, taskTemplateId, cron, dueDay } = req.body;
+  const { id, portfolioId, taskTemplateId, cron, dueDay } = req.body;
 
   const portfolio = await getRepository(Portfolio).findOne(portfolioId);
   assert(portfolio, 404, 'Porotofolio is not found');

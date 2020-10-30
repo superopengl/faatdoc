@@ -9,6 +9,7 @@ import { assert, assertRole } from '../utils/assert';
 import { handlerWrapper } from '../utils/asyncHandler';
 import { computeUserSecret } from '../utils/computeUserSecret';
 import { validatePasswordStrength } from '../utils/validatePasswordStrength';
+import { sendEmail } from '../services/emailService';
 
 export const getProfile = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
@@ -71,7 +72,20 @@ export const deleteUser = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin');
   const { id } = req.params;
 
-  await getRepository(User).delete({ id, email: Not('admin@auao.com.au') });
+  const repo = getRepository(User);
+  const user = await repo.findOne({ id, email: Not('admin@auao.com.au') });
+
+  if (user) {
+    await repo.delete(id);
+    await sendEmail({
+      to: user.email,
+      template: 'deleteUser',
+      vars: {
+      },
+      shouldBcc: false
+    });
+
+  }
 
   res.json();
 });

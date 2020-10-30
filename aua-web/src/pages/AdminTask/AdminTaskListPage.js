@@ -63,10 +63,10 @@ const AdminTaskListPage = (props) => {
       // filteredValue: filteredInfo.name || null,
       sorter: () => 0,
       // onFilter: (value, record) => record.name.includes(value),
-      render: (text, item) => <>
+      render: (text, record) => <Link to={`/tasks/${record.id}/proceed?${record.lastUnreadMessageAt ? 'chat=1' : ''}`}>
         <Highlighter highlightClassName="search-highlighting" searchWords={[queryInfo.text]} autoEscape={true} textToHighlight={text || ''} />
-        {item.lastUnreadMessageAt && <UnreadMessageIcon style={{marginLeft: 4}}/>}
-      </>,
+        {record.lastUnreadMessageAt && <UnreadMessageIcon style={{marginLeft: 4}}/>}
+      </Link>,
       ellipsis: false,
     },
     {
@@ -309,6 +309,7 @@ const AdminTaskListPage = (props) => {
             dataSource={taskList}
             // scroll={{x: 1000}}
             rowKey="id"
+            size="small"
             loading={loading}
             pagination={queryInfo}
             onChange={handleTableChange}

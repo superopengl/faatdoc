@@ -19,6 +19,7 @@ import { sendNewTaskCreatedEmail } from '../utils/sendNewTaskCreatedEmail';
 import { sendCompletedEmail } from '../utils/sendCompletedEmail';
 import { sendArchiveEmail } from '../utils/sendArchiveEmail';
 import { sendRequireSignEmail } from '../utils/sendRequireSignEmail';
+import { sendTodoEmail } from '../utils/sendTodoEmail';
 
 export const generateTask = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
@@ -27,7 +28,7 @@ export const generateTask = handlerWrapper(async (req, res) => {
   const Task = await generateTaskByTaskTemplateAndPortfolio(
     taskTemplateId,
     portfolioId,
-    (j, p) => `${j.name} for ${p.name}`
+    (j, p) => ` ${p.name} ${j.name}`
   );
 
   res.json(Task);
@@ -40,6 +41,9 @@ async function handleTaskStatusChange(oldStatus: TaskStatus, task: Task) {
   if (!oldStatus) {
     // New task
     await sendNewTaskCreatedEmail(task);
+  } else if (status === TaskStatus.TODO) {
+    // Task todo
+    await sendTodoEmail(task);
   } else if (status === TaskStatus.COMPLETE) {
     // Task completed
     await sendCompletedEmail(task);

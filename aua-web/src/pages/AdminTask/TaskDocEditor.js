@@ -197,6 +197,7 @@ export const TaskDocEditor = (props) => {
       {/* <Text code style={{ whiteSpace: 'pre-line' }}>{JSON.stringify(docList, null, 2)}</Text> */}
       <Table
         columns={columns}
+        size="small"
         dataSource={docList}
         pagination={false}
         loading={loading}

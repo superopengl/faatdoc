@@ -13,8 +13,4 @@ export class Agent {
 
   @Column()
   surname: string;
-
-
-  @Column({nullable: true})
-  dob: Date;
 }

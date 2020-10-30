@@ -10,7 +10,7 @@ import { withRouter } from 'react-router-dom';
 import { deleteTaskTemplate, listTaskTemplate } from 'services/taskTemplateService';
 import styled from 'styled-components';
 
-const { Title } = Typography;
+const { Title, Link } = Typography;
 
 const ContainerStyled = styled.div`
   margin: 6rem 1rem 2rem 1rem;
@@ -49,11 +49,22 @@ const LayoutStyled = styled(Layout)`
 
 
 export const TaskTemplatePage = props => {
+
+  const handleEditOne = (id) => {
+    setCurrentId(id);
+    setDrawerVisible(true);
+  }
+  
+  const handleClickTemplate = (e, id) => {
+    e.stopPropagation();
+    handleEditOne(id);
+  }
+
   const columnDef = [
     {
       title: 'Task Template Name',
       dataIndex: 'name',
-      render: (text) => text
+      render: (text, record) => <Link onClick={e => handleClickTemplate(e, record.id)}>{text}</Link>
     },
     {
       title: 'Created At',
@@ -134,6 +145,8 @@ export const TaskTemplatePage = props => {
   }
 
 
+
+
   return (
     <LayoutStyled>
       <HomeHeader></HomeHeader>
@@ -146,16 +159,14 @@ export const TaskTemplatePage = props => {
             <Button type="primary" ghost icon={<PlusOutlined />} onClick={() => handleCreateNew()}>New Task Template</Button>
           </Space>
           <Table columns={columnDef}
+            size="small"
             dataSource={list}
             rowKey="id"
             loading={loading}
             pagination={false}
             // onChange={handleTableChange}
             onRow={(record) => ({
-              onDoubleClick: () => {
-                setCurrentId(record.id);
-                setDrawerVisible(true);
-              }
+              onDoubleClick: () => handleEditOne(record.id)
             })}
           />
         </Space>

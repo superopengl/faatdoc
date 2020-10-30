@@ -80,31 +80,6 @@ export async function executeRecurring(recurringId) {
   return task;
 }
 
-function createCronTask(cron, onRunFn) {
-  let cronPattern = cron;
-  let onExecuteCallback = onRunFn;
-  if (/L/.test(cron)) {
-    cronPattern = cron.replace('L', '28-31');
-    onExecuteCallback = async () => {
-      const now = moment();
-      const today = now.format('D');
-      const lastDayOfMonth = now.endOf('month').format('D');
-      if (today === lastDayOfMonth) {
-        await onRunFn();
-      }
-    };
-  }
-
-  return new CronTask(
-    cronPattern,
-    onExecuteCallback,
-    null,
-    startImmidiatly,
-    tz
-  );
-}
-
-
 function startSingleRecurring(recurring: Recurring): CronTask {
   const { id, cron, taskTemplateId, portfolioId } = recurring;
 
