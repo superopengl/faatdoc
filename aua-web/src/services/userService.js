@@ -19,3 +19,7 @@ export async function deleteUser(id) {
 export async function setPasswordForUser(id, password) {
   return httpPost(`user/${id}/set_password`, {password});
 }
+
+export async function saveProfile(userId, profile) {
+  return httpPost(`user/${userId}/profile`, profile);
+}

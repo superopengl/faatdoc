@@ -33,6 +33,7 @@ import AdminStatsPage from 'pages/AdminStats/AdminStatsPage';
 import AdminBoardPage from 'pages/AdminBoard/AdminBoardPage';
 import AdminBlogPage from 'pages/AdminBlog/AdminBlogPage';
 import BlogsPage from 'pages/BlogsPage';
+import ProfilePage from 'pages/Profile/ProfilePage';
 
 
 class App extends React.Component {
@@ -108,6 +109,7 @@ class App extends React.Component {
             <RoleRoute visible={!isGuest} loading={loading} path="/tasks/:id" exact component={MyTaskPage} />
             <RoleRoute visible={isAdmin || isAgent || isClient} loading={loading} path="/tasks" exact component={isClient ? MyTaskListPage : AdminTaskListPage} />
             <RoleRoute visible={isAdmin || isAgent} loading={loading} path="/tasks/:id/proceed" exact component={ProceedTaskPage} />
+            <RoleRoute visible={!isGuest} loading={loading} path="/profile" exact component={ProfilePage} />
             <RoleRoute visible={!isGuest} loading={loading} path="/change_password" exact component={ChangePasswordPage} />
             <RoleRoute loading={loading} path="/terms_and_conditions" exact component={TermAndConditionPage} />
             <RoleRoute loading={loading} path="/privacy_policy" exact component={PrivacyPolicyPage} />

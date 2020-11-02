@@ -200,6 +200,14 @@ paths:
       responses:
         200:
           description: OK
+  /user/:id/profile:
+    post:
+      operationId: saveProfile
+      # security:
+      #   - authClient: []
+      responses:
+        200:
+          description: OK
   /user/:id/set_password:
     post:
       operationId: setUserPassword

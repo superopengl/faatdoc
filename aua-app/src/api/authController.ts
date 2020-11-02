@@ -34,7 +34,7 @@ async function getLoginUser(email) {
 }
 
 function sanitizeUser(user: User) {
-  return _.pick(user, ['id', 'email', 'role', 'lastLoggedInAt', 'status', 'loginType']);
+  return _.pick(user, ['id', 'email', 'givenName', 'surname', 'role', 'lastLoggedInAt', 'status', 'loginType']);
 }
 
 export const login = handlerWrapper(async (req, res) => {
@@ -205,16 +205,7 @@ export const impersonate = handlerWrapper(async (req, res) => {
   res.json(sanitizeUser(user));
 });
 
-export const inviteUser = handlerWrapper(async (req, res) => {
-  assertRole(req, 'admin');
-  const { email, role } = req.body;
-  assert(email, 400, 'Invalid email');
-
-  const existingUser = await getLoginUser(email);
-  assert(!existingUser, 400, 'User exists');
-
-  const user = createUserEntity(email, uuidv4(), role || 'client');
-
+export const handleInviteUser = async user => {
   const resetPasswordToken = uuidv4();
   user.resetPasswordToken = resetPasswordToken;
   user.status = UserStatus.ResetPassword;
@@ -231,6 +222,19 @@ export const inviteUser = handlerWrapper(async (req, res) => {
   });
 
   await getRepository(User).save(user);
+}
+
+export const inviteUser = handlerWrapper(async (req, res) => {
+  assertRole(req, 'admin');
+  const { email, role } = req.body;
+  assert(email, 400, 'Invalid email');
+
+  const existingUser = await getLoginUser(email);
+  assert(!existingUser, 400, 'User exists');
+
+  const user = createUserEntity(email, uuidv4(), role || 'client');
+
+  await handleInviteUser(user);
 
   res.json();
 });
@@ -239,15 +243,15 @@ async function decodeEmailFromGoogleToken(token) {
   assert(token, 400, 'Empty code payload');
   const secret = process.env.AUA_GOOGLE_SSO_CLIENT_SECRET;
   const decoded = jwt.decode(token, secret);
-  const { email } = decoded;
+  const { email, given_name: givenName, family_name: surname } = decoded;
   assert(email, 400, 'Invalid Google token');
-  return email;
+  return {email, givenName, surname};
 }
 
 export const ssoGoogle = handlerWrapper(async (req, res) => {
   const { token } = req.body;
 
-  const email = await decodeEmailFromGoogleToken(token);
+  const {email, givenName, surname} = await decodeEmailFromGoogleToken(token);
 
   const repo = getRepository(User);
   let user = await repo
@@ -263,6 +267,8 @@ export const ssoGoogle = handlerWrapper(async (req, res) => {
     user.status = UserStatus.Enabled;
   }
 
+  user.givenName = givenName || user.givenName;
+  user.surname = surname || user.surname;
   user.loginType = 'google';
   user.lastLoggedInAt = getUtcNow();
   user.lastNudgedAt = getUtcNow();

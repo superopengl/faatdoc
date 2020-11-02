@@ -13,6 +13,8 @@ export function attachJwtCookie(user, res) {
   const payload = {
     id: user.id,
     email: user.email,
+    givenName: user.givenName,
+    surname: user.surname,
     role: user.role,
     loginType: user.loginType,
     expires: moment(getUtcNow()).add(24, 'hours').toDate()

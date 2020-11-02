@@ -15,6 +15,7 @@ import { FaTheaterMasks } from 'react-icons/fa';
 import { reactLocalStorage } from 'reactjs-localstorage';
 import { GlobalContext } from 'contexts/GlobalContext';
 import PortfolioList from 'pages/Portfolio/PortfolioList';
+import ProfileForm from 'pages/Profile/ProfileForm';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -41,6 +42,7 @@ const UserListPage = () => {
 
   const [] = React.useState(false);
   const [] = React.useState(false);
+  const [profileModalVisible, setProfileModalVisible] = React.useState(false);
   const [portfolioModalVisible, setPortfolioModalVisible] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
   const [setPasswordVisible, setSetPasswordVisible] = React.useState(false);
@@ -92,6 +94,9 @@ const UserListPage = () => {
       render: (text, user) => {
         return (
           <Space size="small" style={{ width: '100%' }}>
+            <Tooltip placement="bottom" title="Update profile">
+              <Button shape="circle" icon={<SafetyCertificateOutlined />} onClick={e => openProfileModal(e, user)} />
+            </Tooltip>
             <Tooltip placement="bottom" title="Set password">
               <Button shape="circle" icon={<SafetyCertificateOutlined />} onClick={e => openSetPasswordModal(e, user)} />
             </Tooltip>
@@ -168,11 +173,15 @@ const UserListPage = () => {
     setPortfolioModalVisible(true);
   }
 
-
-
   const openSetPasswordModal = async (e, user) => {
     e.stopPropagation();
     setSetPasswordVisible(true);
+    setCurrentUser(user);
+  }
+
+  const openProfileModal = async (e, user) => {
+    e.stopPropagation();
+    setProfileModalVisible(true);
     setCurrentUser(user);
   }
 
@@ -280,7 +289,16 @@ const UserListPage = () => {
         footer={null}
         width={600}
       >
-        {currentUser && <PortfolioList userId={currentUser.id}/>}
+        {currentUser && <PortfolioList userId={currentUser.id} />}
+      </Modal>
+      <Modal
+        visible={profileModalVisible}
+        destroyOnClose={true}
+        maskClosable={false}
+        title="Update Profile"
+        footer={null}
+      >
+        {currentUser && <ProfileForm user={currentUser} onOk={() => setProfileModalVisible(false)} />}
       </Modal>
     </LayoutStyled >
 

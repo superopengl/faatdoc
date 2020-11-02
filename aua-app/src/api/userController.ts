@@ -11,6 +11,7 @@ import { validatePasswordStrength } from '../utils/validatePasswordStrength';
 import { sendEmail } from '../services/emailService';
 import { TaskStatus } from '../types/TaskStatus';
 import { Task } from '../entity/Task';
+import { handleInviteUser } from './authController';
 
 export const getProfile = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
@@ -39,6 +40,36 @@ export const changePassword = handlerWrapper(async (req, res) => {
   res.json();
 });
 
+export const saveProfile = handlerWrapper(async (req, res) => {
+  assertRole(req, 'admin', 'agent', 'client');
+  const { id } = req.params;
+  const { id: loginUserId, role } = (req as any).user as User;
+  if (role !== 'admin') {
+    assert(id === loginUserId, 403);
+  }
+  const { email, givenName, surname, phone } = req.body;
+  const repo = getRepository(User);
+  const user = await repo.findOne(id);
+  assert(user, 404);
+
+  user.givenName = givenName;
+  user.surname = surname;
+  user.phone = phone;
+
+  const newEmail = email?.trim().toLowerCase();
+  const hasEmailChange = user.email.toLowerCase() !== newEmail;
+  if (hasEmailChange) {
+    assert(newEmail, 400);
+    assert(user.email !== 'admin@auao.com.au', 400, 'Cannot change the email for the builtin admin');
+    user.email = newEmail;
+    await handleInviteUser(user);
+  } else {
+    await repo.save(user);
+  }
+
+  res.json();
+});
+
 export const listAllUsers = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin');
 
@@ -56,7 +87,7 @@ export const listAgents = handlerWrapper(async (req, res) => {
 
   const list = await getRepository(User)
     .createQueryBuilder()
-    .where({role: 'agent'})
+    .where({ role: 'agent' })
     .select([
       `id`,
       `email`,
@@ -76,8 +107,8 @@ export const deleteUser = handlerWrapper(async (req, res) => {
   const user = await repo.findOne({ id, email: Not('admin@auao.com.au') });
 
   if (user) {
-    await getRepository(Portfolio).update({userId: id}, {deleted: true});
-    await getRepository(Task).update({userId: id}, {status: TaskStatus.ARCHIVE});
+    await getRepository(Portfolio).update({ userId: id }, { deleted: true });
+    await getRepository(Task).update({ userId: id }, { status: TaskStatus.ARCHIVE });
     await repo.delete(id);
     await sendEmail({
       to: user.email,
