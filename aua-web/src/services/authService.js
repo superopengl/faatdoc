@@ -19,7 +19,6 @@ export async function resetPassword(token, password) {
 }
 
 export async function logout() {
-  reactLocalStorage.clear();
   httpPost(`auth/logout`).catch(() => {});
 }
 
