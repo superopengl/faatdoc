@@ -1,7 +1,6 @@
 
-import { getConnection, getRepository, Not } from 'typeorm';
+import { getRepository, Not } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
-import { Agent } from '../entity/Agent';
 import { Portfolio } from '../entity/Portfolio';
 import { User } from '../entity/User';
 import { UserStatus } from '../types/UserStatus';
@@ -55,19 +54,18 @@ export const listAllUsers = handlerWrapper(async (req, res) => {
 export const listAgents = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'agent');
 
-  const clients = await getConnection()
+  const list = await getRepository(User)
     .createQueryBuilder()
-    .from(User, 'u')
-    .innerJoin(q => q.from(Agent, 'a').select('*'), 'a', 'u.id = a.id')
+    .where({role: 'agent'})
     .select([
-      `u.id as id`,
-      `u.email as email`,
-      `a."givenName" as "givenName"`,
-      `a.surname as surname`,
+      `id`,
+      `email`,
+      `"givenName"`,
+      `surname`,
     ])
-    .execute();
+    .getMany();
 
-  res.json(clients);
+  res.json(list);
 });
 
 export const deleteUser = handlerWrapper(async (req, res) => {

@@ -56,6 +56,16 @@ const UserListPage = () => {
       render: (text) => text,
     },
     {
+      title: 'Given Name',
+      dataIndex: 'givenName',
+      render: (text) => text,
+    },
+    {
+      title: 'Surname',
+      dataIndex: 'surname',
+      render: (text) => text,
+    },
+    {
       title: 'Role',
       dataIndex: 'role',
       render: (text) => text

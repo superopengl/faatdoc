@@ -20,6 +20,15 @@ export class User {
   @Column()
   email!: string;
 
+  @Column()
+  givenName: string;
+
+  @Column()
+  surname: string;
+
+  @Column({ nullable: true })
+  phone: string;
+
   @Column({ default: 'local' })
   loginType: string;
 
@@ -30,6 +39,7 @@ export class User {
   salt!: string;
 
   @Column({ nullable: false })
+  @Index()
   role!: Role;
 
   @Column({ nullable: true })
