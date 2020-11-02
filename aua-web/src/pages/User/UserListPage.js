@@ -4,7 +4,8 @@ import { Typography, Layout, Button, Table, Input, Modal, Form, Tooltip, Tag } f
 import HomeHeader from 'components/HomeHeader';
 import {
   DeleteOutlined, SafetyCertificateOutlined, UserAddOutlined, GoogleOutlined, SyncOutlined, QuestionOutlined,
-  IdcardOutlined
+  IdcardOutlined,
+  UserOutlined
 } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
 import { Space } from 'antd';
@@ -95,7 +96,7 @@ const UserListPage = () => {
         return (
           <Space size="small" style={{ width: '100%' }}>
             <Tooltip placement="bottom" title="Update profile">
-              <Button shape="circle" icon={<SafetyCertificateOutlined />} onClick={e => openProfileModal(e, user)} />
+              <Button shape="circle" icon={<UserOutlined />} onClick={e => openProfileModal(e, user)} />
             </Tooltip>
             <Tooltip placement="bottom" title="Set password">
               <Button shape="circle" icon={<SafetyCertificateOutlined />} onClick={e => openSetPasswordModal(e, user)} />
@@ -296,6 +297,8 @@ const UserListPage = () => {
         destroyOnClose={true}
         maskClosable={false}
         title="Update Profile"
+        onOk={() => setProfileModalVisible(false)}
+        onCancel={() => setProfileModalVisible(false)}
         footer={null}
       >
         {currentUser && <ProfileForm user={currentUser} onOk={() => setProfileModalVisible(false)} />}
