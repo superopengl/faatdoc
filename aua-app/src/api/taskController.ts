@@ -20,6 +20,7 @@ import { sendCompletedEmail } from '../utils/sendCompletedEmail';
 import { sendArchiveEmail } from '../utils/sendArchiveEmail';
 import { sendRequireSignEmail } from '../utils/sendRequireSignEmail';
 import { sendTodoEmail } from '../utils/sendTodoEmail';
+import { TaskComment } from '../entity/TaskComment';
 
 export const generateTask = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
@@ -354,6 +355,36 @@ export const markTaskNotifyRead = handlerWrapper(async (req, res) => {
   }
 
   await getRepository(Message).update(query, { readAt: now });
+
+  res.json();
+});
+
+export const getComments = handlerWrapper(async (req, res) => {
+  assertRole(req, 'admin', 'agent');
+  const { id } = req.params;
+
+  const list = await getRepository(TaskComment)
+    .createQueryBuilder()
+    .where(`"taskId" = :id`, { id })
+    .orderBy('id')
+    .getMany();
+
+  res.json(list);
+});
+
+export const newComment = handlerWrapper(async (req, res) => {
+  assertRole(req, 'admin', 'agent');
+  const { id } = req.params;
+  const { content } = req.body;
+  assert(content?.trim(), 400, 'Empty comment body');
+  const { user: { id: userId } } = req as any;
+
+  const comment = new TaskComment();
+  comment.taskId = id;
+  comment.senderId = userId;
+  comment.content = content;
+
+  await getRepository(TaskComment).save(comment);
 
   res.json();
 });
