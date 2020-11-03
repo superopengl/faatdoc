@@ -92,7 +92,7 @@ class App extends React.Component {
             <RoleRoute visible={isGuest} loading={loading} exact path="/signin" component={SignInPage} />
             <RoleRoute visible={isGuest} loading={loading} exact path="/forgot_password" component={ForgotPasswordPage} />
             <RoleRoute visible={isAdmin || isAgent} loading={loading} exact path="/stats" component={AdminStatsPage} />
-            <RoleRoute visible={isAdmin || isAgent} loading={loading} exact path="/board" component={AdminBoardPage} />
+            {/* <RoleRoute visible={isAdmin || isAgent} loading={loading} exact path="/board" component={AdminBoardPage} /> */}
             <RoleRoute visible={isClient} loading={loading} exact path="/landing" component={ClientDashboardPage} />
             <RoleRoute visible={isClient} loading={loading} exact path="/portfolios" component={PortfolioListPage} />
             <RoleRoute visible={!isGuest} loading={loading} exact path="/portfolios/:id" component={PortfolioFormPage} />
