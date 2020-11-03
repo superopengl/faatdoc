@@ -107,8 +107,8 @@ export const listMessage = handlerWrapper(async (req, res) => {
       list = await listMessageForClient(id, pagenation, unreadOnly);
       break;
     case 'agent':
-      list = await listMessageForAgent(id, pagenation, unreadOnly);
-      break;
+      // list = await listMessageForAgent(id, pagenation, unreadOnly);
+      // break;
     case 'admin':
       list = await listMessageForAdmin(pagenation, unreadOnly);
       break;
