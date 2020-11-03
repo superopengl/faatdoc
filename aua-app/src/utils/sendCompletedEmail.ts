@@ -3,6 +3,7 @@ import { Task } from '../entity/Task';
 import { User } from '../entity/User';
 import { sendEmail } from '../services/emailService';
 import { File } from '../entity/File';
+import { getEmailRecipientName } from './getEmailRecipientName';
 
 
 export async function sendCompletedEmail(task: Task) {
@@ -21,6 +22,7 @@ export async function sendCompletedEmail(task: Task) {
     to: user.email,
     template: 'taskComplete',
     vars: {
+      toWhom: getEmailRecipientName(user),
       forWhom,
       taskId,
       taskName,

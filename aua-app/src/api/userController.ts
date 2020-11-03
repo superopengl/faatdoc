@@ -12,6 +12,7 @@ import { sendEmail } from '../services/emailService';
 import { TaskStatus } from '../types/TaskStatus';
 import { Task } from '../entity/Task';
 import { handleInviteUser } from './authController';
+import { getEmailRecipientName } from '../utils/getEmailRecipientName';
 
 export const getProfile = handlerWrapper(async (req, res) => {
   assertRole(req, 'admin', 'client');
@@ -113,6 +114,7 @@ export const deleteUser = handlerWrapper(async (req, res) => {
       to: user.email,
       template: 'deleteUser',
       vars: {
+        toWhom: getEmailRecipientName(user),
       },
       shouldBcc: false
     });

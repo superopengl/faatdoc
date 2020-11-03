@@ -13,6 +13,7 @@ import { getUtcNow } from '../utils/getUtcNow';
 import { Role } from '../types/Role';
 import * as jwt from 'jsonwebtoken';
 import { attachJwtCookie, clearJwtCookie } from '../utils/jwt';
+import { getEmailRecipientName } from '../utils/getEmailRecipientName';
 
 export const getAuthUser = handlerWrapper(async (req, res) => {
   const { user } = (req as any);
@@ -131,6 +132,7 @@ async function setUserToResetPasswordStatus(user: User) {
     to: user.email,
     template: 'resetPassword',
     vars: {
+      toWhom: getEmailRecipientName(user),
       url
     },
     shouldBcc: false
@@ -215,6 +217,7 @@ export const handleInviteUser = async user => {
     to: user.email,
     template: 'inviteUser',
     vars: {
+      toWhom: getEmailRecipientName(user),
       email: user.email,
       url
     },

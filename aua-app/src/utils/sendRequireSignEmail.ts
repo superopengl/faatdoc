@@ -2,6 +2,7 @@ import { getRepository } from 'typeorm';
 import { Task } from '../entity/Task';
 import { User } from '../entity/User';
 import { sendEmail } from '../services/emailService';
+import { getEmailRecipientName } from './getEmailRecipientName';
 
 
 export async function sendRequireSignEmail(task: Task) {
@@ -12,6 +13,7 @@ export async function sendRequireSignEmail(task: Task) {
     to: user.email,
     template: 'taskToSign',
     vars: {
+      toWhom: getEmailRecipientName(user),
       forWhom,
       taskId,
       taskName,

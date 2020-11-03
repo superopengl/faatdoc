@@ -3,6 +3,7 @@ import { Task } from '../entity/Task';
 import { User } from '../entity/User';
 import { sendEmail } from '../services/emailService';
 import { Portfolio } from '../entity/Portfolio';
+import { getEmailRecipientName } from './getEmailRecipientName';
 
 
 export async function sendNewPortfolioEmail(portfolio: Portfolio) {
@@ -12,6 +13,7 @@ export async function sendNewPortfolioEmail(portfolio: Portfolio) {
     to: user.email,
     template: 'createPortfolio',
     vars: {
+      toWhom: getEmailRecipientName(user),
       portfolioName: portfolio.name,
     },
     shouldBcc: true

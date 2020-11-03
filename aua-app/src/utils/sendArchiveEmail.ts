@@ -2,6 +2,7 @@ import { getRepository } from 'typeorm';
 import { Task } from '../entity/Task';
 import { User } from '../entity/User';
 import { sendEmail } from '../services/emailService';
+import { getEmailRecipientName } from './getEmailRecipientName';
 
 
 export async function sendArchiveEmail(task: Task) {
@@ -12,6 +13,7 @@ export async function sendArchiveEmail(task: Task) {
     to: user.email,
     template: 'taskArchived',
     vars: {
+      toWhom: getEmailRecipientName(user),
       forWhom,
       taskId,
       taskName,
@@ -19,3 +21,4 @@ export async function sendArchiveEmail(task: Task) {
     shouldBcc: true
   });
 }
+
