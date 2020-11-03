@@ -116,7 +116,7 @@ const SignDocEditor = (props) => {
           validator: (_, value) =>
             value ? Promise.resolve() : Promise.reject('You have to agree to continue.'),
         }]}>
-          <Checkbox>I have read and agree on the <a href="/disclaimer" target="_blank">declare</a></Checkbox>
+          <Checkbox>I have read and agree on the <a href="/declaration" target="_blank">declaration</a></Checkbox>
         </Form.Item>
         <Form.Item>
           <Button htmlType="submit" type="primary" block disabled={!canSign}>{canSign ? 'e-Sign All Documents' : 'Please view all documents before sign'}</Button>
@@ -140,7 +140,7 @@ const SignDocEditor = (props) => {
             validator: (_, value) =>
               value ? Promise.resolve() : Promise.reject('You have to agree to continue.'),
           }]}>
-            <Checkbox>I have read and agree on the <a href="/disclaimer" target="_blank">declare</a></Checkbox>
+            <Checkbox>I have read and agree on the <a href="/declaration" target="_blank">declaration</a></Checkbox>
           </Form.Item>
           <Form.Item>
             <Button htmlType="submit" type="primary" block>Sign</Button>

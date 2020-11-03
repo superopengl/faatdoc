@@ -27,7 +27,7 @@ import UserListPage from 'pages/User/UserListPage';
 import ImpersonatePage from 'pages/Impersonate/ImpersonatePage';
 import { countUnreadMessage } from 'services/messageService';
 import PortfolioFormPage from 'pages/Portfolio/PortfolioFormPage';
-import DisclaimerPage from 'pages/DisclaimerPage';
+import DeclarationPage from 'pages/DeclarationPage';
 import ClientDashboardPage from 'pages/ClientDashboard/ClientDashboardPage';
 import AdminStatsPage from 'pages/AdminStats/AdminStatsPage';
 import AdminBoardPage from 'pages/AdminBoard/AdminBoardPage';
@@ -113,7 +113,7 @@ class App extends React.Component {
             <RoleRoute visible={!isGuest} loading={loading} path="/change_password" exact component={ChangePasswordPage} />
             <RoleRoute loading={loading} path="/terms_and_conditions" exact component={TermAndConditionPage} />
             <RoleRoute loading={loading} path="/privacy_policy" exact component={PrivacyPolicyPage} />
-            <RoleRoute loading={loading} path="/disclaimer" exact component={DisclaimerPage} />
+            <RoleRoute loading={loading} path="/declaration" exact component={DeclarationPage} />
             {/* <Redirect to="/" /> */}
             <RoleRoute loading={loading} component={Error404} />
 

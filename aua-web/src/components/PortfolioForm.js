@@ -100,7 +100,7 @@ const PortfolioForm = (props) => {
         validator: (_, value) =>
           value ? Promise.resolve() : Promise.reject('You have to agree to continue.'),
       }]}>
-        <Checkbox>I have read and agree on the <a href="/disclaimer" target="_blank">disclaimer</a></Checkbox>
+        <Checkbox>I have read and agree on the <a href="/declaration" target="_blank">disclaimer</a></Checkbox>
       </Form.Item>}
       <Form.Item>
         <Button block type="primary" htmlType="submit" disabled={loading}>Save</Button>
