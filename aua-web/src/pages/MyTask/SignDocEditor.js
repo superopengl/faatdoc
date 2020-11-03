@@ -5,7 +5,7 @@ import { TimeAgo } from 'components/TimeAgo';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { openFile, searchFile } from 'services/fileService';
-import { signTaskDoc } from 'services/taskService';
+import { getTask, signTaskDoc } from 'services/taskService';
 import styled from 'styled-components';
 import * as _ from 'lodash';
 import { withRouter } from 'react-router-dom';
@@ -33,49 +33,53 @@ const StyledListItem = styled(List.Item)`
 const SignDocEditor = (props) => {
   const { value, onOk } = props;
 
-  const task = value;
-  const [, setLoading] = React.useState(true);
-  const [fileToSign, setFileToSign] = React.useState();
-  const [files, setFiles] = React.useState([]);
+  const [task, setTask] = React.useState(value);
+  const [loading, setLoading] = React.useState(true);
+  const [docToSign, setDocToSign] = React.useState();
+  const [docs, setDocs] = React.useState([]);
 
 
-  const getSignFiles = async (task) => {
-    const files = await searchFile(task.docs.filter(d => d.requiresSign).map(d => d.fileId));
+  const initSignDocs = task => {
+    const files = task.docs.filter(d => d.requiresSign);
+    const sortedFiles = _.sortBy(files, ['fileName']);
+    setDocs(sortedFiles);
     return files
   }
 
   const loadEntity = async () => {
     setLoading(true);
-    const files = await getSignFiles(task);
-    const sortedFiles = _.sortBy(files, ['fileName']);
-    setFiles(sortedFiles);
+    const updatedTask = await getTask(task.id);
+    setTask(updatedTask);
+    const docs = initSignDocs(updatedTask);
+    const sortedDocs = _.sortBy(docs, ['fileName']);
+    setDocs(sortedDocs);
     setLoading(false);
   }
 
   React.useEffect(() => {
-    loadEntity()
+    initSignDocs(value);
   }, []);
 
   const handleSignAll = async () => {
-    const unsignedFileIds = files.filter(f => !f.signedAt).map(f => f.id);
+    const unsignedFileIds = docs.filter(f => !f.signedAt).map(f => f.fileId);
     await signTaskDoc(task.id, unsignedFileIds);
     await loadEntity();
     onOk();
   }
 
-  const handleFileClick = async (file) => {
-    await openFile(task.id, file.id);
+  const handleFileClick = async (doc) => {
+    await openFile(task.id, doc.fileId);
     loadEntity();
   }
 
   const showSignDocModal = async (e, file) => {
     e.stopPropagation();
-    setFileToSign(file);
+    setDocToSign(file);
   }
 
-  const handleSignFile = async (file) => {
-    await signTaskDoc(task.id, [file.id]);
-    setFileToSign(null);
+  const handleSignDoc = async (file) => {
+    await signTaskDoc(task.id, [file.fileId]);
+    setDocToSign(null);
     await loadEntity();
     onOk();
   }
@@ -83,16 +87,17 @@ const SignDocEditor = (props) => {
   const { status } = task || {};
 
   const isSigned = status === 'signed';
-  const canSign = status === 'to_sign' && files.every(f => !!f.lastReadAt) && !isSigned;
+  const canSign = status === 'to_sign' && docs.every(f => !!f.lastReadAt) && !isSigned;
 
+  console.log(docs);
   return (
     <Space size="large" direction="vertical" style={{ width: '100%' }}>
       <List
         itemLayout="horizontal"
-        dataSource={files}
+        dataSource={docs}
         renderItem={item => (<StyledListItem
           onClick={() => handleFileClick(item)}
-          key={item.id}
+          key={item.fileId}
           actions={[
             item.signedAt ? null :
             item.lastReadAt ? <Button type="link" style={{ paddingRight: 0 }} onClick={e => showSignDocModal(e, item)}>Sign</Button> :
@@ -124,17 +129,17 @@ const SignDocEditor = (props) => {
       </Form>}
       {isSigned && <Button block type="primary" onClick={() => props.history.goBack()}>OK</Button>}
       <Modal
-        visible={fileToSign}
+        visible={docToSign}
         destroyOnClose={true}
         maskClosable={false}
-        onOk={() => setFileToSign(null)}
-        onCancel={() => setFileToSign(null)}
+        onOk={() => setDocToSign(null)}
+        onCancel={() => setDocToSign(null)}
         footer={null}
         title="Sign document"
       >
-        <Form onFinish={() => handleSignFile(fileToSign)}>
+        <Form onFinish={() => handleSignDoc(docToSign)}>
           <Form.Item>
-            <FileLink id={fileToSign?.id} />
+            <FileLink id={docToSign?.fileId} />
           </Form.Item>
           <Form.Item name="" valuePropName="checked" rules={[{
             validator: (_, value) =>

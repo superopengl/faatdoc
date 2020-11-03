@@ -252,6 +252,7 @@ export const signTaskDoc = handlerWrapper(async (req, res) => {
   const task = await taskRepo.findOne(id);
   assert(task, 404);
   const { files } = req.body;
+  const oldStatus = task.status;
 
   if (files?.length) {
     const now = getUtcNow();
@@ -264,6 +265,7 @@ export const signTaskDoc = handlerWrapper(async (req, res) => {
   }
 
   await taskRepo.save(task);
+  await handleTaskStatusChange(oldStatus, task);
 
   res.json();
 });
