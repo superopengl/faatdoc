@@ -62,7 +62,6 @@ ENV TZ=utc
 ENV GIT_HASH=$REACT_APP_GIT_HASH
 ENV GENERATE_SOURCEMAP=false
 ENV REACT_APP_AUA_API_ENDPOINT=/api/v1
-ENV REACT_APP_AUA_S3_URL=https://aua-upload-files-test.s3-ap-southeast-2.amazonaws.com/$NODE_ENV
 ENV REACT_APP_AUA_GOOGLE_SSO_CLIENT_ID=1036301846271-e8sto3acfpcd06mgbl7e4tl5cdfanqjm.apps.googleusercontent.com
 
 # Build app
