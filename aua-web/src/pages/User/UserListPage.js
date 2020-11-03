@@ -8,7 +8,7 @@ import {
   UserOutlined
 } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
-import { Space } from 'antd';
+import { Space, Alert } from 'antd';
 import { listAllUsers, deleteUser, setPasswordForUser } from 'services/userService';
 import { inviteUser, impersonate } from 'services/authService';
 import { TimeAgo } from 'components/TimeAgo';
@@ -301,6 +301,8 @@ const UserListPage = () => {
         onCancel={() => setProfileModalVisible(false)}
         footer={null}
       >
+        <Alert style={{ marginBottom: '0.5rem' }} type="warning" message="Changing email will change the login account. After changing, system will send you an new invitation to the new email address to reset your password." />
+
         {currentUser && <ProfileForm user={currentUser} onOk={() => setProfileModalVisible(false)} />}
       </Modal>
     </LayoutStyled >

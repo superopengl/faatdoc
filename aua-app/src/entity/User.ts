@@ -20,10 +20,10 @@ export class User {
   @Column()
   email!: string;
 
-  @Column({ default: 'Unset' })
+  @Column({ nullable: true })
   givenName: string;
 
-  @Column({ default: 'Unset' })
+  @Column({ nullable: true })
   surname: string;
 
   @Column({ nullable: true })

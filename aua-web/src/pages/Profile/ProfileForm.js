@@ -41,7 +41,7 @@ const LayoutStyled = styled(Layout)`
 `;
 
 const ProfileForm = (props) => {
-  const { user, onOk } = props;
+  const { user, initial, onOk } = props;
   const [sending, setSending] = React.useState(false);
 
   console.log('profile', user);
@@ -68,14 +68,13 @@ const ProfileForm = (props) => {
 
   return (
     <Form layout="vertical" onFinish={handleSave} style={{ textAlign: 'left' }} initialValues={user}>
-      <Alert style={{marginBottom: '0.5rem'}} type="warning" message="Changing email will change the login account. After changing, system will send you an new invitation to the new email address to reset your password."/>
-      <Form.Item
+      {!initial && <Form.Item
         label="Email"
         name="email" rules={[{ required: true, type: 'email', whitespace: true, max: 100, message: ' ' }]}>
         <Input placeholder="abc@xyz.com" type="email" autoComplete="email" allowClear={true} 
         disabled={isBuiltinAdmin}
         maxLength="100" autoFocus={!isBuiltinAdmin} />
-      </Form.Item>
+      </Form.Item>}
       <Form.Item label="Given Name" name="givenName" rules={[{ required: true, whitespace: true, max: 100, message: ' ' }]}>
         <Input placeholder="Given name" autoComplete="given-name" allowClear={true} maxLength="100" autoFocus={isBuiltinAdmin} />
       </Form.Item>
@@ -93,9 +92,12 @@ const ProfileForm = (props) => {
 }
 
 ProfileForm.propTypes = {
-  user: PropTypes.any.isRequired
+  user: PropTypes.any.isRequired,
+  initial: PropTypes.bool
 };
 
-ProfileForm.defaultProps = {};
+ProfileForm.defaultProps = {
+  initial: false
+};
 
 export default withRouter(ProfileForm);

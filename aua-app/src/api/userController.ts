@@ -52,14 +52,13 @@ export const saveProfile = handlerWrapper(async (req, res) => {
   const user = await repo.findOne(id);
   assert(user, 404);
 
-  user.givenName = givenName;
-  user.surname = surname;
-  user.phone = phone;
+  user.givenName = givenName || user.givenName;
+  user.surname = surname || user.surname;
+  user.phone = phone || user.phone;
 
   const newEmail = email?.trim().toLowerCase();
-  const hasEmailChange = user.email.toLowerCase() !== newEmail;
+  const hasEmailChange = newEmail && user.email.toLowerCase() !== newEmail;
   if (hasEmailChange) {
-    assert(newEmail, 400);
     assert(user.email !== 'admin@auao.com.au', 400, 'Cannot change the email for the builtin admin');
     user.email = newEmail;
     await handleInviteUser(user);

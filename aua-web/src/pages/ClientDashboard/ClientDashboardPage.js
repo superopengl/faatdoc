@@ -13,6 +13,8 @@ import { groupBy } from 'lodash';
 import { Empty } from 'antd';
 import { Loading } from 'components/Loading';
 import { Tooltip } from 'antd';
+import { GlobalContext } from 'contexts/GlobalContext';
+import ProfileForm from 'pages/Profile/ProfileForm';
 
 const { Paragraph } = Typography;
 
@@ -44,6 +46,10 @@ const LayoutStyled = styled(Layout)`
 
 const ClientDashboardPage = (props) => {
 
+  const context = React.useContext(GlobalContext);
+  const { user, setUser } = context;
+  const isProfileMissing = !user.givenName || !user.surname;
+  const [profileModalVisible, setProfileModalVisible] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
   const [portfolioList, setPortfolioList] = React.useState([]);
   const [taskListByPortfolioMap, setTaskListByPortfolioMap] = React.useState({});
@@ -57,7 +63,9 @@ const ClientDashboardPage = (props) => {
 
     setPortfolioList(portfolioList);
     setLoading(false);
-    if (!portfolioList.length) {
+    if (isProfileMissing) {
+      setProfileModalVisible(true);
+    } else if (!portfolioList.length) {
       showNoPortfolioWarn();
     }
   }
@@ -89,6 +97,13 @@ const ClientDashboardPage = (props) => {
     props.history.push(`/tasks/${task.id}?${task.lastUnreadMessageAt ? 'chat=1' : ''}`)
   }
 
+  const handleSaveProfile = updatedUser => {
+    setUser(updatedUser);
+    setProfileModalVisible(false);
+    if (!portfolioList.length) {
+      showNoPortfolioWarn();
+    }
+  }
 
   return (
     <LayoutStyled>
@@ -103,7 +118,7 @@ const ClientDashboardPage = (props) => {
         <Loading loading={loading}>
           <Tabs
             type="card"
-            tabBarExtraContent={<Tooltip title="Create new portfolio"><Button type="link" onClick={() => props.history.push(`/portfolios?create=1`)} icon={<PlusOutlined />}/></Tooltip>}
+            tabBarExtraContent={<Tooltip title="Create new portfolio"><Button type="link" onClick={() => props.history.push(`/portfolios?create=1`)} icon={<PlusOutlined />} /></Tooltip>}
           >
             {portfolioList.map((p, i) => <Tabs.TabPane key={i} tab={<Space size="small" direction="vertical" style={{ alignItems: 'center' }}>
               <PortfolioAvatar value={p.name} id={p.id} size={36} />
@@ -121,6 +136,17 @@ const ClientDashboardPage = (props) => {
           </Tabs>
         </Loading>
       </ContainerStyled>
+      <Modal
+        visible={profileModalVisible}
+        destroyOnClose={true}
+        maskClosable={false}
+        closable={false}
+        title="Set Profile"
+        footer={null}
+      >
+        <Paragraph type="secondary">Please set up your profile to continue using the system.</Paragraph>
+        <ProfileForm user={context.user} initial={true} onOk={user => handleSaveProfile(user)} />
+      </Modal>
     </LayoutStyled >
   );
 };
