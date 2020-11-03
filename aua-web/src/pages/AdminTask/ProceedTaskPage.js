@@ -19,6 +19,7 @@ import TaskChatPanel from './TaskChatPanel';
 import { TaskStatus } from 'components/TaskStatus';
 import * as queryString from 'query-string';
 import { Loading } from 'components/Loading';
+import TaskCommentPanel from './TaskCommentPanel';
 
 const { Text, Title } = Typography;
 const ContainerStyled = styled.div`
@@ -239,17 +240,17 @@ const ProceedTaskPage = (props) => {
         <Divider />
         <Layout style={{ backgroundColor: '#ffffff', height: '100%' }}>
           <Layout.Content style={{ padding: '0' }}>
-            <Form
-              form={form}
-              layout="vertical"
-              onValuesChange={handleValuesChange}
-              onFinish={handleSubmit}
-              style={{ textAlign: 'left', width: '100%' }}
-              initialValues={task}
-            >
-              <Row gutter={20}>
-                <Col style={{ width: '50%', maxWidth: 400 }}>
-                  <Title level={3}>Fields</Title>
+            <Row gutter={20}>
+              <Col style={{ width: '50%', maxWidth: 400 }}>
+                <Title level={3}>Fields</Title>
+                <Form
+                  form={form}
+                  layout="vertical"
+                  onValuesChange={handleValuesChange}
+                  onFinish={handleSubmit}
+                  style={{ textAlign: 'left', width: '100%' }}
+                  initialValues={task}
+                >
                   <Form.Item name="name" label="Task Name" rules={[{ required: true, message: ' ' }]}>
                     <Input className="task-name-input" placeholder="Task name" disabled={loading} style={{ fontWeight: 600 }} />
                   </Form.Item>
@@ -275,13 +276,15 @@ const ProceedTaskPage = (props) => {
                       </Form.Item>
                     );
                   })}
-                </Col>
-                <Col style={{ flex: '1' }}>
-                  <Title level={3}>Attachments</Title>
-                  <TaskDocEditor value={task.docs} fields={task.fields} onChange={handleTaskDocsChange} />
-                </Col>
-              </Row>
-            </Form>
+                </Form>
+              </Col>
+              <Col style={{ flex: '1' }}>
+                <Title level={3}>Attachments</Title>
+                <TaskDocEditor value={task.docs} fields={task.fields} onChange={handleTaskDocsChange} />
+                <Title level={3} style={{ marginTop: '2rem' }}>Comments</Title>
+                <TaskCommentPanel taskId={task.id} />
+              </Col>
+            </Row>
           </Layout.Content>
           <Layout.Sider collapsed={!chatVisible} reverseArrow={true} collapsedWidth={0} width={400} collapsible={false} theme="light" style={{ paddingLeft: 20, height: '100%' }}>
             <Title level={3}>Messages</Title>

@@ -46,3 +46,12 @@ export async function notifyTask(taskId, msg) {
     return httpPost(`task/${taskId}/notify`, { content });
   }
 }
+
+export async function listTaskComments(taskId) {
+  return httpGet(`task/${taskId}/comment`);
+}
+
+export async function addTaskComment(taskId, content) {
+  return httpPost(`task/${taskId}/comment`, {content});
+}
+

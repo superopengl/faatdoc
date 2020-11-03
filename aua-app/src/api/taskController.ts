@@ -216,7 +216,7 @@ export const listTask = handlerWrapper(async (req, res) => {
 });
 
 export const getTask = handlerWrapper(async (req, res) => {
-  assertRole(req, 'admin', 'client');
+  assertRole(req, 'admin', 'agent', 'client');
   const { id } = req.params;
   const repo = getRepository(Task);
   const task = await repo.findOne(id);
@@ -372,10 +372,18 @@ export const getComments = handlerWrapper(async (req, res) => {
   const { id } = req.params;
 
   const list = await getRepository(TaskComment)
-    .createQueryBuilder()
+    .createQueryBuilder('c')
+    .leftJoin(q => q.from(User, 'u'), 'u', `u.id = c."senderId"`)
     .where(`"taskId" = :id`, { id })
-    .orderBy('id')
-    .getMany();
+    .orderBy('c.id')
+    .select([
+      `u."givenName" as "givenName"`,
+      `u."surname" as "surname"`,
+      `c."senderId" as "senderId"`,
+      `c.content as content`,
+      `c."createdAt" as "createdAt"`,
+    ])
+    .execute();
 
   res.json(list);
 });
