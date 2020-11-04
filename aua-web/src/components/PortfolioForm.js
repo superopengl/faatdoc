@@ -88,7 +88,7 @@ const PortfolioForm = (props) => {
           <Form.Item {...formItemProps}>
             {inputType === 'text' ? <Input {...inputProps} disabled={loading} /> :
               inputType === 'paragraph' ? <Input.TextArea {...inputProps} disabled={loading} /> :
-                inputType === 'date' ? <DateInput placeholder="DD MMM YYYY" style={{ display: 'block' }} format="D MMM YYYY" {...inputProps} /> :
+                inputType === 'date' ? <DateInput placeholder="DD/MM/YYYY" style={{ display: 'block' }} format="DD/MM/YYYY" {...inputProps} /> :
                   inputType === 'select' ? <Radio.Group buttonStyle="solid">
                     {fieldDef.options.map((x, i) => <Radio key={i} style={{ display: 'block', height: '2rem' }} value={x.value}>{x.label}</Radio>)}
                   </Radio.Group> :
@@ -115,7 +115,7 @@ const PortfolioForm = (props) => {
 PortfolioForm.propTypes = {
   id: PropTypes.string,
   userId: PropTypes.string,
-  type: PropTypes.string.isRequired,
+  type: PropTypes.string,
   loading: PropTypes.bool.isRequired,
 };
 

@@ -119,7 +119,7 @@ const AdminTaskListPage = (props) => {
         value={text}
       >
         <Select.Option key={-1} value={null}>{' '}</Select.Option>
-        {agentList.map((a, i) => <Select.Option key={i} value={a.id}>{a.givenName} {a.surname}</Select.Option>)}
+        {agentList.map((a, i) => <Select.Option key={i} value={a.id}>{a.givenName || 'Unset'} {a.surname || 'Unset'}</Select.Option>)}
       </Select>
     },
     {

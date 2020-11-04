@@ -6,9 +6,16 @@ import * as moment from 'moment';
 
 export const DateInput = (props) => {
   const {defaultValue, value} = props;
+
+  const getMomentValue = (value) => {
+    if(!value) return value;
+    const {format} = props;
+    return format ? moment(value, format) : moment(value);
+  }
+
   return <DatePicker {...props} 
-  defaultValue={defaultValue ? moment(defaultValue) : defaultValue}
-  value={value ? moment(value) : value}
+  defaultValue={getMomentValue(defaultValue)}
+  value={getMomentValue(value)}
   onChange={(moment, dateString) => props.onChange(dateString)} />;
 }
 

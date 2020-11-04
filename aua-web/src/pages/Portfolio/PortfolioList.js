@@ -23,7 +23,7 @@ const PortfolioList = props => {
   const [loading, setLoading] = React.useState(true);
   const [newModalVisible, setNewModalVisible] = React.useState(createMode);
   const [formVisible, setFormVisible] = React.useState(false);
-  const [newType, setNewType] = React.useState(false);
+  const [newType, setNewType] = React.useState();
   const [portfolioId, setPortfolioId] = React.useState();
   const context = React.useContext(GlobalContext);
 

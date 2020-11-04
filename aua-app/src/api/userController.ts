@@ -94,7 +94,7 @@ export const listAgents = handlerWrapper(async (req, res) => {
       `"givenName"`,
       `surname`,
     ])
-    .getMany();
+    .execute();
 
   res.json(list);
 });

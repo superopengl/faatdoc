@@ -81,6 +81,17 @@ export const BuiltInFieldDef = [
     portfolioType: ['individual', 'business'],
   },
   {
+    name: 'Post_Address',
+    inputType: 'text',
+    rules: [{ required: false, max: 100, message: ' ' }],
+    inputProps: {
+      maxLength: 100,
+      allowClear: true,
+      placeholder: `If different from above address`,
+    },
+    portfolioType: ['individual', 'business'],
+  },
+  {
     name: 'Date_Of_Birth',
     inputType: 'date',
     rules: [{
