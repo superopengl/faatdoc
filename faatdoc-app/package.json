@@ -1,5 +1,5 @@
 {
-  "name": "aua-app",
+  "name": "faatdoc-app",
   "version": "1.0.0",
   "description": "AUA server",
   "main": "src/index.js",
@@ -14,7 +14,7 @@
     "clean": "ts-clean && rm -rf www",
     "compile": "tsc",
     "lint": "tslint -c tslint.json -p tsconfig.json --fix",
-    "link-web": "rm -rf www && ln -sfn \"$(pwd)/../aua-web/build\" www",
+    "link-web": "rm -rf www && ln -sfn \"$(pwd)/../faatdoc-web/build\" www",
     "migrate:up": "npm run typeorm migration:run",
     "migrate:down": "npm run typeorm migration:revert",
     "migrate:new": "npm run typeorm migration:create -- -n",

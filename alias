@@ -3,11 +3,11 @@ ORANGE='\033[0;33m'
 GREEN='\033[0;32m'
 NC='\033[0m'
 
-echo -e "${ORANGE}AUA${NC}"
+echo -e "${ORANGE}Techseeding Faatdoc${NC}"
 
-alias ahome='cd /Users/jshao/github/aua'
+alias ahome='cd /Users/jshao/github/faatdoc'
 
-export AWS_PROFILE=aua
+export AWS_PROFILE=txd
 
 ssh-add -K ~/.ssh/superopengl_id_rsa
 

@@ -3,5 +3,5 @@
 **/build
 **/.env*
 */docs
-aua-app/src/**/*.js
-aua-app/index.js
+faatdoc-app/src/**/*.js
+faatdoc-app/index.js

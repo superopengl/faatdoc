@@ -65,7 +65,7 @@
     "watch": "npm-watch",
     "g": "npx generate-react-cli component --",
     "p": "npx generate-react-cli component -- --type=page",
-    "upload": " aws s3 sync build s3://aua-web/"
+    "upload": " aws s3 sync build s3://faatdoc-web/"
   },
   "eslintConfig": {
     "extends": "react-app"

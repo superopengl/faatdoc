@@ -46,8 +46,8 @@ RUN npm install -g pnpm
 EXPOSE 80
 # Install dependencies
 WORKDIR /usr/portal
-COPY ./aua-web/package.json /usr/portal/web/
-COPY ./aua-app/package.json /usr/portal/app/
+COPY ./faatdoc-web/package.json /usr/portal/web/
+COPY ./faatdoc-app/package.json /usr/portal/app/
 
 WORKDIR /usr/portal/web
 RUN pnpm install
@@ -65,14 +65,14 @@ ENV REACT_APP_AUA_API_ENDPOINT=/api/v1
 ENV REACT_APP_AUA_GOOGLE_SSO_CLIENT_ID=1036301846271-e8sto3acfpcd06mgbl7e4tl5cdfanqjm.apps.googleusercontent.com
 
 # Build app
-COPY ./aua-app /usr/portal/app
+COPY ./faatdoc-app /usr/portal/app
 RUN pnpm run build:prod
 RUN pnpm prune --production
 # RUN /usr/local/bin/node-prune
 
 # Build web
 WORKDIR /usr/portal/web
-COPY ./aua-web /usr/portal/web
+COPY ./faatdoc-web /usr/portal/web
 RUN pnpm run compile:prod
 
 # Copy web to app/www
